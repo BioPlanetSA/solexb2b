@@ -1,0 +1,43 @@
+﻿@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+
+@{
+    PlikDoEdycji plik = Model;
+}
+<div class="modal edycja-pliku" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="text-align: left;">
+    <div class="modal-dialog modal-lg">
+        <div class= "modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title ">
+                    Edycja pliku @plik.Nazwa
+                </h3>
+                <b>Jeśli edytor nie pokazuje się poprawnie lub nie działa poprawnie, zmień przeglądarkę.</b>
+            </div>
+            <div class="modal-body">
+                
+                <form></form>
+                @using (Html.BeginForm("ZapiszPlik", "Admin", FormMethod.Post, new {id = "edycjapliku", @class = "form-horizontal"}))
+                {
+                    <input type="hidden" name="Hash" value="@plik.Hash" />
+                    <input type="hidden" name="Nazwa" value="@plik.Nazwa" />
+                    <input type="hidden" name="Opis" value="@plik.Opis" />
+                    <input type="hidden" name="Typ" value="@plik.Typ" />
+                    <input type="hidden" name="Sciezka" value="@plik.Sciezka" />
+                    <input type="hidden" name="Zawartosc" id="Zawartosc" value="@plik.Zawartosc" />
+                    <div id="editor" style="height: 500px">@plik.Zawartosc</div>
+                    <div class="zatwierdzanie">
+                        <button type="submit" class="btn btn-primary" data-postback-ajax>@Html.PobierzTlumaczenie("Zapisz zmiany")</button>
+                        <span id="result"></span>
+                    </div>
+                }
+
+            </div>
+            <div class="modal-footer"></div>
+
+        </div>
+    </div>
+</div>
+<script>
+    InicjujEdytor('@plik.Typ', '#Zawartosc'); 
+</script>

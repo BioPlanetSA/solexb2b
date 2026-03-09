@@ -1,0 +1,146 @@
+﻿@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model  Tuple<int,   IList<SolEx.Hurt.Core.ModelBLL.KontrolkaTresciBaza>>
+@{
+    var kontrolki = Model.Item2.OrderBy(x=>x.Grupa).GroupBy(x => x.Grupa);
+}
+<div class="modal   fade wybor-kontrolki-tresci">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Wybierz typ treści do dodania</h4>
+                <br />
+                <div class="btn-group">
+                    <input type="text" id="search" placeholder="Szukaj kontrolki" class="form-control">
+                    <span id="searchclear" class="fa fa-remove-circle"></span>
+                </div>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="card">
+                    <ul class="list-group list-group-flush list-unstyled" id="accordion" role="tablist" aria-multiselectable="true">
+                        @foreach (var g in kontrolki)
+                        {
+                            <li class="zakladka">
+
+
+                                <div role="tab" id="sekcja-@g.Key.Replace(" ", "-")">
+                                    <h3 class="card-header">
+                                        <a class="collapsed card-link" role="button" data-toggle="collapse" data-parent="#accordion" href="#zamyka-@g.Key.Replace(" ", "-")" aria-expanded="false" aria-controls="collapseTwo">
+                                            @g.Key
+                                        </a>
+                                    </h3>
+
+                                </div>
+                                <div id="zamyka-@g.Key.Replace(" ", "-")" class="panel-collapse collapse kontrolki " role="tabpanel" aria-labelledby="sekcja-@g.Key.Replace(" ", "-")">
+                                    <div class="card">
+                                        <ul class="list-group list-group-flush">
+                                            @foreach (var k in g)
+                                            {
+                                                string url = Url.Action("DodajKolumne", "Admin", new { id = Model.Item1, typ = k.GetType().PobierzOpisTypu() });
+                                                <li class="list-group-item ">
+                                                    <a href="@url" class="card-link">
+                                                        <i class="fa @k.Ikona"> </i> &nbsp; @k.Nazwa
+                                                        <div class="text-muted">
+                                                            @k.Opis
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+    
+    //# sourceURL=wyborkontrolki.js
+    $('.wybor-kontrolki-tresci .kontrolki .list-group-item a').on('click', function (e) {
+        e.preventDefault();
+        var el = $(this);
+        var link = el.prop('href');
+        $.ajax({
+            url: link,
+            type: "POST",
+            error: function() {
+                alert('Błąd zapisu danych proszę odświeżyć stronę');
+            }
+        }).done(function() {
+            el.closest('.modal').modal('hide');
+        });
+    });
+
+    var $rows = $('li.list-group-item');
+    var $kontener = $('.zakladka');
+    $('#search').bind('click keyup',function () {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+        val = val.replace(/\s+/g, '');
+        if (val === '') return;
+        $rows.show().filter(function () {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            var czyUkryc = !~text.indexOf(val);
+            return czyUkryc;
+        }).hide();
+
+        $kontener.show().filter(function () {
+            //przeszukiwnaie rodziców
+            var element = $(this).find('.card-header');
+            var text = element.text().replace(/\s+/g, ' ').toLowerCase();
+            var czyUkryc = !~text.indexOf(val);
+
+            //przeszukiwanie dzieci
+            if (czyUkryc == true) {
+                var dzieci = $(this).find('li.list-group-item');
+                var czyUkrycRodzica = true;
+                dzieci.show().filter(function () {
+                    var text1 = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+
+                    var ukrycDziecko = !~text1.indexOf(val);
+                    if (ukrycDziecko === true) {
+                        $(this).hide();
+                    } else {
+                        czyUkrycRodzica = false;
+                    }
+                });
+                if (czyUkrycRodzica === true) {
+                    $(this).hide();
+                }
+            }
+        });
+
+        //jeżeli postanie jeden rodzic otwieram go
+        var rodzice = $('.zakladka');
+        var widocznychElementow = 0;
+        var widocznyElement=null;
+        var displayed = rodzice.filter(function () {
+            var element = $(this);
+            if (element.css('display') === 'none') {
+                return false;
+            }
+            widocznychElementow++;
+            widocznyElement = $(this);
+            $(this).find('[role=tabpanel]').addClass('in');
+            return true;
+
+        });
+
+        if (widocznychElementow == 1) {
+            var item = widocznyElement.find('.collapsed');
+            $(item).click();
+        }
+    });
+    
+    $("#searchclear").click(function () {
+        $("#search").val('');
+        $('#search').click();
+    });
+</script>

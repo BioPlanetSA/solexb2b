@@ -1,0 +1,60 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model SolEx.Hurt.Model.Helpers.MojeDane.ZmianaHaslaModel
+@{
+    Dictionary<string, object> parametry = new Dictionary<string, object>();
+    parametry.Add("type", "password");
+    parametry.Add("required", "required");
+    parametry.Add("class", "form-control");
+}
+    @Html.HiddenFor(x => x.GUID)
+
+    <div id="reset-form" class="container zmiana-hasla">
+        <form></form>
+        <form method="POST">
+            @if (Model.HasloZmienione)
+            {
+                <div class="alert-success alert">
+                    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Hasło zostało zmienione.")
+                    @if (SolexHelper.AktualnyKlient.Dostep == AccesLevel.Niezalogowani)
+                    {
+                        <a class="alert-link" href="/logowanie">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Kliknij aby się zalogować") </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <h3>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zmiana hasła")</h3>
+
+                if (!string.IsNullOrEmpty(Model.komunikatDlaKlienta))
+                {
+                    <br/>
+                    <div class="alert alert-danger">
+                        @Html.PobierzTlumaczenie(Model.komunikatDlaKlienta)
+                    </div>
+                    <br/>
+                }
+
+
+                <fieldset class="form-group">
+                    <div class="zmianaHaslaPola">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nowe hasło") </div>
+                    @Html.TextBoxFor(x => x.Haslo, "", parametry)
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <div class="zmianaHaslaPola">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Powtórz hasło")</div>
+                    @Html.TextBoxFor(x => x.Haslo2, "", parametry)
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <input type="submit" name="zmianahasla" value="@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wyślij")" class="btn btn-szary btn-lg">
+                </fieldset>
+
+                <div class="clearfix">&nbsp</div>
+
+            }
+        </form>
+
+    </div>

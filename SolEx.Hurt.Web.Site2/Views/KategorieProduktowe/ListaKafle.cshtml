@@ -1,0 +1,31 @@
+﻿@using ServiceStack.OrmLite
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoListyKategoriiProduktow
+
+<div class="kategorie-produtkow-kafle kafle">
+    @foreach (KategorieBLL kat in Model.Kategorie)
+    {
+        <div class="kategorie-produtkow-kafel kafel c @Model.ElementCss ramka-wykropkowana-dol">
+            @{ bool jestobrazek = kat.Obrazek != null; }
+
+            <div class="@(jestobrazek ? "kategorie-produtkow-obrazek" : "")">
+                @if (jestobrazek)
+                {
+                    <a href="@kat.Tekst5" target="_blank" class="a-link">
+                        <img class="wlacz-tooltip producent-photo @Model.RozmiarKafla" alt-text="@kat.Nazwa" src="@kat.Obrazek.LinkWWersji(Model.RozmiarKafla)" title="@kat.Nazwa"/>
+                    </a>
+                }
+            </div>
+            @if (Model.PokazujNazwe)
+            {
+                <span class="kategorie-produtkow-nazwa text-uppercase">
+                    <a href="@Url.ZbudujLink(kat,SolexHelper.AktualnyJezyk)" class="a-link">
+                        @kat.Nazwa
+                    </a>
+                </span>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,58 @@
+﻿@using System.Globalization
+@using Newtonsoft.Json
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+@model  IndywidualizacjaWartosc
+
+<div data-indywidualizacja-parametr="@Model.IndywidualizacjaID" data-indywidualizacja-produkt="@Model.ProduktID">
+    @Html.HiddenFor(x => x.ProduktID)
+    @Html.HiddenFor(x => x.IndywidualizacjaID)
+    @Html.HiddenFor(x => x.Indywidualizacja)
+    @{
+        Dictionary<string, object> pars = new Dictionary<string, object>();
+        if (Model.Indywidualizacja.Wymagane)
+        {
+            pars.Add("required", "required");
+        }
+
+        pars.Add("class", "form-control-xs");
+
+        switch (Model.Indywidualizacja.RodzajKontrolki)
+        {
+
+            case RodzajKontrolki.Input:
+                <span class="nazwa-parametru">@Html.PobierzTlumaczenie(Model.Indywidualizacja.Nazwa)</span>
+                <span class="wartosc-parametru">@Html.TextBoxFor(x => x.Wartosc, pars)</span>
+                break;
+
+            case RodzajKontrolki.Atrybut:
+                <div class="koszyk-parametr ramka-wykropkowana-dol">
+                    <span class="parametr-nazwa">
+                        @Model.Indywidualizacja.PobierzAtrybut().Nazwa
+                    </span>
+                    @Html.DropDownListFor(x => x.Wartosc, Model.Indywidualizacja.PobierzAtrybut().ListaCech.Select(x => new SelectListItem() { Text = x.Nazwa, Value = x.Id.ToString(), Selected = (long)Model.Wartosc == x.Id }), " - ", pars)
+
+                    @{
+                        var zmianaCeny = Model.Indywidualizacja.PobierzCeneDlaWaluty(SolexHelper.AktualnyKlient.WalutaKlienta.Id);
+                    }
+                    
+                    @if (zmianaCeny.NarzutTyp != NarzutTyp.Brak)
+                    {
+                        if (zmianaCeny.NarzutTyp == NarzutTyp.Staly)
+                        {
+                            @Html.PobierzTlumaczenie("Cena wzrośnie o: {0} {1}", zmianaCeny.Cena, SolexHelper.AktualnyKlient.WalutaKlienta.WalutaB2b)
+                        }
+                        else
+                        {
+                        @Html.PobierzTlumaczenie("Cena wzrośnie o: {0} {1} za każdy element", zmianaCeny.Cena, SolexHelper.AktualnyKlient.WalutaKlienta.WalutaB2b)
+                        }
+                    }
+                </div>
+                break;
+        }
+    }
+</div>

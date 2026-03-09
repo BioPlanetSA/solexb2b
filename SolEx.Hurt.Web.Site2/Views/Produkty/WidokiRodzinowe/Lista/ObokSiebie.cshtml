@@ -1,0 +1,136 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryDoProduktowRodzinowych
+@{
+    ProduktKlienta pk = Model.ProduktGlowny;
+    List<IProduktKlienta> listaDzieci = Model.ProduktyRodzinowe;
+    int iloscKolumn = Model.IloscKolumn;
+    string link = Url.ZbudujLink(pk, SolexHelper.AktualnyJezyk);
+}
+<tr class="rodzina-pozioma">
+    @{
+        if (iloscKolumn < 1)
+        {
+            throw new Exception("Źle policzone kolumny - nie można pokazać rodziny. Sprawdz czy pokazywany jest nagłówke - ustawienie pokazuje nagłówki na liście produktów");
+        }
+
+        int iloscKolumnDzieci = iloscKolumn;
+        if (!Model.ListaDane.AktualneParametry.KontrolkaProduktow.RodzinyPokazujZdjeciaDzieci && pk.ZdjecieGlowne != null)
+        {
+            <td>
+                @{
+                    Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(pk, Model.ListaDane.AktualneParametry.KontrolkaProduktow.LRozmiarZdjecia, true, RodzajMetki.WidokRodzinowy, "foto link-szczegoly", link));
+                }
+            </td>
+
+            iloscKolumnDzieci = iloscKolumnDzieci - 1;
+        }
+    }
+
+    <td colspan="@iloscKolumnDzieci">
+
+        @{
+            Html.RenderPartial("PolaProduktu/Nazwa", new ParametryPrzekazywaneDoNazwy(pk, RodzajMetki.WidokRodzinowy, "produkt-nazwa link-szczegoly", link, true, false));
+        }
+        @{
+            Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pk.PobierzMetkiRodzina(MetkaPozycjaRodziny.PodNazwa), string.Format("lista-rodziny metki {0}", MetkaPozycjaRodziny.PodNazwa)));
+        }
+
+        <div class="rodzina-dzieci">
+            @foreach (IProduktKlienta produkt in listaDzieci)
+            {
+                var typStanuProdukt = produkt.PobierzTypStany;
+                <div class="rodzina-dziecko">
+                    @{
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkiRodzina(MetkaPozycjaRodziny.NadWariantem), $"lista-rodziny metki {MetkaPozycjaRodziny.NadWariantem}"));
+                    }
+                    @if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.CechyRodzinoweListaProduktowPokazuj && produkt.CechaUnikalnaRodzina != null)
+                    {
+                        <div class="rodzina-dziecko-cechy">
+                            <a href="@Url.ZbudujLink(produkt, SolexHelper.AktualnyJezyk)" class="clickable link-szczegoly">
+                                <div class="label label-border wieksze-litery-100 rodzina-dziecko-cecha ">
+                                    @{
+                                        Html.RenderPartial("~/Views/Produkty/_AtrybutProduktu.cshtml", produkt.CechaUnikalnaRodzina);
+                                    }
+                                </div>
+                            </a>
+                        </div>
+                    }
+
+
+                    @if (typStanuProdukt != TypStanu.niedostepny_dluzszy_czas)
+                    {
+                        if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.LSymbol)
+                        {
+                            <div class="rodzina-dziecko-symbol">
+                                <span class="kod">@(produkt.Kod)</span>
+                            </div>
+                        }
+                        if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.LKodKreskowy && !string.IsNullOrEmpty(produkt.KodKreskowy))
+                        {
+                            <div class="rodzina-dziecko-kod-kreskowy">
+                                <span class="kod-kreskowy">@(produkt.KodKreskowy)</span>
+                            </div>
+                        }
+                    }
+                    @if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.RodzinyPokazujZdjeciaDzieci)
+                    {
+                        <div class="rodzina-dziecko-zdjecie">
+                            @{
+                                Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(produkt, Model.ListaDane.AktualneParametry.KontrolkaProduktow.LRozmiarZdjecia, true, RodzajMetki.WidokRodzinowy, "foto link-szczegoly", Url.ZbudujLink(produkt, SolexHelper.AktualnyJezyk)));
+                            }
+                        </div>
+                    }
+
+                    @if (SesjaHelper.PobierzInstancje.CzyKlientZalogowany && Model.ListaDane.KlientWidziCeneHurtowa && typStanuProdukt != TypStanu.niedostepny_dluzszy_czas)
+                    {
+                        if (pk.GradacjePosortowane != null && Model.ListaDane.AktualneParametry.KontrolkaProduktow.LGradacja != GradacjaSposobPokazywania.Brak)
+                        {
+                            Html.RenderAction("Gradacje", "Produkty", new {ProduktId = produkt.Id, sposobPokazywania = Model.ListaDane.AktualneParametry.KontrolkaProduktow.LGradacja});
+                        }
+                        else
+                        {
+                            Html.RenderPartial("_Cena", new CenaDoPokazania(produkt.FlatCeny, "netto", "", "ceny-po-rabacie lista-produktow-warianty", "", Model.ListaDane.AktualneParametry.KontrolkaProduktow.CenaPoRabacie, "brutto"));
+                        }
+                    }
+
+                    @if (Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem))
+                    {
+                        <div class="rodzina-dziecko-stany">
+                            @{ Html.StanyProduktowWszystkie(produkt, Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem]); }
+                        </div>
+                    }
+
+                    @if (SesjaHelper.PobierzInstancje.CzyKlientZalogowany)
+                    {
+                        if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.PokazujKoszyk)
+                        {
+                            <div class="rodzina-dziecko-dodawanie-do-koszyka">
+                                @{
+                                    string info = "";
+                                    bool pokazujCene;
+
+                                    ParametryIlosciProduktu pi = new ParametryIlosciProduktu(produkt, Model.ListaDane.SortowanieJednostek, TypPozycjiKoszyka.Zwykly, null, Model.ListaDane.PokazujJednostki);
+                                    pi.MoznaDodawacDoKoszyka = SolexBllCalosc.PobierzInstancje.ProduktyBazowe.MoznaDodacDoKoszyka(produkt, out info, out pokazujCene);
+                                    pi.Info = info;
+                                    Html.RenderPartial("EditorTemplates/DodawanieDoKoszyka", pi);
+
+                                    //Html.RenderAction("DodawanieProduktuProdukt", "Koszyk", new { produkt = produkt, ukryjdodawanie = false });
+                                }
+                            </div>
+                        }
+                        Html.RenderPartial("~/Views/Koszyk/_Ulubione.cshtml", new Tuple<long, HashSet<long>, bool>(produkt.Id, Model.IdUlubionych, false));
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pk.PobierzMetkiRodzina(MetkaPozycjaRodziny.PodWariantem), string.Format("lista-rodziny metki {0}", MetkaPozycjaRodziny.PodWariantem)));
+                    }
+                </div>
+            }
+        </div>
+    </td>
+</tr>
+

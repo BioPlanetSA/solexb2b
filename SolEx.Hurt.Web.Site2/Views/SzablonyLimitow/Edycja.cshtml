@@ -1,0 +1,51 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.SzablonLimitow
+<div class="modal fade szablon-limitow-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            @using (Html.BeginForm("Edycja", "SzablonyLimitow", FormMethod.Post, new { id = "edycjaLimitow" }))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">@(Model.Id == 0 ? "Nowy szablon limitów" : "Edycja szablonu limitu " + Model.Nazwa)</h4>
+
+                </div>
+                <div class="modal-body">
+
+                    @Html.HiddenFor(x => x.Id)
+                    @Html.HiddenFor(x => x.Tworca)
+                    @Html.LabelFor(x => x.Nazwa, Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nazwa szablonu").ToString())
+                    @Html.TextBoxFor(x => x.Nazwa, new { @class = "form-control", required = "required" })
+                    @Html.LabelFor(x => x.IloscZamowien, Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Liczba zamówień"))
+                    @Html.TextBoxFor(x => x.IloscZamowien, new { @class = "form-control" })
+                    @Html.LabelFor(x => x.WartoscZamowien, Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wartość zamówień").ToString())
+                    @Html.TextBoxFor(x => x.WartoscZamowien, new { @class = "form-control" })
+                    @Html.LabelFor(x => x.IloscMiesiecy, Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Limit ilośc miesięcy").ToString().ToString())
+                    @Html.TextBoxFor(x => x.IloscMiesiecy, new { @class = "form-control", required = "required" })
+                    @Html.LabelFor(x => x.OdKiedy, Html.PobierzTlumaczenie("Od kiedy liczymy limit").ToString())
+                    @Html.TextBoxFor(x => x.OdKiedy, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+                </div>
+            }
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script language="javascript" type="text/javascript">
+    //# sourceURL=limitklienta.js
+    $('[name="IloscMiesiecy"]').on('keyup', function() {
+        var elem = $(this);
+        var testowane = elem.val();
+        var varint = parseInt(testowane);
+        if (varint == NaN || varint < 1) {
+            elem[0].setCustomValidity('@Html.PobierzTlumaczenie("Ilość miesięcy musi być większa od zera")');
+          
+        } else {
+            elem[0].setCustomValidity('');
+        }
+    });
+</script>

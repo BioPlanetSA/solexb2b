@@ -1,0 +1,49 @@
+﻿
+#poczatek opis
+<div>
+    <text></text>
+    @if(Model.Klient.Obrazek!=null)
+    {
+    <img src='@Klient.Obrazek.LinkWWersji("klient")' />
+    }
+    <h4>@(Model.Klient.nazwa)</h4>
+    <span class="glyphicon glyphicon-phone"></span>Tel: @(Model.Klient.telefon)<br />
+    <span class="glyphicon glyphicon-envelope"></span> E-mail: <a class="poziom" href="mailto:@(Klient.email)"> @(Model.Klient.email) </a>
+    @if(!string.IsNullOrEmpty(Model.Klient.skype ))
+    {
+    <br />
+    <text>
+        <a target="_top" href="skype:@(Klient.skype)?call"><img border="0" title="@(Klient.skype)" alt="@(Klient.skype)" oncontextmenu="return false" src="http://mystatus.skype.com/smallclassic/@(Klient.skype)"></a><br />
+    </text>
+    }
+    @if(!string.IsNullOrEmpty(Model.Klient.gadu_gadu ))
+    {
+    <br /><text>
+        <a href="gg:@(Klient.gadu_gadu)"><img style="border:0" src="http://status.gadu-gadu.pl/users/status.asp?id=@(Klient.gadu_gadu)&styl=1" />@(Klient.gadu_gadu)</a><br />
+    </text>
+    }
+</div>
+    #koniec opis
+
+    #poczatek opis_krotki
+    #koniec opis_krotki
+
+    #poczatek dostep
+    Zalogowani
+    #koniec dostep
+
+    #poczatek uklad
+    Pełny
+    #koniec uklad
+
+    #poczatek nazwa
+    Dane opiekuna
+    #koniec nazwa
+
+    #poczatek dostepne_parametry
+    SolEx.Hurt.Core.Klient, SolEx.Hurt.Core;
+    #koniec dostepne_parametry
+
+    #poczatek parent
+    strony-systemowe\naglowkowe
+    #koniec parent

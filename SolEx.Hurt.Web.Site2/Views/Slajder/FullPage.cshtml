@@ -1,0 +1,82 @@
+﻿@using ServiceStack.Text
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Models
+@model SlajderDane
+@{
+    int nrSlajdu = 0;
+    var kolorySlajdow = Model.ListaSlajdow.Select(x => x.KolorTla).ToList().ToJson();
+    var nazwySlajdow = Model.ListaSlajdow.Select(x => x.Nazwa.ToLower().Replace(" ", "")).ToList().ToJson();
+    var ladneNazwySlajdow = Model.ListaSlajdow.Select(x => x.Nazwa).ToList().ToJson();
+    string tloSjadow = "";
+    foreach (Slajd slajd in Model.ListaSlajdow)
+    {
+        if (slajd.PlikTlaId != null)
+        {
+            var obrazek = SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Plik>(slajd.PlikTlaId);
+            tloSjadow += @" #section" + (nrSlajdu) + " { background-image: url(\"" + obrazek.SciezkaWzgledna + "\");padding: 6% 0 0 0;}";
+        }
+        nrSlajdu++;
+    }
+
+    string autoScrolling = "";
+    if (Model.CzasPrzeskoku > 0) { autoScrolling = @" afterRender: function () {setInterval(function () {$.fn.fullpage.moveSectionDown();}, " + (Model.CzasAnimacji + Model.CzasPrzeskoku) + ");}"; }
+    nrSlajdu = 0;
+}
+
+<style>
+    h1 {
+        font-size: 5em;
+        font-family: arial,helvetica;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+    .section {
+        text-align: center;
+    }
+    .section {
+        background-size: cover;
+    }
+    .slide {
+        background-size: cover;
+    }
+
+   @Html.Raw(tloSjadow)
+
+    #infoMenu li a {
+        color: #fff;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#fullpage').fullpage({
+            anchors: @Html.Raw(nazwySlajdow),
+            sectionsColor: @Html.Raw(kolorySlajdow),
+            navigation: true,
+            navigationPosition: 'right',
+            navigationTooltips: @Html.Raw(ladneNazwySlajdow),
+            continuousVertical: true,
+            scrollingSpeed:@Model.CzasAnimacji,
+            autoScrolling: true,
+            @autoScrolling
+        });
+    });
+</script>
+
+<div id="fullpage">
+    @foreach (Slajd sl in Model.ListaSlajdow)
+    {
+        <div class="section " id="section@(nrSlajdu++)">
+            <div class="intro">
+                @if (sl.CzyPokazywacTytul)
+                {
+                    <h1>@sl.Nazwa</h1>
+                }
+                @if (!string.IsNullOrEmpty(sl.Opis))
+                {
+                    @Html.Raw(sl.Opis)
+                }
+            </div>
+        </div>
+    }
+</div>

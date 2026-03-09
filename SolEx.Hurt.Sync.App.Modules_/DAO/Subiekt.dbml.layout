@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14, 26.25" name="Subiekt">
+  <DataContextMoniker Name="/SubiektDataContext" />
+  <nestedChildShapes>
+    <classShape Id="1f6d8ed5-6ac3-413e-b243-c49145eb73a5" absoluteBounds="3.25, 1, 2, 17.924217122395834">
+      <DataClassMoniker Name="/SubiektDataContext/dok__Dokument" />
+      <nestedChildShapes>
+        <elementListCompartment Id="efa32ee1-eebd-47e9-afde-839752662287" absoluteBounds="3.265, 1.46, 1.9700000000000002, 17.364217122395832" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b558ad86-0785-49de-a3c2-2760ee9e4062" absoluteBounds="6.375, 0.75, 2, 11.001365559895833">
+      <DataClassMoniker Name="/SubiektDataContext/pw_Dane" />
+      <nestedChildShapes>
+        <elementListCompartment Id="55f3e213-c30a-405d-b6aa-3c9687f57a0f" absoluteBounds="6.39, 1.21, 1.9700000000000002, 10.441365559895832" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="edfc3273-7e5f-4f43-9a99-109e0e90d5c5" absoluteBounds="9.375, 0.75, 2, 3.6939111328124996">
+      <DataClassMoniker Name="/SubiektDataContext/pw_Pole" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b37ee774-4eb7-4cb5-9069-e28ecddb49d6" absoluteBounds="9.39, 1.21, 1.9700000000000002, 3.1339111328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2e2d4afe-10c5-4653-b7a7-262e3463a57c" absoluteBounds="9, 5.375, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/SubiektDataContext/tw_ZdjecieTw" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2f9e8716-bdf6-4ce2-916f-6c604e26fdb0" absoluteBounds="9.015, 5.835, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ef59142c-270a-429f-b1e9-8705c81ce5f7" absoluteBounds="11.75, 1.125, 2, 12.732078450520833">
+      <DataClassMoniker Name="/SubiektDataContext/tw__Towar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="961580a5-b0b3-42a5-a765-d785feed3a5a" absoluteBounds="11.765, 1.585, 1.9700000000000002, 12.172078450520832" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(11.75 : 6.26044840494792); (11.7083333333333 : 6.26044840494792 : JumpStart); (11.5416666666667 : 6.26044840494792 : JumpEnd); (11 : 6.26044840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/SubiektDataContext/tw__Towar/tw__Towar_tw_ZdjecieTw" />
+      <nodes>
+        <classShapeMoniker Id="ef59142c-270a-429f-b1e9-8705c81ce5f7" />
+        <classShapeMoniker Id="2e2d4afe-10c5-4653-b7a7-262e3463a57c" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(12.4592307692308 : 13.8570784505208); (12.4592307692308 : 14.1070784505208); (13.0546153846154 : 14.1070784505208); (13.0546153846154 : 13.8570784505208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/SubiektDataContext/tw__Towar/tw__Towar_tw__Towar" />
+      <nodes>
+        <classShapeMoniker Id="ef59142c-270a-429f-b1e9-8705c81ce5f7" />
+        <classShapeMoniker Id="ef59142c-270a-429f-b1e9-8705c81ce5f7" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="5049e435-5321-47b7-8fe4-ef7bde7a8ff5" absoluteBounds="0.875, 1.75, 2, 24.270164388020834">
+      <DataClassMoniker Name="/SubiektDataContext/vwTowar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="58ac535f-0abf-4902-915e-d6f52df7a1c3" absoluteBounds="0.89000000000000012, 2.21, 1.9700000000000002, 23.710164388020832" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="827c40a1-4fde-4cc2-b4a3-e6d9f62a9d12" absoluteBounds="1.875, 0.875, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/SubiektDataContext/sl_Magazyn" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2cdcaefc-3794-4cc9-ae31-39131ed937d0" absoluteBounds="1.8900000000000001, 1.335, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="5372c2f1-fa4b-4114-91d1-39af7402f749" absoluteBounds="5.875, 0.75, 2, 1.3862939453125">
+      <DataClassMoniker Name="/SubiektDataContext/tw_CechaTw" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f76d42f1-45f7-4b13-9df4-9f1ff6e3a309" absoluteBounds="5.89, 1.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(11.75 : 7.51044840494792); (11.7083333333333 : 7.51044840494792 : JumpStart); (11.5416666666667 : 7.51044840494792 : JumpEnd); (8.625 : 7.51044840494792); (8.625 : 0.5); (6.875 : 0.5); (6.875 : 0.75)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/SubiektDataContext/tw__Towar/tw__Towar_tw_CechaTw" />
+      <nodes>
+        <classShapeMoniker Id="ef59142c-270a-429f-b1e9-8705c81ce5f7" />
+        <classShapeMoniker Id="5372c2f1-fa4b-4114-91d1-39af7402f749" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="e5a564fa-a14f-410d-b025-404763cefed3" absoluteBounds="10.625, 7.875, 2, 17.155011393229167">
+      <DataClassMoniker Name="/SubiektDataContext/tw_Cena" />
+      <nestedChildShapes>
+        <elementListCompartment Id="02eb9d2c-fba2-4d00-9140-5d793a59ab59" absoluteBounds="10.64, 8.335, 1.9700000000000002, 16.595011393229164" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(12.75 : 1.125); (12.75 : 0.875); (11.625 : 0.875); (11.625 : 7.875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/SubiektDataContext/tw__Towar/tw__Towar_tw_Cena" />
+      <nodes>
+        <classShapeMoniker Id="ef59142c-270a-429f-b1e9-8705c81ce5f7" />
+        <classShapeMoniker Id="e5a564fa-a14f-410d-b025-404763cefed3" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="342d9bc0-8df8-4d08-8e82-f140227d380a" absoluteBounds="8.875, 4.375, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/SubiektDataContext/vwPoziomyCenWaluty" />
+      <nestedChildShapes>
+        <elementListCompartment Id="03331a6d-77d7-41cd-89fe-7a99c7a3dd2a" absoluteBounds="8.89, 4.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

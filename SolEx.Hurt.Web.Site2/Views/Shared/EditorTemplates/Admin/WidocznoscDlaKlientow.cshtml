@@ -1,0 +1,170 @@
+﻿@using System.Web.Script.Serialization
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Core.Helper
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+@{
+    var szablony = SolexBllCalosc.PobierzInstancje.WidocznosciTypowBll.PobierzSzablony();
+    WidocznosciTypow dane = (WidocznosciTypow)Model.Wartosc;
+    if (dane == null)
+    {
+        dane = new WidocznosciTypow();
+    }
+    JavaScriptSerializer ser = new JavaScriptSerializer();
+}
+
+
+<div class="widocznosc-dla-klienta">
+
+    @Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+    <label>Widoczność dla wybranych klientów - wg. schematu</label>
+    <br/>
+
+
+    @if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+    {
+        <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+    }
+
+    @Html.Hidden("Wartosc", ser.Serialize(dane))
+
+
+    @Html.Label("WyborSzablonListyProduktowu", "Wybierz wzór z uprzednio zapisanych")
+    @Html.DropDownList("WyborSzablonListyProduktowu", szablony.Select(x => new ExtendedSelectListItem {Text = x.Nazwa, Value = ser.Serialize(x)}), "Wybierz szablon", new {@class = "form-control"})
+    @Html.Label("Kierunek", "Okreś kierunek")
+  
+    @Html.DropDownList("Kierunek", Enum.GetNames(typeof(WidocznoscTypoKierunek)).Select(x => new SelectListItem { Text = x, Value = x, Selected = x == dane.Kierunek.ToString() }), new { @class = "form-control", id = "kierunek" })
+
+   
+    <div>
+        @Html.Label("token-input-WymaganeKategorie-" + Model.IdentyfikatorObiektu, "jednocześnie wszystkich wybranych")
+        @{ Html.RenderPartial("EditorTemplates/Admin/PoleZeSlownikiem", new OpisPolaObiektu
+           {
+               TypSlownika = typeof(SlownikKategoriiKlienta),
+               IdentyfikatorObiektu = Model.IdentyfikatorObiektu,
+               NazwaPola = "WymaganeWszystkie",
+               Multiselect = true,
+               Wartosc = dane.KategoriaKlientaIdWszystkie,
+               Slownik = Activator.CreateInstance<SlownikKategoriiKlienta>().PobierzWartosci()
+           }, new ViewDataDictionary {TemplateInfo = new TemplateInfo {HtmlFieldPrefix = "WymaganeWszystkie"}}); }
+    </div>
+    <div>
+        @Html.Label("token-input-WymaganeKategorie-" + Model.IdentyfikatorObiektu, "i dowolnych z wybranych")
+        @{
+            Html.RenderPartial("EditorTemplates/Admin/PoleZeSlownikiem", new OpisPolaObiektu
+            {
+                TypSlownika = typeof(SlownikKategoriiKlienta),
+                IdentyfikatorObiektu = Model.IdentyfikatorObiektu,
+                NazwaPola = "WymaganeNiektore",
+                Multiselect = true,
+                Wartosc = dane.KategoriaKlientaIdKtorakolwiek,
+                Slownik = Activator.CreateInstance<SlownikKategoriiKlienta>().PobierzWartosci()
+            }, new ViewDataDictionary {TemplateInfo = new TemplateInfo {HtmlFieldPrefix = "WymaganeNiektore"}});
+        }
+
+    </div>
+    <br/>
+
+
+    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModal">Zapisz wybór jako nowy wzór </button>
+    @if (dane != null && dane.Id!=0)
+    {
+        <a class="btn btn-info btn-sm widocznosc-klienci" href="/Admin/WidocznosDlaKlientowListaKlientow?id=@dane.Id">Zobacz wybranych klientów</a>
+    }
+    else
+    {
+        <span class="czcionka-tekstowa-paragraf"> &nbsp; @Html.PobierzTlumaczenie("Podgląd wybranych klientów będzie dostępny po zapisaniu strony")</span>
+    }
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Nowy wzór widoczności</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.Label("NowySzablonListyProduktowNazwa", "Nazwa")
+                    @Html.TextBox("NowySzablonListyProduktowNazwa", "", new {@class = "form-control"})
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" name="akcja">Zapisz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+    //# sourceURL=widocznoscDlaKlientow.js
+    $('.widocznosc-klienci').click(function (e) {
+        e.preventDefault();
+        var url = $(this).prop('href');
+        $.ajax({ url: url, method: 'Post' }).done(function (data) {
+            var pojemnik = $('[data-containter="modal"]');
+            pojemnik.html(data);
+            InitModal(pojemnik);
+        });
+    });
+    $('input[name$="NowySzablonNazwa"]').onFirst('change', function (e) {
+        e.stopImmediatePropagation();
+    });
+    $('button[name="akcja"]').on('click', function () {
+        var poleteksotwe = $('input[name$="NowySzablonNazwa"]');
+        UzupelnijObiekt($(this), undefined, undefined, undefined, poleteksotwe.val());
+        $('body').removeClass('modal-open').find('.modal-backdrop').remove();
+        $('#kierunek').trigger('change');
+    });
+    $('select[name$="WyborSzablonu"]').onFirst('change', function () {
+        console.log('wybor szablon');
+        var el = $(this);
+        var wybrany = el.val();
+        if (wybrany != '') {
+            var obj = jQuery.parseJSON(wybrany);
+            UzupelnijObiekt(el, obj.Kierunek, obj.KategoriaKlientaIdWszystkie, obj.KategoriaKlientaIdKtorakolwiek, undefined);
+        }
+    });
+
+    $('#kierunek, input[name^="WymaganeNiektore"], input[name^="WymaganeWszystkie"]').onFirst('change', function () {
+        var kierunek = $('#kierunek');
+        var niektowe = $('input[name^="WymaganeNiektore"].wartosc-ukryta');
+        var wszystkie = $('input[name^="WymaganeWszystkie"].wartosc-ukryta');
+        var wszystkiew = wszystkie.map(function () {
+            if ($(this).val() != '') {
+                return parseInt($(this).val());
+            }
+        }).toArray();
+        var niektowew = niektowe.map(function () {
+            if ($(this).val() != '') {
+                return parseInt($(this).val());
+            }
+        }).toArray();
+        UzupelnijObiekt($(this), kierunek.val(), wszystkiew, niektowew, undefined);
+    });
+
+    function UzupelnijObiekt(sender, kierunek, wszystkie, wybrane, nazwa) {
+        var wartoscPole = sender.closest('.widocznosc-dla-klienta').children('[name$="Wartosc"]');
+        var obj = jQuery.parseJSON(wartoscPole.val());
+        if (kierunek != undefined) {
+            obj.Kierunek = kierunek;
+        }
+        if (wszystkie != undefined) {
+            obj.KategoriaKlientaIdWszystkie = wszystkie;
+        }
+        if (wybrane != undefined) {
+            obj.KategoriaKlientaIdKtorakolwiek = wybrane;
+        }
+        if (nazwa != undefined) {
+            obj.Nazwa = nazwa;
+        }
+        wartoscPole.val(JSON.stringify(obj));
+       // console.log(obj);
+    }
+</script>

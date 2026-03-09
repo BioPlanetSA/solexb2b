@@ -1,0 +1,88 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.DaneDoWidokuPlikow
+
+<div class="lista-plikow">
+    <table class="table">
+        
+        @if (Model.PokazujNaglowek)
+        {
+            <thead>
+            <th>@Html.PobierzTlumaczenie("Nazwa")</th>
+                @if (Model.PokazujDate)
+                {
+                    <th>@Html.PobierzTlumaczenie("Data aktualizacji")</th>
+                }
+            <th>@Html.PobierzTlumaczenie("Rozmiar")</th>
+            </thead>
+        }
+
+        @if (Model.Rodzic != null)
+        {
+            <tr>
+                <td colspan="2">
+                    <a href="@Model.Rodzic">
+                        <img class="katalog-ikona" src="/Zasoby/Obrazki/ikony_plikow/katalog-otwarty.png"/>
+                        <span class="katalog-nazwa">...</span>
+                    </a>
+                </td>
+            </tr>
+        }
+
+        @{
+            if (Model != null)
+            {
+                foreach (var item in Model.ListaPlikow)
+                {
+                    string obrazekWPreset = item.LinkDoIkony + "?preset=ikona50";
+                    string linkDoPliku = item.Link;
+
+                    if (!item.LinkDoIkony.StartsWith("\\") && !item.LinkDoIkony.StartsWith("/"))
+                    {
+                        obrazekWPreset = "\\" + obrazekWPreset;
+                    }
+
+                    if (!item.Link.StartsWith("\\") && !item.Link.StartsWith("/"))
+                    {
+                        linkDoPliku = "\\" + linkDoPliku;
+                    }
+
+                    <tr>
+                        <td>
+                        <a href="@linkDoPliku">
+                            <img src="@obrazekWPreset" alt="@item.NazwaBezRoszerzenia"/>
+                            @if (item.Typ == TypZasobu.Katalog)
+                            {
+                                <span class="nazwa">@item.NazwaBezRoszerzenia</span>
+                            }
+                            else
+                            {
+                                <span class="nazwa">
+                                    @item.NazwaBezRoszerzenia
+                                    <span class="ext">@item.Roszerzenie</span>
+                                </span>
+                            }
+                        </a>
+
+                        @if (Model.PokazujDate)
+                        {
+                            <td>
+                                <span class="data">@item.Data</span>
+                            </td>
+                        }
+                        
+                        <td>
+                            @if (item.Typ == TypZasobu.Plik)
+                            {
+                                <span class="rozmiar">@item.RozmiarMB MiB</span>
+                            }
+                        </td>
+
+                    </tr>
+                }
+            }
+        }
+    </table>
+</div>

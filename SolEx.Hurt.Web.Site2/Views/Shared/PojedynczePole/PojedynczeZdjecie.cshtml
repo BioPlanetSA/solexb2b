@@ -1,0 +1,20 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryPrzekazywaneDoSzegolow
+@if (!string.IsNullOrEmpty(Model.Naglowek))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Naglowek)
+}
+@if (Model.Wartosc != null)
+{
+    IObrazek obrazek = (IObrazek)Model.Wartosc;
+    <div class="pole-pojedyncze-zdjecie pole-pojedyncze">
+        <img class="img-fluid" src="@obrazek.LinkWWersji()" />
+    </div>
+}
+@if (!string.IsNullOrEmpty(Model.Stopka))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Stopka)
+}

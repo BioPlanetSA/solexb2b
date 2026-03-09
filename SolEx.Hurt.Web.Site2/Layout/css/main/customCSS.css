@@ -1,0 +1,234 @@
+﻿@charset "UTF-8";
+/*
+    definicja kolorów
+*/
+/* 
+
+
+    FONTY 
+
+
+*/
+.ramka-wykropkowana, .ramka-wykropkowana-dol, .ramka-wykropkowana-gora, .ramka-wykropkowana-prawa, .ramka-wykropkowana-lewa {
+  border: 0 solid transparent;
+  border-image-source: url("../../dots.svg");
+  border-image-slice: 7;
+  border-image-repeat: round;
+  border-width: 0;
+}
+
+.ramka-wykropkowana-dol {
+  border-bottom-width: 5px;
+}
+
+.ramka-wykropkowana-gora {
+  border-top-width: 5px;
+}
+
+.ramka-wykropkowana-prawa {
+  border-right-width: 5px;
+}
+
+.ramka-wykropkowana-lewa {
+  border-left-width: 5px;
+}
+
+.czcionka-tekstowa-paragraf, p {
+  font-family: Roboto, Verdana, Arial;
+  font-size: 14px;
+  line-height: 23px;
+}
+
+.czcionka-tekstowa {
+  font-family: Roboto, Verdana, Arial;
+  font-size: 14px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.UstawMinimalnaSzerokoscZObrazka {
+  overflow: hidden;
+}
+
+@media (max-width: 1139px) {
+  .UstawMinimalnaSzerokoscZObrazka img {
+    min-width: auto !important;
+    min-width: unset !important;
+  }
+}
+
+.czcionka-georgia {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.tekst-kolor-czarny {
+  color: black;
+}
+
+.ramka-ciagla, .ramka-ciagla-lewa, .ramka-ciagla-prawa, .ramka-ciagla-gora, .ramka-ciagla-dol {
+  border: 0 solid #e7e7e7;
+}
+
+.ramka-ciagla-lewa {
+  border-left-width: 1px;
+}
+
+.ramka-ciagla-prawa {
+  border-right-width: 1px;
+}
+
+.ramka-ciagla-gora {
+  border-top-width: 1px;
+}
+
+.ramka-ciagla-dol {
+  border-bottom-width: 1px;
+}
+
+.ramka-ciagla-biala-gora {
+  border-bottom: 1px solid white;
+}
+
+.ramka-ciagla-biala-dol {
+  border-bottom: 1px solid white;
+}
+
+.ramka-ciagla-biala-prawa {
+  border-bottom: 1px solid white;
+}
+
+.ramka-ciagla-biala-lewa {
+  border-bottom: 1px solid white;
+}
+
+.ramka-ciagla-dol-czerwona {
+  border-bottom: 1px solid #f1a598;
+}
+
+.biala-linia-1px {
+  border-top: 1px solid #ffffff;
+}
+
+.biala-linia-2px {
+  border-top: 1px solid #ffffff;
+  padding-top: 20px;
+}
+
+/*tlo*/
+.cien-dla-wewnetrznego > div {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+/*wiersze i kolulmny*/
+.wiersz-wysrodkuj-w-pionie {
+  align-items: center;
+  -webkit-align-items: center;
+}
+
+.kontrolka-jak-najmniej-miejsca-display-inline {
+  display: inline-block;
+}
+
+.kolumna-bez-odstepow {
+  padding-right: 0;
+  padding-left: 0;
+  margin: 0;
+}
+
+.wiersz-kolumny-bez-odstepow.row > [class*="col-"] {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.tekst-nie-zawijaj * {
+  white-space: nowrap;
+}
+
+.container {
+  margin: auto;
+}
+
+.podciagnij-obrazek-o-200px {
+  z-index: -50;
+}
+
+.podciagnij-obrazek-o-200px div {
+  z-index: -50;
+}
+
+.podciagnij-obrazek-o-200px img {
+  z-index: -50;
+  position: relative;
+  margin-top: -200px;
+}
+
+.obrazek-rozciagaj-na-pelny-monitor img {
+  width: 100%;
+  position: relative;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.minimalna-szerokosc-991px {
+  min-width: 991px;
+  overflow: hidden;
+}
+
+.minimalna-szerokosc-1200px {
+  min-width: 1200px;
+  overflow: hidden;
+}
+
+.wypunktowanie-listowanie-2-kolumny li.list-inline {
+  width: 50%;
+  float: left;
+}
+
+.wypunktowanie-listowanie-1-kolumna li.list-inline {
+  width: 100%;
+}
+
+/*menu*/
+.menu-pozycja-do-prawej.menu-pozycja {
+  float: right;
+}
+
+/**{
+        //moga byc divy w srodku jakies
+        display: inline;
+    }*/
+.menu-moje-dane a .tresc-pojemnik, a > .menu-moje-dane .tresc-pojemnik {
+  margin-left: 30px;
+  display: inline-block;
+  color: black !important;
+  font-size: 13px;
+  position: relative;
+}
+
+.menu-moje-dane a .tresc-pojemnik:before, a > .menu-moje-dane .tresc-pojemnik:before {
+  content: ' ';
+  background: url("../../images/user.svg");
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: -30px;
+  top: -3px;
+}
+
+.menu-moje-dane .menu-pozycja {
+  display: inline-block !important;
+}
+
+.menu-moje-dane .open > .dropdown-menu {
+  display: block !important;
+}
+
+/*# sourceMappingURL=customCSS.css.map */

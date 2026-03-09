@@ -1,0 +1,236 @@
+﻿@import "_ustawienia.scss";
+
+.filtr {
+    display: inline;
+}
+
+.filtry {
+    padding-top: 5px;
+    margin-left: -2.5px;
+    margin-right: -2.5px; //marginesy ujemne dlatego ze w srodku filtry maja marignesy 5px dookola, a chcemy skasowac po bokach odstepy zeby bylo rowno
+
+    .przelamanie-_CheckBox {
+        display: block;
+    }
+
+   
+   .fil:not(.fil-button){
+      .btn {
+        border-color: $kolor-ramki-mocny !important;
+        // background-color: white !important;
+        text-align: left;
+       }
+   }
+
+
+    .fil {
+        .fil-naglowek {
+            color: $kolor-text-muted;
+            text-transform: uppercase;
+        }
+
+        display: inline-block;
+        margin: 0 0;
+
+        & {
+            padding: 5px 2.5px;
+            padding-top: 0; //tu trzeba uwazc bo mozemy filtry miec po prawej albo po lewej nad kategoriami - i bez sensu zeby byly odstpey od gory
+
+            /*&:not(:last-child) {
+                padding-right: 0;
+            }*/
+        }
+    }
+
+
+    .form-control {
+        border: 1px solid black;
+    }
+
+    input[type=text] {
+        font-family: $font-menu-rodzina;
+        padding-left: 5px;
+    }
+
+    label {
+        display: inline;
+    }
+
+
+    .fil-label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: -12px; //kazda opcja musi miec margin-top: 15px
+        margin-top: 5px;
+    }
+
+    //wyszukiwanie wewnwtrzne
+    .fil.wyszukiwanie-wewnetrzne {
+        .fa-search {
+            top: 9px;
+        }
+    }
+
+
+    .fil-select {
+        width: 200px;
+
+        //menu rozsuwane
+        .dropdown-menu {
+            width: 200px; //nadpisujemy standard- filtry raczej nie beda szersze - ale jak by co to mozna napisac pod klienta
+            min-width: 200px;
+        }
+
+        .btn-group {
+            width: 100%;
+            position: relative;
+            vertical-align: bottom;
+
+            .dropdown-toggle {
+                width: 100%;
+                max-width: 300px;
+                min-width: 60px;
+                overflow: hidden;
+                padding-left: 10px;
+                font-size: 14px;
+                //przecinki po kazdej opcji, oprocz ostatniej
+                span {
+                    &:not(:last-child):after {
+                        content: ',';
+                    }
+                }
+            }
+        }
+
+        //dla najmniejszego ekranu dropdown ma być na 100% szerokosci
+        @media (max-width: 34em) {
+             width: 100%;
+             .dropdown-toggle{
+                 max-width: 100%  !important;
+             }
+        }
+    }
+
+
+    a {
+        cursor: pointer;
+    }
+
+
+    .fil-aktywny {
+        .fil-label {
+            //  font-weight: bold;
+        }
+    }
+
+
+    //filtr suwak
+    .fil-suwak {
+        margin-left: 5px;
+
+        .fil-label {
+            margin-left: -8px;
+        }
+
+        input {
+            border: 0;
+            background-color: transparent;
+            display: inline-block;
+            margin-left: 20px;
+            font-weight: bold;
+            max-width: 80px;
+        }
+
+        .range {
+            max-width: 150px;
+            display: inline-block;
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .ui-widget-header {
+            background: lighten($kolor-zaznaczenia,40%);
+        }
+
+        .ui-state-default {
+            background: $kolor-zaznaczenia;
+        }
+    }
+
+
+
+    //filtr checkbox
+    .fil-cb {
+        .opcje {
+            /*margin-top: 6px;*/
+            //odpowiednik btn-sm - tak jak pozostel filtry sa
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            padding-left: 0;
+            text-transform: uppercase;
+        }
+
+        a {
+            color: $kolor-text-muted;
+            text-decoration: none;
+            font-size: 14px;
+            vertical-align: middle;
+
+            &:not(:last-child) {
+                margin-right: 12px;
+            }
+
+            .fa {
+                // margin-left:10px;
+                margin-right: 2px;
+                font-size: 30px;
+                vertical-align: middle;
+            }
+
+            &.a-checkbox-checked {
+                color: black;
+            }
+
+            display: inline-block;
+            margin-top: 5px;
+        }
+    }
+
+    .fil-button{
+        width: 100%;
+         .btn{ 
+             width: 100%; 
+             margin: 2px auto;
+
+             &:first-child{
+                 margin-top:0;
+             }
+         }
+    }
+
+    .fil-zdjecie{
+
+    }
+}
+.zmiana-profilu-bool, .drukuj-katalog, .modal-okno{
+    display:inline;
+}
+
+
+
+
+
+.panel-aktywne-filtry{
+
+    .cecha{
+        background-color: rgba(211, 211, 211, 0.31);
+        border-radius: 10px;
+        padding: 5px 10px 5px 10px;
+
+        a{
+            margin-left: 5px;
+        }
+            margin-right: 10px;
+    }
+}

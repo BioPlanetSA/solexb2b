@@ -1,0 +1,68 @@
+﻿@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Core.DostepDane.DaneObiektu
+@using SolEx.Hurt.Helpers
+@model SolEx.Hurt.Web.Site2.Helper.DaneListaAdmin.DaneEdycjaAdmin
+@{
+    List<IGrouping<string, OpisPolaObiektu>> taby = Model.PolaObiektu.OrderBy(x=>x.Grupa.Kolejnosc).GroupBy(x => x.Grupa.Grupa).ToList();
+}
+
+    @Html.HiddenFor(x => x.KluczWartosc)
+    @Html.HiddenFor(x => x.Nadrzedny)
+    @Html.EditorFor(x => x.Typ)
+    @Html.HiddenFor(x => x.JezykId)
+    @Html.EditorFor(x => x.TypNadrzednych, "Type")
+    @if (taby.Count > 1)
+    {
+        <ul class="nav nav-tabs" role="tablist" id="zakladki">
+            @for (int i = 0; i < taby.Count; i++)
+            {
+                <li role="presentation" class="nav-item">
+                    <a href="#tab@(taby[i].Key.GetHashCode()+Model.Typ.GetHashCode())" role="tab" data-toggle="tab" class="nav-link @Html.Raw(i == 0 ? "active" : "")">@(taby[i].Key)</a>
+                </li>
+            }
+        </ul>
+    }
+
+    <div class="tab-content">
+        @for (int i = 0; i < taby.Count; i++)
+        {
+            <div role="tabpanel" class="tab-pane @Html.Raw(i == 0 ? "active" : "")" id="tab@(taby[i].Key.GetHashCode()+Model.Typ.GetHashCode())">
+                @for (int j = 0; j < Model.PolaObiektu.Length; j++)
+                {
+                    int j1 = j;
+                    if (Model.PolaObiektu[j1].Grupa.Grupa == taby[i].Key)
+                    {
+                        <div class="edytor edytor-@Model.PolaObiektu[j].PobierzTypEdytora() @(Model.PolaObiektu[j].PobieraneErp ? "edytowaneErpNieWolnoEdytowac" : "")">
+                            @Html.DisplayFor(x => Model.PolaObiektu[j1], "Admin\\EtykietaPola")
+                            @Html.EditorFor(x =>  Model.PolaObiektu[j1], "Admin\\" + Model.PolaObiektu[j].PobierzTypEdytora() )
+
+                            @if (!string.IsNullOrEmpty(Model.PolaObiektu[j1].OpisPola))
+                            {
+                                <span class="label-opis"> @Html.Raw( @Model.PolaObiektu[j1].OpisPola )</span>
+                            }
+
+                        </div>
+                    }
+                }
+            </div>
+        }
+
+    </div>
+<script type="text/javascript">
+    $('#zakladki a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    $('.akcje button:not([formnovalidate])').on('click', function () {
+        if (!$('#edycja')[0].checkValidity()) {
+            var zly = $('#edycja :invalid')[0];
+            var tabl = $(zly).closest('.tab-pane');
+            $('.tab-pane').removeClass('active');
+            tabl.addClass('active');
+
+            var id = tabl.prop('id');
+            $('#edycja a[href="#' +id+ '"]').tab('show');
+        }
+    });
+</script>

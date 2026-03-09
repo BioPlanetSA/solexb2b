@@ -1,0 +1,123 @@
+﻿@import "_ustawienia.scss";
+
+.slider-full {
+    overflow: hidden;
+
+    .slick-prev, .slick-next {
+        &, &:hover {
+            background: #000;
+            width: 50px;
+            height: 50px;
+            opacity: 0.4;
+            z-index: 10;
+        }
+
+        &:before {
+            color: white;
+        }
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    .slick-initialized .slick-slide {
+        text-align: center;
+    }
+
+    .slick-slide img {
+        //dwie wersje - dla ekranó MNIEJ niz 1140 (lg) - skalowanie normalne, dla wiekszych ekranów minimalna szerokosc ustawiana JS na pelny banner
+        position: relative;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
+        width: 100%;
+    }
+
+    &:not(.slick-initialized) {
+        .slide {
+            display: none;
+
+            &:first-child {
+                display: block;
+            }
+        }
+    }
+
+
+    .slide_content {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 40%;
+        transform: translateX(-50%) translateY(-50%);
+        font-family: $font-menu-rodzina;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.4);
+
+        .title, .description {
+            &, a {
+                color: white;
+            }
+        }
+
+        .title {
+            text-transform: uppercase;
+        }
+
+        .description {
+            &, a {
+                font-family: $font-rodzina-georgia;
+            }
+        }
+        //fonty responsywne
+        @media (min-width: 544px) {
+            .title {
+                font-size: 20px;
+            }
+
+            .description {
+                font-size: 13px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .title {
+                font-size: 34px;
+            }
+
+            .description {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .title {
+                font-size: 64px;
+            }
+
+            .description {
+                font-size: 25px;
+            }
+        }
+    }
+
+    //animacja dla tekstów i tytulu
+    .slick-current {
+        .slide_content {
+            .title {
+                position: relative;
+                animation: NajazdZGory 0.7s ease;
+            }
+
+            .description {
+                position: relative;
+                animation: NajazdZGory 0.7s ease;
+                animation-fill-mode: backwards;
+                animation-delay: 0.7s;
+            }
+        }
+    }
+}

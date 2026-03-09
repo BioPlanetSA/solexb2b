@@ -1,0 +1,95 @@
+﻿@using System.Globalization
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+@model  SolEx.Hurt.Core.BLL.Web.ParametryIlosciProduktu
+
+@{
+    DodawanieProduktuPrzyciski przyciski = Model.Przyciski;
+    Dictionary<string, object> parametryselecta = new Dictionary<string, object> { { "data-width", "auto" }, { "class", "jednostki" } };
+    Dictionary<string, object> parametryinputa = new Dictionary<string, object>() { { " autocomplete", "off" }, { "class", "r input-xs input-ilosc" }, { "data-pozycjaid", Model.Id }, { "pattern", @"[0-9\.,]*" } };
+    //    @; // TODO!
+    bool nieaktywnywybor = (ViewData["nieaktywne"] != null && (bool)ViewData["nieaktywne"]);
+    decimal domyslnieDodawanaIlosc = SolexBllCalosc.PobierzInstancje.Konfiguracja.DomyslnaDodawanaIloscKoszyka;
+    if (Model.WidoczneJednostki.Length == 1 || nieaktywnywybor)
+    {
+        //   parametryselecta.Add("disabled", "disabled");
+    }
+    if (nieaktywnywybor)
+    {
+        parametryinputa.Add("readonly", "readonly");
+    }
+    bool selectpokazwac = Model.WidoczneJednostki.Length > 1;
+
+    decimal przelicznik = 1;
+    if (Model.WidoczneJednostki.Any(x => x.Id == Model.JednostkaId))
+    {
+        przelicznik = Model.WidoczneJednostki.First(x => x.Id == Model.JednostkaId).Przelicznik;
+    }
+
+    if (Model.Produkt.IloscWOpakowaniu > 0)
+    {
+        parametryinputa.Add("data-iloscwopakowaniu", Model.Produkt.IloscWOpakowaniu);
+    }
+}
+<div class="dodawanie-zbiorcze" style="text-align: left; margin-bottom: 5px; margin-left: 42px;">
+    
+</div>
+
+
+<div style="margin-bottom: 10px;" @(domyslnieDodawanaIlosc != 0 ? string.Format("data-domyslna-ilosc={0}", domyslnieDodawanaIlosc) : "")
+     class="dodawanie-panel @Html.Raw(przyciski != null && przyciski.DodawanieTekstowe ? "tekstowe" : "")"
+     @*@(Model.KrokDodawanie != 1 ? string.Format("data-step={0}", Model.KrokDodawanie) : "")*@
+     @(Model.Indywidualizowany ? "data-indywidualizowany=1" : "")
+     @(przelicznik != 1 ? $"data-przelicznik-aktualny={przelicznik}" : "")
+     @(Model.TypPozycji != TypPozycjiKoszyka.Zwykly ? string.Format("data-typ-pozycji={0}", Model.TypPozycji) : "")
+     @(SolexBllCalosc.PobierzInstancje.Konfiguracja.ZamykajKarteProduktuPoDodaniuDoKoszyka ? "data-zamykajModal=1" : "")>
+    <input id="ProduktBazowyId" name="ProduktBazowyId" type="hidden" value="@Model.ProduktBazowyId">
+    @Html.HiddenFor(x => x.ProduktId, new { @class = "idproduktu" })
+    @Html.HiddenFor(x => x.TypPozycji, new { @class = "TypPozycji" })
+    @Html.HiddenFor(x => x.Id)
+
+    @if (Model.PokazywacJednostki)
+    {
+        <span class="dodawanie-jednostki">
+            @if (selectpokazwac)
+            {
+                @Html.ExtendedDropDownListFor(x => x.JednostkaId, Model.WidoczneJednostki.Select(x => new ExtendedSelectListItem
+                {
+                    Selected = x.Id == Model.JednostkaId,
+                    Value = x.Id.ToString(CultureInfo.InvariantCulture),
+                    Text = x.Nazwa,
+                    htmlAttributes = new {data_przelicznik = x.Przelicznik}//, data_step = x.Krok}
+                }), null, parametryselecta)
+            }
+            else
+            {
+                @Model.WidoczneJednostki[0].Nazwa
+            }
+        </span>
+    }
+
+    @if (!Model.PokazywacJednostki || !selectpokazwac)
+    {
+        @Html.HiddenFor(x => x.JednostkaId, new { @class = "jednostki" })
+    }
+    <div class="dodawanie-btn">
+        @Html.TextBoxFor(x => x.Ilosc, Model.Ilosc > 0 ? "{0:0.####}" : "{0:#.#}", parametryinputa)
+
+        @if (!nieaktywnywybor)
+        {
+            <i class="zbiorczododaj fa fa-cubes hidden-lg-up" aria-hidden="true" style="position: absolute; bottom: 7px; left: -70px; cursor: pointer;"></i>
+            <i class="zbiorczododaj fa fa-cubes hidden-md-down" aria-hidden="true" style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); cursor: pointer;"></i>
+            <i class="wgore fa fa-caret-up hidden-xs"></i>
+            <i class="wdol fa fa-caret-down hidden-xs"></i>
+        }
+    </div>
+
+    @if (przyciski != null)
+    {
+        <div class="przycisk przycisk-id-@Model.ProduktId">
+            @Html.Partial("DodawanieProduktuPrzyciski", przyciski)
+        </div>
+    }
+</div>

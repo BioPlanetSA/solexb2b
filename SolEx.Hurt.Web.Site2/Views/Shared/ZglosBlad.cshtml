@@ -1,0 +1,19 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.ParametryDoZglosBlad
+    @{
+        string temat = Html.PobierzTlumaczenie(Model.Temat) + " " + Model.NazwaObiektu.Trim();
+    }
+<div class="row">
+    @if (!string.IsNullOrEmpty(Model.Naglowek))
+    {
+        @Html.PobierzTlumaczenie(Model.Naglowek)
+    }
+    <span>
+        <a href="mailto:@Model.Email?subject=@temat"> @Html.PobierzTlumaczenie(Model.Text)</a>
+    </span>
+    
+    @if (!string.IsNullOrEmpty(Model.Stopka))
+    {
+        @Html.PobierzTlumaczenie(Model.Stopka)
+    }
+</div>

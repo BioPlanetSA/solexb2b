@@ -1,0 +1,14 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@{
+    if (Model.Wartosc != null)
+    {
+        <span> @(SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Plik>(Convert.ToInt32(Model.Wartosc)).Nazwa)</span>
+    }
+}
+
+
+

@@ -1,0 +1,34 @@
+﻿@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.Helper
+@using SolEx.Hurt.Web.Site2.Helper
+@model List<ProduktKlienta>
+@{
+    Layout = null;
+}
+
+@section Opis {
+  
+    Aby zaimportować ceny należy stworzyć poziomy cenowe w Subiekcie o odpowiednich nazwach (nazwy muszą być dokładnie jak niżej - wielkość liter ma znaczenie). I tak:
+    
+    <ul class="czcionka-tekstowa-paragraf">
+        <li>Do poziomu cenowego o nazwie 'Detaliczna-B2B' zapisywana jest cena detaliczna</li>
+        <li>Do poziomu cenowego o nazwie 'Hurtowa-B2B' zapisywana jest cena przed rabatem</li>
+        <li>Do poziomu cenowego o nazwie 'Zakup-B2B' zapisywana jest cena po rabacie</li>
+    </ul>
+}
+
+@section Nazwa {
+   Pełna baza produktów z opisami i cenami dla Subiekta GT/ Nexo
+}
+
+@section Szablon{@if (Model != null){List<EppHelper.TowarDoGeneracjiEpp> obiektyDoEpp = new List<EppHelper.TowarDoGeneracjiEpp>();
+        foreach (ProduktKlienta p in Model)
+        {
+            EppHelper.TowarDoGeneracjiEpp produkt = new EppHelper.TowarDoGeneracjiEpp(p);
+            obiektyDoEpp.Add(produkt);
+        }
+
+        @Html.Raw(EppHelper.PobierzInstancje.WygenerujEpp(obiektyDoEpp))
+    }
+}

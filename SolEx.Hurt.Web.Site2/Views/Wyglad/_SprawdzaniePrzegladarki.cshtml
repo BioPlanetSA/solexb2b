@@ -1,0 +1,26 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model Dictionary<string, decimal> 
+           <div class="info-przegladarki">
+               <h2 class="przegladarka-wersja">
+                   @Html.PobierzTlumaczenie("Wykryliśmy że masz bardzo starą przeglądarkę.")
+         
+                   @Html.PobierzTlumaczenie("Twoja przeglądarka to:")
+
+                   @if (Model.ContainsKey(Request.Browser.Browser))
+                   {
+                       <span class="przegladarka @Request.Browser.Browser.ToLower()"></span>
+                   }
+                   @Request.Browser.Browser @Request.Browser.Version
+               </h2>
+    
+               <p>
+                   @Html.PobierzTlumaczenie("Platforma nie będzie wyglądać ładnie na tak starej przeglądarce. Bardzo prosimy o zmianę przeglądarki na nowszą. Proponujemy Ci zainstalowanie nowej darmowej przeglądarki - kliknij niżej w logo aby zainstalować nową przeglądarkę Firefox lub Chrome")
+               </p>
+               <div class="linki">
+                   <a href="http://www.getfirefox.com" class="link-przeglarka"><span class="przegladarka firefox"></span><span>Firefox</span></a>
+                   <a href="http://www.google.com/chrome"><span class="przegladarka chrome"></span><span>Chrome</span></a>
+               </div>
+</div>

@@ -1,0 +1,323 @@
+﻿@import "_ustawienia.scss";
+
+.koszyk-podglad {
+    position: relative;
+
+    #koszyk_podglad {
+
+        .tekst-pusty {
+            padding-right: 5px;
+        }
+
+        &:not(.koszyk-podglad-pusty) {
+            .tekst-pusty {
+                display: none;
+            }
+        }
+
+        &.koszyk-podglad-pusty {
+
+            #ilosc_pozycji, .jednostka, #cena_netto {
+                display: none;
+            }
+        }
+
+
+
+        .bsk_icon {
+            //powiekszamy ikone i dajemy w srodku info o ilosci produktow
+            height: 34px;
+            width: 34px;
+            margin-top: 0;
+
+            #ilosc_pozycji {
+                width: 22px;
+                height: 22px;
+                background: #f2613f;
+                border-radius: 20px;
+                font-size: 14px;
+                color: white;
+                line-height: 1.5;
+                margin-left: 11px;
+                margin-top: -2px;
+            }
+        }
+
+        @media only screen and (max-width: $lg) {
+           .cena-wartosc {
+                //wersja mobilna - przezroczystosci
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                left: 0;
+                font-weight: bold;
+                background-color: rgba(255,255,255,0.73);
+                bottom: 2px;
+                opacity: 1;
+                z-index: 99435;
+            }
+
+           .bsk_icon{
+               opacity: 0.4;
+           }
+        }
+    }
+
+    .dropdown-toggle:after {
+        display: none;
+    }
+}
+
+
+#koszyk-podglad-wysuwany {
+    min-width: 350px;
+    margin-top: -5px; //z powodu tego ze kursor lubi uciekac z kontrolki i jest problem, lepiej zeby nachrodzilo menu na koszyk
+    .sum {
+        font-size: 17px;
+
+        .line {
+            margin: 2px;
+        }
+    }
+
+    .btn-success {
+        width: 100%;
+        color: white;
+    }
+
+    table {
+        .ilosc, .kod, .kodkreskowy {
+            white-space: nowrap;
+        }
+    }
+}
+
+.wybor-koszyka {
+    padding: 0.1rem 0;
+}
+
+#koszyk-lista-pozycji {
+    .param_name {
+        font-family: $font-tekst-rodzina;
+    }
+
+    .belka-nad-produktami {
+        .finalizuj {
+            margin-left: 20px;
+        }
+    }
+
+
+    .cena-zmian-przedstawiciel {
+        margin-top: 20px;
+        color: lightgray;
+
+        .fa {
+            color: black;
+        }
+
+        .zmiana-ceny-input {
+            width: 65px;
+            color: black;
+            text-align: right;
+        }
+
+        &.zmiana-ceny-jest {
+            color: red;
+
+            .zmiana-ceny-input {
+                //color: red;
+            }
+        }
+    }
+
+    .koszyk-przyciski {
+        margin-bottom: 5px;
+    }
+
+
+    .koszyk-pozycja-usun > a {
+        padding: 5px;
+    }
+
+    .koszyk-belka-podsumowanie {
+        > div {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+    }
+
+    .koszyk-podsumowanie {
+        tbody {
+            font-family: $font-tekst-rodzina;
+        }
+    }
+
+    .koszyk-finalizacja {
+        font-family: $font-tekst-rodzina;
+    }
+
+
+    .koszyk-lista-produktow {
+        //------------------------------------
+        //lista produktów responsywność, (min-device-width: 768px) and (max-device-width: 1024px)
+        //-----------------------------------
+        @media only screen and (max-width: $lg) {
+            td {
+                //domsylnie wszystko ukrywanie
+                display: none;
+
+                &.koszyk-pozycja-usun, &.waga, &.CenaPoRabacie, &.cena-zmian-przedstawiciel, &.zdjecie, &.nazwa, &.ProduktWartoscKoszyk {
+                    display: inline;
+                }
+
+                &.kolumna-dodawanie-do-koszyka {
+                    display: inline-block;
+                    width:100%;
+                }
+
+
+                &.koszyk-pozycja-usun {
+                    a {
+                        border: 1px solid $kolor-ramki-mocny !important;
+                        float: left;
+                        padding: 5px;
+                        margin-right: 5px;
+
+                        height: 40px;
+                        width: 25px;
+                    }                   
+                }
+
+                &.waga {
+                    font-size: 13px;
+                    margin-right: 10px;
+
+                    &:before {
+                        content: '\A';
+                        white-space: pre;
+                    }
+                }
+
+                &.CenaPoRabacie {
+                    display: inline-block;
+                }
+
+                &.ProduktWartoscKoszyk {
+                    display: inline-block;
+                    vertical-align: middle;
+                    float: right;
+                    font-size: 20px;
+                    top: -18px;
+                    margin-right: 10px;
+                }
+
+                .fa-refresh {
+                    height: 30px;
+                    width: 40px;
+                    border: 1px solid $kolor-ramki-mocny;
+                    line-height: 1.4;
+                    font-size: 20px;
+                }
+            }
+        }
+
+        .rabat-dodatkowy {
+            margin-top: 10px;
+            padding: 2px 15px;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+    }
+}
+
+
+.parametry-koszyk-wybor {
+    margin-bottom: 5px;
+
+    .koszyk-parametr {
+        padding-bottom: 5px;
+        padding-top: 10px;
+
+        &.brak-wyboru {
+            button {
+                border-color: red;
+            }
+
+            color: red;
+        }
+
+        button {
+            background-color: white;
+            border-color: $kolor-ramki-mocny;
+            outline: none !important;
+        }
+
+        .parametr-nazwa {
+            /*width: 20%;
+                display: inline-block;*/
+            font-family: $font-tekst-rodzina;
+        }
+
+        .fa.fa-plus {
+            /*display: inline-block;
+                width: 4%;*/
+        }
+
+
+        .bootstrap-select {
+            width: 100% !important;
+        }
+        /*.btn-group {
+                width: 79%;
+
+                .dropdown-toggle::after {
+                    top: 0;
+                }
+            }*/
+    }
+
+
+    .koszyk-upload-plikow {
+        .dropzone {
+            width: 100%;
+            border: 4px dashed $kolor-wyroznienie2;
+            padding: 30px;
+            text-align: center;
+            background-color: $kolor-szary-ledwowidoczny;
+            font-size: 20px;
+            font-family: $font-tekst-rodzina;
+            color: $kolor-text-muted;
+            // color:#92AAB0;
+            /*text-align:left;
+                vertical-align:middle;
+                padding:10px 10px 10 10px;
+                margin-bottom: 10px;
+                font-size: 200%;*/
+            &.dragenter {
+                color: darken($kolor-text-muted, 5%);
+                background-color: darken($kolor-szary-ledwowidoczny, 5%);
+                border: 4px dashed darken($kolor-wyroznienie2,5%);
+            }
+        }
+
+        .pliki-lista {
+            margin-top: 10px;
+
+            .statusbar {
+                margin-top: 5px;
+                margin-bottom: 5px;
+
+                .close {
+                    width: 10px;
+                    display: inline-block;
+                }
+
+                .progress {
+                    display: inline-block;
+                    width: calc(100% - 20px);
+                }
+            }
+        }
+    }
+}

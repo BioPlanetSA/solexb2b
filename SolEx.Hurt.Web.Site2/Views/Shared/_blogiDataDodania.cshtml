@@ -1,0 +1,14 @@
+﻿@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow
+@using SolEx.Hurt.Web.Site2.Helper
+@model DateTime
+
+@{
+    string[] nazwaZOdmiana = Model.ToString("M").Split(null);
+    string miesiac = nazwaZOdmiana[1];
+    string dzien = nazwaZOdmiana[0];
+}
+
+<span class="blog-data-dodania blog-data-znaczek">
+    <span class="dzien">@dzien</span>
+    <span class="miesiac">@miesiac</span>
+</span>

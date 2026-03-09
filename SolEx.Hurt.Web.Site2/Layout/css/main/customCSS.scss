@@ -1,0 +1,677 @@
+﻿@import "_wspolneCustomCSS.scss";
+
+.hidden-xs-down {
+}
+
+.hidden-sm-down {
+}
+
+.hidden-md-down {
+}
+
+.hidden-lg-down {
+}
+
+.hidden-sm-up {
+}
+
+.hidden-md-up {
+}
+
+.hidden-lg-up {
+}
+
+.col-sm-offset-1 {
+}
+
+.col-sm-offset-2 {
+}
+
+.col-sm-offset-3 {
+}
+
+.col-sm-offset-4 {
+}
+
+.col-sm-offset-5 {
+}
+
+.col-sm-offset-6 {
+}
+
+.col-sm-offset-7 {
+}
+
+.col-sm-offset-8 {
+}
+
+.col-sm-offset-9 {
+}
+
+.col-sm-offset-10 {
+}
+
+.col-sm-offset-11 {
+}
+
+.col-sm-offset-12 {
+}
+
+.col-md-offset-1 {
+}
+
+.col-md-offset-2 {
+}
+
+.col-md-offset-3 {
+}
+
+.col-md-offset-4 {
+}
+
+.col-md-offset-5 {
+}
+
+.col-md-offset-6 {
+}
+
+.col-md-offset-7 {
+}
+
+.col-md-offset-8 {
+}
+
+.col-md-offset-9 {
+}
+
+.col-md-offset-10 {
+}
+
+.col-md-offset-11 {
+}
+
+.col-md-offset-12 {
+}
+
+.col-lg-offset-1 {
+}
+
+.col-lg-offset-2 {
+}
+
+.col-lg-offset-3 {
+}
+
+.col-lg-offset-4 {
+}
+
+.col-lg-offset-5 {
+}
+
+.col-lg-offset-6 {
+}
+
+.col-lg-offset-7 {
+}
+
+.col-lg-offset-8 {
+}
+
+.col-lg-offset-9 {
+}
+
+.col-lg-offset-10 {
+}
+
+.col-lg-offset-11 {
+}
+
+.col-lg-offset-12 {
+}
+
+
+.col-lg-1 {
+}
+
+.col-lg-2 {
+}
+
+.col-lg-3 {
+}
+
+.col-lg-4 {
+}
+
+.col-lg-5 {
+}
+
+.col-lg-6 {
+}
+
+.col-lg-7 {
+}
+
+.col-lg-8 {
+}
+
+.col-lg-9 {
+}
+
+.col-lg-10 {
+}
+
+.col-lg-11 {
+}
+
+.col-lg-12 {
+}
+
+.col-md-1 {
+}
+
+.col-md-2 {
+}
+
+.col-md-3 {
+}
+
+.col-md-4 {
+}
+
+.col-md-5 {
+}
+
+.col-md-6 {
+}
+
+.col-md-7 {
+}
+
+.col-md-8 {
+}
+
+.col-md-9 {
+}
+
+.col-md-10 {
+}
+
+.col-md-11 {
+}
+
+.col-md-12 {
+}
+
+
+.col-sm-1 {
+}
+
+.col-sm-2 {
+}
+
+.col-sm-3 {
+}
+
+.col-sm-4 {
+}
+
+.col-sm-5 {
+}
+
+.col-sm-6 {
+}
+
+.col-sm-7 {
+}
+
+.col-sm-8 {
+}
+
+.col-sm-9 {
+}
+
+.col-sm-10 {
+}
+
+.col-sm-11 {
+}
+
+.col-sm-12 {
+}
+
+
+.col-xs-top{}
+.col-xs-bottom {}
+.col-xs-center {}
+
+
+.kontener-z-index-20 {
+    //definicja w tresci
+}
+
+
+.UstawMinimalnaSzerokoscZObrazka {
+    overflow: hidden; //jak szerokosc ustaiwmy wymuszona na minimalny rozmiar, to musimy uciac brzego wystajace jesli sa takowe
+    & img {
+        @media (max-width: 1139px) {
+            min-width: auto !important;
+            min-width: unset !important; // to JS ustawia odpowidnio i nadpisujemy dla malych rozdzielczosci
+        }
+    }
+}
+
+.wyzeruj-wysokosc-xs-up {
+    //definicja w _tresci.scss
+}
+
+.wyzeruj-wysokosc-sm-up { //definicja w _tresci.scss
+}
+
+.wyzeruj-wysokosc-md-up { //definicja w _tresci.scss
+}
+
+.wyzeruj-wysokosc-lg-up { //definicja w _tresci.scss
+}
+
+//tlo
+
+.tlo-wiersza-usun-xs {
+    //definicja w _treci.scss
+}
+
+.tlo-wiersza-usun-md-down { //definicja w _treci.scss
+}
+
+tlo-wiersza-usun-sm-down { //definicja w _treci.scss
+}
+
+tlo-wiersza-usun-lg-down { //definicja w _treci.scss
+}
+
+
+
+.tlo-wiersza-centruj-poziomie {
+    //definicja w tresci.scss
+}
+
+tlo-wiersza-centruj-pionie { //definicja w tresci.scss
+}
+
+
+.pokaz-jako-h6 {
+    //definicja w _fonts.scss
+}
+
+.pokaz-jako-h5 {
+    //definicja w _fonts.scss
+}
+
+.pokaz-jako-h4 {
+    //definicja w _fonts.scss
+}
+
+.pokaz-jako-h3 {
+    //definicja w _fonts.scss
+}
+
+.pokaz-jako-h2 {
+    //definicja w _fonts.scss
+}
+
+.pokaz-jako-h1 {
+    //definicja w _bootstrap-flex.scss
+}
+
+.text-xs-left {
+}
+
+
+.text-xs-center {
+}
+
+.text-xs-right {
+}
+
+.text-uppercase {
+}
+
+.text-lowercase {
+}
+
+.text-muted {
+}
+
+.czcionka-georgia {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.tekst-kolor-czarny {
+    color: black;
+}
+
+.hidden-print{ }
+
+.ramka-ciagla {
+    border: 0 solid #e7e7e7;
+}
+
+.ramka-ciagla-lewa {
+    @extend .ramka-ciagla;
+    border-left-width: 1px;
+}
+
+.ramka-ciagla-prawa {
+    @extend .ramka-ciagla;
+    border-right-width: 1px;
+}
+
+.ramka-ciagla-gora {
+    @extend .ramka-ciagla;
+    border-top-width: 1px;
+}
+
+.ramka-ciagla-dol {
+    @extend .ramka-ciagla;
+    border-bottom-width: 1px;
+}
+
+.ramka-ciagla-biala-gora {
+    border-top: 1px solid white;
+}
+
+.ramka-ciagla-biala-dol {
+    border-bottom: 1px solid white;
+}
+
+.ramka-ciagla-biala-prawa {
+    border-right: 1px solid white;
+}
+
+.ramka-ciagla-biala-lewa {
+    border-left: 1px solid white;
+}
+
+.ramka-ciagla-dol-czerwona {
+    border-bottom: 1px solid #f1a598;
+}
+
+.biala-linia-1px {
+    border-top: 1px solid #ffffff;
+}
+
+.biala-linia-2px {
+    border-top: 1px solid #ffffff;
+    padding-top: 20px;
+}
+
+/*tlo*/
+
+.tlo-do-prawej {
+    //definicja w _tresci.scss
+}
+
+.tlo-do-dolu{
+    //definicja w _tresci.scss
+}
+
+.tlo-rozciagnij {
+    //definicja w _tresci.scss
+}
+
+.cien-dla-wewnetrznego {
+    > div {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    }
+}
+
+.cien-dla-wiersza {
+    //definicja w  tresci.scss
+}
+
+.maska-przezroczysta-stala-xs {
+    //definicja w efekty.scss
+}
+
+
+/*wiersze i kolulmny*/
+
+.wiersz-wysrodkuj-w-pionie {
+    align-items: center;
+    -webkit-align-items: center;
+}
+
+.wiersz-dodaj-odstepy-dla-elementow-wewnatrz{
+    &> div{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+}
+
+.kontrolka-jak-najmniej-miejsca-display-inline {
+    display: inline-block;
+}
+
+
+.kolumna-bez-odstepow {
+    padding-right: 0;
+    padding-left: 0;
+    margin: 0;
+}
+
+
+.wiersz-kolumny-bez-odstepow {
+    //dziala tylko dla pierwszego poziomu kollumn - dlatego nazwa wiersz-kolumny
+    &.row > [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        //margin: 0;
+    }
+}
+
+.tekst-nie-zawijaj {
+    * {
+        white-space: nowrap;
+    }
+}
+
+.container {
+    margin: auto;
+}
+
+.clearfix {
+}
+
+
+.ustawJakoTopBanner {
+    //tylko na potrzeby JS
+}
+
+.podciagnij-obrazek-o-200px {
+    z-index: -50;
+
+    div {
+        z-index: -50;
+    }
+
+    img {
+        z-index: -50;
+        position: relative;
+        margin-top: -200px;
+    }
+}
+
+
+.obrazek-rozciagaj-na-pelny-monitor {
+    img {
+        width: 100%;
+        //to ponizej centruj obrazek
+        position: relative;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
+}
+
+.minimalna-szerokosc-991px {
+    min-width: 991px;
+    overflow: hidden;
+}
+
+.minimalna-szerokosc-1200px {
+    min-width: 1200px;
+    overflow: hidden;
+}
+
+
+.wypunktowanie-listowanie-2-kolumny {
+    //dziala tylko dla ul li ktore maja juz klase list-inline
+    li.list-inline {
+        width: 50%;
+        float: left;
+    }
+}
+
+.wypunktowanie-listowanie-1-kolumna {
+    //dziala tylko dla ul li ktore maja juz klase list-inline
+    li.list-inline {
+        width: 100%;
+    }
+}
+
+/*menu*/
+
+.menu-pozycja-do-prawej {
+    &.menu-pozycja {
+        float: right;
+    }
+}
+
+.komunikat-brak-licencji{
+    color:red;
+}
+.menu-moje-dane {
+    //jeszcze widocnzosc specjalna - te wszystkie bajery wyzej maja sie pokazywac tylko w duzym ekranie - nadajemy style na CALE MENU - gdy styl menu-moje-dane ma w srodku menu
+    //przechwyt zeby w menu glownym nie pokazywac wcale tej opcji
+    .menu-pozycja {
+        display: inline-block !important;
+    }
+    .open > .dropdown-menu{
+         display: block !important;
+    }
+}
+
+.submenu-rozwijanie-wchodzenie-pod-spod {
+}
+
+
+.submenu-rozwijanie-pelna-szerokosc {
+}
+
+
+
+
+.bold {
+}
+
+
+//pole opis wartość
+.pole-opis-wartosc-w-jednej-linii {
+    //definicja w tresci
+}
+
+
+.belka-plywajaca-ukryj{}
+
+
+.img-circle{
+    img{
+       border-radius:50%
+    }
+}
+
+
+.cien{ //definicja w efetkach
+}
+
+.col-xs-order--3-down{}
+.col-sm-order--3-down{}
+.col-md-order--3-down{}
+.col-lg-order--3-down{}
+
+.col-xs-order--2-down{}
+.col-sm-order--2-down{}
+.col-md-order--2-down{}
+.col-lg-order--2-down{}
+
+.col-xs-order--1-down{}
+.col-sm-order--1-down{}
+.col-md-order--1-down{}
+.col-lg-order--1-down{}
+
+.col-xs-order--3-up{}
+.col-sm-order--3-up{}
+.col-md-order--3-up{}
+.col-lg-order--3-up{}
+
+.col-xs-order--2-up{}
+.col-sm-order--2-up{}
+.col-md-order--2-up{}
+.col-lg-order--2-up{}
+
+.col-xs-order--1-up{}
+.col-sm-order--1-up{}
+.col-md-order--1-up{}
+.col-lg-order--1-up{}
+
+.col-xs-order-1-down{}
+.col-sm-order-1-down{}
+.col-md-order-1-down{}
+.col-lg-order-1-down{}
+
+.col-xs-order-2-down{}
+.col-sm-order-2-down{}
+.col-md-order-2-down{}
+.col-lg-order-2-down{}
+
+.col-xs-order-3-down{}
+.col-sm-order-3-down{}
+.col-md-order-3-down{}
+.col-lg-order-3-down{}
+
+.col-xs-order-4-down{}
+.col-sm-order-4-down{}
+.col-md-order-4-down{}
+.col-lg-order-4-down{}
+
+.col-xs-order-5-down{}
+.col-sm-order-5-down{}
+.col-md-order-5-down{}
+.col-lg-order-5-down{}
+
+.col-xs-order-1-up{}
+.col-sm-order-1-up{}
+.col-md-order-1-up{}
+.col-lg-order-1-up{}
+
+.col-xs-order-2-up{}
+.col-sm-order-2-up{}
+.col-md-order-2-up{}
+.col-lg-order-2-up{}
+
+.col-xs-order-3-up{}
+.col-sm-order-3-up{}
+.col-md-order-3-up{}
+.col-lg-order-3-up{}
+
+.col-xs-order-4-up{}
+.col-sm-order-4-up{}
+.col-md-order-4-up{}
+.col-lg-order-4-up{}
+
+.col-xs-order-5-up{}
+.col-sm-order-5-up{}
+.col-md-order-5-up{}
+.col-lg-order-5-up{}

@@ -1,0 +1,63 @@
+﻿@using System.Dynamic
+@using System.Globalization
+@using System.Text
+@using System.Web.Script.Serialization
+@using CsvHelper
+@using CsvHelper.Configuration
+@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.App_Start
+@using SolEx.Hurt.Web.Site2.Helper
+@using CsvWriter = CsvHelper.CsvWriter
+@model  SolEx.Hurt.Web.Site2.Models.ParametrDoKataloguProduktow
+@{
+    Layout = null;
+}
+@section Opis {
+}
+@section Nazwa {
+   Uniwersalny plik JSON do drukowania katalogów - ceny
+}
+@section Szablon{
+    @if (Model != null)
+    {
+        List<dynamic> produkty = new List<dynamic>();
+        foreach (IProduktKlienta p in Model.ListaProduktow)
+        {
+            dynamic ceny = new ExpandoObject();
+
+            var slownik = (ceny as IDictionary<string, Object>);
+
+            slownik.Add("ProduktId", p.Id);
+
+            foreach (var cena in p.CenyPoziomy.Values)
+            {
+                if (cena.Netto == 0 || !cena.WalutaId.HasValue)
+                {
+                    continue;
+                }
+
+                string klucz = "Cena_" + cena.PoziomId;
+                slownik.Add(klucz, cena.Netto.DoLadnejCyfry());
+            }
+
+            produkty.Add(ceny);
+        }
+
+        object listaDoJson = new {Ceny = produkty};
+
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            serializer.MaxJsonLength = Int32.MaxValue;
+            serializer.RegisterConverters(new JavaScriptConverter[] { new ExpandoJSONConverter() });
+
+            ViewBag.ObiektModelu = listaDoJson;
+
+            @Html.Raw(serializer.Serialize(listaDoJson));
+        }
+    }

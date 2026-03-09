@@ -1,0 +1,19 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@Html.ActionLink(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Dodaj"), "Edycja", new { }, new { @class = "okno-modalne btn btn-primary pull-right" })
+
+
+
+<div class="subkonta">
+
+    <div class="c subkonta-naglowek">
+        @Html.PobierzTlumaczenie("Lista miejsc powstawaniu kosztu (MPK)")
+    </div>
+
+    <div class="szablon-miejscKosztow-pojemnik">
+
+    </div>
+    <script language="javascript" type="text/javascript">
+        InicjujListe('.szablon-miejscKosztow-pojemnik', '.szablon-miejscKosztow-edycja', '/MiejsceKosztow/ListaDane');
+    </script>
+</div>

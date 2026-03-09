@@ -1,0 +1,133 @@
+/*@import "../../../Content/bootstrap/_mixins.scss";*/
+
+@import "_ustawienia.scss";
+
+@import "_wspolneCustomCSS.scss";
+
+@import "_fileinput.scss";
+@import "_belka_plywajaca.scss";
+@import "mixins/_grid.scss";
+
+@import "_admin_historia_zmian.scss";
+
+@import "_jezyki-zmiana.scss";
+
+@import "_moje_dane.scss";
+
+@import "_dokumenty.scss";
+@import "_kafle_flex.scss";
+@import "_menu-mobilne.scss";
+@import "_galeriaZdjec.scss";
+@import "_walidatory.scss";
+@import "_colobox.scss";
+@import "_animacja.scss";
+
+@import "_bootbox.scss";
+
+@import "_pliki.scss";
+
+@import "_ulubione.scss";
+@import "_modal.scss";
+
+@import "_integracja.scss";
+@import "_ceny.scss";
+@import "_tabele.scss";
+@import "_bootstrap_poprawki.scss";
+
+@import "_slick_slider.scss";
+@import "_slajder_fullwidth.scss";
+
+
+@import "_efekty.scss";
+
+@import "_dropdowny.scss";
+
+@import "_body.scss";
+
+
+@import "_subkonta.scss";
+
+@import "_gradacja.scss";
+
+@import "_koszyk_importy.scss";
+
+@import "_koszyk_dodawanie.scss";
+@import "_rejestracja.scss";
+@import "_akordion.scss";
+@import "_popover.scss";
+@import "_przyciski.scss";
+@import "_menu.scss";
+@import "_wyszukiwarka.scss";
+@import "_tresci.scss";
+@import "_obrazki.scss";
+@import "_slajder-suwak.scss";
+@import "_produkty_kafle.scss";
+@import "_blog.scss";
+
+@import "_newsletter.scss";
+@import "_menu-kolumnowe.scss";
+@import "_pracownicy.scss";
+@import "_breadcrumb.scss";
+@import "_kategorie_produktow.scss";
+@import "_logowanie.scss";
+@import "_stronnicowanie.scss";
+@import "_produkty-lista.scss";
+@import "_koszyk.scss";
+@import "_metki.scss";
+@import "_sklepy.scss";
+@import "_filtry.scss";
+@import "_translator.scss";
+@import "_produkt_szczegoly.scss";
+@import "_SzablonyAkceptacji.scss";
+
+@import "_rodziny.scss";
+
+@import "_bootstrap3-progres-bar.scss";
+
+
+@import "_wymiaryLogistyka.scss";
+
+
+//adminowe
+@import "_admin_edycja_tresci.scss";
+@import "_admin_ustawienia.scss";
+@import "_admin_podpowiedzi.scss";
+@import "_admin_listy.scss";
+@import "_admin_kontrolki.scss";
+@import "_admin_emaile.scss";
+
+
+a:hover, a:focus{
+    text-decoration: none;
+}
+
+
+
+//testy przepelenienie
+
+#page-content{
+ //   padding-top: 0 !important;
+}
+
+
+/*.lista-produktow-do-przepelnienia.przepelnienie{      
+        
+        //jedna opcja
+    /*position: fixed;
+    overflow: scroll;
+    height: 100%;
+    width: 825px;
+    padding-bottom: 200px;
+
+
+    //druga opcja
+    height: calc(100vh - 220px);
+    position: absolute;
+    overflow: auto;
+}*/
+
+/*.tree-tab_elem.przepelnienie{
+    height: calc(100vh - 220px);
+    position: absolute;
+    overflow: auto;
+}*/

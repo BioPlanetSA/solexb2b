@@ -1,0 +1,73 @@
+﻿@using System.Web.Mvc.Html
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model TrescDoPokazania
+
+@{
+    <div id="page-content">
+        @if (Model.LewaKolumna == null)
+        {
+            Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement { Tresc = Model.Tresc, Klient = Model.Klient });
+        }
+        else
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-@Model.LewaKolumna.Szerokosc hidden-md-down col-bez-odstepow-xs-up tresc_symbol@(Model.LewaKolumna.Symbol)">
+                        @{ Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement { Tresc = Model.LewaKolumna, Klient = Model.Klient }); }
+                    </div>
+                    <div class="col-lg-@Model.Tresc.Szerokosc  col-bez-odstepow-xs-up col-xs-12">
+                        @{ Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement { Tresc = Model.Tresc, Klient = Model.Klient }); }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section naglowek
+{
+    @if (Model.Naglowek != null)
+    {
+        HashSet<int> idKategoriiDoBelki = new HashSet<int>() { 1000183, 1000185, 912509951, 1399134293, 2030250717 };
+        <div class="page-header" id="page-header">
+
+            @if (SolexHelper.AktualnyPrzedstawiciel != null || SolexHelper.AktualnyKlient.CzyAdministrator)
+            {
+                <p class="belka zalogowany-jako-przedstawiciel c bg-danger">
+                    <span class="hidden-md-down">@Html.PobierzTlumaczenie("Klient"):</span>
+                    @SolexHelper.AktualnyKlient.Email
+                    @Html.Partial("~/Views/Logowanie/ListaKontrahentow.cshtml")
+                </p>
+            }
+            @{
+               // int? iloscKoszykowDoAkceptacji;
+                //bool saKoszykiDoAkceptacji = SolexBllCalosc.PobierzInstancje.Koszyk.CzyKlientMaKoszykiDoAkceptacji(SolexHelper.AktualnyKlient.Id, out iloscKoszykowDoAkceptacji);
+                @*if (saKoszykiDoAkceptacji)
+                {
+                    string tekst = $"Posiadasz {iloscKoszykowDoAkceptacji} {(iloscKoszykowDoAkceptacji > 1 ? "koszyki" : "koszyk")} do akceptacji";
+                    <p class="belka ilosc-koszykow-do-akceptacji c bg-danger">%
+                        <span class="hidden-md-down">@Html.PobierzTlumaczenie(tekst)</span>
+                    </p>
+                }*@
+            }
+            @if (idKategoriiDoBelki.Intersect(SolexHelper.AktualnyKlient.Kategorie).Any())
+            {
+                <p class="belka blokada-zamwien c bg-danger">
+                    <span>@Html.PobierzTlumaczenie("Blokada dostaw w związku z przeterminowanymi płatnościami - prosimy o kontakt z Rozliczeniowcem.")</span>
+                </p>
+            }
+            @{ Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement { Tresc = Model.Naglowek, Klient = Model.Klient }); }
+        </div>
+    }
+}
+@section stopka
+{
+    @if (Model.Stopka != null)
+    {
+        <div class="page-footer">
+            @{ Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement { Tresc = Model.Stopka, Klient = Model.Klient }); }
+        </div>
+    }
+}

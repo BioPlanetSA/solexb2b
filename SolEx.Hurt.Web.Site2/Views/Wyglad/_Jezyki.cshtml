@@ -1,0 +1,40 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoJezykow
+@{
+    Jezyk wybrany = Model.ListaJezykow.First(x => x.Id == SolexHelper.AktualnyJezyk.Id);
+}
+
+<div class="dropdown jezyki-dropdown czcionka-tekstowa-paragraf">
+    @if (Model.ListaRozwijana)
+    {
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle text" id="jezyki-lista">
+            @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Język:")
+
+            @if (wybrany.ObrazekId.HasValue)
+            {
+                <img src="@Html.Raw(SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(wybrany.ObrazekId.Value) != null
+                              ? SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(wybrany.ObrazekId.Value).LinkWWersji("jezyki_logo") : "")" />
+            }
+            <span class="jezyk_nazwa text">@wybrany.Nazwa</span><span class="caret"></span>
+        </a>
+    }
+
+    <div class="@Html.Raw(Model.ListaRozwijana ? "dropdown-menu" : "nav nav-inline")" role="menu" aria-labelledby="jezyki-lista">
+        @foreach (Jezyk j in Model.ListaJezykow)
+        {
+            var link = Url.ZbudujLink(j, SolexHelper.AktualnyKlient);
+            <a class="@Html.Raw(Model.ListaRozwijana ? "dropdown-item" : "nav-link")  @Html.Raw(!Model.ListaRozwijana && wybrany.Id == j.Id ? "active" : "")" id="@j.Symbol" 
+               href="@link">
+
+                @if (j.ObrazekId.HasValue)
+                {
+                    <img src="@Html.Raw(SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(j.ObrazekId.Value) != null ? SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(j.ObrazekId.Value).LinkWWersji("jezyki_logo") : "")"/>
+                }
+                <span class="text jezyk_nazwa">@j.Nazwa</span>
+            </a>
+
+        }
+    </div>
+</div>

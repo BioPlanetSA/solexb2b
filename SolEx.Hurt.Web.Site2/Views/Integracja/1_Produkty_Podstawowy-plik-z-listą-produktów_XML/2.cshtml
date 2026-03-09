@@ -1,0 +1,239 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model List<ProduktKlienta>
+@{
+    Layout = null;
+    bool sposobyPokazywaniaStanow = SolexBllCalosc.PobierzInstancje.SposobyPokazywaniaStanowBll.CzyKlientMaSposobyPokazywaniaStanow(SolexHelper.AktualnyKlient);
+
+    if (sposobyPokazywaniaStanow == false)
+    {
+        //mze byc tak ze ktos pokazuje belke dostepnosci dla klienta, co nie jest w sposobach stanow - dlatego Bartek dodaje na dodatkowy warunek
+        if (SolexBllCalosc.PobierzInstancje.Konfiguracja.MaxPokazywanyStan > 1)
+        {
+            sposobyPokazywaniaStanow = true;
+        }
+    }
+
+    //z karty produktow bierzemy info o cenach
+    bool czyPokazywacCenaDetal = (SolexBllCalosc.PobierzInstancje.Konfiguracja.GetPriceLevelDetal != null);
+    bool czySaRodziny = SolexBllCalosc.PobierzInstancje.Konfiguracja.AtrybutyRodzin.Any();
+    bool czyDrzewkoProducentow = SolexBllCalosc.PobierzInstancje.DostepDane.Pobierz<GrupaBLL>(SolexHelper.AktualnyKlient, x => x.Producencka).Any();
+}
+@section Opis {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pole w pliku", MiejsceFrazy.Integracja)</th>
+                <th>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Opis pola", MiejsceFrazy.Integracja)</th>
+                <th>
+                    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Typ", MiejsceFrazy.Integracja)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ean</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Kod kreskowy", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Id produktu", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "liczba całkowita", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>sku</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Symbol", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>name</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nazwa produktu", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+            @if (czySaRodziny)
+            {
+                <tr>
+                    <td>model</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nazwa rodziny produktów", MiejsceFrazy.Integracja)</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+                </tr>
+            }
+
+            @if (czyDrzewkoProducentow)
+            {
+                <tr>
+                    <td>brand</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nazwa producenta", MiejsceFrazy.Integracja)</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+                </tr>
+            }
+            <tr>
+                <td>desc</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Opis", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>url</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Link do produktu", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>categories</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Scieżki do kategorii w których jest produkt. Separatorem jest znak ;", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>attributes</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Widoczne cechy", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "lista", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>unit</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Podstawowa jednostka miary", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>weight</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Waga brutto", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "liczba ułamkowa", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>PKWiU</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "PKWiU", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+
+            @if (sposobyPokazywaniaStanow)
+            {
+                <tr>
+                    <td>inStock</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Czy produkt jest aktualnie na stanie", MiejsceFrazy.Integracja)</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "wartość logiczna", MiejsceFrazy.Integracja)</td>
+                </tr>
+                <tr>
+                    <td>qty</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ilość (ograniczona do maksymalnego pokazywanego stanu)", MiejsceFrazy.Integracja)</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "typ: liczba ułamkowa", MiejsceFrazy.Integracja)</td>
+                </tr>
+                <tr>
+                    <td>availability</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Data od kiedy towar będzie dostępny (tylko dla towarów brakujacych)", MiejsceFrazy.Integracja)</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "data", MiejsceFrazy.Integracja)</td>
+                </tr>
+            }
+
+            <tr>
+                <td>requiredBox</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Czy jest wymóg zakupu pełnego opakowania zbiorczego", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "wartość logiczna", MiejsceFrazy.Integracja)</td>
+            </tr>
+
+            <tr>
+                <td>quantityPerBox</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ilość w opakowaniu zbiorczym", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "liczba ułamkowa", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>priceAfterDiscountNet</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Cena netto po rabacie", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "liczba ułamkowa", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>vat</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Stawka vat", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "wartość liczbowa zaokrąglona", MiejsceFrazy.Integracja)</td>
+            </tr>
+
+            @if (czyPokazywacCenaDetal)
+            {
+                <tr>
+                    <td>retailPriceGross</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Cena brutto detaliczna", MiejsceFrazy.Integracja)</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "liczba ułamkowa", MiejsceFrazy.Integracja)</td>
+                </tr>
+            }
+
+            <tr>
+                <td>photos</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zdjęcia produktu", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "lista", MiejsceFrazy.Integracja)</td>
+            </tr>
+
+        </tbody>
+    </table>
+}
+@section Nazwa {
+    Uniwersalny plik XML
+}
+@section Szablon{@if (Model != null)
+{<products elments="@Model.Count" clientid="@SolexHelper.AktualnyKlient.Id" lang="@SolexHelper.AktualnyJezyk.Symbol" datetime="@DateTime.Now.ToString("G")">
+            @foreach (ProduktKlienta p in Model)
+            {
+                <product>
+                    <ean><![CDATA[@p.KodKreskowy]]></ean>
+                    <id>@p.Id</id>
+                    <sku><![CDATA[@p.KodKreskowy]]></sku>
+                    @if (czySaRodziny && p.CechaUnikalnaRodzina != null)
+                    {
+                        <model id="@p.CechaUnikalnaRodzina.Id" attributeId="@p.CechaUnikalnaRodzina.AtrybutId">
+                            <name><![CDATA[@p.Rodzina]]></name>
+                            <label><![CDATA[@p.CechaUnikalnaRodzina.Nazwa]]></label>
+                        </model>
+                    }
+                    <name><![CDATA[@Html.Raw(p.Nazwa)]]></name>
+                    @if (czyDrzewkoProducentow && p.Marka != null)
+                    {
+                        <brand id="@p.Marka.Id"><![CDATA[@p.Marka.Nazwa]]></brand>
+                    }
+                    <desc><![CDATA[@Html.Raw(p.Opis)]]></desc>
+                    <url><![CDATA[@Url.ZbudujLink(p, SolexHelper.AktualnyJezyk, false)]]></url>
+                    <categories>
+                        @{foreach (var c in p.Kategorie.Where(x => x.Widoczna && !x.Grupa.Producencka)){
+                                <category id="@c.Id"><![CDATA[@c.Sciezka]]></category>
+                            }
+                        }
+                    </categories>
+                    <attributes>
+                        @foreach (var c in p.ListaCech.Where(x => x.Widoczna))
+                        {
+                            if (c.AtrybutId.HasValue && c.PobierzAtrybut() != null && c.PobierzAtrybut().Widoczny && c.PobierzAtrybut().PokazujWPlikachIntegracji)
+                            {
+                                <attribute id="@c.Id" attributeId="@c.AtrybutId">
+                                    <name><![CDATA[@c.NazwaAtrybutu]]> </name>
+                                    <label><![CDATA[@c.Nazwa]]></label>
+                                </attribute>
+                            }
+                        }
+                    </attributes>
+                    <unit><![CDATA[@p.JednostkaPodstawowa.Nazwa]]></unit>
+                    <weight>@(p.Waga.HasValue ? p.Waga.Value.DoLadnejCyfry() : "")</weight>
+                    <PKWiU>@p.PKWiU</PKWiU>
+                    @if (sposobyPokazywaniaStanow)
+                    {
+                        <inStock>@p.NaStanie</inStock>
+                                <qty>@p.IloscOgraniczonaDoMax</qty>
+                                <availability>@(p.DostawaData.HasValue ? p.DostawaData.Value.ToShortDateString() : null)</availability>
+                    }
+                    <requiredBox>@p.WymaganeOz</requiredBox>
+                    <quantityPerBox>@p.IloscWOpakowaniu.DoLadnejCyfry()</quantityPerBox>
+                    <priceAfterDiscountNet>@p.FlatCeny.CenaNetto.Wartosc.DoLadnejCyfry()</priceAfterDiscountNet>
+                    <vat>@p.Vat.DoLadnejCyfry()</vat>
+                    @if (czyPokazywacCenaDetal)
+                    {
+                        <retailPriceGross>@p.FlatCeny.CenaDetalicznaBrutto.Wartosc.DoLadnejCyfry()</retailPriceGross>
+                    }
+                    <photos>
+                        @foreach (var z in p.Zdjecia)
+                        {
+                            <photo id="@z.Id" main="@(z.Id == p.ZdjecieGlowne.Id ? 1 : 0)"><![CDATA[@Url.ZbudujLinkZewnetrzny(z.LinkOryginal)]]></photo>
+                        }
+                    </photos>
+                </product>
+                            }
+        </products>
+                     <!-- SOLEX B2B -->
+                            }
+}

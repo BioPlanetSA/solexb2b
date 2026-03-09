@@ -1,0 +1,32 @@
+﻿@import "_ustawienia.scss";
+
+.kafle-sklepy{
+    a, a:hover{
+        color: $font-kolor;
+        text-decoration: none;
+    }
+  
+    .sklep-nazwa{
+        margin: 20px auto 20px auto;
+        text-align: center;
+    }
+
+    img{
+        transition: all 1s ease 0s;
+    }
+}
+
+
+.mapa-sklepow{
+    .mapa-naglowek{
+          > div:not(:last-child){
+             padding-right: 40px;
+             }
+
+        .wybor-kategorie{
+            a:not(:last-child){
+                padding-right: 5px;
+            }
+        }
+    }
+}

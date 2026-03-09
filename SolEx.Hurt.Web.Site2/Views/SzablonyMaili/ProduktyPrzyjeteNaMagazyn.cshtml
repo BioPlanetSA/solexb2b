@@ -1,0 +1,101 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+}
+
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.ProduktyPrzyjeteNaMagazyn
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+
+}
+@section Tytul
+{
+    @Html.PobierzTlumaczenie(Model.JezykMaila(), "Ponownie dostępne produkty Na Platformie B2B")
+
+}
+@section Naglowek
+{
+    <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Ponownie dostępne produkty Na Platformie B2B")</h4>
+}
+@section Tresc
+{
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                    <tr>
+                        <td class="text-pad">
+                            <span class="czcionka13">
+                                @Html.PobierzTlumaczenie(Model.JezykMaila(), "Poniższe produkty są ponownie dostępne na Platformie B2B:")
+                            </span>
+                            <br/>
+                        </td>
+                        <td class="expander"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table class="row">
+        <tr>
+            <td class="center" align="center">
+                <table class="container">
+                    <tr>
+                        <td class="wrapper">
+                            <table class="twelve columns">
+                                <tr>
+                                    <td class="text-pad">
+                                        <table class="tabelaProdukty">
+                                            <tr class="naglowekProdukty">
+                                                <td class="naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "lp.")</td>
+                                                <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Nazwa")</td>
+                                                <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Symbol")</td>
+                                                <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Kod kreskowy")</td>
+                                                <td align="center" class="center naglowek ostatniaKolumna">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Stan")</td>
+                                            </tr>
+
+                                            @{
+                                                if (Model.ProduktyPrzyjeteNaMagazynWOstatnimCzasie != null)
+                                                {
+                                                    for (int i = 0; i < Model.ProduktyPrzyjeteNaMagazynWOstatnimCzasie.Count; ++i)
+                                                    {
+                                                        var p = Model.ProduktyPrzyjeteNaMagazynWOstatnimCzasie[i];
+                                                        <tr class="elementWiersz">
+                                                            <td>
+                                                                @(i + 1)
+                                                            </td>
+
+                                                            <td align="left" class="vcenter">
+                                                                <span class="czcionka12">@p.NazwaProduktu</span>
+                                                            </td>
+                                                            <td align="center" class="vcenter">
+                                                                <span class="czcionka12">@p.KodProduktu</span>
+                                                            </td>
+                                                            <td align="center" class="vcenter">
+                                                                <span class="czcionka12">@p.KodKreskowy</span>
+                                                            </td>
+                                                            <td align="center" class="vcenter">
+                                                                <span class="czcionka12">@p.Stan</span>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+}

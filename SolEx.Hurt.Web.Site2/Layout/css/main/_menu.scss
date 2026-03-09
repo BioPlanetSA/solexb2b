@@ -1,0 +1,109 @@
+﻿@import "_ustawienia.scss";
+
+.submenu-rozwijanie-wchodzenie-pod-spod {
+    .menu-klasyczne-rozwijane .dropdown-menu {
+        z-index: -1; //dropdown w MENU zawsze ma być pod MENU
+    }
+}
+
+.menu-klasyczne-rozwijane {
+    width: 100%;
+    font: $font-menu-rozmiar $font-menu-rodzina;
+    margin-top: 12px;
+    margin-bottom: 12px;
+
+    .menu-opcja-strona-glowna{
+        span{
+            display: none;
+        }
+    }
+
+    & > ul.nav {
+        width: 100%;
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    .menu-klasyczne-link {
+        color: $font-menu-kolor;
+
+        &:hover {
+            color: $kolor-zaznaczone-menu;
+        }
+    }
+
+    .dropdown-menu {
+        min-width: 260px;
+        padding-top: 15px;
+        border: none;
+        //szerokosc     width: 500px; ?
+        &.has-subcategories {
+
+            min-width: 520px;
+
+            .zawartosc {
+                > ul {
+                    float: left;
+                }
+
+                .podmenu-cale-okno {
+                    display: inline-block;
+                }
+            }
+        }
+
+        > li{
+            &.has-subcategories{
+
+            }
+        }
+    }
+
+    .submenu-rozwijanie-pelna-szerokosc {
+        &.menu-pozycja {
+            position: static; //kasowanie pozycji relative - tak zeby submenu pelnej szerokosci bylo dobrze pokazane
+            //position: unset;
+        }
+
+        &.dropdown-menu {
+            width: 100%;
+            top: calc(100% - 5px);
+        }
+    }
+
+    .podmenu-cale-okno {
+        .opis-parent {
+            padding: 15px;
+            padding-top: 10px;
+        }
+    }
+
+    .kontrolka-Menu {
+        //kontrolka menu NIE moze byc relatywna - z powodu pozycjonoiwania dropdownow - chcemy zeby pozycje lapaly z containerów
+        position: unset !important;
+    }
+}
+
+
+
+.menu-rozsuwane {
+    ul {
+        font-size: 18px;
+        line-height: 1.8;
+        padding: 0 10px;
+    }
+
+
+    a.akordion-naglowek {
+        color: $kolor-zaznaczone-menu;
+        padding: 10px 10px;
+
+        .fa {
+            float: right;
+            color: black;
+            width: 25px;
+        }
+    }
+}

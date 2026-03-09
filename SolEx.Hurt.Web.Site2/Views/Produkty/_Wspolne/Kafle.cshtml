@@ -1,0 +1,405 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ListaDane
+@{
+    var parametry = Model.AktualneParametry;
+    KategorieBLL poprzedniaKategoria = null;
+    int i = 0;
+    bool CzyZalogowany = SesjaHelper.PobierzInstancje.CzyKlientZalogowany;
+    IConfigBLL konfiguracja = SolexBllCalosc.PobierzInstancje.Konfiguracja;
+    HashSet<long> idUlubionch = SolexHelper.AktualnyKlient.IdUlubionych;
+    bool czyWidziStany = CzyZalogowany && SolexHelper.AktualnyKlient.CzyWidziStany;
+    bool czyKlientWidziCeny = !SolexBllCalosc.PobierzInstancje.ProfilKlienta.PobierzWartosc<bool>(SolexHelper.AktualnyKlient, TypUstawieniaKlienta.UkryjCenyHurtowe);
+
+    //wyliczenie jakie style css w cenach pokazywac
+    string klasaCSSKolumnaCeny = "";
+
+    bool jednaCena = parametry.KontrolkaProduktow.KCenaPrzedRabatem == JakieCenyPokazywac.Brak || parametry.KontrolkaProduktow.KCenaPoRabacie == JakieCenyPokazywac.Brak;
+
+    if (parametry.KontrolkaProduktow.KVat != MiejscaNaKaflachNaDole.PierwszaLiniaZaCena && parametry.KontrolkaProduktow.KVat != MiejscaNaKaflachNaDole.PierwszaLiniaZaCena)
+    {
+        if (jednaCena)
+        {
+            klasaCSSKolumnaCeny = "szerokosc100";
+        }
+        else
+        {
+            klasaCSSKolumnaCeny = "szerokosc50";
+        }
+    }
+    else
+    {
+        if (parametry.KontrolkaProduktow.KVat == MiejscaNaKaflachNaDole.PierwszaLiniaZaCena
+            && parametry.KontrolkaProduktow.KVat == MiejscaNaKaflachNaDole.PierwszaLiniaZaCena)
+        {
+            if (jednaCena)
+            {
+                klasaCSSKolumnaCeny = "szerokosc72";
+            }
+            else
+            {
+                klasaCSSKolumnaCeny = "szerokosc36";
+            }
+        }
+        else
+        {
+            //tylko jeden jest wlaczony vat albo rabat
+            if (jednaCena)
+            {
+                klasaCSSKolumnaCeny = "szerokosc86";
+            }
+            else
+            {
+                klasaCSSKolumnaCeny = "szerokosc43";
+            }
+        }
+    }
+    bool pokazujDrugaLinie = parametry.KontrolkaProduktow.KVat == MiejscaNaKaflachNaDole.DrugaLiniaMiedzyCenamiAKoszykiem ||
+                             parametry.KontrolkaProduktow.KJM == MiejscaNaKaflachNaDole.DrugaLiniaMiedzyCenamiAKoszykiem ||
+                             parametry.KontrolkaProduktow.KOZ == MiejscaNaKaflachNaDole.DrugaLiniaMiedzyCenamiAKoszykiem ||
+                             parametry.KontrolkaProduktow.KRabat == MiejscaNaKaflachNaDole.DrugaLiniaMiedzyCenamiAKoszykiem;
+
+    string klasaCSSDlaNazwy = "";
+    if (parametry.KontrolkaProduktow.KSymbol == MiejscaNaKaflach.ZaNazwa)
+    {
+        klasaCSSDlaNazwy = "rozdzielKod";
+    }
+
+    string klasaCSSdlaZdjecia = string.Empty;
+
+    if (parametry.KontrolkaProduktow.KSymbol == MiejscaNaKaflach.NadZdjeciem
+        || parametry.KontrolkaProduktow.KNazwa == MiejscaNaKaflach.NadZdjeciem
+        || parametry.KontrolkaProduktow.KNazwa == MiejscaNaKaflach.NadZdjeciem
+        || parametry.KontrolkaProduktow.KKodKreskowy == MiejscaNaKaflach.NadZdjeciem)
+    {
+        klasaCSSdlaZdjecia = "nazwa-nad-zdjeciem";
+    }
+
+    string cssCenLinia = "";
+
+    if (parametry.KontrolkaProduktow.KCenaPrzedRabatem == JakieCenyPokazywac.Brak || parametry.KontrolkaProduktow.KCenaPoRabacie == JakieCenyPokazywac.Brak)
+    {
+        cssCenLinia = "kafle-ceny-w-poziomie";
+    }
+    var idpoj = "idpoj-" + DateTime.Now.Ticks;
+    int iloscKafliWGrupie = 1;
+}
+
+
+<div class="lista-produktow lista-produktow-kafle @(Model.slajder != null ? "slide-slick" : "row-center") @idpoj" data-slick="@(Model.slajder != null ? Model.slajder.Konfiguracja : "")">
+    @foreach (IProduktKlienta pk in Model.UstawieniaListyProduktow.Produkty)
+    {
+        bool rodzina = !string.IsNullOrEmpty(pk.Rodzina) && pk.ProduktyWRodzinie(Model.UstawieniaListyProduktow.ProduktyId).Count > 1;
+        var typStanu = pk.PobierzTypStany;
+        string link = Url.ZbudujLink(pk, SolexHelper.AktualnyJezyk);
+
+        //renderowanie belki grupowania
+        if (Model.UstawieniaListyProduktow.Kategorie != null)
+        {
+            if (poprzedniaKategoria == null || Model.UstawieniaListyProduktow.Kategorie[i]?.Sciezka != poprzedniaKategoria.Sciezka)
+            {
+                if (poprzedniaKategoria != null)
+                {
+                    //zanim pokazemy grupe trzeba rednerowac sztuczne kafle zeby zawsze byly 3 w lini - to jest bardzo wazne zeby dobrze pokazac, bo inaczej ostatnie elementy bea na srodku, albo prawej itp.
+                    int modulo3 = iloscKafliWGrupie % 3;
+
+                    if (modulo3 != 0)
+                    {
+                        switch (modulo3)
+                        {
+                            case 1:
+                                <div class="kafel-content @parametry.KontrolkaProduktow.KRozmiarZdjecia auto-kafel">&nbsp;</div>
+                                <div class="kafel-content @parametry.KontrolkaProduktow.KRozmiarZdjecia auto-kafel">&nbsp;</div>
+                                break;
+                            case 2:
+                                <div class="kafel-content @parametry.KontrolkaProduktow.KRozmiarZdjecia auto-kafel">&nbsp;</div>
+                                break;
+                        }
+                    }
+                }
+
+                poprzedniaKategoria = Model.UstawieniaListyProduktow.Kategorie[i];
+                if (poprzedniaKategoria != null && !string.IsNullOrEmpty(poprzedniaKategoria.Sciezka))
+                {
+                    iloscKafliWGrupie = 0;
+                    <h6 class="active kategoria">@poprzedniaKategoria.Sciezka</h6>
+                }
+            }
+            ++iloscKafliWGrupie;
+        }
+
+        <div class="kafel-content @parametry.KontrolkaProduktow.KRozmiarZdjecia">
+        @*sekcja tylko jesli sa jakiekolwiek elementy NAD zdjeciem*@
+
+        @if (parametry.KontrolkaProduktow.KNazwa == MiejscaNaKaflach.NadZdjeciem || parametry.KontrolkaProduktow.KKodKreskowy == MiejscaNaKaflach.NadZdjeciem || parametry.KontrolkaProduktow.KSymbol == MiejscaNaKaflach.NadZdjeciem)
+        {
+            if (parametry.KontrolkaProduktow.KNazwa == MiejscaNaKaflach.NadZdjeciem)
+            {
+                <div class="kafle-linia kafle-tlo nazwa-nad-zdjeciem">
+                    @if (parametry.KontrolkaProduktow.KNazwa == MiejscaNaKaflach.NadZdjeciem)
+                    {
+                        Html.RenderPartial("PolaProduktu/Nazwa", new ParametryPrzekazywaneDoNazwy(pk, RodzajMetki.KafleProduktu, "clickable produkt-nazwa link-szczegoly", link, rodzina, true, idUlubionch));
+                    }
+
+                    @if (!rodzina && parametry.KontrolkaProduktow.KSymbol == MiejscaNaKaflach.ZaNazwa)
+                    {
+                        <a href="@link" class="clickable produkt-kod link-szczegoly">
+                            @pk.Kod
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                if (!rodzina)
+                {
+                    <div class="kafle-linia kafle-tlo nazwa-nad-zdjeciem">
+                        @if (parametry.KontrolkaProduktow.KKodKreskowy == MiejscaNaKaflach.NadZdjeciem)
+                        {
+                            @pk.KodKreskowy
+                        }
+                        @if (parametry.KontrolkaProduktow.KSymbol == MiejscaNaKaflach.NadZdjeciem)
+                        {
+                            @pk.Kod
+                        }
+                    </div>
+                }
+            }
+        }@*sekcja zdjecia*@
+        <div class="kafel-photo @klasaCSSdlaZdjecia">
+            @{
+                //bartek - na kaflach NIE ma powiekszania. Nie zmieniac tego!
+                Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(pk, parametry.KontrolkaProduktow.KRozmiarZdjecia, false, RodzajMetki.KafleProduktu, "clickable produkt-nazwa link-szczegoly", link));
+            }
+        </div>
+
+        @*sekcja tylko jesli jest jakis element POD zdjeciem*@
+
+        @if (parametry.KontrolkaProduktow.KNazwa == MiejscaNaKaflach.PodZdjeciem)
+        {
+            <div class="kafle-linia pierwsza-linia">
+                <div class="@klasaCSSDlaNazwy produkt-nazwa">
+                    @{
+                        Html.RenderPartial("PolaProduktu/Nazwa", new ParametryPrzekazywaneDoNazwy(pk, RodzajMetki.KafleProduktu, "clickable produkt-nazwa link-szczegoly", link, rodzina, true, idUlubionch));
+                    }
+                </div>
+
+
+                @if (parametry.KontrolkaProduktow.KSymbol == MiejscaNaKaflach.ZaNazwa)
+                {
+                    <div class="produkt-kod">
+                        <a href="@link" class="clickable link-szczegoly">
+                            @(rodzina ? Html.Raw("&nbsp") : Html.Raw(pk.Kod))
+                        </a>
+                    </div>
+                }
+                @{
+                    Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pk.PobierzMetkiKafle(MetkaPozycjaKafle.PodNazwa), string.Format("metki {0}", MetkaPozycjaKafle.PodNazwa)));
+                }
+            </div>
+        }
+
+        @if (!rodzina)
+        {
+            <div class="kafle-linia">
+                @if (parametry.KontrolkaProduktow.KKodKreskowy == MiejscaNaKaflach.PodZdjeciem)
+                {
+                    <a href="@link" class="clickable produkt-kod link-szczegoly">
+                        @(rodzina ? Html.Raw("&nbsp") : Html.Raw(pk.KodKreskowy))
+                    </a>
+                }
+                @if (parametry.KontrolkaProduktow.KSymbol == MiejscaNaKaflach.PodZdjeciem)
+                {
+                    <a href="@link" class="clickable produkt-kod link-szczegoly">
+                        @(rodzina ? Html.Raw("&nbsp") : Html.Raw(pk.Kod))
+                    </a>
+                }
+            </div>
+        }
+
+        <div class="kafle-linia">
+            @if (rodzina)
+            {
+                <div class="c">
+                    <a href="@link" class="clickable produkt-nazwa link-szczegoly">
+                        <div class="btn btn-success btn-sm c">@konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "zobacz warianty")</div>
+                        <br/>
+                    </a>
+                </div>
+
+                if (czyKlientWidziCeny)
+                {
+                    if (parametry.KontrolkaProduktow.KCenaPoRabacie != JakieCenyPokazywac.Brak)
+                    {
+                        <div class="c CenaKafleWarianty">
+                            @{
+                                IFlatCenyBLL fc = new FlatCenyBLL(pk, pk.Klient);
+                                if (!pk.CzyWszystkieDzieciMajaTaSamaCene(ref fc))
+                                {
+                                    <span>@Html.PobierzTlumaczenie("Od"):</span>
+                                }
+                                //tu bedzie tylko zalogowany
+                                Html.RenderPartial("_Cena", new CenaDoPokazania(fc, "kafle netto", "", "", "", parametry.KontrolkaProduktow.KCenaPoRabacie, "kafle brutto", "kafle cena po rabacie"));
+                            }
+                        </div>
+                    }
+
+                    if (parametry.KontrolkaProduktow.KVat == MiejscaNaKaflachNaDole.PierwszaLiniaZaCena && (pk.FlatCeny.CenaNetto != 0 || pk.FlatCeny.CenaNetto == 0 && SolexBllCalosc.PobierzInstancje.Konfiguracja.ZastepujCeneZerowaIkonkaTelefonu))
+                    {
+                        <div class="kafle-kolumna-vat-warianty">
+                            @Html.PobierzTlumaczenie("VAT")
+                            <div class="b">@(((decimal) pk.Vat).ToString("0.##"))%</div>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                if (parametry.KontrolkaProduktow.KCenaPrzedRabatem != JakieCenyPokazywac.Brak)
+                {
+                    Html.RenderPartial("_Cena", new CenaDoPokazania(pk.FlatCeny.CenaHurtowaNetto, pk.FlatCeny.CenaHurtowaBrutto, null, null, "kafle netto", "", klasaCSSKolumnaCeny, "", parametry.KontrolkaProduktow.KCenaPrzedRabatem, "kafle brutto", "kafle cena przed rabatem"));
+                }
+
+                if (parametry.KontrolkaProduktow.KRabat == MiejscaNaKaflachNaDole.PierwszaLiniaZaCena && czyKlientWidziCeny)
+                {
+                    <div class="kafle-kolumna-rabat">
+                        @Html.PobierzTlumaczenie("Rabat")
+                        <div class="b">
+                            @pk.FlatCeny.Rabat.DoRabatString()
+                        </div>
+                    </div>
+                }
+
+                if (czyKlientWidziCeny && parametry.KontrolkaProduktow.KCenaPoRabacie != JakieCenyPokazywac.Brak)
+                {
+                    Html.RenderPartial("_Cena", new CenaDoPokazania(pk.FlatCeny, CzyZalogowany ? "kafle netto" : "netto", "", klasaCSSKolumnaCeny, "", parametry.KontrolkaProduktow.KCenaPoRabacie, CzyZalogowany ? "kafle brutto" : "brutto", CzyZalogowany ? "kafle cena po rabacie" : "Cena katalogowa"));
+                }
+
+                if (parametry.KontrolkaProduktow.KVat == MiejscaNaKaflachNaDole.PierwszaLiniaZaCena)
+                {
+                    <div class="kafle-kolumna-vat">
+                        @Html.PobierzTlumaczenie("VAT")
+                        <div class="b">@(((decimal) pk.Vat).ToString("0.##"))%</div>
+                    </div>
+                }
+            }
+        </div>
+
+        @*druga linia*@
+        @if (!rodzina)
+        {
+            if (pokazujDrugaLinie)
+            {
+                <div class="kafle-linia kafle-tlo">
+
+                    @if (parametry.KontrolkaProduktow.KJM == MiejscaNaKaflachNaDole.DrugaLiniaMiedzyCenamiAKoszykiem)
+                    {
+                        <div>
+                            @Html.PobierzTlumaczenie("VAT: ")
+                            <span class="b">@(pk.Vat.ToString("0.##"))%</span>
+                        </div>
+                    }
+
+                    @if (parametry.KontrolkaProduktow.KJM == MiejscaNaKaflachNaDole.DrugaLiniaMiedzyCenamiAKoszykiem)
+                    {
+                        <div>
+                            @Html.PobierzTlumaczenie("j.m: ")
+                            <span class="b">@pk.JednostkaPodstawowa.Nazwa</span>
+                        </div>
+                    }
+
+                    @if (parametry.KontrolkaProduktow.KOZ == MiejscaNaKaflachNaDole.DrugaLiniaMiedzyCenamiAKoszykiem)
+                    {
+                        <div>
+                            @Html.PobierzTlumaczenie("Il. w op. zbiorczym: ")
+                            <span class="b">@pk.IloscWOpakowaniu.ToString("0.##")</span>
+                        </div>
+                    }
+
+                    @if (parametry.KontrolkaProduktow.KRabat == MiejscaNaKaflachNaDole.DrugaLiniaMiedzyCenamiAKoszykiem)
+                    {
+                        if (typStanu != TypStanu.niedostepny_dluzszy_czas)
+                        {
+                            <div>
+                                @Html.PobierzTlumaczenie("rabat:")
+                                <span class="b">
+                                        @pk.FlatCeny.Rabat.DoRabatString()
+                                    </span>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+
+
+                @*trzecia linia*@
+            if (!rodzina && ((czyWidziStany || (!CzyZalogowany && Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.Any())) || (CzyZalogowany && Model.AktualneParametry.KontrolkaProduktow.PokazujKoszyk)))
+            {
+                <div class="kafle-linia kafle-tlo">
+                    @if (czyWidziStany && Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.Any())
+                    {
+                        <div class="c">
+                            @{
+                                Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pk.PobierzMetkiKafle(MetkaPozycjaKafle.NadStanemKolumna), string.Format("metki {0}", MetkaPozycjaKafle.NadStanemKolumna)));
+                        {
+
+                            Html.StanyProduktowWszystkie(pk, Model.WszystkieSposobyPokazywaniaStanowKlienta.SelectMany(x => x.Value).ToDictionary(x => x.Key, x => x.Value));
+                        }
+                                Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pk.PobierzMetkiKafle(MetkaPozycjaKafle.PodStanemKolumna), string.Format("metki {0}", MetkaPozycjaKafle.PodStanemKolumna)));
+                            }
+                        </div>
+                    }
+
+                    @if (CzyZalogowany && Model.AktualneParametry.KontrolkaProduktow.PokazujKoszyk)
+                    {
+                        <div class="r">
+                            @{
+                                bool ukrywacJednostki = (parametry.KontrolkaProduktow.KJM != MiejscaNaKaflachNaDole.ObokKoszyka);
+
+                                string info = "";
+                                bool pokazujCene;
+                                bool moznaDodacDoKoszyka = SolexBllCalosc.PobierzInstancje.ProduktyBazowe.MoznaDodacDoKoszyka(pk, out info, out pokazujCene);
+
+                                ParametryIlosciProduktu pi = new ParametryIlosciProduktu(pk, Model.SortowanieJednostek, TypPozycjiKoszyka.Zwykly, null, !ukrywacJednostki);
+                                pi.MoznaDodawacDoKoszyka = moznaDodacDoKoszyka;
+                                Html.RenderPartial("EditorTemplates/DodawanieDoKoszyka", pi);
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        }
+        </div>
+        ++i;
+    }
+    
+
+@{
+    //na koniec jescze raz module zeby byly pelne trojki
+    int modulo3koniec = iloscKafliWGrupie%3;
+
+    if (modulo3koniec != 0)
+    {
+        switch (modulo3koniec)
+        {
+            case 1:
+                <div class="kafel-content @parametry.KontrolkaProduktow.KRozmiarZdjecia auto-kafel-k">&nbsp;</div>
+                <div class="kafel-content @parametry.KontrolkaProduktow.KRozmiarZdjecia auto-kafel-k">&nbsp;</div>
+                break;
+            case 2:
+                <div class="kafel-content @parametry.KontrolkaProduktow.KRozmiarZdjecia auto-kafel-k">&nbsp;</div>
+                break;
+        }
+    }
+}
+    
+    
+
+</div>

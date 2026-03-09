@@ -1,0 +1,23 @@
+﻿@using SolEx.Hurt.Core.BLL
+@model Tuple<string, string, string>
+    @{
+        string tooltip = Model.Item1 + "" + Model.Item2;
+        if (string.IsNullOrEmpty(tooltip))
+        {
+            tooltip = "Drukuj strone";
+        }
+    }
+
+<a onclick="javascript:$('@Model.Item3').print();" class="wlacz-tooltip clickable"
+   title="@Html.Raw(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, tooltip)) ">
+    @if (!string.IsNullOrEmpty(Model.Item1))
+    {
+        @Html.Raw(Model.Item1)
+    }
+    <i class="fa fa-print "></i>
+    @if (!string.IsNullOrEmpty(Model.Item2))
+    {
+        @Html.Raw(Model.Item2)
+    }
+</a>
+

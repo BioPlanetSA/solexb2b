@@ -1,0 +1,109 @@
+﻿@import "_ustawienia.scss";
+
+
+//labele takie samo w admienie jak i stronie
+    label {
+        margin-bottom: 0;
+        margin-top: 10px;
+        padding-bottom: 8px;
+        font-weight: 600;
+        font-size: 15px;
+        font-family: $font-tekst-rodzina;
+        color: #5a5a5a;
+    }
+
+
+
+body.admin-panel {
+
+    .edytowaneErpNieWolnoEdytowac {
+        background-color: #fff1f1 !important;
+        //dla token inputa
+        ul, input {
+            background-color: #fff1f1 !important;
+        }
+    }
+
+    .widocznosc-dla-klienta {
+        border: 1px solid $kolor-ramki;
+        padding: 20px;
+        padding-top: 0;
+        margin: 10px 0;
+        background-color: $kolor-szary-ledwowidoczny;
+    }
+
+
+    .edytor {
+        margin-bottom: 15px;
+
+        .label-opis {
+            font-size: 13px;
+            color: #848484;
+            font-family: $font-tekst-rodzina;
+        }
+
+        &.edytor-PoleBool {
+            margin-top: 25px;
+
+            label {
+                margin-top: 2px;
+                margin-left: 10px;
+              
+            }
+
+            .label-opis{
+                display: block;
+                margin-left: 40px;
+            }
+
+            .pole-bool {
+                float: left;
+                width: 30px;
+
+                input[type="checkbox"] {
+                    height: 25px;
+                }
+            }
+        }
+
+    }
+
+    select[multiple] {
+        min-height: 300px;
+    }
+
+    .nav-tabs {
+        margin-top: 10px;
+        margin-bottom: 20px;
+
+        > .nav-item > a {
+            margin-bottom: 0;
+            margin-top: 10px;
+            padding-bottom: 8px;
+            font-size: 15px;
+            font-family: $font-tekst-rodzina;
+            color: #5a5a5a;
+
+            &.active {
+                font-weight: 600;
+            }
+        }
+    }
+
+
+    /*.dropdown-menu{
+        min-width: 200px; //reset do boostrarpowogo standardu
+        font-size: 14px;
+        font-size: 18px;
+        line-height: 28px;
+        text-align: center;     
+    }*/
+
+    .fa-cog{
+        color: #5a5a5a;
+    }
+
+}
+
+
+

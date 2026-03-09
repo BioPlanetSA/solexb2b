@@ -1,0 +1,230 @@
+﻿@using ServiceStack.OrmLite
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoListyDokumentow
+@{
+    bool daneprzelew = !string.IsNullOrEmpty(Model.DaneDoPrzelewu);
+    bool platnosconline = daneprzelew || Model.PlatnoscOpline;
+    string fraza = "";
+    switch (Model.Rodzaj)
+    {
+        case RodzajDokumentu.Faktura:
+            fraza = "Znajdź fakturę";
+            break;
+        case RodzajDokumentu.Oferta:
+            fraza = "Znajdź ofertę";
+            break;
+        case RodzajDokumentu.Zamowienie:
+            fraza = "Znajdź zamówienie";
+            break;
+    }
+    
+    DateTime doKiedy = DateTime.Now;
+}
+
+<div class="dokumenty-lista" data-metoda-url="ZbudujUrl" id="dokumenty@(Model.Rodzaj)"
+     data-szukanie-placeholder="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,fraza)"
+     data-platnosc="@platnosconline" 
+     data-dane-do-przelewu="@daneprzelew" data-type="lista"
+     data-rodzaj="@Model.Rodzaj"
+     data-dokiedy="@doKiedy.ToString("dd-MM-yyyy")"
+     data-odkiedy="@Model.OdKiedyPobieracDokumenty.ToString("dd-MM-yyyy")"
+  
+     @if (Model.Rodzaj == RodzajDokumentu.Faktura)
+     {
+         <text>
+             data-odkiedyprzeglad="@Model.OdKiedyTrybuPrzegladania.Value.ToString("dd-MM-yyyy")"
+             data-odkiedyplatnosc="@Model.OdKiedyTrybuPlatnosci.Value.ToString("dd-MM-yyyy")"
+         </text>
+     }
+
+
+     data-now="@doKiedy.ToString("dd-MM-yyyy")"
+     data-kolumna-statusu="@Model.PokazujStatus"
+     data-kolumna-zrealizowane="@Model.PokazujKolumneZrealizowane"
+     data-sort-icon-asc="fa fa-sort-by-attributes"
+     data-sort-icon-desc="fa fa-sort-by-attributes-alt"
+     data-szukanie-fraza="" data-podmieniaj-backslash="1" >
+    @if (Model.Taby != null && Model.Taby.Any())
+    {
+         @Html.Partial("_Taby", Model.Taby)
+    }
+
+    <div class="dokumenty-filtry kafle kafle-na-boki">
+        <div class="kafel kafel-row ">
+            <input id="hidODd" type="hidden"/>
+            <input id="hidDo" type="hidden"/>
+            <button type="button" class="btn btn-secondary dokumenty-wybor-lat btn-sm btn-success" data-toggle="dropdown" id="lista-lat">
+                <span class="wybrane"> </span>
+                <span class="caret"></span>
+            </button>
+            @if (Model.Rodzaj == RodzajDokumentu.Zamowienie && !Model.PokazTylkoNiezrealizowane)
+            {
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="tylkoNiezrealizowane" class="tylkoNiezrealizowane" @(Model.WybraneTylkoNiezrealizowane ? "checked" : "")/>@Html.PobierzTlumaczenie("Tylko niezrealizowane")
+                    </label>
+                </div>
+            }
+            @if (Model.Rodzaj == RodzajDokumentu.Faktura)
+            {
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="tylkoNiezaplacone" class="tylkoNiezaplacone" @(Model.WybraneTylkoNiezaplacone? "checked" : "")/>@Html.PobierzTlumaczenie("Tylko niezapłacone")
+                    </label>
+                </div>
+            @*}
+            @if (Model.Rodzaj == RodzajDokumentu.Faktura)
+            {*@
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="tylkoPrzeterminowane" class="tylkoPrzeterminowane" @(Model.WybraneTylkoPrzeterminowane ? "checked" : "")/>@Html.PobierzTlumaczenie("Tylko przeterminowane")
+                    </label>
+                </div>
+            }
+        </div>
+        <div class="kafel kafel-row ">
+            <div data-szukanie="pole" style="display: none;" class=""></div>
+            @if (platnosconline)
+            {
+                @Html.ActionLink(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zaplać za dokumenty").ToString(), "DanePrzelew", "PlatnosciOnline", new {online = Model.PlatnoscOpline, symbolopis = Model.DaneDoPrzelewu}, new {@class = "btn btn-secondary btn-sm zaplac-dokumenty"})
+            }
+            @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.GetLicense(Licencje.dokumenty_raporty) && Model.Rodzaj != RodzajDokumentu.Oferta)
+            {
+                <a class="btn btn-secondary btn-sm wlacz-tooltip" data-original-title="@Html.PobierzTlumaczenie("Raporty i zestawienia")" href="/raporty?type=@Model">
+                    <span class="fa fa-stats"></span>
+                </a>
+            }
+        </div>
+    </div>
+    <div id="data"></div>
+</div>
+
+<script type="text/javascript">
+    $('body').delegate('#dokumenty@(Model.Rodzaj) .zaplac-dokumenty', 'click', function (e) {
+        e.preventDefault();
+        var wybrane = [];
+        $('[data-dokument]:visible').each(function (i, el) {
+            el = $(el);
+            wybrane.push({ Dokument: el.data('dokument'), Wartosc: el.val() });
+        });
+        if (wybrane.length === 0) {
+            return;
+        }
+        //  console.log(wybrane);
+        $.ajax(
+       {
+           url: $(this).prop('href'),
+           type: 'Post',
+           data: { dokumenty: wybrane },
+           success: function (data) {
+               WyswietlModal(data);
+           }
+       });
+    });
+
+    function ZaladujWyborDat(parent) {
+        var przedzialy = {};
+        przedzialy['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ostatnie 90 dni")'] = [moment().subtract('days', 89), moment()];
+        przedzialy['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ostatnie 180 dni")'] = [moment().subtract('days', 179), moment()];
+        przedzialy['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Bieżący rok")'] = [moment().startOf('year'), moment().endOf('year')];
+        var pocz = moment($(parent).attr('data-odkiedy'), 'DD.MM.YYYY');
+        var koniec = moment($(parent).attr('data-dokiedy'), 'DD.MM.YYYY');
+        var kontrolka = $('#lista-lat', parent);
+        $('#hidODd', parent).val(pocz);
+        $('#hidDo', parent).val(koniec);
+        $(kontrolka).daterangepicker(
+            {
+                linkedCalendars: false,
+                ranges: przedzialy,
+                startDate: pocz,
+                endDate: koniec,
+                maxDate: koniec,
+                format: 'DD.MM.YYYY',
+                locale: {
+                    format: 'DD.MM.YYYY',
+                    applyLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zastosuj")',
+                    cancelLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Anuluj")',
+                    fromLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Od")',
+                    toLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Do")',
+                    customRangeLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Własny przedział")',
+                    monthNames: ['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Styczeń")',
+                                 '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Luty")',
+                                 '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Marzec")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Kwiecień")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Maj")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Czerwiec")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Lipiec")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Sierpień")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wrzesień")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Październik")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Listopad")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Grudzień")'],
+                    weekHeader: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Tydz")',
+                    monthNamesShort: ['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Sty")',
+                                 '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Lu")',
+                                 '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Mar")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Kw")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Maj")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Cze")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Li")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Sie")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wrz")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pa")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Lis")',
+                     '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Gru")%>'],
+                    dayNamesShort: ['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nie")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pn")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wt")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Śr")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Czw")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pt")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "So")%>'],
+                    daysOfWeek: ['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nie")',
+                       '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pn")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wt")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Śr")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Czw")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pt")',
+                        '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "So")'],
+                }
+            },
+            function (start, end, label) {
+                var od = start.format('DD.MM.YYYY');
+                var dok = end.format('DD.MM.YYYY');
+                if (label.indexOf('dni') > -1 || label.indexOf('days') > -1) {
+                    var days = end.diff(start, 'days');
+                    UstawWartoscWProfiluKlienta('DokumentyZIluDniDomyslniePokazywac@(Model.Rodzaj)', days);
+                }
+                $('#lista-lat .wybrane').html(od + ' - ' + dok);
+                $('#hidODd', parent).val(start);
+                $('#hidDo', parent).val(end);
+                WylaczTaby();
+                ZaladujListe(parent);
+            }
+        );
+        $('.wybrane', kontrolka).html(pocz.format('DD.MM.YYYY') + ' - ' + koniec.format('DD.MM.YYYY'));
+    }
+
+    $(document).ready(function () {
+        var parent = $('#dokumenty@(Model.Rodzaj)');
+        ZaladujWyborDat(parent);
+        ZaladujListe(parent);
+    });
+
+
+    function ZbudujUrl(parent, szukanie) {
+        var odkiedy = moment($('#hidODd', parent).val()).format('YYYY-MM-DD');
+        var dokiedy = moment($('#hidDo', parent).val()).format('YYYY-MM-DD');
+        var rodzaj = $(parent).attr('data-rodzaj');
+        var status = $(parent).attr('data-kolumna-statusu');
+        var kolZrealizowane = $(parent).attr('data-kolumna-zrealizowane');
+        var mozliwaPlatnosc = $(parent).data('platnosc');
+        var daneDoPrzelewu = $(parent).data('dane-do-przelewu');
+        var url = '/dokumenty/PobierzListe/' + rodzaj + '/' + odkiedy + '/' + dokiedy + '/' + status + '/' + kolZrealizowane +'?mozliwaPlatnosc=' + mozliwaPlatnosc + '&czysadane=' + daneDoPrzelewu + '&szukanieFraza=' + szukanie;
+        return url;
+    }
+
+</script>

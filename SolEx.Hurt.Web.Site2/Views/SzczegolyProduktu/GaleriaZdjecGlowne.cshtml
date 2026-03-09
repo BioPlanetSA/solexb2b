@@ -1,0 +1,51 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryGaleriiZdjecProduktu
+@{
+    string iddiva = "zdjecie-glowne-produktu";
+    bool klikalne = Model.DuzyPodglad && Model.Produkt.Zdjecia!=null && Model.Produkt.Zdjecia.Any();
+
+    string cssGlowny = "wylacz-hrefy";
+    string styleCSSzdjecia = "img-fluid zdjecie-produktu zdjecie-glowne";
+
+    if (klikalne)
+    {
+        cssGlowny = "galeria-podglad-po-kliknieciu";
+        styleCSSzdjecia += " clickable";
+    }
+}
+
+@if (!string.IsNullOrEmpty(Model.Naglowek))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Naglowek)
+
+}
+
+<div class="galeria-produktu pozycja-relative @cssGlowny" id="@iddiva" data-rozmiar-duzy="@Model.RozmiarZdjecia">
+    <div class="@Model.RozmiarZdjecia zdjecie-glowne">
+        @{
+            Html.RenderPartial("_zdjecie",
+                new ParametryPrzekazywaneDoZdjec(Model.Produkt, Model.RozmiarZdjecia, false,
+                RodzajMetki.SzczegolyProduku, styleCSSzdjecia, (Model.Produkt.ZdjecieGlowne!=null?Model.Produkt.ZdjecieGlowne.LinkWWersji("full"):""),Model.DuzyPodglad));
+        }
+    </div>
+</div>
+
+@if (Model.Produkt.Zdjecia != null && Model.Produkt.Zdjecia.Any() && Model.PelnaWersja) //renderujemy pobieranie w pelnej wiekosci - mozna to bylo zrobic wyzej, ale metki musza byc odrazu pod zdjeciem zeby pozycja dobrze byla wyliczona
+{
+    <div class="text-xs-center hidden-print">
+        <a download href="@Model.Produkt.Zdjecia[0].LinkWWersji("full")" id="pobieranie" class="a-link">
+            <i class="fa fa-save"></i> @Html.PobierzTlumaczenie("Pobierz w pełnej wielkości")
+        </a>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.Stopka))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Stopka)
+}

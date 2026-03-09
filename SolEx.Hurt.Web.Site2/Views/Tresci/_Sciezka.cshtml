@@ -1,0 +1,19 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model  IList<SolEx.Hurt.Web.Site2.Models.ElementMenu>
+    <ol class="breadcrumb">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <li class="@Html.Raw(i == Model.Count - 1 ? "active" : "")">
+                <a href="@Url.ZbudujLink(Model[i].TrescBll, SolexHelper.AktualnyKlient,SolexHelper.AktualnyJezyk)"> 
+                    @if (i == 0 && "home".Equals(Model[i].TrescBll.Symbol, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        <i class="fa fa-home"></i>
+                    }
+                    else
+                    {
+                        @Model[i].Nazwa
+                    }
+                </a>
+            </li>
+        }
+    </ol>

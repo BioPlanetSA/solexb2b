@@ -1,0 +1,12 @@
+﻿@using SolEx.Hurt.Web.Site2.Models
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Tresci
+@model  SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Tresci.DaneDoMenu
+
+<ul class="nav nav-inline menu menu-klasyczne-rozwijane" data-zaznacz-aktywne-menu role="navigation">
+    @foreach (DaneDoMenuOpcja elem in Model.OpcjeMenu)
+    {
+        Html.RenderPartial("_MenuOpcja", elem );
+    }
+</ul>
+
+

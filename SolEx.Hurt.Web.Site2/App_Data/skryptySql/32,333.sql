@@ -1,0 +1,1 @@
+﻿delete from Cecha where symbol like 'typ stanu%'

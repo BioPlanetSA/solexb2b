@@ -1,0 +1,124 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryDoPlatnosci
+
+@{
+
+    decimal suma = Model.Dokumenty.Sum(x => x.Wartosc);
+}
+
+
+<div class="modal fade dokument" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="text-align: left;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">
+         
+                </h3>
+            </div>
+            <div class="modal-body czcionka-tekstowa-paragraf">
+
+                @if (Model.Tresc != null)
+                {
+                    Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement { Tresc = Model.Tresc, Klient = Model.Klient });
+                    <br />
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                @Html.PobierzTlumaczenie("Suma do zapłaty: ")  <b> @suma.DoLadnejCyfry() @Model.Waluta.WalutaB2b</b>
+                                <br />
+                                @Html.PobierzTlumaczenie("Tytuł przelewu: ")
+
+                            <span class="b">
+                                @for (int i = 0; i < Model.Dokumenty.Count; i++)
+                                {
+                                    @Model.Dokumenty[i].DokumentObiekt.NazwaDokumentu <text>(</text> @Model.Dokumenty[i].Wartosc.DoLadnejCyfry()  @Model.Waluta.WalutaB2b <text> ) </text>
+                                    if (i < Model.Dokumenty.Count - 1)
+                                    {
+                                        @Html.Raw(" + ")
+                                    }
+                                }
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                }
+
+                @if (Model.juzWTrakciePlacenia.Any())
+                {
+                    <div class="container">
+                        <p class="alert alert-danger">Ten dokument wydaje się już płacony płatnościami SolEx Pay - poniżej informacje o transakcjach online</p>
+
+                        <table class="table table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="c"></th>
+                                    <th class="c">Dokument</th>
+                                    <th class="c">Data</th>
+                                    <th class="c">Kwota</th>
+                                    <th class="c">Status</th>
+                                </tr>
+                            </thead>
+                            @foreach (var juzPlacone in Model.juzWTrakciePlacenia)
+                            {
+                                <tr data-id="@juzPlacone.Id">
+                                    <td class="c">@Html.Raw((SolEx.Hurt.Model.Enums.ProviderPlatnosciOnline)juzPlacone.MetodaPlatnosci)</td>
+                                    <td class="c"> @juzPlacone.NazwaDokumentu </td>
+                                    <td class="c">@juzPlacone.DataOperacji.ToShortDateString() @juzPlacone.DataOperacji.ToShortTimeString()</td>
+                                    <td class="r p-r-1">@juzPlacone.Kwota @Model.Waluta.WalutaB2b</td>
+                                    <td class="c">@juzPlacone.Status</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                }
+
+
+                @if (Model.ListaFormPlatnosci != null)
+                {
+                <div class="container">
+                    <div class="row">
+                        @foreach (var bramka in Model.ListaFormPlatnosci)
+                        {
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-body c">
+                                        <div class="card-title m-b-1">
+                                            <img alt="@bramka.Nazwa" src="~/Static/@(bramka.Nazwa).png"/>
+
+                                            @if (bramka.LinkDoPomocy != null)
+                                            {
+                                                <a href="@bramka.LinkDoPomocy" class="fa fa-question-circle p-l-1" style="color: gray; font-size: 20px" title="Kliknij aby dowiedzieć się więcej o SolEx Pay" target="_blank">&nbsp;</a>
+                                            }
+                                        </div>
+                                    <h6 class="card-subtitle mb-2">@bramka.PodTytul</h6>
+                                    @if (!bramka.Aktywna)
+                                    {
+                                        <p class="text-danger">
+                                            Nie możesz skorzystać z SolEx Pay <br />
+                                            @Html.Raw(bramka.Error)
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="card-text">Koszt odroczenia:  @bramka.Koszt.DoLadnejCyfry() @Model.Waluta.WalutaB2b</p>
+
+                                        @Html.ActionLink("Zapłać", bramka.Akcja, new { idDokument = Model.Dokumenty.First().DokumentObiekt.Id }, new { @class = "btn btn-primary" })
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+                }
+
+
+
+            </div>
+                </div>
+            </div>
+</div>

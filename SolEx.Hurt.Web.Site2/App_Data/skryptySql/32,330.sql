@@ -1,0 +1,1 @@
+﻿ALTER TABLE dbo.Klient DROP COLUMN AlternatywnyEmail

@@ -1,0 +1,78 @@
+﻿@using System.Collections
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Helpers
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+
+@{
+    var wartosc = (IEnumerable) Model.Wartosc;
+
+    var typDan = typeof (SolEx.Hurt.Core.ModelBLL.ZadanieBll);
+    if (Model.RodzajDanych == typeof (SposobPokazywaniaStanowRegula))
+    {
+        typDan = Model.RodzajDanych;
+        
+    }
+}
+
+@Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+@if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+{
+    <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+}
+        
+@if (string.IsNullOrEmpty(Model.IdentyfikatorObiektu))
+{
+    <div>Należy zapisać obiekt nadrzędny</div>
+}
+else
+{
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+              @if (typDan == typeof(SposobPokazywaniaStanowRegula))
+              {
+                  <th colspan="99" style="text-align: right">
+                      @Html.ActionLink("Dodaj", "Dodaj", "Admin", new
+                      {
+                          typ = typDan.PobierzOpisTypu(),
+                          typNadrzednego = typeof(SposobPokazywaniaStanow).PobierzOpisTypu(),
+                          nadrzedny = Model.IdentyfikatorObiektu,
+                      }, new {})
+                  </th>
+              }
+              else
+              {
+                <th colspan="99" style="text-align: right">
+                    @Html.ActionLink("Dodaj", "WybierzWarunek", "Admin", new
+                                                      {
+                                                          nadrzedny = Model.IdentyfikatorObiektu,
+                                                          typDanych = typDan
+                                                      }, new { })
+                </th>
+              }
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var w in wartosc)
+            {
+                <tr>
+                    <td>
+                        @Html.EditorFor(x => w, "Admin/ListaPodrzedna/" + w.GetType().Name)
+                    </td>
+                    <td>@Html.ActionLink("Edytuj", "Edycja", "Admin",
+                   new { nadrzedny = Model.IdentyfikatorObiektu, typ = typDan.PobierzOpisTypu(), id = w.PobierzKlucz(), typNadrzednego = Model.RodzajDanychObiektuNadrzednego.PobierzOpisTypu() }, new { })
+                        <br />
+                    @Html.ActionLink("Usuń", "Usuwanie", "Admin", new { typ = typDan.PobierzOpisTypu(), id = w.PobierzKlucz(), typNadrzedny = Model.RodzajDanychObiektuNadrzednego.PobierzOpisTypu(), idNadrzednego = Model.IdentyfikatorObiektu }, new { })
+                    
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

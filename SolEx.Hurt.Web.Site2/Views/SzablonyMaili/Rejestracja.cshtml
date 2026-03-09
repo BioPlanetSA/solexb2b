@@ -1,0 +1,119 @@
+﻿
+@{
+    Layout = "_Layout.cshtml";
+    //List<ParametryPola> pola = SolexBllCalosc.PobierzInstancje.RejestracjeBll.PobierzPola(Refleksja.WygenerujParametryPol(Model));  //nigdzie nie używany
+}
+
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.Rejestracja
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Dziękujemy za rejestrację")
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie( Model.JezykMaila(), "Nowa rejestracja klienta - {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+    }
+}
+
+@section Naglowek
+{
+    <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Rejestracja nowego klienta")</h4>
+}
+
+@section Tresc
+{
+    <table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad">
+
+                        @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+                        {
+                           @Html.PobierzTlumaczenie(Model.JezykMaila(), "<h5>Szanowny Kliencie,</h5>Dziękujemy za wypełnienie formularza rejestracyjnego.<br />" +
+                                                                                       "Po weryfikacji Twoje konto zostanie wprowadzone do systemu.<br />" +
+                                                                                       "Konto zostanie założone posługując się poniższymi danymi, w przypadku zauważnego błędu prosimy o kontakt.<br />")
+                            <br />
+                            }
+                        else
+                        {
+                           @Html.PobierzTlumaczenie(Model.JezykMaila(), "Nowy klient na platformie,<br/><br />")
+                           <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Dane,<br/>")</b>
+                            
+                        }
+                        @if (Model.Pola() != null)
+                        {
+                            foreach (var parametryPola in Model.Pola())
+                            {
+                                if (!string.IsNullOrEmpty(parametryPola.Key))
+                                {
+                                    <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), parametryPola.Key):</b><br />
+                                }
+                                foreach (var par in parametryPola.Value)
+                                {
+                                    if (par.Nazwa == "HasloJednorazowe" && Model.DoKogoWysylany != TypyPowiadomienia.Klient)
+                                    {
+                                        continue;
+                                    }
+                                    if (par.Typ == "Plik")
+                                    {
+                                        <span style="margin-left: 15px">@Html.PobierzTlumaczenie(Model.JezykMaila(), par.WyswietlanaNazwa)<text>: </text>@Html.Raw(Url.WygenerujLinkDoPobraniaZalacznika(par.SciezkaZalacznika))</span>
+                                        <br/>
+                                    }
+                                    else
+                                    {
+                                        <span style="margin-left: 15px">@Html.PobierzTlumaczenie(Model.JezykMaila(), par.WyswietlanaNazwa)<text>: </text>@par.Wartosc</span> <br />
+                                    }
+
+                                }
+                            }
+                        }
+                        <br />
+                        @Html.PobierzTlumaczenie( Model.JezykMaila(), "Rejestracja została wysłana w dniu: {0} z adresu IP: {1}", MiejsceFrazy.Brak, new object[] { Model.Rejestracje.DataRejestracji, Model.Rejestracje.AdresIp})
+                    </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+    
+
+    @*@Model.Konfiguracja.PobierzTlumaczenie(Model.JezykMaila(), "Drogi Kliencie <br /><br /> " +
+                                                                                
+
+    @Model.Konfiguracja.PobierzTlumaczenie(Model.JezykMaila(), "Imie i nazwisko: {0}<br />Telefon: {1}<br />WiadomoscEmail: {2}", Model.Rejestracje.ImieNazwisko, Model.Rejestracje.Telefon, Model.Rejestracje.WiadomoscEmail)
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        <br />
+        @Model.Konfiguracja.PobierzTlumaczenie(Model.JezykMaila(), "Pozostając do dyspozycji,<br />Serdecznie pozdrawiamy")
+    }*@
+}
+

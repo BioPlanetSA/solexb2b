@@ -1,0 +1,21 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@{
+    if (Model.Wartosc != null)
+    {
+        var wartosc = (int)Model.Wartosc;
+        var obrazek = SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(wartosc);
+        if (obrazek != null)
+        {
+            @Html.Image(obrazek, "1", "")
+        }
+        else
+        {
+            <span>Brak zdjecia o id @Model.Wartosc</span>
+        }
+    }
+}
+
+
+

@@ -1,0 +1,107 @@
+﻿@model  Dictionary<string, List<SolEx.Hurt.Core.ModelBLL.ZmianaObiektu>>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+@*
+    
+1 = delete
+2 = insert
+3 = update (captured column values are those before the update operation). This value applies only when the row filter option 'all update old' is specified.
+4 = update (captured column values are those after the update operation)
+        
+    *@
+
+<div class="panel-group historia-zmian-lista" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-striped table-hover tabela-admin table-naglowek">
+                <thead class="table-warning">
+                <tr>
+                    <th>Operacja</th>
+                    <th>Zmiana</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var g in Model)
+                {
+                    string operacjaCss;
+                    string operacjaSlownie;
+
+                    switch (g.Value[0].RodzajZmiany)
+                    {
+                        case 1:
+                            operacjaCss = "table-danger";
+                            operacjaSlownie = "usuwanie";
+                            break;
+
+                        case 2:
+                            operacjaCss = "table-success";
+                            operacjaSlownie = "dodawanie";
+                            break;
+
+                        default:
+                            operacjaSlownie = "poprawienia";
+                            operacjaCss = "table-warning";
+                            break;
+                    }
+
+                    <tr class="cdc-historia-operacja-@g.Value[0].RodzajZmiany @operacjaCss">
+                        <td class="c">
+                            <b>@operacjaSlownie</b>
+                            <br/><br/>
+                            @g.Value[0].DataZmiany                           
+                        </td>
+                        <td class="l">
+                            Obiekt id: <b> @g.Value[0].IdentyfikatoObiektu </b>
+
+                            <table class="table table-bordered table-hover table-sm historia-zmian-pola  @operacjaSlownie">
+                                <thead>
+                                    <tr>
+                                        <th class="c">Pole</th>
+                                        @if (g.Value[0].RodzajZmiany >= 3)
+                                        {
+                                            <th class="c">Stara wartosć</th>
+                                        }
+                                        <th class="c">Nowa wartość</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                @foreach (var k in g.Value)
+                                {
+                                    <tr>
+                                        <td class="r fit-content">@k.Pole</td>
+                                        @if (g.Value[0].RodzajZmiany >= 3)
+                                        {
+                                            //tylko podczas update pokazujemy satra wartosc do porownania
+                                            <td class="r original">@k.StaraWartosc</td>
+                                        }
+                                        <td class="l changed">@k.NowaWartosc</td>
+                                        <td class="diff text-muted"></td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </td>
+
+                    </tr>
+                }
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).one('ready', function () {
+    $(".historia-zmian-pola.poprawienia tr").prettyTextDiff({
+        cleanup: true,
+        diffContainer: ".diff"
+    });
+} )
+</script>

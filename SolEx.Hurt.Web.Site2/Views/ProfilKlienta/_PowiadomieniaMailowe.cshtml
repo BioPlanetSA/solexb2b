@@ -1,0 +1,34 @@
+﻿@using SolEx.Hurt.Core.ModelBLL.ObiektyMaili
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model IList<SolEx.Hurt.Web.Site2.Controllers.ProfilKlientaController.PowiadomieniaMailoweOpis>
+
+@using (Html.BeginForm("PowiadomieniaMailoweZapisz", "ProfilKlienta", FormMethod.Post, new Dictionary<string, object>() { { "class", "c powiadomienia-klienta-zarzadzanie" } }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" value="Powiadomienia mailowe" name="Dodatkowe" />
+    <table class="table l">
+        <thead>
+        <tr>
+            <th class="c"></th>
+            <th class="c">Nazwa</th>
+            <th class="c">Opis</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td class="c"> @Html.CheckBoxFor(x => x[i].Wartosc, new {@class = "powiadomienia-checkbox"})</td>
+                <td> @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model[i].Nazwa)</td>
+                <td> @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model[i].Opis)</td>
+                @Html.HiddenFor(x => x[i].Typ)
+            </tr>
+        }
+
+        </tbody>
+    </table>
+    
+    <button type="submit" class="btn btn-lg btn-success">Zapisz</button>
+}

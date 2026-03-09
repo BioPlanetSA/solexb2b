@@ -1,0 +1,2 @@
+﻿declare function ShowMessage(title: string, text: string, type: string, opoznienie: number, hide: boolean, csstyle?: string);
+declare function PotwierdzenieAlert(sender, tytul:string, msg:string, przyciskTak:string, przyciskNie:string, callbackok?, callbackanuluj?);

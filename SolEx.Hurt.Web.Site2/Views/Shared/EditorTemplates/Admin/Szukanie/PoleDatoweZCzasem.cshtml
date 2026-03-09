@@ -1,0 +1,19 @@
+﻿@{
+    string szukane =(string) ViewData["szukana"];
+    List<string> wynik=null;
+    if (!string.IsNullOrEmpty(szukane))
+    {
+        wynik = szukane.Split(new[] {';'}).ToList();
+    }
+    if (wynik == null)
+    {
+        wynik=new List<string>{"",""};
+    }
+   Random r=new Random((int)DateTime.Now.Ticks);
+    @Html.Hidden("", "", new { @class = "data-wartosc", form = "lista" })
+
+            <input type="text" value="@wynik[0]" class="data data-od form-control form-control-sm" placeholder="od"/>
+
+            <input type="text" value="@wynik[1]" class="data data-do form-control form-control-sm" placeholder="do"/>
+}
+

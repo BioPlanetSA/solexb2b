@@ -1,0 +1,323 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Helper
+@model Tuple<int?, int>
+
+<div class="row"  style="margin: 0;">
+        <div class="col-md-12 zmiana-jezyka ">
+            <span class="pull-xs-right">
+                @if (SolexBllCalosc.PobierzInstancje.DostepDane.CzyJestWlaczonyZapisZmiany(typeof(TrescBll), Model.Item1) && SolexBllCalosc.PobierzInstancje.DostepDane.CzySaZmianyNaObiekcie(typeof(TrescBll), Model.Item1))
+                {
+                    <a class="btn btn-secondary historia-zmian-tresc" href="/Admin/HistoriaZmian?typ=@typeof(TrescBll).PobierzOpisTypu()&id=@Model.Item1">Pokaż zmiany</a>
+                }
+            </span>
+        </div>
+
+    <div id="drzewkoTresci" class="col-md-3">
+    </div>
+    <div class="col-md-9" id="edycja"> </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        $('.historia-zmian-tresc').click(function (e) {
+            e.preventDefault();
+            var url = $(this).prop('href');
+            $.ajax({ url: url, method: 'Post' }).done(function (data) {
+                var pojemnik = $('[data-containter="modal"]');
+                pojemnik.html(data);
+                InitModal(pojemnik);
+            });
+        });
+        var url = '/Admin/TresciDane?id=@Model.Item1';
+
+        var $treeview = $('#drzewkoTresci');
+        $treeview.jstree({
+            'core': {
+                'data': { url: url },
+                'check_callback': function(operation, node, parent) {
+                    if (operation === "move_node") {
+                        return parent.id != "#"; //only allow dropping inside nodes of type 'Parent'
+                    }
+                    return true;
+                },
+                'expand_selected_onload ': true
+            },
+            'dnd': {
+                'is_draggable': function(przesuwany) {
+                    if (przesuwany[0].parent == '#') {
+                        return false;
+                    }
+                    return true;
+                }
+            },
+            'contextmenu': {
+                'items': function(wezel) {
+                    var items = {
+                        "new": {
+                            "label": "Dodaj dziecko",
+                            "action": function(data) {
+                                var inst = $.jstree.reference(data.reference), obj = inst.get_node(data.reference);
+                                inst.create_node(obj, { text: 'Nowa' }, "last");
+                            }
+                        },
+                        "rename": {
+                            "label": "Zmień nazwę",
+                            "action": function(data) {
+                                var inst = $.jstree.reference(data.reference),
+                                    obj = inst.get_node(data.reference);
+                                inst.edit(obj);
+                            }
+                        },
+                        "remove": {
+                            "label": "Usuń",
+                            "action": function(data) {
+                                var inst = $.jstree.reference(data.reference),
+                                    obj = inst.get_node(data.reference);
+                                if (inst.is_selected(obj)) {
+                                    inst.delete_node(inst.get_selected());
+                                } else {
+                                    inst.delete_node(obj);
+                                }
+                            }
+                        },
+                        "saveTemplate": {
+                            "label": "Pobierz szablon na dysk",
+                            "action": function(data) {
+                                var inst = $.jstree.reference(data.reference),
+                                    obj = inst.get_node(data.reference);
+                                $.ajax({ url: "/Admin/EksportSzablonTresci/" + obj.id, method: 'Post' }).done(function (d) { WyswietlModal(d); });
+                            }
+                        },
+                        "loadTemplateFile": {
+                            "label": "Wczytaj szablon",
+                            "action": function(data) {
+                                var inst = $.jstree.reference(data.reference),
+                                    obj = inst.get_node(data.reference);
+                                $.ajax({ url: "/Admin/WczytajSzablonTresci/" + obj.id, method: 'Post' }).done(function (d) { WyswietlModal(d); });
+                            }
+                        }
+                    }
+                    if (wezel.parent == "#") {
+                        delete items.remove;
+                        delete items.rename;
+                    }
+                    if (wezel.children.length > 0) {
+                        delete items.remove;
+                    }
+                    return items;
+                }
+            },
+            'plugins': ["dnd", "contextmenu"]
+        }).on('loaded.jstree', function() {
+            $treeview.jstree('open_all');
+        }).on('move_node.jstree', Aktualizuj).on('create_node.jstree ', Aktualizuj).on('rename_node.jstree ', ZmienNazwe).on('delete_node.jstree ', UsunWezel).on('select_node.jstree', PrzeladujZawartosc);
+    });
+    function PrzeladujZawartosc()
+    {
+        LinkTworz();
+        PrzeladujWybranyPojemnik();
+    }
+    $(window).on('popstate', function (event) {
+
+        if (event.originalEvent.state != null) {
+            var id = event.originalEvent.state.wybrany;
+
+            $('#drzewkoTresci').off('select_node.jstree', PrzeladujZawartosc);
+            $('#drzewkoTresci').jstree("deselect_all");
+            $('#drzewkoTresci').jstree("select_node", "#" + id);
+            PrzeladujWybranyPojemnik();
+            $('#drzewkoTresci').on('select_node.jstree', PrzeladujZawartosc);
+        } else {
+            location.reload();
+        }
+    });
+    function UsunWezel(e, d) {
+        var url = d.node.original.usuwanieurl;
+        $.ajax({ url: url, method: 'Post' }).done(function () {
+            $('#edycja').html('');
+        }).fail(function () {
+            alert('Błąd uaktualizacji danych, proszę odświeżyć stronę');
+        });
+    }
+    function ZmienNazwe(e, d) {
+        var inst = $('#drzewkoTresci').jstree(true),
+            node = inst.get_node(d.node.id),
+            parent = inst.get_node(node.parent);
+        var kolejnosc=$.inArray(node.id, parent.children);
+        var obiekty = [];
+        obiekty.push({ id: d.node.id, text: d.node.text, parent: parent.id, kolejnosc: kolejnosc });
+        Wyslij(obiekty);
+    }
+    function Aktualizuj(e, d) {
+        var parent = d.parent;
+        var instancja = d.instance;
+        var obiekty = [];
+        var nadrzedny = instancja.get_node(parent);
+        for (var i = 0; i < nadrzedny.children.length; i++) {
+            var wezel = instancja.get_node(nadrzedny.children[i]);
+            obiekty.push({ id: wezel.id, text: wezel.text, parent: wezel.parent, kolejnosc: i });
+        }
+        Wyslij(obiekty);
+    }
+
+    function Wyslij(obiekty) {
+        $.ajax({ url: '/Admin/TrescAktualizuj', method: 'Post', contentType: 'application/json; charset=utf-8', dataType: 'json', data: JSON.stringify(obiekty) }).done(PrzeladujWybranyPojemnik).fail(function () {
+            alert('Błąd uaktualizacji danych, proszę odświeżyć stronę');
+        });
+    }
+
+    function LinkTworz() {
+        var drzewko = $("#drzewkoTresci").jstree(true);
+        var wybrany = drzewko.get_node(drzewko.get_selected());
+
+        var link = '@Url.ZbudujLinkDoTresciAdmin(SolexHelper.AktualnyJezyk)/' + wybrany.id;//+ '?jezyk=' + wybrany.original.jezyk;
+
+        if ( !isEndOf( decodeURIComponent(window.location.pathname),link) ) {
+            window.history.pushState({ jezyk: wybrany.original.jezyk, wybrany: wybrany.id }, null, link);
+        }
+    }
+    function PrzeladujWybranyPojemnik() {
+
+        var drzewko = $("#drzewkoTresci").jstree(true);
+        var wybrany = drzewko.get_node(drzewko.get_selected());
+        var link =  wybrany.original.url;
+
+
+        if (link != '') {
+            var elemn = $('.historia-zmian-tresc');
+            if(elemn.lengt>0)
+            {
+                var linkhistoria = elemn.prop('href');
+            var qs = getQsFromUrl(linkhistoria);
+            linkhistoria = linkhistoria.replace(qs, '');
+            linkhistoria += setUrlEncodedKey("id", wybrany.id, qs);
+            elemn.prop('href', linkhistoria);
+            }
+            ZaladujDaneEdycja(link);
+        }
+    }
+    function ZaladujDaneEdycja(link) {
+        var pozycjascroll = $(document).scrollTop();
+        var aktywnytab = $('.nav.nav-tabs >li>a.active');
+        $.ajax({ url: link, method: 'Post' }).done(function (dane) {
+            var edycja = $('#edycja');
+            edycja.html(dane);
+
+            $('input, select').on('change',ZapiszTresc);
+
+            edycja.find('.dodaj-wiersz').on('click', DodajWiersz);
+            //opcje przesuwania pojemnika
+            edycja.find('.tresci-wiersze').sortable({stop:ZapiszKolejnosc });
+            edycja.find('.wiersz>ul').sortable({ connectWith: ".wiersz ul", stop: ZapiszKolejnosc });
+            //opcje wiersza
+            edycja.find('.wiersz .wybor-kontrolki').on('click', WyborKontrolkiTresci);
+            edycja.find('.wiersz .usun-wiersz').on('click', Usun);
+            edycja.find('.wiersz .edytuj-wiersz').on('click', Edytuj);
+            //opcje dotyczące poszczególnych kolumn
+            edycja.find('.opcje-usuwanie').on('click', Usun);
+            edycja.find('.opcje-edycja').on('click', Edytuj);
+            edycja.find('.opcje-klonuj').on('click', Klonuj);
+            $(document).scrollTop(pozycjascroll);
+            if (aktywnytab.length>0) {
+                $('.nav.nav-tabs >li>a').removeClass('active');
+                $('.nav.nav-tabs >li>a[href="#' + aktywnytab[0].hash.replace(/^#/, "") + '"] ').click();
+            }
+            //tootlipy i inne standardowe
+            InicjacjaJs( $('#edycja') );
+        });
+    }
+
+    function WyborKontrolkiTresci(e) {
+        e.preventDefault();
+        var url = $(this).prop('href');
+        $.ajax({ url: url, method: 'Post' }).done(function (data) {
+            var pojemnik = $('[data-containter="modal"]');
+            pojemnik.html(data);
+            InitModal(pojemnik, null, Przeladuj);
+        });
+    }
+
+    function DodajWiersz() {
+        var el = $(this);
+        var form = el.closest('form');
+        var id = $('#KluczWartosc', form).val();
+        $.ajax({ url: '/Admin/DodajWiersz', method: 'Post', data: { id: id } }).done(PrzeladujWybranyPojemnik);
+    }
+
+    function Usun(e) {
+        e.preventDefault();
+        PotwierdzenieAlert(this, 'Potwierdzenie', 'Czy na pewno chcesz usunąć treść?', 'Tak', 'Nie', function (el) {
+            var url = $(el).prop('href');
+            $.ajax({ url: url, method: 'Post' }).done(PrzeladujWybranyPojemnik);
+        });
+    }
+
+    function Klonuj(e) {
+      e.preventDefault();
+      var url = $(this).prop('href');
+      $.ajax({ url: url, method: 'Post' }).done(PrzeladujWybranyPojemnik);
+    }
+
+    function Edytuj(e) {
+        e.preventDefault();
+        var url = $(this).prop('href');
+        $.ajax({ url: url, method: 'Post'}).done(function (data) {
+                    var pojemnik = $('[data-containter="modal"]');
+                    pojemnik.html(data);
+                    InitModal(pojemnik, null, Przeladuj);
+                });
+    }
+    function ZapiszKolejnosc() {
+        var wiersze = [];
+        var kolumny = [];
+        $('.tresci-wiersze>li').each(function(kolejnoscWiersz, wiersz) {
+            wiersz = $(wiersz);
+            var wierszid = wiersz.data('wiersz-id');
+            wiersze.push({ Id: wierszid, Kolejnosc: kolejnoscWiersz });
+            $('.kolumny > li', wiersz).each(
+            function(kolejnoscKolumna, kolumna) {
+                kolumna = $(kolumna);
+                var kolumnaid = kolumna.data('kolumna-id');
+                kolumny.push({ Id: kolumnaid, Kolejnosc: kolejnoscKolumna, TrescWierszId: wierszid });
+            });
+        });
+        $.ajax({ url: '/Admin/ZapiszKolejnosc', method: 'Post', data: { wiersze: wiersze, kolumny: kolumny } }).done(PrzeladujWybranyPojemnik);
+
+    }
+    function ZapiszDane(forma) {
+        if (document.forms[forma].checkValidity()) {
+            var postData = $('#' + forma).serializeArray();
+            var formUrl = $('#' + forma).attr("action");
+            $.ajax({
+                url: formUrl,
+                type: "POST",
+                data: postData,
+                error: function () {
+                    alert('Błąd zapisu danych proszę odświeżyć stronę');
+                }
+            }).done(Przeladuj);
+        } else {
+            $('#' + forma + ' :submit').click();
+        }
+    }
+    function ZapiszTresc() {
+        var forma = 'edycjaTresci';
+        //console.log('zapisztresc');
+           ZapiszDane(forma);
+    }
+    function Przeladuj() {
+
+        $('#drzewkoTresci').jstree(true).refresh();
+    }
+
+</script>
+@if (Model.Item1.HasValue)
+{
+    <script language="javascript" type="text/javascript">
+        var link = '@Url.ZbudujLinkDoTrescZawartoscAdmin(Model.Item1, SolexHelper.AktualnyJezyk)';
+        ZaladujDaneEdycja(link);
+    </script>
+}

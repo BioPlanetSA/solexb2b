@@ -1,0 +1,72 @@
+﻿#poczatek opis
+
+{Koszyk/ImportowaniePozycjiKoszyka}
+<br/>
+<p>
+    Platforma B2B przystosowana jest do importowania zamówień z plików o różnych formatach - np. <b>CSV</b> lub <b>Excel</b> (zalecane kodowanie utf-8).</p>
+ 
+W pliku CSV mogą się pojawić kolumny:<br />
+<ul>
+    <li><b>Kod kreskowy EAN</b> - kod kreskowy produktu odczytany np. z pudełka produktu <i>nagłówek w pliku: <b>kod_kreskowy</b></i></li>
+    <li><b>Produkt ID</b> - identyfikator produktu odczytany np. z plików XML udostępnianych przez naszą platformę B2B  <i>nagłówek w pliku: <b>produkt_id</b></i></li>
+    <li><b>Symbol</b> - symbol produktu  <i>nagłówek w pliku: <b>kod</b></i></li>
+    <li><b>Jednostka</b> - nazwa jednostki w formacie identycznym jakim posługujemy się na naszej platformie B2B <i>nagłówek w pliku: <b>Jednostka</b></i></li>
+    <li><b>Ilość</b> - <i>nagłówek w pliku: <b>Ilosc</b></i></li>
+</ul>
+
+
+<br/>
+Plik w formacie CSV będzie się składał z conajmniej dwóch kolumn:<br/>
+<ul>
+    <li>kolumny identyfikującej produkt (kod kreskowy EAN lub ID lub symbol) </li>
+<li> ilości</li>
+</ul>
+Plik w formacie CSV powinien mieć wszystkie dane rozdzielone znakiem średnika „;”.<br/>
+ <br/>
+
+Przykładowa zawartość pliku CSV (produkty wczytywane na podstawie kodu kreskowego):<br/>
+
+    <br/><br/>
+    <table class="table table-bordered">
+        <tr><td><b>kod_kreskowy</b></td><td><b>ilosc</b></td></tr>
+        <tr><td>43553453453</td><td>3</td></tr>
+        <tr><td>45633453435</td><td>335</td></tr>
+         <tr><td>53453453455</td><td>663</td></tr>
+    </table>
+   
+<br/>
+Inny przykład poprawnego pliku CSV (produkty wczytywane na podstawie kodu kreskowego lub kodu produktu):
+<br/><br/>
+<table class="table table-bordered">
+    <tr><td><b>kod_kreskowy</b></td><td><b>kod</b></td><td><b>ilosc</b></td></tr>
+    <tr><td>43553453453</td><td>Fsre33e</td><td>3</td></tr>
+    <tr><td></td><td>A-343f</td><td>335</td></tr>
+    <tr><td>53453453455</td><td>BZD-34F-D</td><td>663</td></tr>
+</table>
+
+<p>Przykładowy plik csv do pobrania: <a href="/Zasoby/pliki/przykladowy-csv-import-koszyka.csv"> tutaj</a></p>
+
+<b>Wielkość znaków w nazwie kolumny ma znaczenie.</b>
+
+
+#koniec opis
+
+#poczatek opis_krotki
+#koniec opis_krotki
+
+#poczatek dostep
+Zalogowani
+#koniec dostep
+
+#poczatek uklad
+Pełny
+#koniec uklad
+
+#poczatek nazwa
+Import koszyka
+#koniec nazwa
+
+
+#poczatek parent
+strony-systemowe
+#koniec parent

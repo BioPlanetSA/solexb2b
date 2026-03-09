@@ -1,0 +1,28 @@
+﻿@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoSklepu
+@if (Model.Sklepy.Count > 0)
+{
+    <div class="kafle kafle-sklepy">
+            @foreach (ISklepyBll sklep in Model.Sklepy)
+            {
+                bool jestObrazek = sklep.Obrazek != null;
+                <div class="kafel sklep @Model.Kontrolka.DodatkoweKlasyCssElementyKontrolki ramka-wykropkowana-dol">
+                        <a class="text obrazki" @(string.IsNullOrEmpty(sklep.LinkUrl.Url) ? "" : string.Format("href={0} {1} rel='nofollow' ", Url.ZbudujLink(sklep.LinkUrl,SolexHelper.AktualnyJezyk), (sklep.LinkUrl.Tryb== TrybOtwierania.NoweOkno? "target='_blank'" : "")))>
+                            @if (jestObrazek)
+                            {
+                                <img class="sklep-photo @Model.Kontrolka.RozmiarZdjecia" alt-text="@sklep.Nazwa" src="@sklep.Obrazek.LinkWWersji(Model.Kontrolka.RozmiarZdjecia)" />
+                            }
+                            <div class="sklep-nazwa">
+                                @sklep.Nazwa
+                            </div>
+                        </a>
+                </div>
+            }
+    </div>
+}
+else
+{
+    <span>@Html.PobierzTlumaczenie("Brak sklepów do pokazania")</span>
+}

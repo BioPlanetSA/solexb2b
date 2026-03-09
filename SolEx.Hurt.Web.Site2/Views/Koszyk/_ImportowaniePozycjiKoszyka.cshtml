@@ -1,0 +1,56 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.PageBases
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Koszyk.ImportowaniePozycjiKoszykaModel
+@{
+    string link = Url.ZbudujLink(Model.Lista.FirstOrDefault().Value);
+}
+
+@if (!string.IsNullOrEmpty(Model.NaglowekStopka.Naglowek))
+{
+    @Html.PobierzTlumaczenie(Model.NaglowekStopka.Naglowek)
+}
+<div class="koszyk-import-z-pliku c">
+
+    <div class="fileinput" data-provides="fileinput">
+        <input type="hidden" value="" name="Zalacznik1" >
+        <input type="file" id="FileUpload" name="Zalacznik1" data-text="@Html.PobierzTlumaczenie("Wybierz plik zamówienia")">
+    </div>
+
+    <div class="koszyk-import-wybor-formatu">
+        <select id="selectItem1" name="selectItem" class="selectpicker" data-live-search="true" data-style="btn-secondary" data-width="100%" title="Importowany plik" style="display: none;" onchange="ZaladujInfoOPliku(this)">
+            @if (Model.Lista != null)
+            {
+                foreach (var item in Model.Lista)
+                {
+                    if (item.Value.CzyWybrany)
+                    {
+                        link = Url.ZbudujLink(item.Value);
+                    }
+                    <option value="@item.Value.OpisTypu" data-plik-wzorcowy="@Url.ZbudujLink(item.Value)" @(item.Value.CzyWybrany ? "selected" : "")>@item.Key</option>
+                }
+            }
+        </select>
+        <br />
+        <p class="koszyk-import-przyklad ">
+            <a href="@link" target="_blank">@Html.PobierzTlumaczenie("Pobierz przykładowy plik importu")</a>
+        </p>
+    </div>
+
+    <button type="button" id="upload" onclick="ImportujPozycjeKoszyka(this)" class="btn btn-success koszyk-import">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wczytaj produkty")</button>
+    @if (!Request.Url.LocalPath.Equals(Url.ZbudujLinkKoszyka(SolexHelper.AktualnyJezyk)))
+    {
+        <div class="alert alert-success" id="komunikatPoImporcie-upload" style="display: none">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <a class="alert-link" href="@Url.ZbudujLinkKoszyka(SolexHelper.AktualnyJezyk)">
+                @Html.PobierzTlumaczenie("Zaimportowano poniższe pozycje do koszyka, kliknij tutaj aby przejść do koszyka")
+            </a>
+        </div>
+    }
+    <div id="manager-importow-rezultat-upload"></div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.NaglowekStopka.Stopka))
+{
+    @Html.Raw(Model.NaglowekStopka.Stopka)
+}

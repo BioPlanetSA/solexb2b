@@ -1,0 +1,46 @@
+﻿@using System.Web.Mvc.Html
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model IList<SolEx.Hurt.Web.Site2.Models.Admin.OpisModulu>
+          
+<table class="table table-bordered wybor-modul">
+    <thead>
+        <tr>
+            <th colspan="@(!string.IsNullOrEmpty(Model[0].Grupa)?"3":"2")">
+                <div class="fil wyszukiwanie-wewnetrzne">
+                    <input id="SzukanieModul"  placeholder="Szukaj" type="text" class="szukanie-fraza form-control-sm" autocomplete="off">
+                    <i class="fa fa-search"></i>
+                </div>
+                <div class="clearfix"></div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model)
+        {
+            <tr>
+                @if (!string.IsNullOrEmpty(m.Grupa))
+                {
+                    <td>@m.Grupa</td>
+                }
+                <td>@m.Nazwa
+                    <div class="text-muted">
+                        @m.Opis
+                    </div></td>
+                <td>@Html.ActionLink("Dodaj", "DodajModul", "Admin", new {typ = m.Typ.PobierzOpisTypu(), parent = m.Parent}, new {})</td>
+            </tr>
+        }
+    </tbody> 
+</table>
+<script language="javascript" type="text/javascript">
+    $('#SzukanieModul').on('keyup click', function () {
+        var $rows = $('.wybor-modul tbody tr');
+        var el = $(this);
+        var val = $.trim(el.val()).replace(/ +/g, ' ').toLowerCase().replace(/\s+/g, '');
+        $rows.show().filter(function () {
+            var text = $(this).find('td').text().replace(/\s+/g, ' ').toLowerCase();
+            var czyUkryc = !~text.indexOf(val);
+            return czyUkryc;
+        }).hide();
+    });
+</script>

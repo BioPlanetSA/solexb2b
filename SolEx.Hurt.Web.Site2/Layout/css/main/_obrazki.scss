@@ -1,0 +1,88 @@
+﻿
+.obrazki-fluid {
+    img {
+        max-width: 100%; // Part 1: Set a maximum relative to the parent
+        height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
+    }
+}
+
+/*
+    --------------------
+    style dla poparnego pokazywania braków  obrazków z presetów
+    ------------------------
+*/
+
+@mixin ustaw-wymiar-obrazka($height, $width) {
+    max-width: $width;
+    max-height: $height;
+    width: 100%;
+}
+
+.ico475x475m, .ico475x475p {
+    @include ustaw-wymiar-obrazka(475px, 475px);
+}
+
+.ico195x195p {
+    @include ustaw-wymiar-obrazka(195px, 195px);
+}
+
+.ico135x135wp, .ico135x135p {
+    @include ustaw-wymiar-obrazka(135px, 135px);
+}
+
+
+.ico570x630p {
+    @include ustaw-wymiar-obrazka(630px, 570px);
+}
+
+.ico250x250p {
+    @include ustaw-wymiar-obrazka(250px, 250px);
+}
+
+.ico175x175wp, .ico175x175p {
+    @include ustaw-wymiar-obrazka(175px, 175px);
+}
+
+
+.ico82x82wp, .ico82x82p, .ico82x82 {
+    @include ustaw-wymiar-obrazka(82px, 82px);
+}
+
+
+.ico185x185wp, .ico185x185p {
+    @include ustaw-wymiar-obrazka(185px, 185px);
+}
+
+
+.ico195x195wp, .ico195x195p {
+    @include ustaw-wymiar-obrazka(195px, 195px);
+}
+
+//wynika to z tego że jak damy tooltipy na img wewnatrz img to zle sie pokazuje jesli nie jest blokowy
+a[title] {
+   // display: inline-block;
+    
+   //musi tak byc z powodu firefox - blad jest jelsi jest img w a z klasa fluid
+    > img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        width: auto;
+    }
+}
+
+img.zdjecie-produktu{
+    white-space: normal;
+}
+
+.img-fluid {
+    width: auto; //tiny na sztywno ustawia
+}
+
+//wylaczanie popovera dla mobilnych stron
+@media all and (max-width: 768px) {
+    div.popover {
+        display: none !important;
+        visibility: hidden !important;
+    }
+}

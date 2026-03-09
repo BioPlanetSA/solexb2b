@@ -1,0 +1,94 @@
+﻿@using SolEx.Hurt.Core.BLL
+@model IEnumerable<SolEx.Hurt.Core.ModelBLL.ProduktBazowy>
+
+@{
+    int ilosc = Model.Count();
+}
+
+
+<div class="modal fade szczegoly-produktu in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="text-align: left; display: block;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h3 class="modal-title">Wybierz automat pieczątki.</h3>
+            </div>
+            
+            
+            @foreach (var item in Model)
+            {
+                <div class="modal-body row">
+                    <div class="automat-produkt-naglowek">
+                        <h4>
+                            @item.Nazwa
+                        </h4>
+                    </div>
+                    <div class="left-area col-md-6 bez-marginesu">
+                        <div class="sekcje ceny-klienta">
+                            <span class="tytul-sekcji">Ceny</span>
+                            <div class="cena ceny-po-rabacie row karta">
+                                <div class="b opis-cena-netto col-xs-6">
+                                    Twoja cena netto
+                                </div>
+                                <div class="b netto col-xs-6">
+                                    @*@item..Netto PLN*@
+                                    <small> /szt.</small>
+                                </div>
+                                <div class="cena-separator">&nbsp;</div>
+                                <div class="opis-cena-brutto col-xs-6">
+                                    Twoja cena brutto
+                                </div>
+                                <div class="col-xs-6 brutto">
+                                    @*@item.CenaDetalicznaBrutto.Wartosc.ToString("#.##") PLN*@
+                                    <small> /szt.</small>
+                                </div>
+                            </div>
+
+                            <div class="cena ceny-detaliczna row karta">
+                            </div>
+
+                            <div class="row cena cena-bazowa vat">
+                                <div class="col-xs-6">VAT:</div>
+                                <div class="col-xs-6">@item.Vat%</div>
+                            </div>
+                        </div>
+
+                        <div class="row sekcje">
+                            <div class="col-md-4 vcenter">
+                                <div class="btn btn-success link-ladujszablon small btn-sm" onclick="PieczatkiDodajDoKoszyka(@item.Id,@item.JednostkaPodstawowa.JednostkaProduktuId)">
+                                    Dodaj do koszyka
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sekcje dane-ogolne">
+                            <span class="tytul-sekcji">Opis produktu</span>
+                            <div class="row">
+                                <div>@item.Opis:</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 r">
+                        <div class="galeria" id="galeria-2175-967494599">
+                            <img id="duze" src="http://polidruk.com/images/pieczatki-ikona.png?preset=galeria" class="clickable" numer="0">
+                            <div class="c">
+                                <a download="" href="http://polidruk.com/images/pieczatki-ikona.png?preset=full" id="pobieranie"><span class="fa fa-save"></span> Pobierz w pełnej wielkości</a>
+                            </div>
+                            <div class="miniaturki" style="display:none">
+                                <a class="obrazki cboxElement" href="http://polidruk.com/images/pieczatki-ikona.png" numer="0"><img src="http://polidruk.com/images/pieczatki-ikona.png"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                if (ilosc > 1)
+                {
+                    <div class="sekcje cechy col-md-12 sekcje">
+                        <p class="belka-tytul"></p>
+                        <br />
+                    </div>
+                }
+
+            }
+        </div>
+    </div>
+</div>

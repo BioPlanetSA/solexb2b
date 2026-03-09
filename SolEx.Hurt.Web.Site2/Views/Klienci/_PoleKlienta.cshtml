@@ -1,0 +1,15 @@
+﻿@model SolEx.Hurt.Web.Site2.Models.KontrolkaPokazywaniaPrzedrostekModel
+
+@Model.Przedrostek
+@if (Model.WartoscDoPokazania != null && Model.WartoscDoPokazania.Any())
+{
+    foreach (string s in Model.WartoscDoPokazania)
+    {
+        <span>@Html.Raw(s)</span>
+    }
+}
+else
+{
+    <span>@Html.Raw(Model.FrazaDoPokazania)</span>
+}
+@Model.Przyrostek

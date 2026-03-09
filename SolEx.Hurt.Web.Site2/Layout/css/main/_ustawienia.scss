@@ -1,0 +1,67 @@
+﻿/*
+    definicja kolorów
+*/
+
+$font-kolor:                        #303030; //dymyślny kolor wszyskich napisów
+$font-menu-kolor:                   #000000; //dymyślny kolor wszyskich napisów
+$font-menu-kolor-jasniejszy-czarny: #1f1f1f;
+$kolor-zaznaczone-menu:             #ee7203;
+
+
+$kolor-wyroznienie:                 #57dcbf !default;
+$kolor-wyroznienie2:                #c1c1c1 !default;
+$kolor-tlo:                         #efefef !default;
+$kolor-szary-ledwowidoczny:         #fcfcfc !default;
+$kolor-ramki:                       #e7e7e7 !default;
+$kolor-zaznaczenia-hover:           #74a432;
+$kolor-tla-modala:                  #8dc63f;
+$kolor-drzewko-kategorii:           #8dc63f;
+$kolor-zaznaczenia:                 #8dc63f;
+
+
+$kolor-zaznaczenia-jasny:           #badb99;// #dff0d8
+
+
+
+$kolor-niebieski-ledwowidoczny:     #ecf7ff !default;
+$kolor-czerwony-ledwowidoczny:      #fcdede !default;
+$kolor-zielony-ledwowidoczny:       #e6fcde !default;
+$kolor-szary-przezroczysty90:       rgba(232, 232, 232, 0.87);
+$kolor-bialy-przezroczysty84:       rgba(255, 255, 255, 0.84);
+$kolor-ramki-mocny:                 #acabab;
+$kolor-text-muted:                  #959595;
+$kolor-ulubione-zolty:              #ffd800;
+
+/* 
+
+
+    FONTY 
+
+
+*/
+
+//domyślne fonty na stronie, alternatywnie 9pt Open Sans, Verdana, Arial
+$font-rodzina:              Roboto Condensed, Verdana,Arial  !default; 
+$font-rozmiar:              14px;
+
+
+//fonty dla menu górneg - kondensowane
+$font-menu-rodzina:         Roboto Condensed, Verdana,Arial  !default;
+$font-menu-rozmiar:         18px;
+
+//font dla tekstów
+$font-tekst-rodzina:        Roboto, Verdana,Arial  !default; 
+$font-tekst-rozmiar:        10pt;
+
+$font-kursywa:              Georgia, Caveat, Roboto Condensed, Roboto, Verdana,Arial  !default;
+
+$font-rodzina-georgia:      Georgia, Roboto, Verdana,Arial  !default; 
+
+$font-rodzina-awesome:      FontAwesome !default; 
+
+
+//rozmiary
+$sm: 34em;
+$md: 48em;
+$lg: 62em;
+$xl: 75;

@@ -1,0 +1,104 @@
+﻿@using SolEx.Hurt.Core.BLL
+@model Tuple<List<SolEx.Hurt.Core.ZamowieniaProduktyBLL>, SolEx.Hurt.Core.ZamowieniaBLL>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell
+        $('#tabela-zamowienie-podglad tfoot th').each(function () {
+            $(this).html('<input type="text" class="form-control"/>');
+        });
+
+        // DataTable
+        var table = $('#tabela-zamowienie-podglad').DataTable({
+            "oLanguage": {
+                "sLengthMenu": "Pokaż _MENU_ wpisów",
+                "sInfo": "Wszystkich wpisów _TOTAL_ (_START_ - _END_)",
+                "oPaginate": {
+                    "sNext": "Dalej",
+                    "sPrevious": "Wstecz"
+                },
+            }
+        });
+        $('#tabela-zamowienie-podglad_filter').remove();
+        $("#tabela-zamowienie-podglad_wrapper").removeClass('form-inline');
+        // Apply the search
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+    });
+</script>
+
+<legend>Zamówienie nr: @Model.Item2.DokumentNazwa Klient: @Model.Item2.Klient.Nazwa ( Id: @Model.Item2.Klient.Id )</legend>
+
+<form action="/Admin/Zamowienie" method="POST">
+    <div class=" akcje pull-xs-right">
+        <button type="submit" name="akcja" value="Zapisz" class="btn btn-secondary">Zapisz</button>
+        <button type="submit" name="akcja" value="Anuluj" class="btn btn-secondary" formnovalidate="formnovalidate">Anuluj</button>
+    </div>
+    <select name="zamowienieDropDownList">
+        @foreach (var s in SolexBllCalosc.PobierzInstancje.Konfiguracja.StatusyZamowien.Values)
+        {
+            if ((int)Model.Item2.StatusId != s.Id)
+            {
+                <option value="@s.Id">@s.Nazwa</option>
+            }
+            else
+            {
+                <option value="@s.Id" selected="selected">@s.Nazwa</option>
+            }
+        }
+    </select>
+    <input type="hidden" value="@Model.Item2.Id" name="idDokumentu">
+</form>
+<div class="alert alert-info">
+   Uwagi klienta: @Model.Item2.Uwagi
+</div>
+
+<table id="tabela-zamowienie-podglad" class="table table-striped table-hover tabela-admin table-naglowek">
+    <thead>
+        <tr>
+            <th>Nazwa produktu</th>
+            <th>Kod kreskowy</th>
+            <th>Ilość</th>
+            <th>Jednostka miary</th>
+            <th>Wartość netto</th>
+            <th>Wartość brutto</th>
+            <th>Opis pozycji</th>
+        </tr>
+    </thead>
+    <tfoot style="display: table-header-group">
+        <tr>
+            <th>Nazwa produktu</th>
+            <th>Kod kreskowy</th>
+            <th>Ilość</th>
+            <th>Jednostka miary</th>
+            <th>Wartość netto</th>
+            <th>Wartość brutto</th>
+            <th>Opis pozycji</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        @foreach (var item in @Model.Item1)
+        {
+            <tr>
+                <td> @item.ProduktBazowy.Nazwa</td>
+                <td> @item.ProduktBazowy.KodKreskowy</td>
+                <td> @item.PozycjaDokumentuIlosc </td>
+                <td> @item.Jednostka</td>
+                <td> @item.PozycjaDokumentuWartoscNetto</td>
+                <td> @item.PozycjaDokumentuWartoscBrutto</td>
+                <td> @item.Opis</td>
+            </tr>
+        }
+    </tbody>
+</table>

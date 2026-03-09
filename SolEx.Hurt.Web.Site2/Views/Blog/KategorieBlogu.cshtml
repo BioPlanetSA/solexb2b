@@ -1,0 +1,47 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@using Klient = SolEx.Hurt.Core.Klient
+@model SolEx.Hurt.Web.Site2.Models.ParametryPrzekazywaneDoSzegolow
+@{
+    var kategorie = (Dictionary<string, List<BlogKategoria>>) Model.Wartosc;
+}
+@if (!string.IsNullOrEmpty(Model.Naglowek))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Naglowek)
+
+}
+<div class="blog-pojedynczy-wpis">
+    <div class="row">
+        <div class="col-xs-12">
+            @foreach (var g in kategorie)
+            {
+                if (Model.PokazywacNazweGrupy && !string.IsNullOrEmpty(g.Key))
+                {
+                    <h6>@Html.Raw(g.Key)</h6>
+                }
+                foreach (var kat in g.Value)
+                {
+                    <ul class="list-unstyled list-inline">
+                        <li class="list-inline">
+                            @if (kat.ZdjecieId.HasValue)
+                            {
+                                string linkDoZdjecia = SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(kat.ZdjecieId.Value).LinkOryginal;
+                                <img class="blog-pojedynczy-wpis-zdjecie" src="@linkDoZdjecia" />
+                                <br />
+                            }
+                            <span class="blog-wpis-kategoria kategoria-@kat.Nazwa">@Html.Raw(string.Format(Model.Format ,kat.Nazwa))</span>
+                        </li>
+                    </ul>
+                }
+
+            }
+            
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using SolEx.Hurt.Model.Enums;
+
+namespace SolEx.Hurt.Model.Interfaces.Sync
+{
+    public interface IEksportZdjecNadysk
+    {
+        void ZapiszZdjeciaNaDysk(string sciezka, string separator, TypyPolDoDopasowaniaZdjecia polaZapisuZdjec);
+    }
+}

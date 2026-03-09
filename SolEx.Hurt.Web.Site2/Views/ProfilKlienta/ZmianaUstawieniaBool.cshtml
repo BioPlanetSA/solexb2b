@@ -1,0 +1,39 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.ProfilKlienta.ZmianaDanychBool
+
+<div class="zmiana-profilu-bool  clickable">
+   
+    @if (!Model.PokazTylkoLink)
+    {
+        <a class="wlacz-tooltip btn btn-secondary btn-xs ustawienie-klienta" data-wartosc="@Model.Wartosc" data-ustawienie="@Model.Typ" title="@Html.Raw(!string.IsNullOrEmpty(Model.Tooltip) ? SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,Model.Tooltip) : "")">
+            <i class="fa @Model.Ikona "></i>
+            @if (string.IsNullOrEmpty(Model.OpisPrzycisku))
+            {
+                <span></span>
+            }
+            else
+            {
+                <span>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.OpisPrzycisku)</span>
+            }
+        </a>
+    }
+    else
+    {
+        <a class="wlacz-tooltip @Model.klasaCss ustawienie-klienta" data-ustawienie="@Model.Typ" data-wartosc="@Model.Wartosc" title="@Html.Raw(!string.IsNullOrEmpty(Model.Tooltip) ? SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,Model.Tooltip) : "") ">
+            <i class="fa @Model.Ikona "></i>
+            @if (string.IsNullOrEmpty(Model.OpisPrzycisku))
+            {
+                <span></span>
+            }
+            else
+            {
+                <span>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.OpisPrzycisku)</span>
+            }
+        </a>
+    }
+
+</div>
+
+
+

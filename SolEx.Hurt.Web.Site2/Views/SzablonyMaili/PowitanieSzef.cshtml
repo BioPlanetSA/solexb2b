@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+
+}
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.PowitanieSzef
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Witaj w naszym systemie do sprzedaży hurtowej B2B")
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Powitanie klienta {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa }  )
+    }
+}
+@section Naglowek
+{
+    <p class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Powitanie nowego klienta przez szefa firmy")</p>
+}
+@section Tresc
+{
+    <div>
+        @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+           @Html.PobierzTlumaczenie(Model.JezykMaila(), "Serdecznie dziękuję za rejestrację na naszej Platformie B2B!<br/>Dane potrzebne do logowania dostaliście Państwo w osobnym wiadomoscEmailu.<br />Dane do opiekunów i przedstawicieli znajdują sie w stopce maila.<br/>Jesteśmy do Państwa dyspozycji pod telefonem oraz adresem email podanym w stopce.")
+        }
+        @*@if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun)
+        {
+            @Model.Konfiguracja.PobierzTlumaczenie(Model.JezykMaila(), "Powitanie klienta, jesteś jego opiekunem")
+        }
+        else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel)
+        {
+            @Model.Konfiguracja.PobierzTlumaczenie(Model.JezykMaila(), "Powitanie klienta, jesteś jego przedstawicielem")
+        }
+        else if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+            @Model.Konfiguracja.PobierzTlumaczenie(Model.JezykMaila(), "Witamy w naszym systemie")
+        }
+        else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun)
+        {
+            @Model.Konfiguracja.PobierzTlumaczenie(Model.JezykMaila(), "Powitanie klienta, jesteś jego drugim opiekunem")
+        }*@
+    </div>
+
+}
+

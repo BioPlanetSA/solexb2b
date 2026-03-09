@@ -1,0 +1,7 @@
+﻿<iframe id="iframe" src="/filemanager/dialog.php?type=0" frameborder="0" scrolling="no" style="min-height:500px"></iframe>
+<script language="javascript" type="text/javascript">
+    $('#iframe').on('load resize',function () {
+        var zawartosc = this.contentWindow.document.body.offsetHeight;
+        $(this).height(zawartosc);
+    });
+</script>

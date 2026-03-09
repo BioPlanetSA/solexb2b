@@ -1,0 +1,248 @@
+.headerTlo{
+    background-color: #ffffff;
+}
+
+.logoTlo{
+    background-color: #ffffff;
+}
+
+.contentTlo {
+    background-color: white;
+}
+
+.pracownicyTlo {
+    background-color: #F5F5F5;
+}
+
+.wstawkiTlo {
+    background-color: #F5F5F5;
+}
+
+.bodyTlo {
+    background-color: #E6E9EE;
+}
+
+.footerTlo {
+    background-color: #1D1D1D;
+}
+
+span.czcionka12, p.czcionka12{
+    font-size: 12px;
+}
+
+span.czcionka13, p.czcionka13{
+    font-size: 13px;
+}
+
+.blad {
+    color: red;
+}
+
+p {
+    line-height: 25px!important;
+}
+
+p.center {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.wyszarz {
+    color: #888;
+}
+
+p.bold {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 0 15px 0;
+}
+
+.panel.bialy {
+    background: white;
+}
+
+h6 {
+    border-bottom: 2px solid #5090EF;
+}
+
+h5 {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0 0 15px;
+}
+
+
+.r {
+    text-align: right;
+}
+.c {
+    text-align: center;
+}
+
+
+td.r {
+    padding-right: 2px !important;
+}
+
+td.hr{
+    padding: 0 !important;
+}
+
+td.hr.belka {
+    border-bottom: 1px solid #ccc;
+}
+
+th,tr.naglowek td{
+    font-weight: bold;
+    font-size: 12px;
+    border-bottom: #888 2px solid;
+    vertical-align: bottom;
+}
+
+/*----- button akcja ---*/
+
+table.button td a {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+table.akcja td {
+    background: transparent;
+    border-color: #E83038;
+}
+
+table.akcja:hover td {
+    border-color: #970b0e !important;
+    background: transparent !important;
+}
+
+table.button:hover td a, table.button:active td a, table.button td a:visited, table.tiny-button:hover td a, table.tiny-button:active td a, table.tiny-button td a:visited, table.small-button:hover td a, table.small-button:active td a, table.small-button td a:visited, table.medium-button:hover td a, table.medium-button:active td a, table.medium-button td a:visited, table.large-button:hover td a, table.large-button:active td a, table.large-button td a:visited,
+table.akcja td:hover, table.akcja td:visited, table.button:hover td a, table.akcja td a:hover, table.akcja td a {
+    color: #E83038 !important;
+}
+
+
+/*-------- koneic button akcja =---- */
+
+body, table.body, p, td {font-size: 13px;line-height:19px;}
+
+.ikona82 {
+    width: 82px;
+}
+
+.ikona155 {
+    width: 155px; 
+}
+
+.vcenter {
+    vertical-align: middle;
+}
+
+.label {
+    padding: .2em .6em .3em;
+    font-size: 85%;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: .25em;
+} 
+
+.label-danger {
+    background-color:  #d9534f;
+}
+
+.AdminWLocie {
+    border: 1px dotted #0d8f0d;
+    position: relative;
+    min-height: 10px;
+    min-width: 10px;
+}
+
+.AdminWLocie a{
+    display: none !important;
+}
+
+.AdminWLocie:hover{
+    border: 1px solid red;
+    background-color: rgba(0,0,0,0.1);
+}
+
+
+.AdminWLocie:hover a {
+    display: block !important;
+    background-color: #ffa5a5;
+    position: absolute;
+    font-size: 14px;
+    line-height: 14px;
+}
+	
+/*------ nowa tabela produktow w nowym zamowieniu ------*/
+
+table.tabelaProdukty {
+    width: 100%;
+}
+
+table.tabelaProdukty td.ostatniaKolumna {
+    border-right: 0 !important;
+}
+
+table.tabelaProdukty td.cena, table.tabelaProdukty td.wartosc {
+    width: 105px !important;
+}
+
+table.tabelaProdukty td.ilosc {
+    width: 83px !important;
+}
+
+table.tabelaProdukty img.zdjecieElementu {
+    margin: auto;
+}
+
+table.tabelaProdukty tr.naglowekProdukty {
+    background-color: #8dc64b;
+    height: 25px;
+}
+
+table.tabelaProdukty tr.naglowekProdukty td {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border-right: solid 2px white;
+    vertical-align: middle;
+    padding-bottom: 0;
+}
+
+table.tabelaProdukty tr.elementWiersz {
+    border-bottom: solid 1px #999;
+}
+
+table.tabelaProdukty tr.elementWiersz td {
+    vertical-align: middle;
+    text-align: left;
+    padding-left: 1px;
+    height: 35px;
+    max-width: 150px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+table.tabelaProdukty tr.elementWiersz td.srodek {
+    text-align: center;
+    padding: 5px 0 0 0 !important;
+}
+
+table.tabelaProdukty tr.elementWiersz td.prawo {
+    text-align: right;
+    padding-left: 0 !important;
+    padding-right: 1px;
+    padding-top: 5px;
+}
+/*----------------------------------------------------------*/
+	
+	
+	
+
+

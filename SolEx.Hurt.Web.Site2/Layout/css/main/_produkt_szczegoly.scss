@@ -1,0 +1,164 @@
+﻿@import "_ustawienia.scss";
+
+.galeria-produktu {
+    border: 1px solid $kolor-ramki; //ramka dla calej galerii - zeby objac wszystko, metki itp.
+
+    .zdjecie-glowne{
+        margin:0 auto; //wycentrowanie obrazka w srodku
+    }
+
+}
+
+.galeria-produktu-miniaturki {
+    .obrazki img {
+        margin-right: 22px;
+        border: 1px solid $kolor-ramki;
+    }
+}
+
+.produkt-nazwa-naglowek {
+    font-size: 160%; //po to zeby metki byly standardowo 160% wieksze w naglowku niz byly zdefiniwane. Bartek uwaza ze tak bedzie ladniej
+    .produkt-nazwa {
+        font-size: 31px; //chcemy zeby byl h1 na nazwie produktu, ale nie chcemy zbyt duzego rozmiaru
+        margin-bottom: 0;
+    }
+
+
+}
+
+
+.pole-opis-wartosc {
+    .wartosc {
+        .pole-opis-wartosc-element:not(:last-child) {
+            &:after {
+                content: ",";
+                margin-left: -2px; //nie wiem dlaczego, ale tak ladniej wyglada
+            }
+        }
+    }
+}
+
+
+//demonstracja mozliwosci - psosob pokazania atrybutów jako wartosci odzywcze
+.wartosci-odzywcze {
+    .pole-opis-wartosc {
+        margin-bottom: 10px;
+        margin-right: 7px;
+        margin-left: 7px;
+        display: inline-block;
+        background-color: $kolor-zaznaczenia;
+        //border:1px solid red;
+        border-radius: 200px / 100px;
+        // padding: 10px;
+        width: 55px;
+        text-align: center;
+        overflow-wrap: break-word;
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+        -ms-word-break: break-all;
+        word-break: break-all;
+        word-break: break-word;
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        vertical-align: top;
+
+        .opis, .wartosc {
+            text-align: center;
+            font-size: 10px;
+            display: block;
+            display: flex;
+            height: 35px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .opis {
+            border-bottom: 1px solid black;
+            margin-left: 4px;
+            margin-right: 4px;
+            line-height: 80%;
+            align-items: flex-end;
+            padding-bottom: 7px;
+
+            &:after {
+                display: none;
+            }
+        }
+
+        .wartosc {
+            font-size: 17px;
+            height: 45px;
+        }
+    }
+}
+
+
+.produkt-nawigacja {
+    font-size: 13px; // o jeden wiecej niz standard
+    white-space: nowrap; //nie chcemy zeby sie zawijala ta kontrolka
+    .produkt-nawigacja-pozycje {
+        font-size: 120%;
+        margin: auto 7px;
+    }
+
+    .produkt-nawigacja-pozycje-aktualna {
+        color: $kolor-zaznaczone-menu;
+    }
+
+
+
+    a, .fa, span {
+        color: black;
+        text-decoration: none;
+        vertical-align: middle;       
+    }
+
+    a > *{
+         &:hover {
+            color: $kolor-zaznaczone-menu;
+        }
+    }
+
+    .fa-angle-left {
+        padding-right: 5px;
+    }
+
+    .fa-angle-right {
+        padding-left: 5px;
+    }
+    /*.produkt-nawigacja-pozycje{
+        border: 1px solid $kolor-ramki;
+        padding: 5px;
+        margin: 0 5px;
+    }*/
+}
+
+
+.produkt-atrybuty-lista{
+    width: 100%;
+    font-family: $font-tekst-rodzina;
+
+    .atrybut-produktu{
+        padding-top: 10px;
+        width: 100%;
+
+        .atrybut-nazwa {
+            margin-right: 2px;
+        }
+
+        span.atrybut-opis{
+            &:not(:last-child):after{
+                content: '; ';
+                color: $kolor-text-muted;
+                margin-left: -2px;
+                margin-right: 4px;
+            }
+        }
+
+    }
+}
+
+
+

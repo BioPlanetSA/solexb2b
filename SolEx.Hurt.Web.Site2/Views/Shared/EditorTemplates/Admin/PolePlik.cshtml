@@ -1,0 +1,75 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.AtrybutyKlas
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+@{
+    string id = Model.IdentyfikatorObiektu + "-" + Model.NazwaPola;
+}
+
+<span class="wybor-pliku" id="@id">
+    <div class="tresc">
+        @if (Model.Wartosc == null || Model.Wartosc.ToString()==string.Empty)
+        {
+            <span>Brak pliku</span>
+        }
+        else
+        {
+            <span> @(SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Plik>(Convert.ToInt32(Model.Wartosc)).Nazwa) </span>
+        }
+    </div>
+
+    @Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+    @if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+    {
+        <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+    }
+
+    @Html.HiddenFor(x => x.Wartosc, new { @class = "wartosc" })
+    <input type="hidden" id="plik-@id" />
+    @if (!Model.PobieraneErp && !Model.TylkoDoOdczytu)
+    {
+
+        var wymuszonyTyp = Model.AtrybutyPropertisa.FirstOrDefault(x => x is WymuszoneRoszerzeniePlikuAttribute) as WymuszoneRoszerzeniePlikuAttribute;
+        var slownikRoutingu = new RouteValueDictionary {{"id", "plik-" + id}};
+        if (wymuszonyTyp != null)
+        {
+            slownikRoutingu.Add("wymuszonyTypPlikow", wymuszonyTyp.Rozszerzenia);
+        }
+        @Html.ActionLink("Wybierz plik", "ZdjeciaLista", "Pliki", slownikRoutingu, new Dictionary<string, object> { { "class", "btn btn-secondary" }, { "onClick", "return PokazModal(this,null,'[data-containter=\"indywidualny\"]');" } });
+
+        if (Model.Wartosc != null)
+        {
+            <input type="button" class="btn btn-secondary" id="kasujPlik-@id" value="X" />
+        }
+    }
+</span>
+
+<script language="javascript" type="text/javascript">
+    $('#kasujPlik-@id').click(function () {
+        $('#@id').children('input').each(function () {
+            if (this.name.indexOf('.Wartosc') != -1) {
+                this.value = null;
+                $('#@id').children('.tresc').html('<span>Brak pliku</span>');
+            }
+        });
+    });
+
+    $('#plik-@id').observe_field(1000, function () {
+        var plik = this.value;
+        var parent = $('#@id .tresc');
+        $.ajax(
+        {
+            url: '/Pliki/PobierzId',
+            data: { plik: plik },
+            success: function (data) {
+                var spanPliku = "<span>" + plik + "</span>";
+                parent.html(spanPliku);
+                $('#@id .wartosc').val(data);
+            },
+            error: function (data) {
+                parent.html('Bląd wyboru pliku');
+            }
+        });
+    });
+</script>

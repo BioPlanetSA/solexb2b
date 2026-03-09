@@ -1,0 +1,42 @@
+﻿@using ServiceStack.Common
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryKoszyka
+@{
+    IConfigBLL config = SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja;
+    SzablonAkceptacjiPoziomy poziom;
+    //bool akceptcja = Model.KoszykObiekt.CzyKoszykDoAkceptacji(Model.AktualnyKlient, out poziom);
+    //string klienci = "";
+    //if (poziom != null)
+    //{
+    //    if (poziom.Klienci == null || poziom.Klienci.IsEmpty())
+    //    {
+    //        throw  new Exception("Brak klientów w poziomie akceptacji");
+    //    }
+    //    var wybraniKlienci = SolexBllCalosc.PobierzInstancje.DostepDane.Pobierz<Klient>(null, x => poziom.Klienci.Contains(x.Id));
+    //    klienci = wybraniKlienci.Select(x=>x.Nazwa).Aggregate((current, next) => current + "</br>" + next);
+    //}
+}
+@*@if (akceptcja)
+{
+    <button class="btn btn-primary wlacz-tooltip finalizuj" title="@config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Wyślij koszyk do akceptacji do")" @Html.Raw(Model.Finalizacja ? "" : "disabled=\"disabled\"")>
+        <span class="fa fa-check"></span> @Html.PobierzTlumaczenie("Wyślij do akceptacji")
+        <br/>
+        <span>@Html.Raw(klienci)</span>
+    </button>
+}
+else
+{*@
+<button class="btn btn-primary wlacz-tooltip finalizuj" title="@config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Zatwierdź koszyk i złóż zamówienie")" @Html.Raw(Model.Finalizacja ? "" : "disabled=\"disabled\"")>
+    <span class="fa fa-check"></span>@Html.PobierzTlumaczenie(Model.TekstButtonaFinalizacji) 
+</button>
+@*}*@
+@if (Model.KoszykObiekt.KlienciMogacyAkceptowacKoszyk!=null && Model.KoszykObiekt.KlienciMogacyAkceptowacKoszyk.Any())
+{
+    <button class="btn btn-danger wlacz-tooltip odrzuc" title="@Html.PobierzTlumaczenie("Odrzuć koszyk")">
+        <span class="fa fa-check"></span> @Html.PobierzTlumaczenie("Odrzuć koszyk")
+    </button>
+}

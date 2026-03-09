@@ -1,0 +1,61 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Helper.DaneListaAdmin
+@model ListaKolumnModel
+@using (Html.BeginForm("ListaKolumnUstaw", "Admin", FormMethod.Post, new { id = "kolumny" }))
+{
+   <input type="hidden" name="typ" value="@Model.Typ.PobierzOpisTypu()"/>
+  
+    <div class="btn-group wybor-kolumn">
+        <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-placeholder="false">
+            Lista kolumn <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            @if (Model.IstniejaceSzablony.Any())
+            {
+                <li class="dropdown-header">Istniejące szablony</li>
+                foreach (var m in Model.IstniejaceSzablony)
+                {
+                    if (string.IsNullOrEmpty(m.Nazwa))
+                    {
+                        m.Nazwa = "brakNazwy";
+                    }
+                    <li class="@Html.Raw(m.Id==Model.AktywnySzablon?"active":"")">@Html.ActionLink(m.Nazwa, "ListaKolumnUstaw", "Admin", new {szablon = m.Id,typ=Model.Typ.PobierzOpisTypu()}, new {})</li>
+                }
+            }
+            <li class="dropdown-header">Kolumny do pokazania</li>
+            @foreach (var k in Model.WszystkieKolumny)
+            {
+                <li>
+                    <input type="checkbox" id="wk_@(k.NazwaPola)" name="wybraneKolumny" value="@k.NazwaPola" @Html.Raw(Model.WidoczneKolumny.Contains(k.NazwaPola) ? "checked" : "")>
+                    <label for="wk_@(k.NazwaPola)">@k.NazwaWyswietlana</label>
+                </li>
+            }
+            <li class="dropdown-header">Działania</li>
+            <li><button type="submit" class="btn btn-link">Pokaż wybrane kolumny</button></li>
+            <li><a href="#" class="btn btn-link" data-toggle="modal" data-target="#zapisModal">Zapisz wybrane kolumny jako nowy szablon</a></li>
+        </ul>
+    </div>
+    <div class="modal fade" id="zapisModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Nowy szablon listy - @Model.Typ.Name</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nazwaSzablonu">Nazwa szablonu</label>
+                        <input type="text" class="form-control" id="nazwaSzablonu" name="nazwa" placeholder="Nazwa szablonu">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    <button type="submit" class="btn btn-primary" formaction="ZapiszSzablonListyProduktowKolumn">Zapisz wybrane kolumny jako nowy szablon</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

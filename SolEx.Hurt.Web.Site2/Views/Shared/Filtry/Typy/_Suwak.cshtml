@@ -1,0 +1,93 @@
+﻿@using System.Web.Script.Serialization
+@using System.Linq
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Models
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Filtry.DaneDoFiltrow
+@{
+    var cechy = Model.Wszystkie.SelectMany(z => z.ListaCech).ToDictionary(x => x.Id, x => x);
+
+    HashSet<int> data = new HashSet<int>(Model.WszystkieWybraneCechy.SelectMany(y => y.Value));
+
+    var cechylink = cechy.WhereKeyIsIn(data);
+    var cechycyfry = cechylink.GroupBy(z => z.AtrybutId).Select(z => new FiltrListaProduktow {Atrybut = z.Key.GetValueOrDefault(), WybraneCechy = z.Select(y => y.Id).ToList()});
+
+    JavaScriptSerializer ser = new JavaScriptSerializer();
+    HashSet<int> wybranaCecha = Model.WybraneCechyAtrybut;
+    List<decimal> cechyWartosci = new List<decimal>();
+    List<Tuple<decimal, int>> listawartosc = new List<Tuple<decimal, int>>();
+    foreach (var c in Model.Atrybut.ListaCech)
+    {
+        decimal wartosc;
+        if (!TextHelper.PobierzInstancje.SprobojSparsowac(c.Nazwa, out wartosc))
+        {
+            continue;
+        }
+        listawartosc.Add(new Tuple<decimal, int>(wartosc, c.Id));
+        if (!wybranaCecha.Any() || wybranaCecha.Contains(c.Id))
+        {
+            cechyWartosci.Add(wartosc);
+        }
+    }
+    listawartosc = listawartosc.OrderBy(x => x).Distinct().ToList();
+
+    int poczatek = listawartosc.FindIndex(x => x.Item1 == cechyWartosci.Min());
+    int koniec = listawartosc.FindIndex(x => x.Item1 == cechyWartosci.Max());
+}
+
+<div class="fil fil-suwak  fil-@(Model.Atrybut.Id) ">
+    <div class="fil-label">
+        <label>@Model.Atrybut.Nazwa</label>
+        <input type="text" readonly data-pars data-aktualnastrona="1" data-filtry="@ser.Serialize(cechycyfry)">
+    </div>
+    <div class="range"></div>
+</div>
+                 
+<script type="text/javascript" language="javascript">
+    $(function() {
+        var atrybutid = @(Model.Atrybut.Id);
+        var parent = $(".fil-"+atrybutid);
+        var valMap = @Html.Raw(ser.Serialize(listawartosc));
+        parent.find('.range').slider({
+            range: true,
+            min: 0,
+            max: valMap.length - 1,
+            values: [@poczatek, @koniec],
+            start: function() {
+                var input = parent.find("input");               
+                var timer = input.data('timer');
+                if (timer == undefined) {
+                    timer = 0;
+                }
+                clearTimeout(timer);
+            },
+            slide: function(event, ui) {
+                var input = parent.find("input");
+                input.val(valMap[ui.values[0]].Item1 + ' - ' + valMap[ui.values[1]].Item1);              
+            },
+            stop: function(event, ui) {
+                var input = parent.find("input");
+                var timer = setTimeout(function() {
+                    var cechy = [];
+                    for (var i = ui.values[0]; i <= ui.values[1]; i++) {
+                        cechy.push(valMap[i].Item2);
+                    }
+                    var filtry = input.data('filtry');
+                    for (var i = 0; i < filtry.length; i++) {
+                        if (filtry[i].Atrybut == atrybutid) {
+                            filtry.splice(i, 1);
+                            break;
+                        }
+                    }
+                    if (cechy.length > 0) {
+                        var obiekt = { Atrybut: atrybutid, WybraneCechy: cechy };
+                        filtry.push(obiekt);
+                    }
+                    input.data('filtry', filtry);
+                    input.click();
+                }, 500);
+                input.data('timer', timer);
+            }
+        });
+        parent.find("input").val(valMap[@poczatek].Item1 + ' - ' + valMap[@koniec].Item1);
+    });
+</script>

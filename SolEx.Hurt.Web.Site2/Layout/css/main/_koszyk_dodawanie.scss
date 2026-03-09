@@ -1,0 +1,203 @@
+﻿@import "_ustawienia.scss";
+
+
+.dodawanie-panel {
+    display: inline-block;
+    white-space: nowrap; //nie lamac dodawania - zeby jednostka i inne byly razem
+    > div {
+        display: inline-block;
+    }
+
+    .dodawanie-btn {
+        position: relative;
+        width: 60px;
+        height: 27px;
+
+        .fa-caret-up, .fa-caret-down {
+            text-decoration: none !important;
+            position: absolute;
+            right: 3px;
+            width: 15px;
+            color: #676767;
+            height: 12px;
+            -webkit-user-select: none;
+            cursor: pointer;
+            font-size: 18px;
+
+            //zeby dwuklik nie zoomowal strony na mobilnych
+            -ms-touch-action: manipulation;	/* IE10  */
+	        touch-action: manipulation;		/* IE11+ */
+
+            &:hover {
+                color: $kolor-zaznaczone-menu;
+            }
+        }
+
+        .fa-caret-up {
+            top: -2px;
+        }
+
+        .fa-caret-down {
+            bottom: 5px;
+        }
+    }
+
+    &.nie-mozna-dodac {
+        white-space: normal;
+    }
+
+    input {
+        width: 100%;
+        padding-right: 17px;
+        outline: none;
+        text-align: right;
+    }
+
+    select.jednostki, input {
+        font-size: 11px;
+        height: 25px;
+    }
+
+    &.tekstowe {
+
+        .dodawanie-jednostki {
+            margin-right: 10px;
+        }
+
+        .przycisk {
+            margin-left: 10px;
+        }
+
+        .bsk_icon {
+            color: white;
+
+            > .ilosc {
+                color: white;
+            }
+
+            margin-right: 10px;
+        }
+    }
+   
+     //zmiana do gory na dol na przyciski z boku RESPONSYWNOSC
+    @media only screen and (max-width: $lg) {
+      display: inline-block;
+      margin: 5px 0;
+
+      .dodawanie-jednostki{
+          font-size: 13px;
+          position: absolute;
+          top: -15px;
+         // right: 48px;
+          left: 120px;
+      }
+
+        .dodawanie-btn {
+            width: auto;
+            height: 30px;    //dla mobilnej wersji
+
+            margin-right: 55px;
+            margin-left: 40px;
+
+        input{
+            height: 30px;
+            width: 50px;
+            padding-right: 10px;
+            font-size: 13px;
+            border: 1px solid $kolor-ramki-mocny;
+        }
+
+            .fa-caret-up, .fa-caret-down {
+                //STYLE zeby byly obok siebie przyciski
+                /*{
+                position: relative;
+                    width: 40px;
+                    height: 40px;
+                    display: inline-block;
+                    border: 1px solid $kolor-ramki-mocny;
+                    right: auto;
+                    top:auto;
+                    bottom: auto;
+                    vertical-align: bottom;
+                    text-align: center;
+                    font-size: 30px;
+                    line-height: 1.2;
+                }*/
+
+                //style zeby miedzy dodawaniem byly obok siebie
+
+              
+                height: 30px;
+                width: 40px;
+                border: 1px solid $kolor-ramki-mocny;
+                display: inline-block;
+                vertical-align: bottom;
+                text-align: center;
+                font-size: 30px;
+                top:0;
+
+                &.fa-caret-down{
+                    left: -42px;
+                }
+                 &.fa-caret-up{
+                    right: -42px;
+                }
+            }
+        }
+
+        .przycisk {
+            .bsk_icon{
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        .przyciski, .dodawanie-btn{
+            vertical-align: middle;
+        }
+
+    }
+}
+
+.bsk_icon {
+    background: url("/Layout/images/cart2.svg") no-repeat;
+    width: 22px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 22px;
+    //  margin-top: 3px;
+    background-size: contain;
+
+    &.dodano-do-koszyka {
+        background: url("/Layout/images/cart2-added-empty.svg") no-repeat;
+        background-size: contain;
+    }
+
+    &.empty {
+        background: url("/Layout/images/cart2-empty.svg") no-repeat;
+        background-size: contain;
+    }
+
+    > .ilosc {
+        font-size: 11px;
+        color: green;
+        margin-left: 10px;
+    }
+}
+
+
+.produkt-dodaj-zbiorczo-do-koszyka{
+     //powiekszenie dla malego ekranu dotykowego
+    @media only screen and (max-width: $lg) {
+        line-height: 2.5;
+    }
+}
+
+
+.powiadom-o-dostepnosci{
+    cursor: pointer;
+    &.dodano-info{
+        color: #08AF08;
+    }
+}

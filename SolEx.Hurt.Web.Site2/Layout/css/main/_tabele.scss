@@ -1,0 +1,87 @@
+﻿@import "_ustawienia.scss";
+
+td.fit-content {
+    //auto dopasowanie do zawartosci
+    white-space: nowrap;
+    width: 1%;
+}
+
+.table {
+    border-collapse: separate; //po to żeby można było dawać własne obramowania obrazkowe
+    tbody td, thead th {
+        @extend %ramka-wykropkowana;
+        padding: 10px 5px 10px 10px;
+        border-bottom-width: 5px;
+        vertical-align: middle;
+        // padding-bottom:10px;
+        &:not(:last-child) {
+            border-right-width: 5px;
+        }
+    }
+
+
+    & thead {
+        background: #e8e8e8;
+        color: gray;
+    }
+
+    & thead > tr:not(.prosty) > th, & tbody > tr:not(.prosty) > th, & tfoot > tr:not(.prosty) > th {
+        font-size: 14px;
+        border-bottom: 2px solid #ddd;
+        text-transform: uppercase;
+        font-family: $font-menu-rodzina;
+    }
+    //forma skondensowana ma inne szerokosci
+    &.table-condensed {
+        td, th {
+            padding: 5px 0 5px 5px;
+        }
+    }
+    
+    &.table-auto{
+        width: auto;
+    }
+
+    &.table-bez-ramki{
+         tbody td, thead th {
+              border-width: 0;
+             }
+
+    }
+}
+
+#tabela-lista-produktow {
+    tbody td, thead th {
+        &:first-child {
+            padding-left: 0;
+        }
+    }
+}
+
+
+
+.dataTable{
+    tfoot{
+        th{
+            padding: 2px 0 2px 0 !important;
+
+            input{
+                padding: 0 2px 0 2px !important;
+                margin: 0 5px 0 0 !important;
+
+
+                width: calc(100% - 10px);
+
+
+            }
+        }
+    }
+
+    td.btns{
+        text-wrap: none;
+        /*.btn{
+            //width: 100%;
+            display: inline-block;
+        }*/
+    }
+}

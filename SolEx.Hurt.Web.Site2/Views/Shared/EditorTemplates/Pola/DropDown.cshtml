@@ -1,0 +1,22 @@
+﻿@using System.Web.Mvc.Html
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.Web.ParametryPola
+@{
+    string tekst = SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.WyswietlanaNazwa);
+}
+<div title="@tekst">
+    @{
+        Dictionary<string, object> parametry = new Dictionary<string, object>();
+        parametry.Add("class", "form-control form-control-sm");
+        if (Model.Wymagane)
+        {
+            parametry.Add("required", "required");
+        }
+
+    }
+    @Html.DropDownList(Model.Nazwa, Model.SlownikWartosci.Select(x => new SelectListItem() { Text = x.Key, Value = x.Value.ToString(), Selected = Model.Wartosc?.ToString() == x.Value.ToString() }), tekst, parametry)
+</div>
+
+
+

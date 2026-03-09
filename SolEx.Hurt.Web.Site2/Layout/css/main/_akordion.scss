@@ -1,0 +1,35 @@
+﻿@import "_ustawienia.scss";
+
+.akordion {
+  
+    .akordion-naglowek {
+        font-size: 18px;
+        display: block;
+        padding: 10px 0;
+        font-family: $font-menu-rodzina;
+
+        &.collapse-element{
+            //ptaszek na dół - rozwiń
+            &.collapsed {           
+                .fa:after {
+                    margin-left: 10px;
+                    content: "\f107";
+                }
+            }
+
+            //ptaszek do góry - zwiń
+            &:not(.collapsed) .fa:after {
+                margin-left: 10px;
+                content: "\f106";
+            }
+        }
+    }
+
+    .akordion-tresc {
+        &:after {
+            content: " ";
+            border-bottom: 1px solid $kolor-ramki;
+        }
+        margin-bottom: 20px;
+    }
+}

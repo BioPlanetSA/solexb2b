@@ -1,0 +1,79 @@
+ Nazwa Firmy
+ Adres                                            Tel.: (0-22) 123-33-33
+ NIP: 123-456-78-99        Konto:  
+ ----------------------------------------------------------------------------------------------------------------------------------
+
+                           ZAMÓWIENIE nr ZAM/01/2016
+
+  Data:         2016-05-23    Magazyn: Renoma
+  Data dostawy: 2016-05-24
+
+  +----------- zamawiaj¹cy ------------++------------- dostawca -------------+
+  |Nazwa Firmy		               ||BIO PLANET S.A.                     |
+  |Adres		               ||WILKOWA WIEŒ 7, 05-084 LESZNO       |
+  |NIP: 123-456-78-99                  ||NIP: 586-216-07-38                  |
+  +------------------------------------++------------------------------------+
+
++----+---------------------------------------------------------------+--------------+-----+-----------------Field1-----------+
+| LP |                             Towar                             |     Kod      | JM  |      Iloœæ      |     Opis       |
+|    |                                                               |              |     |                 |                |
++----+---------------------------------------------------------------+--------------+-----+-----------------+----------------+
+    1 Baton czekoladowy raw bio 47g, Lifefood                         8594071484538  szt                   4
+    2 Chia nasiona sza³wi hiszpañskiej bio 200g, Every Day            5907814663368  szt                   6
+    3 Chipsy kokosowe pra¿one bio 100g,. Cocomi                       4792038436116  szt                   3
+    4 Ciecierzyca bio 500g, Organic Farma Zdrowia                     5907814667137  szt                   3
+    5 Czekolada ciemna 65% z orzechami laskowymi bio 25g, Cocoa       5902768064636  szt                   6
+    6 Daktyle bez pestek bio 150G Organic Farma Zdrowia               5907814666000  szt                   6
+    7 Deser kokosowy z chia bezgl. bio 130ml, Koko Yogo               5905669271035  szt                   3
+    8 Falafel bio 240g, Florentin                                     5908226684910  szt                   2
+    9 Fasolka adzuki bio 500g,        Organic Farma Zdrowia           5907814667335  szt                   3
+   10 Figi bio 200g, Organic Farma Zdrowia                            5907814666307  szt                   6
+   11 Herbatka moringa detox ekspresowa bio (12x2g) 24g, Lebensbaum   4012346781501  szt                   3
+   12 Hummus z kolendr¹ i cytryn¹ bio 170g, Florentin                 5908226649650  szt                   3
+   13 Jogurt owczy grecki bio 250g, Bergerie                          3273227240796  szt                   6
+   14 Jogurt owczy naturalny bio 125g, Bergerie                       3273227240062  szt                  12
+   15 Kakao bio 200g, Cafe Michel                                     3483981301620  szt                   3
+   16 Karob bio 250g, Organic Farma Zdrowia                           5907814660299  szt                   4
+   17 Kasza gryczana niepalona bio 500g, Organic Farma Zdrowia        5907814663627  szt                   6
+   18 Kasza jêczmienna bio 400g, Organic Farma Zdrowia                5907814665423  szt                   3
+   19 Kasza manna bio 500g, Every Day                                 5907814668769  szt                   3
+   20 Ketchup pikantny bezgl. bio  500ml, Zwergenwiese                4019736005544  szt                   6
+  
+------------------------------------------------------------------------------------------------------------------------------
+
+                            Zamawia:
+                             Pracownik / Szef
+
+
+                ................................
+                    (Piecz¹tka i podpis osoby
+                     wystawiaj¹cej dokument)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    wydruk dokumentu z programu PC-Market 7                    2 / 2

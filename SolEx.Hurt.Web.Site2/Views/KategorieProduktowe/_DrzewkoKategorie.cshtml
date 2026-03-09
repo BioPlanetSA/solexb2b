@@ -1,0 +1,89 @@
+﻿@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow
+@using SolEx.Hurt.Web.Site2.Models.KontrolkiTresci
+@model ParametryDoDrzewaKategorii
+
+@{
+    int poziom = 0;
+}
+
+<div @*data-kategorie-wybrane="@Model.WybranaKategoriaID" data-wybrana-grupa="@Model.WybranaGrupa"*@   >
+    @if (Model.Kontrolka.PokazujGrupyWgSposobu == SposobyPokazaniaGrupKategoriiProduktow.Taby)
+    {
+        <div class="tree-tab">
+            @foreach (GrupaBLL grupa in Model.PosortowaneGrupyKategorii)
+            {
+                <div data-grupa-id="@grupa.Id" class="clickable tree-tab-item tree-grupa-@grupa.Id">
+                   @grupa.Nazwa
+                </div>
+            }
+        </div>
+    }
+
+    @foreach (GrupaBLL grupa in Model.PosortowaneGrupyKategorii)
+    {
+        if (Model.Kontrolka.PokazujGrupyWgSposobu == SposobyPokazaniaGrupKategoriiProduktow.Metki)
+        {
+            //nie pokazujemy tabów - czyli naglowki nad kazdym drzewem - naglowki NIE klikalne dlatego ze sa caly czas pokazywane rozwiniete
+            if (!string.IsNullOrEmpty(grupa.Nazwa))
+            {
+                <div class="article tytul_jako_metka_sukces">
+                        <div class="article_title">
+                            <h3>
+                                <span class="label label-success">@grupa.Nazwa</span>
+                            </h3>
+                        </div>
+                </div>
+            }
+
+            if (grupa.ObrazekId.HasValue && grupa.ObrazekId != 0)
+            {
+                // string pic = string.Format("<img src='{0}?preset=ikona70' alt='{1}' id='logo{2}'/>", SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(k.ObrazekId.Value).LinkOryginal, k.Nazwa, k.Id);
+                <div class="article tytul_jako_metka_sukces">
+                    <div class="c article_zdjecia">
+                        @*@if (!string.IsNullOrEmpty(k.LinkObrazka))
+                            {
+                                string LinkObrazka = string.Format("{0}{1}", ConfigBLL.PobierzInstancje.wlasciciel_AdresPlatformy, k.LinkObrazka);
+                                <a href="@LinkObrazka">@Html.Raw(pic)</a>
+                            }
+                            else
+                            {
+                                @Html.Raw(pic)
+                            }*@
+
+                    </div>
+                </div>
+            }
+        }
+
+        <div class="panel"> @*musi byc ta glupia klasa panel zeby acordion zwijal sie poprawnie - bez tego nie dziala bootstrap*@
+            @*akordiony*@
+            @if (Model.Kontrolka.PokazujGrupyWgSposobu == SposobyPokazaniaGrupKategoriiProduktow.Akordion)
+            {
+                <a href="#" class="a-link bold akordion-naglowek collapse-element ramka-wykropkowana-dol "      @*@Html.Raw(grupa.Id == Model.WybranaGrupa ? "grupa-aktywna" : "collapsed")*@
+                   data-id="@grupa.Id" data-toggle="collapse" data-target="#kat-drzewo-@Model.IdKontrolki-@grupa.Id" @*aria-expanded="@Html.Raw(grupa.Id == Model.WybranaGrupa ? "true" : "")"*@
+                   data-parent="#katprodukty-@Model.IdKontrolki">
+                    @(string.IsNullOrEmpty(grupa.Nazwa) ? "brak nazwy grupy" : grupa.Nazwa) <i class="fa"></i>
+                </a>
+            }
+
+    
+    @*@(Model.WybranaGrupa.GetValueOrDefault(0) == grupa.Id ? "grupa-aktywna" : "")*@ 
+
+            <div data-grupa-id="@grupa.Id" class="tree-elements tree-grupa-@grupa.Id @(Model.Kontrolka.PokazujGrupyWgSposobu == SposobyPokazaniaGrupKategoriiProduktow.Akordion ? "collapse" : "")"
+                 id="kat-drzewo-@Model.IdKontrolki-@grupa.Id">
+                @foreach (KategorieBLL k in Model.WszystkieWidoczneKategorie[grupa.Id].Where(x => x.ParentId == null))
+                {
+                    @Html.Partial("_DrzewkoElement", new ParametryDoElementuDrzewaKategorii(k, poziom, Model))
+                }
+            </div>
+        </div>
+
+    }
+    <script>      
+        DrzewoKategorii_ZaladujSkrypty();
+    </script>
+</div>
+

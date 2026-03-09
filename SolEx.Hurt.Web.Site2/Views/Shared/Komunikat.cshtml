@@ -1,0 +1,27 @@
+﻿@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+@model IEnumerable<Komunikat>
+
+@foreach (Komunikat k in Model)
+{
+    string typ = "";
+    switch (k.Typ)
+    {
+        case KomunikatRodzaj.danger:
+            typ = "alert-danger";
+            break;
+        case KomunikatRodzaj.info:
+            typ = "alert-info";
+            break;
+        case KomunikatRodzaj.success:
+            typ = "alert-success";
+            break;
+        case KomunikatRodzaj.warning:
+            typ = "alert-warning";
+            break;
+    }
+    <div data-autor="@k.Autor" class="border komunikat alert  @typ">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        @Html.PobierzTlumaczenie(k.Wiadomosc)
+    </div>
+}

@@ -1,0 +1,39 @@
+﻿@model Tuple<int,List<string>>
+<div class="modal fade wczytaj-szablom">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Wczytywanie szablonu</h4>
+
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("ZresetujSzablonTresci", "Admin", FormMethod.Post, new { id = "szablonWczytaj", @class = "form-horizontal", enctype = "multipart/form-data" }))
+                {
+
+                    <div class="form-group">
+                        @foreach (string s in Model.Item2)
+                        {
+
+                            <button type="submit" formnovalidate="formnovalidate" class="btn btn-secondary" name="istniejacy" value="@s">@s <img src="/DomyslnaKonfiguracja/SzablonListyProduktowyTresci/@(s).png" style="width: 128px;height: 128px;" /></button>
+
+                        }
+                    </div>
+                    <div class="form-group">
+                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                            <div class="form-control" data-trigger="fileinput"><i class="fa fa-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                            <span class="input-group-addon btn btn-secondary btn-file"><span class="fileinput-new">Wybierz plik</span><span class="fileinput-exists">Zmień</span><input type="file" name="szablon" required="required"></span>
+                            <a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Usuń</a>
+                        </div>
+                    </div>
+
+               
+
+                    @Html.Hidden("id", Model.Item1)
+                    <button type="submit" name="akcja" class="btn btn-primary">Zresetuj szablon</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+                }
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

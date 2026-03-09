@@ -1,0 +1,56 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL.ObiektyMaili
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.UstawieniePowiadomienia
+@{
+    SzablonMailaBaza ob = SolexBllCalosc.PobierzInstancje.MaileBLL.PobierzListeWszystkichPowiadomienMailowych().First(x => x.Id == Model.Id);
+}
+
+<div id="SzablonMaila-@Model.Id" class="tresc-wiersz-kolumna-naglowek  @(Model.BladKompilacji ? "blad" : "" ) @(Model.WlaczoneDlaOdbiorcow ? "" : "nieaktywny")">
+    <div class="row" data-id="@Model.Id">
+      
+        <div class="col-md-12">
+            <h5 class="tytul">
+                @ob.NazwaFormatu()
+            </h5>
+
+            <P class="pole pole-bool">
+                <input type="checkbox" @(Model.ZgodaNaZmianyPrzezKlienta ? "checked" : "") name="Zezwolenie" class="opcje button-ajax " data-pole="ZgodaNaZmianyPrzezKlienta">
+                <label>Zezwalaj na wyłaczenie przez klienta</label>
+            </P>
+            <p>
+                @Html.Raw(ob.OpisFormatu())
+            </p>
+        </div>
+
+        @foreach (var p in Model.ParametryWysylania)
+        {
+            <div class="col-md-3 col-xs-6 odbiorca czcionka-tekstowa-paragraf">
+                @{
+                    var akt = !p.Aktywny;
+                    string link = Url.ZbudujLinkDoPodgladuMaili(p.DoKogo, Model.Id, SolexHelper.AktualnyJezyk);
+                }
+                <button class="btn btn-secondary btn-sm  @(p.Aktywny ? "btn-success" : null) button-ajax" data-pole="Aktywny" data-wartosc="@akt" data-doKogo="@p.DoKogo"> @Html.Raw(p.Aktywny ? "Wysyłaj do" : "Nie wysyłaj do") <b>@p.DoKogo</b></button>
+                <a href="@link" class="text-muted" target="_blank">Zobacz Podgląd</a>
+                <div style="padding-top: 10px">
+                    Kopia maila (BCC) <input type="email" data-dokogo="@p.DoKogo" data-id="@Model.Id" onchange="WyslijMailaBcc(this)" value="@p.EmailBcc"/>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+
+    $('.powiadomienia-mailowe .button-ajax').click(function () {
+        ZmianaSzablonuMaila(this);
+    });
+
+    function WyslijMailaBcc(sender) {
+        var mail = $(sender).val();
+        var id = $(sender).attr('data-id');
+        var dokogo = $(sender).attr('data-dokogo');
+        $.ajax({ url: '/SzablonyMaili/UstawBcc', type: 'GET', data: { id: id, email: mail, doKogo: dokogo } });
+    }
+</script>

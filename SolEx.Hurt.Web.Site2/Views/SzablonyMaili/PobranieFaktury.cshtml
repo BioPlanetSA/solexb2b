@@ -1,0 +1,120 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+
+}
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.PobranieFaktury
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Potwierdzenie pobrania faktury z Platformy B2B")
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Potwierdzenie pobrania faktury z Platformy B2B - {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+    }
+}
+
+@section Naglowek{
+    <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Potwierdzenie pobrania faktury przez klienta")</h4>
+}
+
+@section Tresc
+{
+    <table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad">
+                           @Html.PobierzTlumaczenie(Model.JezykMaila(), "Klient pobrał fakturę z systemu B2B")
+                        <br />
+                    </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+    
+
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                    <tr>
+                        <td class="text-pad wstawkiTlo">
+                            <br/>
+                            <table style="width: 100%" class="tabela">
+                                <tr>
+                                    <td><b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zalogowana osoba"):</b></td>
+                                    <td align="left" class="vcenter">
+                                        @Model.Klient.Nazwa  ( @Model.Klient.Email  )
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Data Pobrania"):</b></td>
+                                    <td align="left" class="vcenter">
+                                        @DateTime.Now
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td><b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Numer faktury"):</b></td>
+                                    <td align="left" class="vcenter">
+                                        @Model.Dokument.NazwaDokumentu
+                                    </td>
+                                </tr>
+
+
+                              
+
+
+                                <tr>
+                                    <td><b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Adres IP komputera klienta"):</b></td>
+                                    <td align="left" class="vcenter">
+                                        @Model.AdresIP
+                                    </td>
+                                </tr>
+
+
+                            </table>
+
+
+
+                        </td>
+                    </tr>
+                </table>
+            </td>
+                       
+        </tr>
+    </table>
+
+
+
+}
+

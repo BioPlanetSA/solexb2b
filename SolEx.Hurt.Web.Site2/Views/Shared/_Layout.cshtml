@@ -1,0 +1,99 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@using StackExchange.Profiling
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+@{
+    if (HttpContext.Current.IsDebuggingEnabled)
+    {
+        ViewContext.ViewBag.Title = "DEBUG !! -" + ViewContext.ViewBag.Title;
+    }
+}
+    <title>@ViewContext.ViewBag.Title - @SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Platforma SolexB2B")</title>
+    @if (!string.IsNullOrEmpty(ViewContext.ViewBag.MetaDescription))
+    {
+        <meta name="description" content="@ViewContext.ViewBag.MetaDescription"/>
+    }
+    @if (!string.IsNullOrEmpty(ViewContext.ViewBag.MetaKeywords))
+    {
+        <meta name="keywords" content="@ViewContext.ViewBag.MetaKeywords"/>
+    }
+    @{
+        string klucz = SolexBllCalosc.PobierzInstancje.Konfiguracja.KluczGoogleAnalytycs;
+
+        if (!string.IsNullOrEmpty(klucz))
+        {
+            <script type="text/javascript">
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', '@klucz']);
+                _gaq.push(['_trackPageview']);
+
+                (function() {
+                    var ga = document.createElement('script');
+                    ga.type = 'text/javascript';
+                    ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') +
+                        '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+        }
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE"/>
+
+        @Styles.Render(BundleConfig.linkDoCss)
+        @Scripts.Render(BundleConfig.linkScript)
+
+        Html.RenderPartial("~/Views/Wyglad/_Dolaczenia.cshtml");
+    }
+</head>
+
+<body  
+    @if (!SesjaHelper.PobierzInstancje.CzyKlientZalogowany)
+    {
+        <text>class="BezLogowania"</text>
+    }
+@*parametr dla id tresci aktualnej - potrzebny zeby ustawic np. aktywne menu*@ data-aktywna-tresc-id="@this.ViewContext.RouteData.Values["idTresci"]" >
+
+
+<script language="javascript" type="text/javascript">
+        $.ajaxPrefilter(function (options) {
+            var url = options.url;
+            options.url = PoprawUrlOJezyk(url, '@Url.SymbolJezyka(SolexHelper.AktualnyJezyk)');
+        });
+</script>    
+<div id="topHeaderBanner" class="container-fluid"></div>
+
+    @RenderSection("naglowek", false)
+    @RenderSection("menu", false)
+    @*@Html.Action("KomunikatyUrl", "Wyglad")*@
+
+    @if (!string.IsNullOrEmpty(ViewBag.Tytul))
+    {
+        <div id="naglowek-tytul">
+            <h1>@ViewBag.Tytul</h1>
+        </div>
+    }
+
+    @RenderBody()
+    @RenderSection("stopka", false)
+
+
+    <div id="toTop" class="hidden-xs c clickable"
+         title="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Powrót do góry")">
+        <i class="fa fa-angle-up fa-2x"></i>
+    </div>
+
+
+    <span data-containter="modal"></span>
+    <span data-containter="indywidualny"></span>
+    @(MiniProfiler.Current?.RenderIncludes())
+</body>
+
+
+</html>

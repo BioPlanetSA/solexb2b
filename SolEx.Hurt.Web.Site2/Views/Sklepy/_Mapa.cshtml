@@ -1,0 +1,73 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoSklepu
+@{
+    string sciezkaKlm="";
+    if (Model.Kontrolka.SklepySciezkaKLMId.HasValue)
+    {
+        sciezkaKlm = Url.LinkAbsolutny(Model.Kontrolka.SklepySciezkaKLM.SciezkaWzgledna);
+    }
+}
+
+<div id="mapa-id@(Model.Kontrolka.Id)" class="mapa-sklepow" data-idkontrolki="@Model.Kontrolka.Id" data-zoom="@Model.Kontrolka.Powiekszenie" data-minzoom="@Model.Kontrolka.MinimalnePowiekszenie" data-maxzoom="@Model.Kontrolka.MaksymalnePowiekszenie"
+     data-sciezkaklm="@sciezkaKlm" data-url="@Url.Action("PobierzSklepyNaMapeWPostaciPuntow")" data-url-info="@Url.Action("InfoOSklepie")" style="width: 100%" data-punkty="@Model.Punkty" data-kategoria="@Model.KategoriaId">
+
+    <div class="mapa-naglowek kafle kafle-do-srodka czcionka-tekstowa-paragraf row-xs-center">
+        @if (Model.Kontrolka.PokazFiltrKategorii)
+        {
+            <div class="wybor-kategorii" data-url="@Url.Action("Miasta")">
+                @foreach (KategoriaSklepu m in Model.KategorieSklepowDoPokazania)
+                {
+                    //domyslnie zaznaczone wszytkie
+                    <a class="kategoria a-checkbox a-checkbox-checked" data-kategoria-id="@m.Id" href="#">
+                        @m.Nazwa
+                    </a>
+                }
+            </div>
+        }
+
+        @if (Model.Kontrolka.SklepyListaMiast)
+        {
+            <div class="wybor-miasta">
+                <span class="wybierz-miejscowosc vertical-middle">@Html.PobierzTlumaczenie("Wybierz miejscowość")</span>
+                <select class="selectpicker miasta-dropdown" data-live-search="true" @*data-width="250px"*@ data-style="btn-sm btn-secondary lista-miast" data-width="auto">
+                    @if (Model.MiastaDlaKategorii.Count > 1)
+                    {
+                        <option value="">-</option>
+                    }
+                    @{
+                        foreach (string miasto in Model.MiastaDlaKategorii)
+                        {
+
+                            <option value="@miasto">@miasto</option>
+                        }
+
+                    }
+                </select>
+
+            </div>
+        }
+    </div>
+
+    <div class="mapa-opakowanie">
+        <div id="brak-zgody" class="alert alert-info" style="display: none">
+            @Html.PobierzTlumaczenie("Przepraszamy, nie możemy pokazać sklepów w Twojej lokalizacji - prawdopodobnie nie zezwoliłeś na pobranie swojej lokalizacji w przeglądarce.")
+        </div>
+        <div id="brak-elementow" class="alert alert-danger" style="display: none">
+            @Html.PobierzTlumaczenie("Przepraszamy, nie ma żadnych sklepów do pokazania dla wybranych kategorii.")
+        </div>
+        <div class="mapa-kontener" style="height: @(Model.Kontrolka.SklepyWysokosc)px; width: 100%"></div>
+    </div>
+</div>
+
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@(SolexBllCalosc.PobierzInstancje.Konfiguracja.GoogleApiKey)"></script>
+
+<script language="javascript" type="text/javascript">
+    $(window).on('load', function() {
+        mapa.inicjalizujMape( $('#mapa-id@(Model.Kontrolka.Id)'));
+    });
+</script>
+
+

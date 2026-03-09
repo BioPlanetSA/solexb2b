@@ -1,0 +1,219 @@
+﻿@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryDoProduktowRodzinowych
+@{
+    IProduktKlienta produktGlowny = Model.ProduktGlowny;
+    List<IProduktKlienta> listaDzieci = Model.ProduktyRodzinowe;
+    int iloscKolumn = Model.IloscKolumn;
+    int iloscWierszy = listaDzieci.Count+1;
+    string link = null;
+    var akcesorRefleksjiProduktow = typeof(ProduktKlienta).PobierzRefleksja();
+}
+<tr>
+   @if (!Model.ListaDane.AktualneParametry.KontrolkaProduktow.RodzinyPokazujZdjeciaDzieci && produktGlowny.ZdjecieGlowne != null)
+   {
+       <td style="vertical-align: middle" rowspan="@iloscWierszy">
+           @{ Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(produktGlowny, Model.ListaDane.AktualneParametry.KontrolkaProduktow.LRozmiarZdjecia, true, RodzajMetki.ListaProduktow, "foto link-szczegoly", link)); }
+       </td>
+   }
+    <td class="l b" colspan="@iloscKolumn">@produktGlowny.Rodzina</td>
+</tr>
+
+@foreach (var produktKlienta in listaDzieci)
+{
+    string info = "";
+    bool pokazujCene;
+    bool moznaDodacDoKoszyka = SolexBllCalosc.PobierzInstancje.ProduktyBazowe.MoznaDodacDoKoszyka(produktKlienta, out info, out pokazujCene);
+    link = Url.ZbudujLink(produktKlienta,SolexHelper.AktualnyJezyk);
+
+    TypStanu typStanuPK = produktKlienta.PobierzTypStany;;
+    <tr>
+        @if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.RodzinyPokazujZdjeciaDzieci)
+        {
+            <td class="rodzina-dziecko-zdjecie">
+                @{
+                    Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(produktKlienta, Model.ListaDane.AktualneParametry.KontrolkaProduktow.LRozmiarZdjecia, true, RodzajMetki.WidokRodzinowy, "foto link-szczegoly", Url.ZbudujLink(produktKlienta, SolexHelper.AktualnyJezyk)));
+                }
+            </td>
+        }
+        <td class="l Nazwa">
+            @{
+                Html.RenderPartial("~/Views/Koszyk/_Ulubione.cshtml", new Tuple<long, HashSet<long>, bool>(produktKlienta.Id, Model.IdUlubionych, false));
+
+                Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produktKlienta.PobierzMetkiRodzina(MetkaPozycjaRodziny.NadNazwa), $"lista-rodziny metki {MetkaPozycjaRodziny.NadNazwa}"));
+                Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produktKlienta.PobierzMetkiRodzina(MetkaPozycjaRodziny.PrzedNazwa), $"lista-rodziny metki {MetkaPozycjaRodziny.PrzedNazwa}"));
+            }
+            <a href="@link" class="clickable">
+                @if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.CechyRodzinoweListaProduktowPokazuj && produktKlienta.CechaUnikalnaRodzina != null)
+                {
+                    <span class="label label-border rodzina-dziecko-cecha">
+                      @{
+                          Html.RenderPartial("~/Views/Produkty/_AtrybutProduktu.cshtml", produktKlienta.CechaUnikalnaRodzina);
+                      }
+                    </span><br/>
+                }
+
+                @if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.LSymbol)
+                {
+                    <span class="kod">@(produktKlienta.Kod)</span>
+                }
+                @if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.LKodKreskowy && !string.IsNullOrEmpty(produktGlowny.KodKreskowy))
+                {
+                    <span class="kod-kreskowy">@(produktKlienta.KodKreskowy)</span>
+                }
+            </a>
+            @{
+                Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produktKlienta.PobierzMetkiRodzina(MetkaPozycjaRodziny.PodNazwa), $"lista-rodziny metki {MetkaPozycjaRodziny.PodNazwa}"));
+                Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produktKlienta.PobierzMetkiRodzina(MetkaPozycjaRodziny.ZaNazwa), $"lista-rodziny metki {MetkaPozycjaRodziny.ZaNazwa}"));
+                Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produktKlienta.PobierzMetkiRodzina(MetkaPozycjaRodziny.ZaNazwaDoPrawej), $"lista-rodziny metki {MetkaPozycjaRodziny.ZaNazwaDoPrawej}"));
+            }
+            @if (!string.IsNullOrEmpty(produktKlienta.OpisKrotki))
+            {
+                <br/>
+                <span class="text-muted produkt-opis-2linia">@Html.Raw(produktKlienta.OpisKrotki)</span>
+                <br/>
+            }
+            @if (Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.NaDole))
+            {
+                <br/>
+                Html.StanyProduktowWszystkie(produktGlowny, Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.NaDole]);
+            }
+
+
+        </td>
+        @if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.LCenaDetaliczna != JakieCenyPokazywac.Brak)
+        {
+            <td class="r CenaProduktu" style="width: 95px;">
+
+                @if (typStanuPK != TypStanu.niedostepny_dluzszy_czas)
+                {
+                    Html.RenderPartial("_Cena",
+                        new CenaDoPokazania(produktKlienta.FlatCeny.CenaDetalicznaNetto, produktKlienta.FlatCeny.CenaDetalicznaBrutto, null, null, "netto", "", "ceny-przed-rabatem lista-produktow", "",
+                            Model.ListaDane.AktualneParametry.KontrolkaProduktow.LCenaDetaliczna, "brutto"));
+
+
+                }
+            </td>
+        }
+
+        @if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.LCenaPrzedRabatem != JakieCenyPokazywac.Brak)
+        {
+            <td class="r CenaProduktu" style="width: 95px;">
+
+                @if (typStanuPK != TypStanu.niedostepny_dluzszy_czas)
+                {
+                    Html.RenderPartial("_Cena",
+                        new CenaDoPokazania(produktKlienta.FlatCeny.CenaHurtowaNetto, produktKlienta.FlatCeny.CenaHurtowaBrutto, null, null, "netto", "", "ceny-przed-rabatem lista-produktow", "",
+                            Model.ListaDane.AktualneParametry.KontrolkaProduktow.LCenaPrzedRabatem, "brutto"));
+                }
+            </td>
+        }
+
+        @if (produktKlienta.GradacjePosortowane != null && Model.ListaDane.AktualneParametry.KontrolkaProduktow.LGradacja != GradacjaSposobPokazywania.Brak)
+        {
+            <td class="brak-odstepu r Gradacja" colspan="@Html.Raw(1 + (Model.ListaDane.AktualneParametry.KontrolkaProduktow.LRabat ? 1 : 0) + (Model.ListaDane.AktualneParametry.KontrolkaProduktow.ZyskKlienta ? 1 : 0))">
+                @if (typStanuPK != TypStanu.niedostepny_dluzszy_czas)
+                {
+                    Html.RenderAction("Gradacje", "Produkty", new {ProduktId = @produktKlienta.Id, sposobPokazywania = Model.ListaDane.AktualneParametry.KontrolkaProduktow.LGradacja});
+                }
+            </td>
+        }
+        else
+        {
+            if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.LRabat && Model.ListaDane.KlientWidziCeneHurtowa)
+            {
+                <td class="c Rabat">
+                    @if (typStanuPK != TypStanu.niedostepny_dluzszy_czas)
+                    {
+                        <span class="produkt-rabat">@produktKlienta.FlatCeny.Rabat.DoRabatString()</span>
+                    }
+                </td>
+            }
+
+
+            if ((Model.ListaDane.AktualneParametry.KontrolkaProduktow.LVat || Model.ListaDane.AktualneParametry.KontrolkaProduktow.CenaPoRabacie != JakieCenyPokazywac.Brak) && Model.ListaDane.KlientWidziCeneHurtowa)
+            {
+                <td class="r CenaPoRabacie" style="width: 110px;">
+                    @if (typStanuPK != TypStanu.niedostepny_dluzszy_czas)
+                    {
+                        Html.RenderPartial("_Cena", new CenaDoPokazania(produktKlienta.FlatCeny, "netto", "", "ceny-po-rabacie", "", Model.ListaDane.AktualneParametry.KontrolkaProduktow.CenaPoRabacie, "brutto"));
+                        if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.LVat)
+                        {
+                            <span class="text-muted produkt-cena-klienta-druga"><span>@Html.PobierzTlumaczenie("VAT")</span> <span>@(produktKlienta.Vat)%</span></span>
+                        }
+                    }
+                </td>
+            }
+
+
+            if (Model.ListaDane.AktualneParametry.KontrolkaProduktow.ZyskKlienta)
+            {
+                <td scope="col" class="c ZyskiKlienta" style="vertical-align: middle; width: 95px">
+                    @if (typStanuPK != TypStanu.niedostepny_dluzszy_czas)
+                    {
+                        <span class="text-muted produkt-zysk-klienta">@(produktKlienta.FlatCeny.ZyskKlientaNetto) </span>
+                    }
+                </td>
+            }
+        }
+        @if (Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.Kolumna))
+        {
+            <td class="c kolumna-stany-produktow">
+                @{
+                    Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produktKlienta.PobierzMetkiLista(MetkaPozycjaLista.NadStanemKolumna), $"metki {MetkaPozycjaLista.NadStanemKolumna}"));
+                    Html.StanyProduktowWszystkie(produktKlienta, Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.Kolumna]);
+                    Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produktKlienta.PobierzMetkiLista(MetkaPozycjaLista.PodStanemKolumna), $"metki {MetkaPozycjaLista.PodStanemKolumna}"));
+                }
+            </td>
+        }
+        @if (!string.IsNullOrEmpty(Model.ListaDane.AktualneParametry.KontrolkaProduktow.Kolumna80))
+        {
+            object wartosc = Refleksja.PobierzWartoscFormatowana(produktKlienta, Model.ListaDane.AktualneParametry.KontrolkaProduktow.Kolumna80, Model.ListaDane.AktualneParametry.KontrolkaProduktow.Lkolumna80format, akcesorRefleksjiProduktow);
+            string fraza = wartosc.ToString();
+            <td class="c NaglowekKolumna80">
+                <a href="@link" class="clickable link-szczegoly">
+                    @Html.Raw(fraza)
+                </a>
+            </td>
+        }
+
+        @if (SesjaHelper.PobierzInstancje.CzyKlientZalogowany)
+        {
+
+            <td class="r kolumna-dodawanie-do-koszyka">
+                @if (Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem))
+                {
+                    Html.StanyProduktowWszystkie(produktKlienta, Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem]);
+                }
+
+                @{
+                    ParametryIlosciProduktu pi = new ParametryIlosciProduktu(produktKlienta, Model.ListaDane.SortowanieJednostek, TypPozycjiKoszyka.Zwykly, null, Model.ListaDane.PokazujJednostki);
+                    pi.MoznaDodawacDoKoszyka = moznaDodacDoKoszyka;
+                    pi.Info = info;
+                    Html.RenderPartial("EditorTemplates/DodawanieDoKoszyka", pi);
+                    //Html.RenderAction("DodawanieProduktuProdukt", "Koszyk", new { produkt = produktKlienta });
+                }
+                @if (Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem))
+                {
+                    Html.StanyProduktowWszystkie(produktKlienta, Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem]);
+
+                }
+            </td>
+
+            if (Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.ListaDane.WszystkieSposobyPokazywaniaStanowKlienta.Any() && Model.ListaDane.AktualneParametry.KontrolkaProduktow.BelkaDostepnosci)
+            {
+                <td style="vertical-align: middle" class="belka-dostepnosci @typStanuPK.ToString()">
+                    &nbsp;
+                </td>
+            }
+        }
+
+    </tr>
+}

@@ -1,0 +1,37 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model   SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Tresci.DaneDoMenu
+
+<div data-zaznacz-aktywne-menu>
+    <div class="container">
+        <nav id="nav_menu_glowne" class="menu-dodatkowe offcanvas-xs">
+            <ul class="list-inline list-unstyled">
+                @foreach (var elem in Model.Drzewo)
+                {
+                    <li data-menu-opcja-id="@elem.Item.Id">
+                        <a class="dropdown-toggle" href="@Url.ZbudujLink(elem.Item.TrescBll, SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk)" data-hover="dropdown" data-delay="1000" data-close-others="true">
+                            @elem.Item.Nazwa
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        $('.menu .submenu').on('mouseleave', function () {
+            $('.opis-parent', this).show();
+            $('div[data-opis]', this).hide();
+        });
+        $('a[data-opis]').on({
+            mouseover: function () {
+                var el = $(this);
+                $('div[data-opis]').hide();
+                var submenu = el.closest('.submenu');
+                $('.opis-parent', submenu).hide();
+                var id = el.data('opis');
+                $('div[data-opis="' + id + '"]').show();
+            }
+        });
+    });
+</script>

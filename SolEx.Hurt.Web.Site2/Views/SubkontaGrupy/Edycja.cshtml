@@ -1,0 +1,44 @@
+﻿@using System.Globalization
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model SubkontoGrupa
+@{
+    IList<SzablonLimitow> szablonyLimitow = ViewBag.SzablonyLimitow;
+    IList<SzablonAkceptacjiBll> szablonyAkceptacji = ViewBag.SzablonyAkceptacji;
+    IList<MiejsceKosztow> miejscaKosztow = ViewBag.MiejsceKosztow;
+           }
+<div class="modal fade szablon-subkontaGrupa-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            @using (Html.BeginForm("Edycja", "SubkontaGrupy", FormMethod.Post, new { id = "edycjaSubkontGrup" }))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">@(Model.Id==0?"Nowa grupa": "Edycja grupy "+Model.Nazwa)</h4>
+
+                </div>
+                <div class="modal-body">
+
+                    @Html.HiddenFor(x => x.Id)
+                    @Html.HiddenFor(x => x.KlientId)
+                    @Html.LabelFor(x => x.Nazwa, Html.PobierzTlumaczenie("Nazwa").ToString())
+                    @Html.TextBoxFor(x => x.Nazwa, new { @class = "form-control", required = "required" })
+                    @Html.LabelFor(x => x.SzablonLimitowId, Html.PobierzTlumaczenie("SzablonListyProduktow limitów").ToString())
+                    @Html.DropDownListFor(x => x.SzablonLimitowId, szablonyLimitow.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.SzablonLimitowId }), "", new { @class = "form-control" })
+                    @Html.LabelFor(x => x.SzablonAkceptacjiId, Html.PobierzTlumaczenie("SzablonListyProduktow akceptacji").ToString())
+                    @Html.DropDownListFor(x => x.SzablonAkceptacjiId, szablonyAkceptacji.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.SzablonAkceptacjiId }), "", new { @class = "form-control" })
+                    @Html.LabelFor(x => x.SzablonAkceptacjiPrzekrocznyLimitId, Html.PobierzTlumaczenie("SzablonListyProduktow akceptacji gdy przekroczone limity").ToString())
+                    @Html.DropDownListFor(x => x.SzablonAkceptacjiPrzekrocznyLimitId, szablonyAkceptacji.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.SzablonAkceptacjiPrzekrocznyLimitId }), "", new { @class = "form-control" })
+                    @Html.LabelFor(x => x.MiejsceKosztowId, Html.PobierzTlumaczenie("Miejsce powstawania kosztów").ToString())
+                    @Html.DropDownListFor(x => x.MiejsceKosztowId, miejscaKosztow.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.MiejsceKosztowId }), "", new { @class = "form-control" })
+                 </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+                </div>
+            }
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

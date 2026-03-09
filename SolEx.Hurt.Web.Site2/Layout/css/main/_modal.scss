@@ -1,0 +1,99 @@
+﻿@import "_ustawienia.scss";
+
+.modal {
+    //zmiana w wersji mobilnych - ekran dotykowy - modal na pelny ekran i fixed naglowek
+    @media only screen and (max-width: $lg) {
+        overflow-y: hidden !important;
+        padding: 0px !important;
+
+        .modal-dialog {
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 !important;
+
+
+            .modal-body {
+                overflow-x: hidden;
+                overflow-y: auto;
+                max-height: calc(100vh - 100px); //100 to sztywna wysoksoc headera ustwona wyzej
+            }
+
+            .modal-header {
+                overflow-x: hidden;
+                //white-space:nowrap;
+                max-height: 100px;
+
+                button.close {
+                    > span {
+                        font-size: 40px !important;
+                    }
+
+                    height: 40px;
+                    width: 40px;
+                    border: 1px solid $kolor-ramki-mocny;
+                    background-color: white;
+                }
+            }
+        }
+    }
+
+    @media only screen and (max-width: $sm) {
+        .modal-header {
+          * {  font-size: 17px !important; }
+        }
+    }
+
+
+    .modal-content {
+        .ukryj-na-modalu {
+            display: none;
+        }
+
+        .modal-header {
+            background-color: $kolor-tla-modala;
+
+            h1, h2, h3, h4, h5, h6 {
+                color: white;
+                margin-bottom: 0;
+            }
+        }
+
+        .modal-footer {
+            text-align: left;
+            font-family: $font-tekst-rodzina;
+
+            &, a {
+                color: $kolor-text-muted;
+            }
+        }
+    }
+}
+
+
+.drukuj-katalog {
+
+    button.close-button{
+        //float: right;
+        z-index: 999;
+        top: 0px;
+        position: fixed;
+    }
+
+    &:not(.open){
+        .modal-okno{
+            display: none;
+        }
+    }
+
+
+    .modal-okno {
+        transition: all 0.5s ease;
+        background: white; //  #d7322c;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 400px;
+        z-index: 20000;
+    }
+}
+

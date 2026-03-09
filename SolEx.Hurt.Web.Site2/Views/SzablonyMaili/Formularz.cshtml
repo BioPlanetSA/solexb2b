@@ -1,0 +1,103 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+}
+
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.Formularz
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.FormularzModel.MailDoWysylki
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+}
+@section Tytul
+{
+    @Model.FormularzModel.TytulWartosc;
+}
+
+
+@section Naglowek
+{
+    <p class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Mail kontaktowy")</p>
+}
+
+@section Tresc
+{
+    @{
+        string tresc = string.Empty;
+        if (Model.FormularzModel.PokazujAdresEmailNaJakiOdeslacOdpowiedz)
+        {
+            tresc = string.Format("Użytkownik o mailu: <b>{0}</b> wysłał wiadomość o treści: ", Model.FormularzModel.MailDoOdpowiedzi);
+        }
+        else
+        {
+            string zMailem = string.Empty;
+            if (Model.Klient != null && Model.Klient.Id != 0)
+            {
+                zMailem = string.Format("Użytkownik o wiadomoscEmailu {0} wysłał wiadomość o treści: ", Model.Klient.Email);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(Model.FormularzModel.MailDoOdpowiedzi))
+                {
+                    zMailem = "Użytkownik wysłał wiadomość o treści: ";
+                }
+                else
+                {
+                    zMailem = string.Format("Użytkownik o wiadomoscEmailu {0} wysłał wiadomość o treści: ", Model.FormularzModel.MailDoOdpowiedzi);
+                }
+
+            }
+            tresc = zMailem;
+        }
+     }
+    @tresc
+    <br />
+    <br />
+    @Model.FormularzModel.TrescWartosc
+    <br />
+    @if (Model.FormularzModel.DPola != null && (Model.FormularzModel.DPola.Any(x => x.Wartosc != null) || Model.FormularzModel.DPola.Any(x => string.IsNullOrEmpty(x.SciezkaZalacznika))))
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Dodatkowe informacje: ")<br />
+        foreach (var dynamicznePola in Model.FormularzModel.DPola)
+        {
+            string tekst;
+            if (dynamicznePola.Typ == "Plik")
+            {
+                if (string.IsNullOrEmpty(dynamicznePola.SciezkaZalacznika))
+                {
+                    continue;
+                }
+                tekst = string.Format("{0}:", dynamicznePola.Nazwa);
+                @tekst
+                @Html.Raw(Url.WygenerujLinkDoPobraniaZalacznika(dynamicznePola.SciezkaZalacznika))
+                <br />
+            }
+            else
+            {
+                if (dynamicznePola.Wartosc == null)
+                {
+                    continue;
+                }
+                tekst = string.Format("{0}: {1}", dynamicznePola.Nazwa, dynamicznePola.Wartosc);
+                @tekst <br />
+            }
+        }
+        <br />
+
+    }
+   
+}
+  

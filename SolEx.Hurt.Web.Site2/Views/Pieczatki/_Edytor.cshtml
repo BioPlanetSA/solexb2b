@@ -1,0 +1,54 @@
+﻿@model Tuple<SolEx.Hurt.Model.PieczatkiTyp, SolEx.Hurt.Model.Helpers.Pieczatki.PieczatkiSzablonyViewModel, SolEx.Hurt.Model.Interfaces.IKlient>
+
+<script src="~/Scripts/pieczatki/colorpicker/spectrum.js" defer></script>
+<div id="main-container">
+    <div id="info-container">
+        <div class="inline-element">
+            @if (string.IsNullOrEmpty(@Model.Item2.NazwaTypu))
+            {
+                Model.Item2.NazwaTypu = "Projektujesz nowy szablon";
+            }
+            @if (@Model.Item2.SymbolTypu == "pieczatka_okragla")
+            {
+                <div class="inline-element">@Model.Item2.NazwaTypu (Średnica: @Model.Item2.Szerokosc_mm mm) </div>
+            }
+            else
+            {
+                <div class="inline-element">@Model.Item2.NazwaTypu  (Wysokość: @Model.Item2.Wysokosc_mm mm Szerokość: @Model.Item2.Szerokosc_mm mm) </div>
+            }
+            
+        </div>
+    </div>
+    @Html.HiddenFor(x=>x.Item1.Id) @* id typu*@
+    @Html.HiddenFor(x => x.Item2.Zablokowany)
+    <div id="main-area">
+        <!----- OKNO EDYCYJNE PIECZATKI ----->
+        @Html.Partial("_OknoEdytora", Model.Item2)
+        <!----- MENU ----->
+        <div id="sidebrar-container">
+            @Html.Partial("_MenuBoczne")
+            @Html.Partial("_ModulyEdytora")
+        </div>
+        @Html.Partial("_PrzyciskiPodEdytorem", Model)
+
+        <!-----Okno z wyborem szablonów---->
+        @*<div id="wczytajSzablonListyProduktowy" class="modalDialog">
+            </div>*@
+    </div>
+</div>
+
+
+<script src="~/Scripts/pieczatki/stamp.js" charset="utf-8" defer></script>
+<script>
+    $(document).ready(function() {
+        ZapiszRozmiarSzablonu(@Model.Item2.Szerokosc_mm, @Model.Item2.Wysokosc_mm);
+        PobierzSciezkeSzablonu('@Model.Item2.SciezkaDoPlikuSzablonuJSON');
+    });
+</script>
+
+
+
+
+
+
+

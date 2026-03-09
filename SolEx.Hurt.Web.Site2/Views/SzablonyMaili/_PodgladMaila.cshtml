@@ -1,0 +1,69 @@
+﻿@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@Styles.Render(BundleConfig.linkCssMaile)
+@Scripts.Render(BundleConfig.linkScriptMaile)
+@{
+
+    WiadomoscEmail wiadomoscEmail = Model;
+    <style>
+        .row {
+            display: inline-table !important;
+        }
+        .tlumaczenie-w-locie {
+            border: 1px dotted red;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .tlumaczenie-w-locie:hover {
+            font-style: italic;
+            color: red !important;
+        }
+
+        .tlumaczenie-w-locie.hover-box {
+            display: none;
+            cursor: pointer;
+            background-color: red;
+            color: white;
+            padding: 10px;
+            z-index: 9999999999;
+            position: absolute;
+            top: -10px;
+            left: 0;
+        }
+        .modal .modal-content .modal-header {
+            background-color: #8dc63f;
+        }
+    </style>
+}
+<script language="javascript" type="text/javascript">
+    function tlumaczWLocie(sender) {
+        var hash = sender.target.attributes['data-hash'].value;
+        var domian = document.domain;
+        var url = "http://" + domian + "/Admin/TlumaczenieWLocie?hash=" + hash;
+        PokazModal(sender.target, url);
+    }
+
+    $(document).on('click', '.tlumaczenie-w-locie', tlumaczWLocie );
+</script>
+
+<body class="bodyTlo">
+<span data-containter="modal"></span>
+@if (wiadomoscEmail == null)
+{
+    <span>Błąd tworzenia maila - sprawdz logi</span>
+}
+else
+{
+    <div class="c">
+        @if (!string.IsNullOrEmpty(wiadomoscEmail.Tytul))
+        {
+            <span>Temat maila jaki będzie wysłany do klienta: @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, wiadomoscEmail.Tytul.UsunFormatowanieHTML())</span>
+            <br/>
+        }
+    </div>
+
+    @Html.Raw(wiadomoscEmail.TrescWiadomosci.ZamienZnakKoncaLiniNaWebowy())
+}
+</body>
+

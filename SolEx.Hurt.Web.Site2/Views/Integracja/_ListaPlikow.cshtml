@@ -1,0 +1,84 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Controllers
+@using SolEx.Hurt.Web.Site2.Helper
+@model IntegracjaController.UstawieniaWidokuListySzablonowIntegracji
+
+<div class="czcionka-tekstowa-paragraf">
+    @Html.Raw(Model.Opis)
+</div>
+
+<div id="GenerowanieKluczaPojemnik">
+    @Html.Partial("_generowanieKlucza")
+</div>
+<br/>
+
+<div class="lista-plikow">
+    @foreach (TypDanychIntegracja typ in Model.Szablony.Keys)
+    {
+        if (Model.Szablony.Keys.Count > 1)
+        {
+            <p class="h5">@Html.PobierzTlumaczenie(typ.ToString())</p>
+        }
+
+        <table class="table w-100 integracja-lista-plikow integracja">
+            <thead>
+                <th>@Html.PobierzTlumaczenie("Opis pliku i format")</th>
+                <th>@Html.PobierzTlumaczenie("Pobierz plik")</th>
+            </thead>
+
+            @foreach (PlikIntegracjiSzablon szablon in Model.Szablony[typ])
+            {
+                    <tr>
+                        <td>
+                            <h5>
+                                <span class="label format-@szablon.Format">@szablon.Format</span>
+                            </h5>
+
+                            <span class="nazwa">
+                                @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, szablon.Szablon.Replace("-", " "), MiejsceFrazy.Integracja)
+                            </span>
+                            @*@if (Model.PokazPoprzednieWersje && szablon.Wersja.Count > 1)
+                                {
+                                    var aktualnaWersja = szablon.Wersja.First();
+                                    <br/>
+                                    <a href="#wersje@(szablon.Szablon)@(szablon.Format)" data-toggle="collapse" aria-expanded="false" class="btn btn-link btn-sm text-muted">
+                                        @Html.PobierzTlumaczenie("Zobacz wersje historyczne tego pliku")
+                                    </a>
+
+                                    <div class="collapse" id="wersje@(szablon.Szablon)@(szablon.Format)">
+                                        <div class="card card-block c text-muted wersje-historyczne" style="width: 80%; margin: auto">
+                                            @foreach (int wersja in szablon.Wersja)
+                                            {
+                                                <a href="@Url.Action("SzczegolyFormatu", new {typDanych = szablon.typDanych, format = szablon.Format, szablon = szablon.Szablon, wersja = wersja})"
+                                                   class="btn-xs btn btn-link text-muted wersja-historyczna">
+                                                    @Html.PobierzTlumaczenie("Zobacz wersje numer") @wersja
+                                                </a>
+
+                                                if (wersja == aktualnaWersja)
+                                                {
+                                                    <span class="label label-primary">@Html.PobierzTlumaczenie("Aktualna")</span>
+                                                }
+
+                                                <hr/>
+                                            }
+                                        </div>
+                                    </div>
+                                }*@
+                        </td>
+
+                        <td class="r fit-content">
+                            <a href="@Url.Action("SzczegolyFormatu", new {szablonId = szablon.IdSzablonu, wersja = szablon.Wersja.Max()})"
+                               class="btn btn-primary-outline">
+                                @Html.PobierzTlumaczenie("Zobacz szczegóły i pobierz plik")
+                            </a>
+                        </td>
+
+                    </tr>
+            }
+        </table>
+    }
+</div>
+
+
+<br />

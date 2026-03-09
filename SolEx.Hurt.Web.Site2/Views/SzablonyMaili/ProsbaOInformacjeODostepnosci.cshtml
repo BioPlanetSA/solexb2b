@@ -1,0 +1,120 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+    HashSet<PolaListaProduktowNoweZamowienie> pola = Model.Konfiguracja.KtorePolaProduktuPowiadomienieDostepneProdukty;
+    string preset = Model.Konfiguracja.ZdjecieRozmiarWPowiadomieniach;
+}
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.ProsbaOInformacjeODostepnosci
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+    
+}
+
+@section Naglowek
+{
+    <p class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zainteresowanie brakującymi towarami")</p>
+}
+
+
+@section Tytul
+{
+    @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Zainteresowanie brakującymi towarami - {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+}
+@section Tresc
+{
+    <div>
+        @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Klient {0}, email:{1} jest zainteresowany następującymi brakującymi towarami.<br /><br />Data zgłoszenia: {2}. ", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa, @Model.Klient.Email, DateTime.Now.ToShortDateString()})<br />
+
+        <table class="row bodyTlo">
+            <tr>
+                <td class="center" align="center">
+                    <table class="container">
+                        <tr>
+                            <td class="wrapper">
+                                <table class="twelve columns">
+                                    <tr>
+                                        <td class="panel bialy">
+                                            <table class="container">
+                                                <tr>
+                                                    @if (pola.Contains(PolaListaProduktowNoweZamowienie.Zdjecie))
+                                                    {
+                                                        <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zdjecie")</td>
+                                                    }
+                                                    <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Nazwa")</td>
+                                                    @if (pola.Contains(PolaListaProduktowNoweZamowienie.Symbol))
+                                                    {
+                                                        <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Symbol")</td>
+                                                    }
+                                                    @if (pola.Contains(PolaListaProduktowNoweZamowienie.Ean))
+                                                    {
+                                                        <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Kod kreskowy")</td>
+                                                    }
+                                                </tr>
+
+                                                @{
+                                                    IProduktKlienta p = Model.Produkt;
+                                                    if (p != null)
+                                                    {
+                                                        <tr>
+                                                            @if (pola.Contains(PolaListaProduktowNoweZamowienie.Zdjecie))
+                                                            {
+                                                                <td align="center" class="vcenter">
+                                                                    @if (p.ZdjecieGlowne == null)
+                                                                    {
+                                                                        if (!string.IsNullOrEmpty(Model.Konfiguracja.DomyslneZdjecieSciezka))
+                                                                        {
+                                                                            string sciezka = string.Format("{0}?preset={1}", Model.Konfiguracja.DomyslneZdjecieSciezka, Model.Konfiguracja.ZdjecieRozmiarWPowiadomieniach);
+                                                                            <img src="@sciezka" alt="" />
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <img src="@p.ZdjecieGlowne.LinkWWersji(preset)" alt="@p.Nazwa.Replace('"', ' ')" />
+                                                                    }
+                                                                </td>
+                                                            }
+                                                            <td align="left" class="vcenter">
+                                                                @p.Nazwa
+                                                            </td>
+                                                            @if (pola.Contains(PolaListaProduktowNoweZamowienie.Symbol))
+                                                            {
+                                                                <td align="center" class="vcenter">
+                                                                    @p.Kod
+                                                                </td>
+                                                            }
+                                                            @if (pola.Contains(PolaListaProduktowNoweZamowienie.Ean))
+                                                            {
+                                                                <td align="center" class="vcenter">
+                                                                    @p.KodKreskowy
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+}

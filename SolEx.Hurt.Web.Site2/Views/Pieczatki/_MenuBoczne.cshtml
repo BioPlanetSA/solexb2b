@@ -1,0 +1,52 @@
+﻿<div id="menu-bar">
+    <div id="menu-bar-text">MENU</div>
+</div>
+<ul id="menu">
+    <li id="DodajPoleTekstowe" onclick="DodajPoleTekstowe()">
+        <span class="odnosnik" onclick=""> Dodaj tekst</span>
+        <i class="ikona-arrow-right"></i>
+        <i class="ikona-menu" style="background-image: url('/Layout/images/pieczatki/text.png');"></i>
+    </li>
+    <li id="goToMyGraphic" onclick="goToMyGraphic()">
+        <span class="odnosnik"> Dodaj obrazek</span>
+        <i class="ikona-arrow-right"></i>
+        <i class="ikona-menu" style="background-image: url('/Layout/images/pieczatki/mygraphic.png');"></i>
+    </li>
+    <li id="goToGallery" onclick="goToGallery()">
+        <span class="odnosnik">Gotowe wzory</span>
+        <i class="ikona-arrow-right"></i>
+        <i class="ikona-menu" style="background-image: url('/Layout/images/pieczatki/gallery.png');"></i>
+    </li>
+    <li id="goToFigures" onclick="goToFigures()">
+        <span class="odnosnik">Figury</span>
+        <i class="ikona-arrow-right"></i>
+        <i class="ikona-menu" style="background-image: url('/Layout/images/pieczatki/figures.png');"></i>
+    </li>
+    <li style="cursor: default; padding: 4px 0 0 13px;">
+        <div>
+            <span class="fa fa-search" style="font-size:26px; opacity: 0.66; margin-right: 12px;"></span>
+            <button class="" onclick="ZoomMinus()"><span class="fa fa-zoom-out" style="font-size: 18px;"></span></button>
+            <div class="inline-element">Powiększenie:</div>
+            <div class="inline-element"><output for=text-scale id=powiekszenie>100</output></div>
+            <div class="inline-element">%</div>
+            <button class="" onclick="ZoomPlus()"><span class="fa fa-zoom-in" style="font-size: 18px;"></span></button>
+        </div>
+    </li>
+    
+    <li style="cursor: default; padding: 6px 0 0 13px;">
+        <span class="fa fa-pencil" style="font-size: 22px; opacity: 0.65; margin-right: 16px;"></span>
+        Kolor pieczątki: <input type="text" name="color" id="color" style="display: none;" title="Dostępne kolory">
+    </li>
+    
+</ul>
+
+    
+
+<!----- Przycisk Wstecz ----->
+    <div id="back-button-container">
+        <button id="button-cofnij" class="btn btn-info btn-sm" onclick="backToMenu()">
+            <span class="fa fa-arrow-left"></span>
+             Wstecz
+        </button>
+        <div id="back-button-container-text"></div>
+    </div>

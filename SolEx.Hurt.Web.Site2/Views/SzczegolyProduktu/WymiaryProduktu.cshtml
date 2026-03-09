@@ -1,0 +1,305 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.SzczegolyProduktu.ParametryDoWymiarowProduktu
+
+@{
+    int szerokoscKolumny = 0;
+    if (Model.Wymiary.OpJednostkowe.CzyJestUzupelnione)
+    {
+        ++szerokoscKolumny;
+    }
+    if (Model.Wymiary.Paleta.CzyJestUzupelnione)
+    {
+        ++szerokoscKolumny;
+    }
+    if (Model.Wymiary.OpZbiorcze.CzyJestUzupelnione)
+    {
+        ++szerokoscKolumny;
+    }
+}
+
+@if (szerokoscKolumny > 0)
+{
+    if (!string.IsNullOrEmpty(Model.NaglowekStopka.Naglowek))
+    {
+        @Html.Raw(Model.NaglowekStopka.Naglowek)
+    }
+
+    szerokoscKolumny = 12/szerokoscKolumny;
+
+    <div class="row wymiary-logistyka">
+    @if (Model.Wymiary.OpJednostkowe.CzyJestUzupelnione)
+    {
+        <div class="col-md-12 col-lg-@szerokoscKolumny c wymiar-op-jednostkowe wymiar">
+            <div class="b">@Html.PobierzTlumaczenie("Op. jednostkowe")</div>
+            <div>
+                @if (Model.Wymiary.OpJednostkowe.Wzor == null)
+                {
+                    @Html.Image(@"/static/wymiary-box.png", null, "opakowanie jednostkowe", null)
+                }
+                else
+                {
+                    @Html.Image(Model.Wymiary.OpJednostkowe.Wzor, null, "opakowanie jednostkowe")
+                }
+            </div>
+
+            <table class="table table-condensed">
+                <tr>
+                    @if (Model.Wymiary.OpJednostkowe.Wysokosc != null)
+                    {
+                        <th class="wymiar-a">@Html.PobierzTlumaczenie("A")</th>
+                    }
+                    @if (Model.Wymiary.OpJednostkowe.Szerokosc != null)
+                    {
+                        <th class="wymiar-b">@Html.PobierzTlumaczenie("B")</th>
+                    }
+                    @if(Model.Wymiary.OpJednostkowe.Glebkosc != null)
+                    {
+                        <th class="wymiar-c">@Html.PobierzTlumaczenie("C")</th>
+                                            }
+                    @if(Model.Wymiary.OpJednostkowe.Waga != null)
+                                            {
+                        <th class="wymiar-waga">@Html.PobierzTlumaczenie("Waga")</th>
+                    }
+                    @if (Model.Wymiary.OpJednostkowe.Objetosc != null)
+                    {
+                        <th class="wymiar-objetosc">@Html.PobierzTlumaczenie("Objętość")</th>
+                    }
+                </tr>
+
+                <tr>
+                    @if (Model.Wymiary.OpJednostkowe.Wysokosc != null)
+                    {
+                        <td class="wymiar-a">
+                            @Model.Wymiary.OpJednostkowe.Wysokosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaGabarytow
+                        </td>
+                    }
+                    @if (Model.Wymiary.OpJednostkowe.Szerokosc != null)
+                    {
+                        <td class="wymiar-b">
+                            @Model.Wymiary.OpJednostkowe.Szerokosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaGabarytow
+                        </td>
+                    }
+                    @if (Model.Wymiary.OpJednostkowe.Glebkosc != null)
+                    {
+                        <td class="wymiar-c">
+                            @Model.Wymiary.OpJednostkowe.Glebkosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaGabarytow
+                        </td>
+                    }
+                    @if (Model.Wymiary.OpJednostkowe.Waga != null)
+                    {
+                        <td class="wymiar-waga">
+                            @Model.Wymiary.OpJednostkowe.Waga.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaWagi
+                        </td>
+                    }
+                    @if (Model.Wymiary.OpJednostkowe.Objetosc != null)
+                    {
+                        <td class="wymiar-objetosc">
+                          @Model.Wymiary.OpJednostkowe.Objetosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaObjetosci
+                        </td>
+                    }
+                </tr>
+
+            </table>
+        </div>
+    }
+
+    @if (Model.Wymiary.OpZbiorcze.CzyJestUzupelnione)
+    {
+        <div class="col-md-12 col-lg-@szerokoscKolumny c wymiar-op-zbiorcze wymiar">
+            <div class="b">@Html.PobierzTlumaczenie("Op. zbiorcze")</div>
+            <div>
+                @if (Model.Wymiary.OpZbiorcze.Wzor == null)
+                {
+                    @Html.Image(@"/static/wymiary-box-zbiorczy.png", null, "opakowanie zbiorcze", null)
+                }
+                else
+                {
+                    @Html.Image(Model.Wymiary.OpZbiorcze.Wzor, null, "opakowanie zbiorcze")
+                }
+            </div>
+
+
+
+            <table class="table table-condensed">
+                <tr>
+                    @if (Model.Wymiary.OpZbiorcze.Wysokosc != null)
+                    {
+                        <th class="wymiar-a">@Html.PobierzTlumaczenie("A")</th>
+                    }
+                     @if(Model.Wymiary.OpZbiorcze.Szerokosc != null)
+                    {
+                        <th class="wymiar-b">@Html.PobierzTlumaczenie("B")</th>
+                                            }
+                    @if(Model.Wymiary.OpZbiorcze.Glebkosc != null)
+                    {
+                        <th class="wymiar-c">@Html.PobierzTlumaczenie("C")</th>
+                    }
+                        @if(Model.Wymiary.OpZbiorcze.IloscWOpakowaniu != null)
+                    {
+                        <th class="wymiar-ilosc-op" title="@Html.PobierzTlumaczenie("Ilość w opakowaniu zbiorczym")" class="fit-content">@Html.PobierzTlumaczenie("Ilość w op. zb.")</th>
+                    }
+
+                    @if (Model.Wymiary.OpZbiorcze.Waga != null)
+                    {
+                        <th class="wymiar-waga">@Html.PobierzTlumaczenie("Waga")</th>
+                    }
+                    @if (Model.Wymiary.OpZbiorcze.Objetosc != null)
+                    {
+                        <th class="wymiar-objetosc">@Html.PobierzTlumaczenie("Objętość")</th>
+                    }
+                 
+                </tr>
+
+                <tr>
+                    @if (Model.Wymiary.OpZbiorcze.Wysokosc != null)
+                    {
+                        <td class="wymiar-a">
+                            @Model.Wymiary.OpZbiorcze.Wysokosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaGabarytow
+                        </td>
+                    }
+                    @if (Model.Wymiary.OpZbiorcze.Szerokosc != null)
+                    {
+                        <td class="wymiar-b">
+                            @Model.Wymiary.OpZbiorcze.Szerokosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaGabarytow
+                        </td>
+                    }
+                    @if (Model.Wymiary.OpZbiorcze.Glebkosc != null)
+                    {
+                        <td class="wymiar-c">
+                            @Model.Wymiary.OpZbiorcze.Glebkosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaGabarytow
+                        </td>
+                    }
+                    @if (Model.Wymiary.OpZbiorcze.IloscWOpakowaniu != null)
+                    {
+                        <td class="wymiar-ilosc-op">
+                            @Model.Wymiary.OpZbiorcze.IloscWOpakowaniu.Value.DoLadnejCyfry()
+                            @Model.JednostkaPodstawowa
+                        </td>
+                    }
+                    @if (Model.Wymiary.OpZbiorcze.Waga != null)
+                    {
+                        <td class="wymiar-waga">
+                          @Model.Wymiary.OpZbiorcze.Waga.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaWagi
+                        </td>
+                    }
+                    @if (Model.Wymiary.OpZbiorcze.Objetosc != null)
+                    {
+                        <td class="wymiar-objetosc">
+                           @Model.Wymiary.OpZbiorcze.Objetosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaObjetosci
+                        </td>
+                    }
+                 
+                </tr>
+
+            </table>
+        </div>
+    }
+
+
+    @if (Model.Wymiary.Paleta.CzyJestUzupelnione)
+    {
+        <div class="col-md-12 col-lg-@szerokoscKolumny c wymiar-op-paleta wymiar">
+            <div class="b">@Html.PobierzTlumaczenie("Paleta")</div>
+            <div>
+                @if (Model.Wymiary.Paleta.Wzor == null)
+                {
+                    @Html.Image(@"/static/wymiary-paleta.png", null, "paleta", null)
+                }
+                else
+                {
+                    @Html.Image(Model.Wymiary.Paleta.Wzor, null, "paleta")
+                }
+            </div>
+
+
+
+            <table class="table table-condensed">
+                <tr>
+                    @if (Model.Wymiary.Paleta.IloscNaWarstwie != null)
+                    {
+                        <th class="wymiar-ilosc-warstwa">@Html.PobierzTlumaczenie("Ilość na warstwie")</th>
+                    }
+                    @if (Model.Wymiary.Paleta.IloscWOpakowaniu != null)
+                    {
+                        <th class="wymiar-ilosc-paleta">@Html.PobierzTlumaczenie("Ilość na palecie")</th>
+                    }
+
+                    @if (Model.Wymiary.Paleta.Wysokosc != null)
+                    {
+                        <th class="wymiar-a">@Html.PobierzTlumaczenie("A")</th>
+                    }
+                    @if(Model.Wymiary.Paleta.Szerokosc != null)
+                    {
+                        <th class="wymiar-b">@Html.PobierzTlumaczenie("B")</th>
+                    }
+                    @if(Model.Wymiary.Paleta.Glebkosc != null)
+                    {
+                        <th class="wymiar-c">@Html.PobierzTlumaczenie("C")</th>
+                    }
+                    @if(Model.Wymiary.Paleta.Waga != null)
+                    {
+                        <th class="wymiar-waga">@Html.PobierzTlumaczenie("Waga")</th>
+                    }
+                    @if (Model.Wymiary.Paleta.Objetosc != null || Model.Wymiary.Paleta.Objetosc>0)
+                    {
+                        <th class="wymiar-objetosc">@Html.PobierzTlumaczenie("Objętość")</th>
+                    }
+                </tr>
+
+                <tr>
+                    @if (Model.Wymiary.Paleta.IloscNaWarstwie != null)
+                    {
+                        <td class="wymiar-ilosc-warstwa">
+                            @Model.Wymiary.Paleta.IloscNaWarstwie.Value.DoLadnejCyfry()
+                            @Model.JednostkaPodstawowa
+                        </td>
+                    }
+                    @if (Model.Wymiary.Paleta.IloscWOpakowaniu != null)
+                    {
+                        <td class="wymiar-ilosc-op">
+                            @Model.Wymiary.Paleta.IloscWOpakowaniu.Value.DoLadnejCyfry()
+                            @Model.JednostkaPodstawowa
+                        </td>
+                    }
+                    @if (Model.Wymiary.Paleta.Wysokosc != null)
+                    {
+                        <td class="wymiar-a">
+                            @Model.Wymiary.Paleta.Wysokosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaGabarytow
+                        </td>
+                    }
+                    @if (Model.Wymiary.Paleta.Szerokosc != null)
+                    {
+                        <td class="wymiar-b">
+                            @Model.Wymiary.Paleta.Szerokosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaGabarytow
+                        </td>
+                    }
+                    @if (Model.Wymiary.Paleta.Glebkosc != null)
+                    {
+                        <td class="wymiar-c">
+                            @Model.Wymiary.Paleta.Glebkosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaGabarytow
+                        </td>
+                    }
+                    @if (Model.Wymiary.Paleta.Waga != null)
+                    {
+                        <td class="wymiar-waga">
+                            @Model.Wymiary.Paleta.Waga.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaWagi
+                        </td>
+                    }
+                    @if (Model.Wymiary.Paleta.Objetosc != null || Model.Wymiary.Paleta.Objetosc > 0)
+                    {
+                        <td class="wymiar-objetosc">
+                           @Model.Wymiary.Paleta.Objetosc.Value.DoLadnejCyfry() @Model.Wymiary.JednostkaObjetosci
+                        </td>
+                    }
+                </tr>
+            </table>
+        </div>
+    }
+    </div>
+
+
+if (!string.IsNullOrEmpty(Model.NaglowekStopka.Stopka))
+{
+    @Html.Raw(Model.NaglowekStopka.Stopka)
+    }
+}

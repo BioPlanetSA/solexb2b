@@ -1,0 +1,4 @@
+﻿<appSettings >
+<add key="url" value="testowa" />
+<add key="api_token" value="847caac7-0d28-4bee-b7ee-79922ceda6f3" />
+</appSettings>

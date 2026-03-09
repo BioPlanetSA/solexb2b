@@ -1,0 +1,151 @@
+﻿@using System.Collections
+@using System.Web.Script.Serialization
+@using ServiceStack.Text
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+@if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+{
+    <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+}
+ 
+@Html.Hidden("W","",new{@class="nazwa-poczatek"})
+@{
+    List<KeyValuePair<string, object>> wartosciDoPokazaniaIstniejace = new List<KeyValuePair<string, object>>();
+    List<string> wartosciBrakujaceAktualnie = new List<string>();
+    string wynikilosc=Model.Multiselect ? "null" : "1";
+    string dane;
+
+    if (Model.TypSlownika==null)
+    {
+        dane = new JavaScriptSerializer().Serialize(Model.Slownik.Select(x => x));
+    }
+    else
+    {
+        dane = "'/Slownik/PobierzWartosci?typ=" + Model.TypSlownika.PobierzOpisTypu() + "'";
+    }
+    string wybrane;
+    string id = Model.NazwaPola+"-" +Model.IdentyfikatorObiektu;
+    Dictionary<string, object> pars = new Dictionary<string, object> { { "class", "form-control form-control-sm" },{ "id", id } };
+    pars.Add("data-identyfikatorObiektu", Model.IdentyfikatorObiektu);
+    pars.Add("data-walidator", Model.WalidatorDanych != null ? Model.WalidatorDanych.PobierzOpisTypu() : "");
+    pars.Add("data-rodzaj","slownik");
+    if (Model.Wymagane)
+    {
+        pars.Add("required", "required");
+    }
+    if (Model.PobieraneErp || Model.TylkoDoOdczytu)
+    {
+        pars.Add("readonly", "readonly");
+    }
+    List<string> wartosci = new List<string>();
+}
+
+@if (Model.Wartosc != null)
+{
+    if (Model.Wartosc is IEnumerable && Model.Wartosc.GetType() != typeof (string))
+    {
+       // List<string> wartosci = new List<string>();
+        foreach (object w in (IEnumerable) Model.Wartosc)
+        {
+            wartosci.Add(w.ToString());
+            @Html.Hidden("Wartosc", w, new { @class = "wartosc-ukryta" })
+        }
+
+        foreach (string wartosc in wartosci)
+        {
+            string klucz = null;
+            Model.SlownikWedlugWartosciStringowych().TryGetValue(wartosc, out klucz);
+
+            if (klucz != null)
+            {
+                wartosciDoPokazaniaIstniejace.Add(new KeyValuePair<string, object>(klucz, wartosc));
+            }
+            else
+            {
+                wartosciBrakujaceAktualnie.Add(wartosc);
+            }
+        }
+
+        wybrane = new JavaScriptSerializer().Serialize(wartosciDoPokazaniaIstniejace);
+    }
+    else
+    {
+        @Html.Hidden("Wartosc", Model.Wartosc,new{@class="wartosc-ukryta"})
+        wybrane = new JavaScriptSerializer().Serialize(Model.Slownik.Where(x => x.Value.ToString() == Model.Wartosc.ToString()));
+    }
+}
+else
+{
+    wybrane = "[]";
+    @Html.Hidden("Wartosc", "", new { @class = "wartosc-ukryta" })
+}
+
+@Html.TextBox("WartoscFake", Model.Slownik.Where(x => wartosci.Contains(x.Value.ToString())).Select(x=>x.Key).ToCsv(), pars)
+
+@if (wartosciBrakujaceAktualnie.Any())
+{
+    <span class="label-opis">Wybrane wartości których aktualnie nie można znaleźć w systemie (być może coś zostało usunięte). Zmień zawarość pola aby skasować złe wartości: <b>@wartosciBrakujaceAktualnie.ToCsv()</b></span>
+}
+
+<script type="text/javascript">
+    $(document)
+        .ready(function() {
+            $('#@(id)')
+                .tokenInput(@Html.Raw(dane),
+                {
+                    onAdd: PoprawInputytokenInput,
+                    onDelete: PoprawInputytokenInput,
+                    prePopulate: @Html.Raw(wybrane),
+                    minChars: 0,
+                    resultsLimit: 50,
+                    preventDuplicates: true,
+                    hintText: 'Zacznij pisać aby zobaczyć podpowiedzi',
+                    queryParam: 'szukane',
+                    method: 'POST',
+                    tokenValue: 'Value',
+                    propertyToSearch: 'Key',
+                    theme: 'facebook',
+                    tokenDelimiter: ';',
+                    tokenLimit: @wynikilosc
+                    });
+
+                @*nie robimy pola do uzupełniania jeśli jest tylko do odczytu albo nie edytowane w adminie*@
+                @if (Model.PobieraneErp || Model.TylkoDoOdczytu)
+                        {
+                            <text>  $('#@(id)').tokenInput("toggleDisabled"); </text>
+                        }
+                    else
+                    {
+                    <text> $('#@(id)').on('change', WalidujPole); </text>
+                    }
+
+        });
+
+</script>
+
+
+
+@if (Model.Wymagane)
+{
+    <script type="text/javascript">
+    $('#@(id)').siblings('.ui-autocomplete-input').prop('required', 'required');
+    $(document).ready(function () {
+        if ($('#@(id)').val() == "")
+        $('#token-input-@(id)').prop("required", "false");
+
+    });
+    $('#@(id)').on('change', function() {
+        if ($(this).val() != "") {
+
+            $('#token-input-@(id)').removeAttr('required');
+        } else {
+
+            $('#token-input-@(id)').prop("required", "true");
+        }
+    });
+    </script>
+}

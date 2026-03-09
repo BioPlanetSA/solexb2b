@@ -1,0 +1,102 @@
+// Bootstrap with Flexbox enabled
+//
+// Includes all the imports from the standard Bootstrap project, but enables
+// the flexbox variable.
+
+$enable-flex: true;
+$enable-rounded: false;
+
+
+//tooltipy
+$tooltip-arrow-color:       #ee7203;
+$tooltip-bg:                #ee7203;
+
+//ogólne
+$link-color:                #000000;
+
+//kolor g³ówny
+$brand-primary:             #0275d8;
+$brand-success:             #8dc63f;
+$brand-info:                #5bc0de;
+$brand-warning:             #ee7203;
+$brand-danger:              #d9534f;
+
+/*kalkulator rem - px -> http://www.standardista.com/px-to-rem-conversion-if-root-font-size-is-16px/    */
+
+$font-size-h1:               3.4375rem !default;    //55px
+$font-size-h2:               3rem !default;         //48px
+$font-size-h3:               2.5rem !default;       //40px
+$font-size-h4:               2rem !default;         //33px
+$font-size-h5:               1.6875rem !default;      //27px
+$font-size-h6:               1.25rem !default;     //20px
+
+
+//odstep miedzy kolumnami
+$grid-gutter-width:         1.25rem;                 //20px
+
+
+//przyciski
+$btn-secondary-border:      #000000;
+$btn-secondary-color:       #000000;
+$brand-danger:              #ed1c2a;
+$font-size-lg:              1.125rem;
+
+
+//breadcrumb
+$breadcrumb-padding-vertical:   .75rem;
+$breadcrumb-padding-horizontal: 1rem;
+
+$breadcrumb-bg:                 transparent;
+$breadcrumb-divider-color:      black ;
+$breadcrumb-active-color:       black ;
+$breadcrumb-divider:            ">" ;
+
+//dropdown
+$dropdown-border-color:          transparent;
+$dropdown-border-width:          0;
+$dropdown-link-color:            black;
+$dropdown-link-hover-color:      darken(#94c83c, 5%);
+$dropdown-link-hover-bg:         transparent;
+
+//pagination
+
+$pagination-color:                     $brand-success;
+
+$pagination-hover-color:               darken($brand-success, 10%);
+
+$pagination-active-bg:                 lighten($brand-success, 10%);
+$pagination-active-border:             darken($brand-success, 10%);
+
+
+//outline kasowanie
+$input-border-focus:             red;
+$input-box-shadow-focus:         red;
+
+
+//texty
+$gray-light:                #959595;
+
+.pokaz-jako-h6{
+   font-size: $font-size-h6 !important;
+}
+.pokaz-jako-h5{
+   font-size: $font-size-h5 !important;
+}
+.pokaz-jako-h4{
+    font-size: $font-size-h4 !important;
+}
+.pokaz-jako-h3{
+   font-size: $font-size-h3 !important;
+}
+.pokaz-jako-h2{
+   font-size: $font-size-h2 !important;
+}
+.pokaz-jako-h1{
+   font-size: $font-size-h1 !important;
+}
+
+
+@import "bootstrap";
+
+
+

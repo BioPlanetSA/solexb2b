@@ -1,0 +1,60 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Tresci
+@model  SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Tresci.DaneDoMenu
+
+<div class="menu menu-rozsuwane akordion" data-zaznacz-aktywne-menu id="menu-rozsuwane-@Model.idKontrolkiWywolujacej">
+    @foreach (var elem in Model.Drzewo)
+    {
+        //wersja jesli jest dziecko
+        if (elem.Children.Any())
+        {
+            string idElement = "menu-rozsuwane-" + elem.Item.Id;
+
+            <div class="panel">
+                @*musi byc ta glupia klasa panel zeby acordion zwijal sie poprawnie - bez tego nie dziala bootstrap*@
+                <a href="#" class="text-uppercase a-link bold akordion-naglowek collapse-element collapsed" data-menu-opcja-id="@elem.Item.Id" data-toggle="collapse"
+                    aria-expanded="false" data-target="#@idElement" data-parent="#menu-rozsuwane-@Model.idKontrolkiWywolujacej">
+                    @if (elem.Item.TrescBll.Symbol != null && elem.Item.TrescBll.Symbol.ToLower() == "home")
+                    {
+                        <span class="menu-opcja-strona-glowna">
+                            <i class='fa fa-home'></i>
+                        </span>
+                    }
+                    else
+                    {
+                        @elem.Item.Nazwa
+                        <i class="fa"></i>
+                    }
+                </a>
+
+                <ul class="list-unstyled nav collapse akordion-tresc" id="@idElement">
+                    @foreach (TreeItem<ElementMenu> d in elem.Children)
+                    {
+                        Html.RenderPartial("_MenuOpcja", new DaneDoMenuOpcja(d, false, false)); //w menu rozsuwanym nie bedzie nigdy reklam ani submenow bo tego nie obslugujemy
+                    }
+                </ul>
+            </div>
+        }
+        else
+        {
+            //wersja jak nie ma dziecka
+            <a href="@Url.ZbudujLink(elem.Item.TrescBll, SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk)" class="text-uppercase a-link bold akordion-naglowek">
+                @if (elem.Item.TrescBll.Symbol != null && elem.Item.TrescBll.Symbol.ToLower() == "home")
+                {
+                    <span class="menu-opcja-strona-glowna">
+                            <i class='fa fa-home'></i>
+                            @*@Html.PobierzTlumaczenie("Strona główna")*@
+                        </span>
+                }
+                else
+                {
+                    @elem.Item.Nazwa
+                    <i class="fa"></i>
+                }
+            </a>
+        }
+
+        <div class="ramka-ciagla-biala-gora" style="height: 0px">&nbsp;</div>
+    }
+</div>

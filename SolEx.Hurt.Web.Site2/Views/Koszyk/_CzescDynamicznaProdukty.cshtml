@@ -1,0 +1,599 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Core
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model  ParametryKoszyka
+@{
+    bool zmianaCen = Model.ZmianaCen;
+    IConfigBLL config =SolexBllCalosc.PobierzInstancje.Konfiguracja;
+    int emelent = ViewBag.IloscElemntow;
+    WidocznoscKolumnKoszyk widocznoscKolumn = ViewBag.WidocznoscKolumn;
+    var saStany = SolexBllCalosc.PobierzInstancje.SposobyPokazywaniaStanowBll.WszystkieSposobyKlienta(SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk.Id, SolexHelper.AktualnyPrzedstawiciel);
+
+    int iloscKolumn=1;
+
+    bool kolmna20koszyk = !string.IsNullOrEmpty(Model.KontrolkaKoszyka.PoleProduktuKoszykKolumna20);
+    bool kolumna80koszyk = !string.IsNullOrEmpty(Model.KontrolkaKoszyka.PoleProduktuKoszykKolumna80);
+
+    int nr = emelent;
+
+    RodzajMetki rodzajMetki = RodzajMetki.KoszykDodanePrzezKlienta;
+    switch (widocznoscKolumn.TypPozycjiKoszyka)
+    {
+        case TypPozycjiKoszyka.Automatyczny:
+            rodzajMetki = RodzajMetki.KoszykAutmoatyczne;
+            break;
+        case TypPozycjiKoszyka.Zwykly:
+            rodzajMetki = RodzajMetki.KoszykDodanePrzezKlienta;
+            break;
+        case TypPozycjiKoszyka.Gratis:
+            rodzajMetki = RodzajMetki.KoszykGratis;
+            break;
+        case TypPozycjiKoszyka.ZaPunkty:
+            rodzajMetki = RodzajMetki.KoszykDodanePrzezKlienta;
+            break;
+    }
+    var akcesorRefleksjiProduktow = typeof(ProduktKlienta).PobierzRefleksja();
+}
+
+<div class="row">
+<div class="col-xs-12">
+<table class="table table-condensed lista-produktow koszyk-lista-produktow">
+<thead>
+<tr class="naglowek-pozycje-koszyk">
+    <th class="nr-pozycji fit-content"></th>
+    @if (widocznoscKolumn.TypPozycjiKoszyka != TypPozycjiKoszyka.Automatyczny)
+    {
+        <th></th>
+    }
+    @if (widocznoscKolumn.PokazywacDateDodania)
+    {
+        <th class="data-dodania fit-content">@Html.PobierzTlumaczenie("Data dodania")</th>
+        iloscKolumn++;
+    }
+    @if (widocznoscKolumn.PokazywacZdjecieProduktu)
+    {
+        <th class="zdjecie c @Model.KontrolkaKoszyka.RozmiarZdjeciaWKoszyku">&nbsp;</th>
+        iloscKolumn++;
+    }
+
+
+    @if (kolmna20koszyk)
+    {
+        <th scope="col" class="c NaglowekKolumna20 fit-content" style="vertical-align: middle">
+            @Html.PobierzTlumaczenie("Koszyk-Kolumna20")
+        </th>
+        iloscKolumn++;
+    }
+    @if (widocznoscKolumn.PokazywacNazweProduktu || widocznoscKolumn.PokazywacSymbolProduktu || widocznoscKolumn.PokazywacKodKreskowy)
+    {
+        <th class="dane c fit-content">@Html.PobierzTlumaczenie("Nazwa")</th>
+        iloscKolumn++;
+    }
+    @if (widocznoscKolumn.PokazywacWage)
+    {
+        <th class="dane c fit-content">@Html.PobierzTlumaczenie("Waga")</th>
+        iloscKolumn++;
+    }
+
+    @if (widocznoscKolumn.CenaHurtowa != JakieCenyPokazywac.Brak && Model.WidoczneCeny)
+    {
+        <th class="cena-hurtowa fit-content c">
+            @Html.PobierzTlumaczenie("Cena hurtowa")
+        </th>
+        iloscKolumn++;
+    }
+    @if (widocznoscKolumn.CenaWPunktach)
+    {
+        <th class="NaglowekTwojaCena cena-koszyk fit-content">@Html.PobierzTlumaczenie("Cena")</th>
+        iloscKolumn++;
+    }
+
+    @if ((widocznoscKolumn.CenaJednostowa != JakieCenyPokazywac.Brak || widocznoscKolumn.PokazywacVat) && Model.WidoczneCeny)
+    {
+        <th class="NaglowekTwojaCena cena-koszyk c fit-content">
+            @Html.PobierzTlumaczenie("Cena po rabacie")
+        </th>
+        iloscKolumn++;
+    }
+
+    @if (kolumna80koszyk)
+    {
+        <th scope="col" class="c NaglowekKolumna80" style="vertical-align: middle">
+            @Html.PobierzTlumaczenie("Koszyk-Kolumna80")
+        </th>
+        iloscKolumn++;
+    }
+
+    @if ((widocznoscKolumn.WartoscPozycji != JakieCenyPokazywac.Brak || widocznoscKolumn.PokazywacWartoscVat) && Model.WidoczneCeny)
+    {
+        <th class="NaglowekWartoscKoszyk c wartosc-koszyk fit-content">
+            @Html.PobierzTlumaczenie("Wartość")
+        </th>
+        iloscKolumn++;
+    }
+
+    @if (widocznoscKolumn.TypPozycjiKoszyka != TypPozycjiKoszyka.ZaPunkty && saStany!=null && saStany.ContainsKey(PozycjaLista.Kolumna) && SolexHelper.AktualnyKlient.CzyWidziStany)
+    {
+        <th class="c stan fit-content">@Html.PobierzTlumaczenie("Stan")</th>
+        iloscKolumn++;
+    }
+
+    @if (widocznoscKolumn.WartoscPozycjiWPunktach)
+    {
+        <th class="NaglowekWartoscKoszyk c wartosc-koszyk fit-content">
+            @Html.PobierzTlumaczenie("Wartość")
+        </th>
+        iloscKolumn++;
+    }
+
+    <th class="ilosc c fit-content"></th>
+
+    @{iloscKolumn++;}
+
+    @if (saStany != null && saStany.Any() && Model.KontrolkaKoszyka.PokazywacBelkeDostepnosci)
+    {
+        <th scope="col" style="width: 10px;" class="belka-dostepnosci">
+        </th>
+        iloscKolumn++;
+    }
+</tr>
+
+
+</thead>
+<tbody>
+@for (int i = 0; i < Model.KoszykObiekt.PobierzPozycje.Count; i++)
+{
+    IKoszykPozycja pozycjaKoszyka = Model.KoszykObiekt.PobierzPozycje[i];
+    string link = Url.ZbudujLink(pozycjaKoszyka.Produkt, SolexHelper.AktualnyJezyk);
+    string kolor = ((pozycjaKoszyka.TypPozycji != TypPozycjiKoszyka.Zwykly) || string.IsNullOrEmpty(pozycjaKoszyka.KolorTla)) ? string.Empty : $"background-color: {@pozycjaKoszyka.KolorTla}";
+
+    if (pozycjaKoszyka.TypPozycji != widocznoscKolumn.TypPozycjiKoszyka)
+    {
+        continue;
+    }
+
+    bool rozpoczeciePokazywaniaRodziny = false;
+    bool pokazjemyDzieckoAktualnie = false;
+
+    if (!string.IsNullOrEmpty(pozycjaKoszyka.Produkt.Rodzina))
+    {
+        if (i == 0 || Model.KoszykObiekt.PobierzPozycje[i - 1].Produkt.Rodzina != pozycjaKoszyka.Produkt.Rodzina)
+        {
+            <tr class="nazwaRodziny b">
+                <td colspan="@(iloscKolumn + 1)">@pozycjaKoszyka.Produkt.Rodzina</td>
+            </tr>
+
+            rozpoczeciePokazywaniaRodziny = true;
+        }
+        else
+        {
+            if (i > 0 && Model.KoszykObiekt.PobierzPozycje[i - 1].Produkt.Rodzina == pozycjaKoszyka.Produkt.Rodzina)
+            {
+                pokazjemyDzieckoAktualnie = true;
+            }
+        }
+    }
+
+    string waluta = SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<SolEx.Hurt.Model.Waluta>(pozycjaKoszyka.Produkt.FlatCeny.WalutaId).WalutaB2b;
+
+    <tr data-id-pozycji="@Model.KoszykObiekt.PobierzPozycje[i].Id">
+
+    <td style="@kolor" class="c fit-content koszyk-pozycja-numer">
+        @(nr++)
+        @Html.HiddenFor(x => x.KoszykObiekt.PobierzPozycje[i].Id)
+    </td>
+
+    @if (widocznoscKolumn.TypPozycjiKoszyka != TypPozycjiKoszyka.Automatyczny)
+    {
+        <td style="@kolor" class="koszyk-pozycja-usun c fit-content">
+            <a class="clickable usun-pozycje close-button" data-id-pozycji="@pozycjaKoszyka.Id"></a>
+        </td>
+    }
+    @if (widocznoscKolumn.PokazywacDateDodania)
+    {
+        <td style="@kolor" class="dataDodania fit-content c">@pozycjaKoszyka.DataDodania</td>
+    }
+    @if (widocznoscKolumn.PokazywacZdjecieProduktu && !pokazjemyDzieckoAktualnie)
+    {
+        <td style="@kolor" class="zdjecie c fit-content @Model.KontrolkaKoszyka.RozmiarZdjeciaWKoszyku" rowspan="@(rozpoczeciePokazywaniaRodziny ? Model.KoszykObiekt.PozycjeRodzinyIIleDzieci()[pozycjaKoszyka.Produkt.Rodzina] : 1)  ">
+            @{
+                Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(pozycjaKoszyka.Produkt, Model.KontrolkaKoszyka.RozmiarZdjeciaWKoszyku, true, rodzajMetki, "foto link-szczegoly", link));
+            }
+        </td>
+    }
+
+
+    @if (kolmna20koszyk)
+    {
+        object wartosc20 = Refleksja.PobierzWartosc(pozycjaKoszyka.Produkt, Model.KontrolkaKoszyka.PoleProduktuKoszykKolumna20);
+        string fraza = "";
+        if (wartosc20 != null)
+        {
+            if (wartosc20 is decimal)
+            {
+                fraza = ((decimal) wartosc20).DoLadnejCyfry();
+
+            }
+            else
+            {
+                fraza = wartosc20.ToString();
+            }
+        }
+        <td class="c Kolumna20  fit-content " style="@kolor">
+            <a href="@link" class="clickable produkt-kolumna20 link-szczegoly">
+                @Html.Raw(@fraza)
+            </a>
+        </td>
+    }
+
+    @if (widocznoscKolumn.PokazywacNazweProduktu || widocznoscKolumn.PokazywacSymbolProduktu || widocznoscKolumn.PokazywacKodKreskowy)
+    {
+        <td style="@kolor" class="l nazwa">
+
+            @if (widocznoscKolumn.PokazywacNazweProduktu)
+            {
+                if (!pokazjemyDzieckoAktualnie && !rozpoczeciePokazywaniaRodziny)
+                {
+                    Html.RenderPartial("PolaProduktu//Nazwa", new ParametryPrzekazywaneDoNazwy(pozycjaKoszyka.Produkt, rodzajMetki, "clickable produkt-nazwa link-szczegoly", link, false, false));
+                }
+
+                if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Gratis && Model.KontrolkaKoszyka.KoszykPokazujMetkeProduktyGratisowe)
+                {
+                    <span class="pull-xs-right label label-info">@Html.PobierzTlumaczenie("Pozycja gratisowa")</span>
+                }
+                if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.ZaPunkty && Model.KontrolkaKoszyka.KoszykPokazujMetkeProduktyZaPkt)
+                {
+                    <span class="pull-xs-right label label-info">@Html.PobierzTlumaczenie("Pozycja za punkty")</span>
+                }
+                if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Automatyczny && Model.KontrolkaKoszyka.KoszykPokazujMetkeProduktyAutomatyczne)
+                {
+                    <span class="pull-xs-right label label-info">@Html.PobierzTlumaczenie("Pozycja automatycznie dodana")</span>
+                }
+            }
+
+
+            <div class="text-muted kody-pod-nazwa">
+                <a href="@link">
+                    @if (widocznoscKolumn.PokazywacSymbolProduktu)
+                    {
+                        <span class="kod">@pozycjaKoszyka.Produkt.Kod</span>
+                    }
+                    @if (widocznoscKolumn.PokazywacKodKreskowy && !string.IsNullOrEmpty(pozycjaKoszyka.Produkt.KodKreskowy))
+                    {
+                        <span class="kod-kreskowy">@pozycjaKoszyka.Produkt.KodKreskowy</span>
+                    }
+                </a>
+            </div>
+
+
+            @*@if (SolexBllCalosc.PobierzInstancje.ProduktyKlienta.PobierzZamiennikiWidoczneDlaKlienta(pozycjaKoszyka.Produkt.Id, pozycjaKoszyka.Produkt.Klient).Any())
+                        {
+                            <a href="@link" class="link-szczegoly">
+                                <span class="label label-success">@config.PobierzTlumaczenie("Zamienniki")</span>
+                            </a>
+                        }*@
+
+            @if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Zwykly)
+            {
+                <div>
+                    @{ Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykProdukty(MetkaPozycjaKoszykProdukty.PodNazwa ), string.Format("metki {0}", MetkaPozycjaLista.PodNazwa))); }
+                </div>
+            }
+
+            @if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Automatyczny)
+            {
+                <div>
+                    @{ Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykAutomatyczne(MetkaPozycjaKoszykAutomatyczne.PodNazwa ), string.Format("metki {0}", MetkaPozycjaLista.PodNazwa))); }
+                </div>
+            }
+
+            @if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Gratis)
+            {
+                <div>
+                    @{ Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykGratisy(MetkaPozycjaKoszykGratisy.PodNazwa ), string.Format("metki {0}", MetkaPozycjaLista.PodNazwa))); }
+                </div>
+            }
+
+            @if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.ZaPunkty)
+            {
+                <div>
+                    @{ Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykProdukty(MetkaPozycjaKoszykProdukty.PodNazwa ), string.Format("metki {0}", MetkaPozycjaLista.PodNazwa))); }
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(pozycjaKoszyka.Produkt.OpisKrotki))
+            {
+                <div class="text-muted produkt-opis-2linia">@Html.Raw(pozycjaKoszyka.Produkt.OpisKrotki)</div>
+            }
+
+            @if (saStany != null && saStany.ContainsKey(PozycjaLista.NaDole) && SolexHelper.AktualnyKlient.CzyWidziStany)
+            {
+                <div>
+                    @{ Html.StanyProduktowWszystkie(pozycjaKoszyka.Produkt, saStany[PozycjaLista.NaDole]); }
+                </div>
+            }
+
+
+            @if (widocznoscKolumn.PokazywacMetkeRodzinowa && pozycjaKoszyka.Produkt.Rodzina != null && pozycjaKoszyka.Produkt.CechaUnikalnaRodzina != null)
+            {
+                <span class="label label-border rodzina-dziecko-cecha">
+                    @{
+                        Html.RenderPartial("~/Views/Produkty/_AtrybutProduktu.cshtml", pozycjaKoszyka.Produkt.CechaUnikalnaRodzina);
+                    }
+                 </span>
+            }
+            @if (Model.KoszykObiekt.PobierzPozycje[i].Indywidualizacja != null && Model.KoszykObiekt.PobierzPozycje[i].Indywidualizacja.Any())
+            {
+                <div class="indywidualizacje-pozycji">
+                    @Html.EditorFor(x => x.KoszykObiekt.PobierzPozycje[i].Indywidualizacja)
+                </div>
+            }
+
+            @if (Model.KontrolkaKoszyka.PokazujOpisPozycji)
+            {
+                <span>opis</span>
+                @Html.TextBoxFor(x => x.KoszykObiekt.PobierzPozycje[i].Opis)
+            }
+
+            @if (pozycjaKoszyka.RabatDodatkowy != 0)
+            {
+                <div class="rabat-dodatkowy  alert  alert-@Html.Raw(pozycjaKoszyka.RabatDodatkowy > 0 ? "success" : "warning")">
+                    @Html.Raw(pozycjaKoszyka.OpisRabatu)
+
+                    @if (pozycjaKoszyka.PowodDodatkowegoRabatu_DodatkoweInfoDymek != null)
+                    {
+                        <span class="fa fa-question-circle" data-original-title="@pozycjaKoszyka.PowodDodatkowegoRabatu_DodatkoweInfoDymek"></span>
+                    }
+                </div>
+            }
+
+        </td>
+    }
+    @if (widocznoscKolumn.PokazywacWage)
+    {
+        <td style="@kolor" class="c waga fit-content">
+            @{
+                decimal? waga = pozycjaKoszyka.WagaPozycji();
+                if (waga != null)
+                {
+                    string format = "0.##";
+                    if (!string.IsNullOrEmpty(Model.KontrolkaKoszyka.FormatPokazywanejWagi))
+                    {
+                        format = Model.KontrolkaKoszyka.FormatPokazywanejWagi;
+                    }
+                    @waga.Value.DoLadnejCyfry(format)
+                    @Html.Raw(" ")
+                    @Html.PobierzTlumaczenie("kg")
+                }
+            }
+
+        </td>
+    }
+    @if (widocznoscKolumn.CenaHurtowa != JakieCenyPokazywac.Brak && Model.WidoczneCeny)
+    {
+        <td style="@kolor" class="r cenaHurtowa fit-content">
+
+            @{
+                Html.RenderPartial("_Cena", new CenaDoPokazania(
+                    new WartoscLiczbowa(pozycjaKoszyka.Produkt.FlatCeny.CenaHurtowaNetto, waluta),
+                    new WartoscLiczbowa(pozycjaKoszyka.Produkt.FlatCeny.CenaHurtowaBrutto, waluta),
+                    null, null,
+                    "netto",
+                    "", "ceny-przed-rabatem lista-produktow", "", widocznoscKolumn.CenaHurtowa,
+                    "brutto", null,
+                    ((pozycjaKoszyka.Jednostka().Podstawowa) ? null : pozycjaKoszyka.Produkt.JednostkaPodstawowa.Nazwa)
+                    ));
+            }
+            @if (widocznoscKolumn.PokazywacVat)
+            {
+                <span class="text-muted produkt-cena-klienta-druga vat">@pozycjaKoszyka.Produkt.Vat%</span>
+
+            }
+        </td>
+    }
+    @if (widocznoscKolumn.CenaWPunktach)
+    {
+        <td style="@kolor" class="r CenaWPunktach fit-content">
+            @if (widocznoscKolumn.CenaWPunktach)
+            {
+                Html.RenderPartial("_Cena", new CenaDoPokazania(
+                    new WartoscLiczbowa(pozycjaKoszyka.CenaWPunktach(), config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "pkt.")),
+                    null, null, null,
+                    "", "", "wartosc-pozycji koszyk", "", widocznoscKolumn.CenaJednostowa, "", null,
+                    ((pozycjaKoszyka.Jednostka().Podstawowa) ? null : pozycjaKoszyka.Produkt.JednostkaPodstawowa.Nazwa)
+                    ));
+            }
+        </td>
+    }
+    @if ((widocznoscKolumn.CenaJednostowa != JakieCenyPokazywac.Brak || widocznoscKolumn.PokazywacVat) && Model.WidoczneCeny)
+    {
+        <td style="@kolor" class="r CenaPoRabacie fit-content">
+            @if (widocznoscKolumn.CenaJednostowa != JakieCenyPokazywac.Brak)
+            {
+                Html.RenderPartial("_Cena", new CenaDoPokazania(
+                    new WartoscLiczbowa(pozycjaKoszyka.CenaNettoPodstawowa, waluta),
+                    new WartoscLiczbowa(pozycjaKoszyka.CenaBruttoPodstawowa(), waluta), null, null,
+                    "netto", "", "wartosc-pozycji koszyk", "", widocznoscKolumn.CenaJednostowa, "brutto", null,
+                    ((pozycjaKoszyka.Jednostka().Podstawowa) ? null : pozycjaKoszyka.Produkt.JednostkaPodstawowa.Nazwa)
+                    ));
+            }
+
+            @if (widocznoscKolumn.PokazywacWartoscVat && (pozycjaKoszyka.CenaNettoPodstawowa != 0 || (pozycjaKoszyka.CenaNettoPodstawowa == 0 && SolexBllCalosc.PobierzInstancje.Konfiguracja.ZastepujCeneZerowaIkonkaTelefonu)))
+            {
+                <span class="text-muted produkt-cena-klienta-druga fit-content vat">
+                                        <span>@Html.PobierzTlumaczenie("VAT")</span>
+                                        <span>@pozycjaKoszyka.Produkt.Vat.DoLadnejCyfry()%</span>
+                                    </span>
+            }
+
+            @if (!zmianaCen && pozycjaKoszyka.WymuszonaCenaNettoPrzedstawiciel.HasValue)
+            {
+                @Html.HiddenFor(x => x.KoszykObiekt.PobierzPozycje[i].WymuszonaCenaNettoPrzedstawiciel)
+            }
+
+            @if (zmianaCen)
+            {
+                bool jestInnaCena = pozycjaKoszyka.WymuszonaCenaNettoPrzedstawiciel.HasValue;
+                WartoscLiczbowa cenaStandardowa = new WartoscLiczbowa(pozycjaKoszyka.CenaNettoPodstawowa_BezCenyPrzedstawiciela(), waluta);
+
+                Dictionary<string, object> zmianaCenInputAtrybuty = new Dictionary<string, object>();
+                zmianaCenInputAtrybuty.Add("data-normalna-cena", cenaStandardowa.Wartosc);
+                zmianaCenInputAtrybuty.Add("class", "form-inline zmiana-ceny-input" + (jestInnaCena ? " zmieniona-cena " : ""));
+                zmianaCenInputAtrybuty.Add("title", config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zmień cene netto na inną"));
+
+                <div class="cena-zmian-przedstawiciel @Html.Raw(jestInnaCena ? "zmiana-ceny-jest" : "")">
+                    <div>@Html.PobierzTlumaczenie("zmiana ceny netto")</div>
+
+                    @if (jestInnaCena)
+                    {
+                        decimal rabat = (cenaStandardowa.Wartosc - pozycjaKoszyka.WymuszonaCenaNettoPrzedstawiciel.Value)/(cenaStandardowa.Wartosc == 0 ? 1 : cenaStandardowa.Wartosc);
+                        string komunikat = config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Normalna cena netto: {0}<br />Różnica: {1}%", cenaStandardowa, Math.Abs(rabat*100).DoLadnejCyfry());
+                        <i class="fa fa-info-circle" title="@Html.Raw(komunikat)"></i>
+                    }
+
+                    @Html.TextBoxFor(x => x.KoszykObiekt.PobierzPozycje[i].WymuszonaCenaNettoPrzedstawiciel, zmianaCenInputAtrybuty)
+                </div>
+            }
+        </td>
+    }
+
+
+    @if (kolumna80koszyk)
+    {
+        object wartosc80 = Refleksja.PobierzWartoscFormatowana(pozycjaKoszyka.Produkt, Model.KontrolkaKoszyka.PoleProduktuKoszykKolumna80, Model.KontrolkaKoszyka.PoleProduktuKoszykKolumna80Format, akcesorRefleksjiProduktow);
+        string fraza = wartosc80.ToString();
+
+        <td class="c NaglowekKolumna80 fit-content" style="@kolor">
+            <a href="@link" class="clickable link-szczegoly">
+                @Html.Raw(@fraza)
+            </a>
+        </td>
+    }
+
+    @if ((widocznoscKolumn.WartoscPozycji != JakieCenyPokazywac.Brak || widocznoscKolumn.PokazywacWartoscVat) && Model.WidoczneCeny)
+    {
+        <td style="@kolor" class="ProduktWartoscKoszyk r fit-content">
+            @if (widocznoscKolumn.WartoscPozycji != JakieCenyPokazywac.Brak)
+            {
+                decimal wartoscNiedokladna = Math.Round(pozycjaKoszyka.Produkt.FlatCeny.CenaNetto*pozycjaKoszyka.Ilosc, 2);
+                if (Model.KontrolkaKoszyka.PokazywacInformacjeORoznicyPrzyZaokraglaniu && Math.Round(pozycjaKoszyka.WartoscNetto.Wartosc, 2) != wartoscNiedokladna)
+                {
+                    <div style="float: left; margin-right: 5px">
+                        @{ string tooltip = string.Format("Wartość została wyliczona z ceny po rabacie do 4 miejsc po przecinku <br />{0} * {1} = {2}", pozycjaKoszyka.Produkt.FlatCeny.CenaNettoDokladna.ToString("f4"), pozycjaKoszyka.Ilosc.ToString("f"), pozycjaKoszyka.WartoscNetto.Wartosc.ToString("f")); }
+                        <i class="fa fa-exclamation text-warning" aria-hidden="true" title="@Html.Raw(tooltip) "> </i>
+                    </div>
+                }
+                <span>
+                    @Html.Partial("_Cena", new CenaDoPokazania(pozycjaKoszyka.WartoscNetto, pozycjaKoszyka.WartoscBrutto, null, null, "netto", "", "wartosc-pozycji koszyk", "", widocznoscKolumn.WartoscPozycji, "brutto"))
+                    </span>
+            }
+
+            @if (widocznoscKolumn.PokazywacWartoscVat && (pozycjaKoszyka.CenaNettoPodstawowa != 0 || (pozycjaKoszyka.CenaNettoPodstawowa == 0 && SolexBllCalosc.PobierzInstancje.Konfiguracja.ZastepujCeneZerowaIkonkaTelefonu)))
+            {
+            <span class="text-muted produkt-cena-klienta-druga vat">
+                @(pozycjaKoszyka.WartoscVat)
+            </span>
+            }
+        </td>
+    }
+
+    @if (widocznoscKolumn.TypPozycjiKoszyka != TypPozycjiKoszyka.ZaPunkty && saStany != null && saStany.ContainsKey(PozycjaLista.Kolumna) && SolexHelper.AktualnyKlient.CzyWidziStany)
+    {
+        <td style="@kolor" class="c kolumna-stany-produktow fit-content">
+            @{
+                if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Zwykly)
+                {
+                    Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykProdukty(MetkaPozycjaKoszykProdukty.NadStanemKolumna ), string.Format("metki {0}", MetkaPozycjaLista.NadStanemKolumna)));
+                }
+                if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Automatyczny)
+                {
+                    Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykAutomatyczne(MetkaPozycjaKoszykAutomatyczne.NadStanemKolumna ), string.Format("metki {0}", MetkaPozycjaLista.NadStanemKolumna)));
+                }
+                if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Gratis)
+                {
+                    Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykGratisy(MetkaPozycjaKoszykGratisy.NadStanemKolumna ), string.Format("metki {0}", MetkaPozycjaLista.NadStanemKolumna)));
+                }
+        {
+            Html.StanyProduktowWszystkie(pozycjaKoszyka.Produkt, saStany[PozycjaLista.Kolumna]);
+        }
+
+                if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Zwykly)
+                {
+                    Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykProdukty(MetkaPozycjaKoszykProdukty.PodStanemKolumna ), string.Format("metki {0}", MetkaPozycjaLista.NadStanemKolumna)));
+                }
+                if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Automatyczny)
+                {
+                    Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykAutomatyczne(MetkaPozycjaKoszykAutomatyczne.PodStanemKolumna ), string.Format("metki {0}", MetkaPozycjaLista.NadStanemKolumna)));
+                }
+                if (widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Gratis)
+                {
+                    Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pozycjaKoszyka.Produkt.PobierzMetkaPozycjaKoszykGratisy(MetkaPozycjaKoszykGratisy.PodStanemKolumna ), string.Format("metki {0}", MetkaPozycjaLista.NadStanemKolumna)));
+                }
+            }
+        </td>
+    }
+
+    @if (widocznoscKolumn.WartoscPozycjiWPunktach)
+    {
+        <td style="@kolor" class="ProduktWartoscKoszyk r fit-content">
+
+            <span class="text-muted produkt-cena-klienta-druga">
+                    @Math.Round(pozycjaKoszyka.CenaWPunktach()*pozycjaKoszyka.Ilosc).DoLadnejCyfry()
+                </span>
+        </td>
+    }
+
+    <td style="@kolor" class="r kolumna-dodawanie-do-koszyka fit-content">
+        @if (saStany != null && saStany.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem) && SolexHelper.AktualnyKlient.CzyWidziStany)
+        {
+            {
+                Html.StanyProduktowWszystkie(pozycjaKoszyka.Produkt, saStany[PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem]);
+            }
+
+            <br/>
+        }
+        
+        @Html.EditorFor(x => x.KoszykObiekt.PobierzPozycje[i].DodawanieProduktu, new {ukryc = widocznoscKolumn.UkrywacJednoskeMiaryIIlosc, nieaktywne = widocznoscKolumn.TypPozycjiKoszyka == TypPozycjiKoszyka.Automatyczny})
+        @if (widocznoscKolumn.TypPozycjiKoszyka != TypPozycjiKoszyka.Automatyczny)
+        {
+            <a class="przelicz-koszyk btn btn-link btn-sm" ><span class="fa fa-refresh">
+                        </span>
+            </a>
+        }
+
+        <span class="text-muted">@((pozycjaKoszyka.Jednostka().Podstawowa) ? null : "= " + pozycjaKoszyka.IloscWJednostcePodstawowej.DoLadnejCyfry("0.#######") + "  " + pozycjaKoszyka.Produkt.JednostkaPodstawowa.Nazwa)</span>
+        @if (saStany != null && saStany.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem) && SolexHelper.AktualnyKlient.CzyWidziStany)
+        {
+            <br/>
+            {
+                Html.StanyProduktowWszystkie(pozycjaKoszyka.Produkt, saStany[PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem]);
+            }
+
+        }
+    </td>
+
+    @if (saStany != null && saStany.Any() && Model.KontrolkaKoszyka.PokazywacBelkeDostepnosci)
+    {
+        <td style="vertical-align: middle" class="belka-dostepnosci @pozycjaKoszyka.Produkt.PobierzTypStany.ToString()">
+            &nbsp;
+        </td>
+    }
+
+    </tr>
+}
+</tbody>
+
+</table>
+
+</div>
+</div>

@@ -1,0 +1,46 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.Helpers.MojeDane.ResetHaslaModel
+
+@{
+    Dictionary<string, object> parametry = new Dictionary<string, object>();
+    parametry.Add("required", "required");
+    parametry.Add("placeholder", Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wpisz swój email lub login"));
+    parametry.Add("autocomplete", "off");
+    parametry.Add("class", "form-control");
+}
+
+
+<div id="reset-form" class="c czcionka-tekstowa-paragraf">
+    <form method="POST">
+        <h3 class="text-uppercase bold">
+            @Html.PobierzTlumaczenie("Resetowanie hasła")
+        </h3>
+
+        @if (Model.Info)
+        {
+            <div class="alert alert-success">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Hasło złostało wysłane na podany adres email.")</div>
+        }
+        else
+        {
+            @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wpisz adres email lub login użytkownika dla którego chcesz zresetować hasło. Tymczasowe hasło zostanie wysłane mailem.")
+
+            <div class="komunikat-blad c text-danger czcionka-tekstowa-paragraf">
+                @if (Model.Blad)
+                {
+                  @Html.Raw( Html.PobierzTlumaczenie("Wprowadzone dane są błędne.") )
+                }
+            </div>
+
+
+            <fieldset class="form-group">
+                @Html.TextBoxFor(x => x.EmailLubLogin, "", parametry)
+            </fieldset>
+
+            <fieldset>
+                <input type="submit" name="resethasla" value="@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "WYŚLIJ")" class="btn btn-warning btn-lg">
+            </fieldset>
+            }
+</form>
+</div>

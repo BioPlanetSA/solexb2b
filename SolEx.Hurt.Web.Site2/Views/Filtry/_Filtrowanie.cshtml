@@ -1,0 +1,22 @@
+﻿@model string
+<div id="panel-filtrow" data-kategorie="@Model">
+
+</div>
+<script language="javascript" type="text/javascript">
+    
+   $(document).ready(function() {
+       var target = $("#panel-filtrow");
+     
+
+      
+       target.append(PobierzHtmlLadowanie());
+       var kats = target.attr('data-kategorie');
+       var adres =  window.location.search;
+       adres = setUrlEncodedKey('strona', window.location.pathname, adres);
+       adres = setUrlEncodedKey('kategorie', kats, adres);
+       $.get('/filtry/filtrowanieDane'+adres, function (data) {
+
+           target.html(data);
+       });
+   })
+</script>

@@ -1,0 +1,14 @@
+﻿@*"data-przepelnienie"*@ 
+
+@using SolEx.Hurt.Web.Site2.Models.KontrolkiTresci
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.ParametryDoDrzewaKategorii 
+<div id="katprodukty-@Model.IdKontrolki" data-id-kontrolki="@Model.IdKontrolki" class="drzewo-kategorii @(Model.Kontrolka.WszystkieKategorieRozwiniete ? "rozwiniete-wszystko" : "") 
+    @(Model.Kontrolka.PokazujGrupyWgSposobu == SposobyPokazaniaGrupKategoriiProduktow.Taby ? "grupa-jako-taby" : "")
+    @(Model.Kontrolka.PokazujGrupyWgSposobu == SposobyPokazaniaGrupKategoriiProduktow.Akordion ? "grupa-jako-akordion akordion" : "")
+    @(Model.Kontrolka.PokazujGrupyWgSposobu == SposobyPokazaniaGrupKategoriiProduktow.Metki ? "grupa-jako-metki " : "") "
+
+     data-kategorie-wybrane="@Model.WybranaKategoriaID">
+    
+    @Html.Action("DrzewkoKategorie", new RouteValueDictionary(new {idKontrolki = Model.IdKontrolki, wybranaKategoria = Model.WybranaKategoriaID, wybranaGrupa = Model.WybranaGrupa, szukanieGlobalne = Model.szukanieGlobalne}))
+</div>
+   

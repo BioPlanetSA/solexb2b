@@ -1,0 +1,51 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Web
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script src="/Scripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+@{
+    Dictionary<string, PlikDoEdycji> pliki = Model;
+}
+Indywidualne zablony ustawia się w ustawieniach -> szablon_wlasny_niestandardowy
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th>Plik</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var wpis in pliki)
+        {
+            <tr>
+                <td>@wpis.Value.Nazwa
+                    <div class="text-muted">@wpis.Value.Opis</div></td>
+                <td><a href="/Admin/EdytujPlik?hash=@wpis.Value.Hash" onclick="return PokazModal(this)">Edytuj</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function ZamknijModal(data, sender) {
+        $(sender).closest(".modal").modal('hide');
+    }
+
+    function InicjujEdytor(typ, poledozapisu) {
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.getSession().setMode("ace/mode/" + typ);
+        editor.on('change', function (ob) {
+            var nowy = editor.getValue();
+            $(poledozapisu).val(nowy);
+        });
+    }
+</script>
+
+
+
+
+
+

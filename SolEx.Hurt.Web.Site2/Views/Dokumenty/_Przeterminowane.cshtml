@@ -1,0 +1,9 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model bool
+
+@if (Model)
+{
+    <div class="alert alert-danger ">
+        @Html.PobierzTlumaczenie("Posiadasz niezapłacone, przeterminowane faktury")
+    </div>
+}

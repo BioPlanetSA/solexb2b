@@ -1,0 +1,7 @@
+﻿@{
+    string szukane =(string) ViewData["szukana"];
+}
+
+@Html.DropDownList("", new List<SelectListItem> {new SelectListItem() { Text = "", Value = "",Selected =string.IsNullOrEmpty(szukane)},
+    new SelectListItem() { Text = "Tak", Value = "True",Selected =szukane=="True" }, new SelectListItem() { Text = "Nie", Value = "False",Selected =szukane=="False" } }, new { @class = "form-control form-control-sm bool", form = "lista" })
+

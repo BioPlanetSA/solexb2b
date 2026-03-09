@@ -1,0 +1,50 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoSzczegolowejListyDokumentow
+
+<table class="dokumenty table table-condensed ">
+    <thead>
+        <tr>
+            <th style="width:146px" data-pole-sort="DataUtworzenia">
+                @Html.PobierzTlumaczenie("Data utworzenia")
+            
+
+            </th>
+            <th style="width:146px" data-pole-sort="TerminPlatnosci">
+                @Html.PobierzTlumaczenie("Do kiedy ważna")
+
+
+            </th>
+            <th  data-pole-sort="NazwaDokumentu">
+                @Html.PobierzTlumaczenie("Numer dokumentu")
+
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var d in Model.Dokumenty)
+    {
+        <tr>
+            <td class=" c" >@d.DataUtworzenia.ToShortDateString()</td>
+            <td class=" c">
+                @if (d.OfertaDoKiedyWazna.HasValue)
+                {
+                    @d.OfertaDoKiedyWazna.Value.ToShortDateString()
+                }
+            </td>
+            <td class=" c">
+
+                <b>@d.NazwaDokumentu</b>
+            </td>
+
+            <td class="c">
+                @Html.Partial("_Pobieranie", d)
+            </td>
+
+
+        </tr>
+      
+    }
+
+</table>

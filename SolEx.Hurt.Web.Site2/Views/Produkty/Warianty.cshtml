@@ -1,0 +1,279 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ListaDane
+@{
+    IProduktKlienta[] lista = Model.UstawieniaListyProduktow.Produkty.ToArray();
+    var idUlubionych = SolexHelper.AktualnyKlient.IdUlubionych;
+    bool kolumnaZeZdjeciem = Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.PokazywacZdjecieProduktyRodzinowego || Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.CechyRodzinoweListaProduktowPokazuj;
+
+}
+<table class="table table-condensed lista-produktow lista-wariantow">
+    <thead>
+    <tr>
+        @if (kolumnaZeZdjeciem)
+        {
+            <th scope="col" class="l" style="vertical-align: middle; width: 1px"></th>
+        }
+        <th scope="col" class="c NaglowekNazwa" style="vertical-align: middle">
+            @Html.PobierzTlumaczenie("NAZWA")
+        </th>
+
+        @if (SolexHelper.AktualnyKlient.Id != 0 && Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LCenaPrzedRabatem != JakieCenyPokazywac.Brak)
+        {
+            <th scope="col" class="c NaglowekCenaHurtowa" style="vertical-align: middle; width: 130px;">
+                @Html.PobierzTlumaczenie("CENA HURTOWA")
+            </th>
+        }
+
+        @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LRabat && Model.KlientWidziCeneHurtowa)
+        {
+            <th scope="col" class="c NaglowekRabat" style="vertical-align: middle; width: 27px">
+                @Html.PobierzTlumaczenie("RABAT")
+            </th>
+        }
+
+        @if (Model.KlientWidziCeneHurtowa)
+        {
+            <th scope="col" class="c NaglowekTwojaCena" style="vertical-align: middle; width: 130px;">
+                @Html.PobierzTlumaczenie("TWOJA CENA")
+            </th>
+        }
+        @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.ZyskKlienta)
+        {
+            <th scope="col" class="c NaglowekTwojZysk" style="vertical-align: middle">
+                @Html.PobierzTlumaczenie("TWÓJ ZYSK")
+            </th>
+        }
+        @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LCenaDetaliczna != JakieCenyPokazywac.Brak)
+        {
+            <th scope="col" class="c NaglowekCenaDetaliczna" style="vertical-align: middle; width: 130px;">
+                @Html.PobierzTlumaczenie("CENA DETALICZNA")
+            </th>
+        }
+        @if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.Kolumna))
+        {
+            <th scope="col" class="c" style="vertical-align: middle;">
+                @Html.PobierzTlumaczenie("ILOŚĆ")
+            </th>
+        }
+        @if (SolexHelper.AktualnyKlient.Dostep == AccesLevel.Zalogowani)
+        {
+            <th scope="col" class="c"></th>
+            <th scope="col" class="c"></th>
+        }
+        else if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && (Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem) || Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem)))
+        {
+            <th scope="col" class="c"></th>
+        }
+
+        @if (SolexHelper.AktualnyKlient.Dostep == AccesLevel.Zalogowani && Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.Any() && Model.AktualneParametry.KontrolkaProduktow.BelkaDostepnosci && SolexHelper.AktualnyKlient.CzyWidziStany)
+        {
+            <th scope="col" style="width: 10px;" class="belka-dostepnosci">
+
+            </th>
+        }
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (IProduktKlienta produkt in lista.OrderBy(x => (x.CechaUnikalnaRodzina != null ? x.CechaUnikalnaRodzina.Kolejnosc : 0)))
+        {
+            string info = "";
+            bool pokazujCene;
+            bool moznaDodacDoKoszyka = SolexBllCalosc.PobierzInstancje.ProduktyBazowe.MoznaDodacDoKoszyka(produkt, out info, out pokazujCene);
+
+            var typStanu = produkt.PobierzTypStany;
+            string link = Url.ZbudujLink(produkt,SolexHelper.AktualnyJezyk);
+            <tr class="rodzina-dziecko odstepy-rowne">
+
+            @if (kolumnaZeZdjeciem)
+            {
+                <td>
+                    @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.PokazywacZdjecieProduktyRodzinowego)
+                    {
+                        Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(produkt, Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LRozmiarZdjecia, false, RodzajMetki.Warianty, "link-szczegoly", link));
+                    }
+                    @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.CechyRodzinoweListaProduktowPokazuj)
+                    {
+                        <a href="@link" class="clickable">
+                            @if (produkt.CechaUnikalnaRodzina != null)
+                            {
+                                <div class="rodzina-dziecko-cechy ikonki">
+                                    <div class="label label-border wieksze-litery-100 rodzina-dziecko-cecha">
+                                        @{
+                                            Html.RenderPartial("~/Views/Produkty/_AtrybutProduktu.cshtml", produkt.CechaUnikalnaRodzina);
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </a>
+                        Html.RenderPartial("~/Views/Koszyk/_Ulubione.cshtml", new Tuple<long, HashSet<long>, bool>(produkt.Id, idUlubionych, false));
+                    }
+                </td>
+            }
+
+                
+                <td>
+                    @{
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkiSzczegolyWarianty(MetkaPozycjaSzczegolyWarianty.NadAtrybutamiRodzinowymi ), string.Format("warianty metki {0}", MetkaPozycjaRodziny.NadNazwa)));
+                    }
+                    <a href="@link" class="clickable">
+                        @if (produkt.CechaUnikalnaRodzina != null)
+                        {
+                            <div class="rodzina-dziecko-cechy">
+                                <div class="wieksze-litery-100  ">
+                                    @{
+                                        Html.RenderPartial("~/Views/Produkty/_AtrybutProduktu.cshtml", produkt.CechaUnikalnaRodzina);
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </a>
+                    @{
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkiSzczegolyWarianty(MetkaPozycjaSzczegolyWarianty.NadNazwa ), string.Format("warianty metki {0}", MetkaPozycjaRodziny.NadNazwa)));
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkiSzczegolyWarianty(MetkaPozycjaSzczegolyWarianty.PrzedNazwa ), string.Format("warianty metki {0}", MetkaPozycjaRodziny.PrzedNazwa)));
+                    }
+                    <span class="text-muted warianty-dane-produktu">
+
+                        @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LSymbol)
+                        {
+                            <span class="kod"> @(produkt.Kod)     </span>
+                        }
+                        @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LKodKreskowy && !string.IsNullOrEmpty(produkt.KodKreskowy))
+                        {
+                            <span class="kod-kreskowy">@(produkt.KodKreskowy)</span>
+                        }
+
+                    </span>
+                    @{
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkiSzczegolyWarianty(MetkaPozycjaSzczegolyWarianty.ZaNazwa ), string.Format("warianty metki {0}", MetkaPozycjaRodziny.ZaNazwa)));
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkiSzczegolyWarianty(MetkaPozycjaSzczegolyWarianty.ZaNazwaDoPrawej ), string.Format("warianty metki {0}", MetkaPozycjaRodziny.ZaNazwaDoPrawej)));
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkiSzczegolyWarianty(MetkaPozycjaSzczegolyWarianty.PodNazwa ), string.Format("warianty metki {0}", MetkaPozycjaRodziny.PodNazwa)));
+                    }
+                    @if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.NaDole))
+                    {
+                        <br/>
+                        Html.StanyProduktowWszystkie(produkt, Model.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.NaDole]);
+                    }
+                </td>
+
+                @if (SolexHelper.AktualnyKlient.Id != 0 && (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LCenaPrzedRabatem != JakieCenyPokazywac.Brak) )
+                {
+                        <td class="r CenaProduktu">
+                            @if (typStanu != TypStanu.niedostepny_dluzszy_czas)
+                            {
+                                Html.RenderPartial("_Cena", new CenaDoPokazania(produkt.FlatCeny.CenaHurtowaNetto, produkt.FlatCeny.CenaHurtowaBrutto, null, null, "netto", "", "ceny-przed-rabatem karta-produktow-warianty", "", Model.AktualneParametry.KontrolkaProduktow.LCenaPrzedRabatem, "brutto"));
+                            }
+                            @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LVat)
+                            {
+                                <span class="text-muted produkt-vat">@Html.PobierzTlumaczenie("VAT") @(produkt.Vat)%</span>
+                            }
+                        </td>                  
+                }
+                
+                @if (Model.KlientWidziCeneHurtowa && Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LRabat)
+                {
+                    <td class="c Rabat">
+                        @if (typStanu != TypStanu.niedostepny_dluzszy_czas)
+                        {
+                            <span class="produkt-rabat">@produkt.FlatCeny.Rabat.DoRabatString()<br /><br /></span>
+                        }
+                    </td>
+                }
+
+                @if (Model.KlientWidziCeneHurtowa)
+                {
+                    if (typStanu != TypStanu.niedostepny_dluzszy_czas)
+                    {
+                        if (produkt.GradacjePosortowane != null && Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LGradacja != GradacjaSposobPokazywania.Brak)
+                        {
+                            <td class="brak-odstepu r Gradacja">
+                                @{ Html.RenderAction("Gradacje", "Produkty", new { ProduktId = produkt.Id, sposobPokazywania = Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LGradacja }); }
+                            </td>
+                        }
+                        else
+                        {
+                            if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.CenaPoRabacie != JakieCenyPokazywac.Brak)
+                            {
+                                <td class="r CenaPoRabacie">
+                                    @{ Html.RenderPartial("_Cena", new CenaDoPokazania(produkt.FlatCeny, "netto", "", "ceny-przed-rabatem karta-produktow-warianty", "", Model.AktualneParametry.KontrolkaProduktow.CenaPoRabacie, "brutto")); }
+                                    
+                                    @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LVat)
+                                    {
+                                        <span class="text-muted produkt-cena-klienta-vat"><span>@Html.PobierzTlumaczenie("VAT")</span> <span>@(produkt.Vat) %</span></span>
+                                    }
+
+                                </td>
+                            }
+                        }
+                    }
+
+                    if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.ZyskKlienta)
+                    {
+
+                        <td scope="col" style="text-align: center; vertical-align: middle">
+                            @if (typStanu != TypStanu.niedostepny_dluzszy_czas)
+                            {
+                                <span class="text-muted produkt-zysk-klienta"> @(produkt.FlatCeny.ZyskKlientaNetto) </span>
+                            }
+                        </td>
+                    }
+                }
+
+
+                @if (Model.AktualneParametry.KontrolkaProduktowJakoLosowaListaProduktow.LCenaDetaliczna != JakieCenyPokazywac.Brak)
+                {
+                    <td class="r CenaProduktu">
+                        @{ Html.RenderPartial("_Cena", new CenaDoPokazania(produkt.FlatCeny.CenaDetalicznaNetto, produkt.FlatCeny.CenaDetalicznaBrutto, null, null, "Cena detaliczna netto:", "", "ceny-detaliczna karta", "text-muted", Model.AktualneParametry.KontrolkaProduktow.LCenaDetaliczna, "Cena detaliczna brutto:", null, produkt.JednostkaPodstawowa.Nazwa)); }
+                    </td>
+                }
+
+
+
+                @if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.Kolumna))
+                {
+                    <td class="c kolumna-stany-produktow">
+                        @{ Html.StanyProduktowWszystkie(produkt, Model.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.Kolumna]); }
+                    </td>
+                }
+                @if (SesjaHelper.PobierzInstancje.CzyKlientZalogowany)
+                {
+                    <td class="r kolumna-dodawanie-do-koszyka">
+                        @{
+                            if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem))
+                            {
+                                Html.StanyProduktowWszystkie(produkt, Model.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem]);
+                            }
+
+                            ParametryIlosciProduktu pi = new ParametryIlosciProduktu(produkt, Model.SortowanieJednostek, TypPozycjiKoszyka.Zwykly, null, Model.PokazujJednostki);
+                            pi.MoznaDodawacDoKoszyka = moznaDodacDoKoszyka;
+                            pi.Info = info;
+                            Html.RenderPartial("EditorTemplates/DodawanieDoKoszyka", pi);
+
+
+                            if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem))
+                            {
+                                Html.StanyProduktowWszystkie(produkt, Model.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem]);
+                            }
+
+                        }
+                    </td>
+
+                    if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem) && Model.AktualneParametry.KontrolkaProduktow.BelkaDostepnosci)
+                    {
+                        <td class="belka-dostepnosci @typStanu.ToString()">
+                            &nbsp;
+                        </td>
+                    }
+
+                }
+
+            </tr>
+        }
+    </tbody>
+</table>

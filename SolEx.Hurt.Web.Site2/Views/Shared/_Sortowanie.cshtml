@@ -1,0 +1,35 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.DaneDoWidokuSortowania
+@{
+    KeyValuePair<string, Sortowanie> sort;
+    if (Model.DostepneSortowanie.Any(x => Model.WybraneSortowanie!= null && x.Value.SortowanieFraza() == Model.WybraneSortowanie.SortowanieFraza()))
+    {
+        sort = Model.DostepneSortowanie.FirstOrDefault(x => Model.WybraneSortowanie != null && x.Value.SortowanieFraza() == Model.WybraneSortowanie.SortowanieFraza());
+    }
+    else
+    {
+        sort = Model.DostepneSortowanie.FirstOrDefault();
+    }
+}
+
+    <div class="btn-group lista-produktow-sortowanie" id="sortowanie-@Model.Przeznaczenie">
+        <button type="button" class="btn dropdown-toggle btn-sm btn-secondary wlacz-tooltip sortowanie-dropdown l" data-toggle="dropdown"  title="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Sortowanie pozycji")" 
+                data-original-title="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Sortowanie pozycji")">
+            <span>@(!string.IsNullOrEmpty(sort.Key) ? SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,sort.Key) : Html.PobierzTlumaczenie("Sortowanie produktów")+"")</span>
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-right" role="menu">
+            @foreach(var dostepneSortowanie in Model.DostepneSortowanie)
+            {
+                <a class="dropdown-item" data-sortowanie="@dostepneSortowanie.Value.ToString()">
+                    <span class="text">@Html.PobierzTlumaczenie(dostepneSortowanie.Key)</span>
+                    @if ((sort.Value != null && sort.Value.SortowanieFraza() == dostepneSortowanie.Value.SortowanieFraza()) || (sort.Value == null))
+                    {
+                        <i class="fa fa-check"></i>
+                    }
+                </a>
+            }
+        </div>
+    </div>

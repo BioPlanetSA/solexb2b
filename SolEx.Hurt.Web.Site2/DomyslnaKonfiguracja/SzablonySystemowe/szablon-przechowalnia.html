@@ -1,0 +1,125 @@
+﻿#poczatek opis
+<text></text>
+<br/><br/>
+<table class="table table-striped table-condensed przechowalnia" >
+    <thead>
+    <tr>
+        <th class="l" style="width: 10px">#</th>
+        <th style="width: 10px"></th>
+        <th scope="col" style="width: 10px">
+            {Narzedzia/ZaznaczWszystko}
+        </th>
+        <th style="width: 1px"></th>
+        <th scope="col">
+               @Model.Tlumacz("Nazwa produktu") </th>
+               @if(Model.CzyPokazywacCeny() ){
+        <th scope="col">
+              @Model.Tlumacz("Cena netto")
+        </th>
+        }
+      <th scope="col">
+           @Model.Tlumacz("Ilość w przechowalni")
+      </th>
+               @if(Model.CzyPokazywacCeny() ){
+      <th scope="col">
+           @Model.Tlumacz("Wartość netto")
+      </th>
+        }
+    </tr>
+  </thead>
+      <tbody>
+   @{ int i=0;}
+        @foreach(var KoszykPozycjaBLL in Model.KoszykiPozycjeCollection.Data)
+        {
+        i++;
+        <tr>
+            <td class="l text-muted">@i</td>
+            <td class="c" >
+                {Koszyk/KoszykUsun[PozycjaID="@(KoszykPozycjaBLL.id)"]}
+            </td>
+            <td class="c">
+                {Narzedzia/ZaznaczanieElementu[IDElementu=&quot;@(KoszykPozycjaBLL.id)&quot;]}
+            </td>
+            
+            <td>
+                {Produkty/ZdjecieProduktuMiniaturka[ProduktID=" @(KoszykPozycjaBLL.Produkt.produkt_id)", LinkPoKliknieciu="@Model.Linki.PobierzLink(KoszykPozycjaBLL.Produkt)", Rozmiar="@Model.KonfiguracjaBll.RozmiarZdjeciaWKoszyku"]}		
+            </td>
+            <td>
+
+            @KoszykPozycjaBLL.Produkt.nazwa
+                                    @if(KoszykPozycjaBLL.Produkt.CechaRodzina!=null){
+ <span class="label label-primary wieksze-litery-100">
+                    <text>{Produkty/AtrybutProduktu[ProduktID="@(KoszykPozycjaBLL.Produkt.produkt_id)" AtrybutID="@(KoszykPozycjaBLL.Produkt.CechaRodzina.atrybut_id)" NiePokazujNazwyAtrybutu="True"]}</text> 
+         </span>
+                    }
+               {Produkty/MetkaKatalog[ProduktID=" @(KoszykPozycjaBLL.Produkt.produkt_id)"]}
+                 <span class="pull-right">{Produkty/MetkaProduktu[ProduktID=" @(KoszykPozycjaBLL.Produkt.produkt_id)"]}</span><br/>
+            
+                 <span class="text-muted">@KoszykPozycjaBLL.Produkt.kod</span><br/>
+                       @if(Model.CzyPokazywacCeny() ){
+            <td class="r">
+                <strong>@(KoszykPozycjaBLL.CenaNetto)</strong><br />
+                <span class="text-muted">@Model.Tlumacz("(brutto)") @(KoszykPozycjaBLL.CenaBrutto)</span>
+            </td>
+            }
+            <td>
+                {Produkty/DodawanieProduktu[WybranaJednostka="@KoszykPozycjaBLL.jednostka",Ilosc="@KoszykPozycjaBLL.ilosc",ProduktID="@KoszykPozycjaBLL.Produkt.produkt_id",UkryjPrzechowalnie="True",UkryjDostepnosc="True",UkryjKomunikatWyjscie="True"]}
+            </td>
+                   @if(Model.CzyPokazywacCeny() ){
+            <td class="r">
+                @(KoszykPozycjaBLL.CalkowitaWartoscHurtowaNettoPoRabacie)<br/>
+                <span class="text-muted">@Model.Tlumacz("(brutto)") @(KoszykPozycjaBLL.CalkowitaWartoscHurtowaBruttoPoRabacie)</span>
+            </td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>
+<div style="margin-bottom: 5px;margin-top: 5px;">
+    <div style="display: inline-block;width: 20%;vertical-align:  top;">
+    {Koszyk/KoszykOpcje}
+    </div>
+    <div style="text-align: right;display: inline-block;width: 79%;">
+        <div style="text-align: right;">
+            {Koszyk/PokazKatalog} {Koszyk/WrocDoOferty} {Koszyk/KoszykPrzelicz}</div>
+    </div>
+</div>
+         <table class="table table-condensed pull-right" style="width: 400px">
+        
+                <tr class="warning">
+                    <td>@Model.Tlumacz("Wartość netto"):</td>
+                    <td><strong>@Model.KoszykiBLL.CalkowitaWartoscHurtowaNettoPoRabacie</strong></td>
+                </tr> 
+            @if(Model.KoszykiBLL.CalkowitaWartoscHurtowaNettoPoRabacie!=Model.KoszykiBLL.CalkowitaWartoscHurtowaBruttoPoRabacie)
+            {
+                <tr class="warning">
+                      <td>@Model.Tlumacz("Wartość brutto"):</td>
+                    <td><strong>@Model.KoszykiBLL.CalkowitaWartoscHurtowaBruttoPoRabacie</strong></td>
+                </tr> 
+            }
+        </table>
+#koniec opis
+
+#poczatek opis_krotki
+{Koszyk/PrzechowalniaWybor}
+#koniec opis_krotki
+
+#poczatek dostep
+Zalogowani
+#koniec dostep
+
+#poczatek uklad
+Pełny
+#koniec uklad
+
+#poczatek nazwa
+Szablon przechowalni
+#koniec nazwa
+
+#poczatek dostepne_parametry
+SolEx.Hurt.Core.KoszykPozycjaBLL, SolEx.Hurt.Core;SolEx.Hurt.Core.KoszykiBLL, SolEx.Hurt.Core;
+#koniec dostepne_parametry
+
+#poczatek parent
+strony-systemowe
+#koniec parent

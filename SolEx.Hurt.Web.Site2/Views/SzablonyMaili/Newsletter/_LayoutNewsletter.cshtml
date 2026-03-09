@@ -1,0 +1,83 @@
+﻿@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model dynamic
+@{
+    IKlient klient = Model.Klient;
+}
+
+<odbiorca>@RenderSection("Odbiorca")</odbiorca>
+<tytul> @RenderSection("Tytul")</tytul>
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width" />
+    </head>
+
+<body class="bodyTlo">
+    <table class="body">
+        <tr>
+            <td>
+                <center>
+                        @*-------------- kontent START -----------------*@
+                        <table class="container contentTlo">
+                            <tr>
+                                <td>
+                                    <br />
+                                    @RenderSection("Tresc")
+                                </td>
+                            </tr>
+                        </table>
+                        @*-------------- kontent KONIEC -----------------*@
+
+
+                    
+                    @*-------------- Produkty START -----------------*@
+                    @*<table class="container contentTlo">
+                        <tr>
+                            <td>
+                                <br />
+                                @RenderSection("Produkty")
+                            </td>
+                        </tr>
+                    </table>*@
+                    @*-------------- Produkty KONIEC -----------------*@
+
+
+
+
+                        @*-------------- stopka START -----------------*@
+                        <table class="row">
+                            <tr>
+                                <td class="wrapper last">
+                                    <table class="twelve columns">
+                                        <tr>
+                                            <td class="center text-pad">
+                                                <center>
+                                                    <br />
+                                                    <p style="text-align: center; font-size: 11px; font-family: Arial, Helvetica, sans-serif; color: #919191; text-align: center; padding-top: 10px;">
+                                                        @Html.Raw("Otrzymałeś/aś tę wiadomość email, ponieważ twój adres jest zapisany do newslettera. <a href=" + Url.WypiszZNewslettera(klient) + " style='color: #919191'> Zrezygnuj z otrzymywania kolejnych wiadomoscEmaili</a>")
+                                                    </p>
+                                                </center>
+                                            </td>
+                                            <td class="expander"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        @*-------------- stopka KONIEC -----------------*@
+
+                        </center>
+                    </td>
+            </tr>
+        </table>
+    </body>
+
+</html>

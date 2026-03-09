@@ -1,0 +1,148 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+
+}
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.ListyPrzewozowe
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany != TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie( Model.JezykMaila(), "Nowy list przewozowy - {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Nowy list przewozowy")
+    }
+    
+
+}
+@section Naglowek
+{
+    <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Nowy list przewozowy")</h4>
+}
+@section Tresc
+{
+<table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad">
+                        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Dodaliśmy nowe listy przewozowe dla Twojego konta:")
+                        <br />
+                    </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+    
+
+
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                    <tr>
+                        <td class="text-pad wstawkiTlo">
+                            <br />
+                            <table style="width: 100%" class="tabela">
+                                <tr class="naglowek">
+                                    <td>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Numer listu przewozowego")</td>
+                                    <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Śledzenie przesyłki")</td>
+                                    <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Data faktury")</td>
+                                    <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Numer faktury")</td>
+                                </tr>
+
+                                <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="4">&nbsp;</td></tr>
+
+                                @{
+                                    foreach (var listyPrzewozowe in Model.KolekcjaListPrzewozowych)
+                                    {
+                                        <tr>
+                                            <td class="vcenter">
+                                                @listyPrzewozowe.NumerListu
+                                            </td>
+                                            <td align="center" class="vcenter center">
+                                                <a class="link" href="@(listyPrzewozowe.Link)">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zobacz status")</a>
+                                            </td>
+                                            <td align="center" class="vcenter center">
+                                                    @if (Model.Dokument.DataUtworzenia.Hour != 0 && Model.Dokument.DataUtworzenia.Minute != 0 && Model.Dokument.DataUtworzenia.Second != 0)
+                                                    {
+                                                        @Model.Dokument.DataUtworzenia
+                                                    }
+                                                    else
+                                                    {
+                                                        @Model.Dokument.DataUtworzenia.ToShortDateString();
+                                                    }
+                                            </td>
+                                            <td align="center" class="vcenter center">
+                                                @(Model.Dokument.NazwaDokumentu)
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td height="1" style="font-size: 1px; line-height: 1px;" class="hr belka" colspan="4">&nbsp;</td>
+                                        </tr>
+                                        <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="4">&nbsp;</td></tr>
+
+                                    }
+                                }
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+
+
+                     
+        </tr>
+    </table>
+    
+    
+<table class="row">
+    <tr>
+        <td>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad ">
+                        <br /><br />
+                        @Html.PobierzTlumaczenie(Model.JezykMaila(), "<small class='wyszarz' style='text-transform: uppercase'>PAMIĘTAJ, ŻE...</small><br/>" +
+                                                                                   "Na Platformie B2B możesz przeglądać wszystkie swoje faktury i zamówienia - w tym również informacje o listach przewozowych.")
+                                                                                <br />
+                                                                                <br /><br />
+                                                                            </td>
+                </tr>
+            </table>
+        </td>
+        </td>
+    </tr>
+</table>
+}
+

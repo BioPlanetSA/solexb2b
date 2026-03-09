@@ -1,0 +1,93 @@
+﻿@using ServiceStack.Common
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model SolEx.Hurt.Model.Helpers.MojeDane.MojeDaneModel
+
+<div class="customer_change_data">
+        @if (Model.Rezultat)
+        {
+            if (Model.Status)
+            {
+                <div class="alert alert-success c">
+                    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Prośba o zmianę danych została wysłana")
+                </div>
+
+            }
+            else
+            {
+                <div class="alert alert-success c">
+                    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nie udało się wysłąć wiadomośći, proszę spróbować później")
+                </div>
+            }
+        }
+        else
+        {
+            <br/>
+            <p>
+                @if (!string.IsNullOrEmpty(Model.Opis))
+                {
+                    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Opis)
+                }
+            </p>
+
+
+            if (Model.BlokujFormularz)
+            {
+                <br/>
+                <p class="alert alert-danger c">
+                    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Edycja danych jest możliwa tylko dla klientów posiadających opiekunów. Skontaktuj się z nami aby dokonać zmiany swoich danych.")
+                </p>
+                <br/>
+            }
+            <form method="post">
+                @if (!string.IsNullOrEmpty(Model.EmailNaJakiOdeslacOdpowiedz))
+                {
+                    @Html.HiddenFor(x => x.EmailNaJakiOdeslacOdpowiedz)
+                }
+
+                <fieldset>
+                    @Html.HiddenFor(x => x.EmailNaJakiOdeslacOdpowiedz)
+
+                    @{
+                        HashSet<string> grupy = new HashSet<string>(Model.Pola.Select(x => x.Grupa));
+                    }
+                    @foreach (string s in grupy)
+                    {
+                        string nazwaGrupy = s ?? "Dane do faktury";
+                        <h4 class="c b">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, nazwaGrupy)</h4>
+
+                        foreach (ParametryPola p in Model.Pola.Where(x => x.Grupa == s))
+                        {
+                            p.klasaCSS += " form-control";
+                            <fieldset class="form-group">
+                                @Html.Partial("EditorTemplates/Pola/" + p.Typ, p)
+                            </fieldset>
+                        }
+                    }
+                </fieldset>
+                <br/>
+                @if (!Model.BlokujFormularz)
+                {
+                    <div class="c">
+                        <input type="submit" class="c btn btn-primary"
+                               value="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wyślij formularz do opiekuna")"/>
+                    </div>
+                    <br/>
+
+                }
+            </form>
+        }
+    </div>
+           
+
+
+@if (Model.BlokujFormularz)
+{
+    <script>
+        $("input").attr("disabled", true);
+        $("textarea").attr("disabled", true);
+    </script>
+}

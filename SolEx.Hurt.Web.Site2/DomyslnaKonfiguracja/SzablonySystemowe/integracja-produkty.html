@@ -1,0 +1,73 @@
+﻿#poczatek opis
+
+    Poniżej znajdziecie Państwo pliki z naszą bazą danych gotowe do integracji z Państwa systemami (np. sklepami internetowymi lub systemami sprzedaży).<br />
+    Pliki dostępne są w formatach: CSV, XML lub EPP. Format CSV można otworzyć i edytować np. w MS Excel lub OpenOffice, format XML jest dedykowany dla informatyków, format EPP przeznaczony jest dla programu Subiekt GT.<br />
+    Ilość danych w plikach CSV i XML jest inna. Pliki XML są pełniejsze z uwagi na lepsze możliwości techniczne, dlatego zalecamy do integracji korzystanie z tych plików.<br />
+<br />
+    Wszystkie pliki są aktualizowane kilka razy dziennie. Bardzo prosimy nie ściągać plików częściej niż raz na kilka godzin - każdy Użytkownik, który będzie pobierał plik zbyt często dostanie automatycznie kilkuminutową blokadę.<br />
+    W godzinach 10.00 - 14.00 pobieranie plików jest blokowane (jest to związane z wysokim obciążeniem naszego serwera w tych godzinach).<br />
+<br />
+    Zanim zaczną Państwo korzystać z plików prosimy o zapoznanie się z najważniejszymi sugestiami:<br />
+    <ul>
+        <li><b>Import i synchronizacja produktów powinna być dokonywana wyłącznie wg kodów EAN lub ID produktu (nazwa i kod produktu w sporadycznych przypadkach mogą ulec zmianie),</b></li>
+        <li>Nie rozpowszechniaj dowolnie plików w internecie. Pliki udostępniamy tylko dla wybranych klientów - chcemy żeby nie były dostęne dla każdego. Nie jesteś anonimowy - każde pobieranie pliku jest odnotowane (włącznie z adresem IP Twojego komputera),</li>
+        <li>
+            Pliki mogą zawierać Twoje ceny zakupu oraz ceny detaliczne brutto - możesz ustawiać swoją cenę sprzedaży w oparciu o te ceny,
+        </li>
+        <li>
+            Pliki mogą nie zawierać całej oferty produktowej, lub zawierać okrojone dane - np. produkty wyprzedażowe lub przeceniane mogą mieć zerowe ceny - weź to pod uwagę integrując swój sklep z nami,
+        </li>
+        <li>
+            Pliki są aktualizowane kilka razy dziennie - może zdarzyć się sytuacja kiedy sprzedasz produkt, który w pliku jeszcze jest na stanie, ale na naszym magazynie już go nie będzie,
+        </li>
+        <li>Pliki można pobierać automatycznie - instrukcja jest dostępna na dole tej strony. Najlepiej pokaż opis informatykowi - on będzie wiedział jak go wykorzystać.</li>
+    </ul>
+
+    <br />
+    {Eksporty/Lista}
+    <br />
+    <br />
+    <br />
+    <span style="font-size:14px;"><b>Instrukcja zautomatyzowanego pobierania danych</b></span>
+    <br />
+    <br />
+    ​Aby zacząć pobierać automatycznie dane, potrzebujemy klucza do API.
+    <br /><br />
+    {Eksporty/GenerowanieKlucza}
+    <br />
+    Pobieranie plików odbywa się poprzez wysyłanie standardowych wywołań http, z załączonym kluczem API. Klucz może być załączony na kilka sposobów:
+    <ul>
+        <li>przesyłanie w nagłówku wywołania pola "X-Solex-API" z wartością klucza API <strong>(<u>metoda stanowczo zalecana</u>)</strong></li>
+        <li>przesyłanie klucza API w querystringu <strong>key</strong> w adresie www zapytania - np.: "http://.....adres-pliku<strong>?key=kluczApi</strong>"</li>
+    </ul>
+    Jeśli pojawi się błąd w komunikacji - odpowiedz z serwera będzie zawierać informacje o powodzie błędu (np. niepoprawny klucz lub blokada). Najczęstszym błędem jest używanie starego klucza API - każdorazowe wygenerowanie klucza API, <strong><u>unieważnia wszystkie stare klucze</u></strong>.
+    <br />
+    <br />
+    Adresy wywołań są podane wyżej (adresy do plików).
+    <br />
+    <br />
+    Przykładowe wywołanie oparte o querystring:
+    <br />
+    <br />
+    http://www......com/api/synchronizacja.pobierz.ashx?data=13<b>&key=0b25e8f2-b8bd-46e6-b7eb-a38db5c755fd</b>
+    <br />
+    <br />
+    #koniec opis
+
+    #poczatek opis_krotki
+    #koniec opis_krotki
+
+    #poczatek dostep
+    Zalogowani
+    #koniec dostep
+
+    #poczatek uklad
+    Pełny
+    #koniec uklad
+
+    #poczatek nazwa
+    Pliki z produktami XML i CSV
+    #koniec nazwa
+    #poczatek parent
+    integracja
+    #koniec parent

@@ -1,0 +1,48 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+
+<div class="zapisz-do-newslettera c">
+    <form id="newsletter" method="POST">
+        <div class="form-inline linia-przyciski">
+            <fieldset class="form-group">
+                <input type="email" name="email" id="newsletter-email" required class="form-control zapisz-do-newslettera-adres-email" placeholder="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Wpisz adres e-mail")" />
+            </fieldset>
+            <fieldset class="form-group">
+                <input type="submit" id="button-zapisz-do-newslettera" class="btn  btn-warning zapisz-do-newslettera-button bold" value="@Html.PobierzTlumaczenie("ZAPISZ SIĘ")" />
+            </fieldset>
+        </div>
+        <div class="linia-zgody l">
+            <div class="checkbox checkbox-dane">
+                <label>
+                    <input type="checkbox" name="daneosobowe" required class="zapisz-do-newslettera-dane-osobowe" />
+                    <span> @Html.PobierzTlumaczenie("Akceptuję <a class='a-link' href='/politykaprywatnosci' target='_blank' ><u>politykę prywatności</u></a> oraz wyrażam zgodę na przetwarzanie i wykorzystywanie moich danych osobowych w celach marketingowych oraz otrzymywanie treści marketingowych na podany adres email")</span>
+                </label>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<script>
+    var formularz = document.getElementById('newsletter');
+    formularz.onsubmit =function () {
+        $.ajax({
+            url: '/Newsletter/ZapiszDoNewslettera',
+            type: 'POST',
+            data: JSON.stringify({
+                adresemail: $('#newsletter-email').val()
+            }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                Informacja(null, '', data.odp);
+                formularz.reset();
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+        return false;
+    };
+
+</script>

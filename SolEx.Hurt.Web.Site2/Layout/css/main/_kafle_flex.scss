@@ -1,0 +1,36 @@
+﻿.kafle {
+    display: flex;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    justify-content: space-around;
+
+    .kafel {
+        margin-bottom: 27px;
+        display: flex;
+        -ms-flex-flow: column;
+        -webkit-flex-flow: column;
+        flex-flow: column;
+        //  flex:1 1 auto;  //sapce-betwen nie zadziala jak to ustawimy
+        &.kafel-row {
+            -ms-flex-flow: row;
+            -webkit-flex-flow: row;
+            flex-flow: row;
+        }
+    }
+
+    &.kafle-na-boki {
+        justify-content: space-between;
+    }
+
+    &.kafle-do-srodka {
+        justify-content: center;
+    }
+
+    &.kafle-bez-marginesu {
+        margin-bottom: 0;
+    }
+}

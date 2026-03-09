@@ -1,0 +1,21 @@
+﻿@import "_ustawienia.scss";
+
+body.admin-panel {
+    #szablonyMailiZawartosc {
+       .tytul{
+           margin-top: 5px;
+           margin-bottom: 10px;
+           font-family: $font-tekst-rodzina;
+       }
+       .pole-bool{
+           & > *{
+               vertical-align: middle;
+           }
+        input[type="checkbox"] {
+                    height: 25px;
+                    width: 25px;
+                }
+        }
+
+    }
+}

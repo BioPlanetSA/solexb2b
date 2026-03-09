@@ -1,0 +1,35 @@
+﻿
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@if (Model.WymuszonyTypEdytora.HasValue && Model.WymuszonyTypEdytora.Value == TypEdytora.WidocznoscDlaKlientow)
+{
+    //nic nie renderujemy
+    return;
+}
+
+<label title="@Model.OpisPola" data-slownik="@(Model.TypSlownika !=null ?  Model.TypSlownika.PobierzOpisTypu() :  "")">
+    @if (Model.NazwaWyswietlanaTlumaczona)
+    {
+        string symbol = "admin-" + Model.TypPrzechowywanejWartosci.Name + "-" + Model.NazwaWyswietlana;
+
+        long outHash;
+        @SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.NazwaWyswietlana, symbol, out outHash)
+
+        <a class="admin-edytuj-tlumaczenie" target="_blank" href="@Url.Action("Edycja", "Admin", new { id =outHash, typ=typeof(TlumaczeniePole).PobierzOpisTypu()})"> <i class="fa fa-pencil"></i> </a>
+    }
+    else
+    {
+        @Model.NazwaWyswietlana
+    }
+    @if (Model.PobieraneErpModul.HasValue && !Model.TylkoDoOdczytu)
+    {
+        <a class="admin-edytuj-pobierania-erp" target="_blank" href="@Url.Action("Edycja", "Admin", new { id = Model.PobieraneErpModul, typ = typeof(ModulSynchronizacji).PobierzOpisTypu() })"> <i class="fa fa-wrench"></i> </a>
+    }
+</label>

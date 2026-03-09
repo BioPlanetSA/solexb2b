@@ -1,0 +1,42 @@
+﻿@import "../_ustawienia.scss";
+@import "../../../../Content/bootstrap/_variables.scss";
+@import "../../../../Content/bootstrap/mixins/_breakpoints.scss";
+
+
+
+@mixin zrob-klasy-dla-grida-gora-dol($KlasaCssNazwaBazowa) {
+    @each $breakpoint in map-keys($grid-breakpoints) {
+        @include media-breakpoint-up($breakpoint) {
+                .#{$KlasaCssNazwaBazowa}-#{$breakpoint}-up {
+                    @content;
+            }
+        }
+
+
+         @include media-breakpoint-down($breakpoint) {
+            .#{$KlasaCssNazwaBazowa}-#{$breakpoint}-down {
+                @content;
+            }
+        }
+
+    }
+}
+
+
+@mixin zrob-klasy-dla-order-flexa($KlasaCssNazwaBazowa, $orderNumer) {
+    @each $breakpoint in map-keys($grid-breakpoints) {
+        @include media-breakpoint-up($breakpoint) {
+                .#{$KlasaCssNazwaBazowa}-#{$breakpoint}-order-#{$orderNumer}-up {
+                    @content;
+            }
+        }
+
+
+         @include media-breakpoint-down($breakpoint) {
+            .#{$KlasaCssNazwaBazowa}-#{$breakpoint}-order-#{$orderNumer}-down {
+                @content;
+            }
+        }
+
+    }
+}

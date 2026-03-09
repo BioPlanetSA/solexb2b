@@ -1,0 +1,40 @@
+﻿@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Filtry
+@model DaneDoFiltrow
+@{
+    @Html.Partial("Filtry/Typy/_CheckBox", new DaneDoFiltrow(Model.Atrybut, Model.WszystkieWybraneCechy, Model.Wszystkie, Model.StalyFiltr, false,true))
+}
+
+
+@*<div class="fil  fil_@(Model.Atrybut.Id) fil-cb-zdjecie fil-multi">
+    <label class="fil_nazwa">@Model.Atrybut.Nazwa</label>
+    @foreach (var x in Model.Atrybut.ListaCech)
+    {
+        HashSet<int> data = new HashSet<int>(Model.WszystkieWybraneCechy.SelectMany(y => y.Value));
+        bool wybrany = wybranaCecha.Contains(x.Id);
+        if (wybrany)
+        {
+            data.Remove(x.Id);
+        }
+        else
+        {
+            data.Add(x.Id);
+        }
+        var cechylink = cechy.WhereKeyIsIn(data);
+        var cechycyfry = cechylink.GroupBy(z => z.AtrybutId).Select(z => new FiltrListaProduktow { Atrybut = z.Key.GetValueOrDefault(), WybraneCechy = z.Select(y => y.Id).ToList() });
+
+        <a class="@Html.Raw(wybrany ? "filtr-wybrany" : "")" data-pars data-aktualnastrona="1" data-filtry="@ser.Serialize(cechycyfry)">
+            @if (x.Ikona != null)
+            {
+                @Html.Image(x.Ikona, "ikona70", x.PobierzWyswietlanaNazwe, new Dictionary<string,string> { { "data-original-title", x.PobierzNazweCechyZNazwaAtrybutu()} } )
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja.DomyslneZdjecieSciezka))
+                {
+                    @Html.Image(SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja.DomyslneZdjecieSciezka, "ikona70", x.PobierzWyswietlanaNazwe, new Dictionary<string, string>() { { "data-original-title", x.PobierzNazweCechyZNazwaAtrybutu() } })
+                }
+
+            }
+        </a>
+    }
+</div>*@ 

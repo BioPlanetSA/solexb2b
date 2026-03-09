@@ -1,0 +1,102 @@
+﻿@using System.Globalization
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.Admin.EdycjaTresciAdmin
+@using (Html.BeginForm("ZapiszObiekt", "Admin", FormMethod.Post, new { id = "edycjaTresci" }))
+{
+    <button type="submit" style="display: none"></button>
+    @Html.Hidden("akcja", AkcjaEdycjiObiektu.Nic)
+    Html.RenderPartial("_EdycjaZawartosc", Model);
+    
+    <span class="btn btn-primary dodaj-wiersz">Dodaj wiersz</span>
+    <br/>
+
+    <ul class="tresci-wiersze list-unstyled">
+        @for (int i = 0; i < Model.Wiersze.Count; i++)
+        {
+            <li class="wiersz" data-wiersz-id="@Model.Wiersze[i].Id" id="wiersz-@Model.Wiersze[i].Id">
+                <div class="row text-white tresc-wiersz-naglowek">
+                    <div class="col-xs-9 bg-admin-wyroznienie l">
+                        <b>@Model.Wiersze[i].OpisKontenera</b>
+                        <span class="pull-xl-right">@Model.Wiersze[i].PobierzCss()</span>
+                    </div>
+
+                    <div class="col-xs-1 bg-admin-wyroznienie2 c">
+                        <span>
+                            <b>@Model.Wiersze[i].Szerokosc</b>
+                        </span>
+
+                        @if (Model.Wiersze[i].RozciagnijCalaSzerokosc)
+                        {
+                            <i class="fa fa-arrows-alt fa-2x" aria-hidden="true"></i>
+                        }
+                    </div>
+
+                    <div class="col-xs-2 r">
+                        @Html.ActionLink(" ", "WyborKontrolkiTresci", "Admin", new
+                        {
+                            id = Model.Wiersze[i].Id
+                        }, new {@class = "wybor-kontrolki fa fa-plus fa-2x btn btn-success-outline btn-sm"})
+                        
+                       <a href="@Url.ZbudujLinkDoEdycjiTresciAdmin(Model.Wiersze[i],SolexHelper.AktualnyJezyk)"
+                           class="edytuj-wiersz fa-2x btn btn-primary-outline btn-sm">
+                            <i class="fa fa-cog"></i>
+                        </a>
+
+                        @Html.ActionLink(" ", "Usuwanie", "Admin", new
+                        {
+                            id = Model.Wiersze[i].Id,
+                            typ = typeof (TrescWierszBll).PobierzOpisTypu(),
+                            przekieruj = false
+
+                        }, new {@class = "fa fa-trash-o usun-wiersz fa-2x btn btn-danger-outline btn-sm"})
+                    </div>
+                </div>
+
+                <ul class="row kolumny list-unstyled">
+                    @foreach (TrescKolumnaBll k in Model.Wiersze[i].Kolumny)
+                    {
+                        <li data-kolumna-id="@k.Id" class="tresc-wiersz-kolumna c col-md-@k.Szerokosc">
+                            <div class="row">
+                                <div class="col-xs-12 tresc-wiersz-kolumna-naglowek dostep-@(k.Dostep)  ">
+                                    <span>@k.Szerokosc</span>
+                                    <span class="kontrolka-id text-muted">(id: @k.Id)</span>
+
+                                    <span class="pull-xs-right">
+
+                                        <a href="@Url.ZbudujLinkDoKlonyjTrescAdmin(k,SolexHelper.AktualnyJezyk)"
+                                           class="opcje-klonuj btn btn-warning-outline btn-sm">
+                                            <i class="fa fa-clone"></i>
+                                        </a>
+
+                                        <a href="@Url.ZbudujLinkDoEdycjiTresciAdmin(k,SolexHelper.AktualnyJezyk)"
+                                           class="opcje-edycja btn btn-primary-outline btn-sm">
+                                            <i class="fa fa-cog"></i>
+                                        </a>
+
+                                        <a href="@Url.ZbudujLinkDoUsunTrescAdmin(k,SolexHelper.AktualnyJezyk)"
+                                           class="opcje-usuwanie btn btn-danger-outline btn-sm"><i class="fa fa-trash-o"></i></a>
+                                    </span>
+                                </div>
+
+                                <div class="col-xs-12 c">
+                                    <i class="text-muted fa @k.Kontrolka().Ikona fa-2x"></i>
+                                    <h6>@k.Kontrolka().Nazwa</h6>
+                                    <div class="text-muted">@k.OpisKontenera</div>
+                                    <div class="text-muted">@k.PobierzCss()</div>
+                                </div>
+
+                            </div>
+
+
+                        </li>
+                    }
+                </ul>
+
+            </li>
+        }
+    </ul>
+}

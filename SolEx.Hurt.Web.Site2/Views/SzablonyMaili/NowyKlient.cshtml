@@ -1,0 +1,154 @@
+﻿@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@{
+    Layout = "_Layout.cshtml";
+    string linkLogownia = "";
+    if (!string.IsNullOrEmpty(Model.Klient.Gid))
+    {
+        linkLogownia = Url.ZbudujLink_ZmianyHaslaKlienta(Model.Klient, Model.Jezyk());
+    }
+    else
+    {
+        linkLogownia = Url.LinkLogowania();
+    }
+}
+
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.NowyKlient
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Potwierdzenie rejestracji na Platformie B2B",MiejsceFrazy.Newsletter)
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie( Model.JezykMaila(), "Potwierdzenie rejestracji na Platformie B2B - {0}", MiejsceFrazy.Newsletter, new object[] { Model.Klient.Nazwa})
+    }
+
+}
+@section Naglowek
+{
+    <br />
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Witamy na naszej Platformie B2B", MiejsceFrazy.Newsletter)</h4>
+    }
+    else
+    {
+        <p class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Potwierdzenie rejestracji na Platformie B2B", MiejsceFrazy.Newsletter)</p>
+    }
+    <br /><br />
+}
+@section Tresc
+{
+
+
+
+
+
+
+
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                    <tr>
+                        <td class="text-pad">
+
+                            @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+                            {
+                                @Html.PobierzTlumaczenie(  Model.JezykMaila(), "<h5>Szanowny Użytkowniku,</h5>Od tej chwili możesz logować się w naszym systemie B2B.<br />  Twój login to: <b>{0}</b>.<br/> " +
+                                   "Hasło ustawisz przy pierwszym logowaniu.", MiejsceFrazy.Newsletter, new object[] { Model.Klient.Login })
+                                <br />
+                            }
+                            else
+                            {
+                                @Html.PobierzTlumaczenie( Model.JezykMaila(), "Nowy klient na platformie,<br/> nazwa: {0}, login: {1}.", MiejsceFrazy.Newsletter, new object[] { Model.Klient.Nazwa, Model.Klient.Email })
+                            }
+                            <br />
+                        </td>
+                        <td class="expander"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        <table class="row">
+            <tr>
+                <td class="wrapper offset-by-four">
+                    <table class="four columns">
+                        <tr>
+                            <td>
+
+                                <table class="button akcja">
+                                    <tr>
+                                        <td>
+                                            <a href="@linkLogownia">
+                                                @Html.PobierzTlumaczenie(Model.JezykMaila(),"Zaloguj się", MiejsceFrazy.Newsletter)
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                            <td class="expander"></td>
+                        </tr>
+                    </table>
+
+
+                </td>
+                <td class="wrapper last offset-by-four"></td>
+            </tr>
+        </table>
+
+
+        <br />
+    }
+
+
+
+    <table class="row">
+    <tr>
+        <td>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                <tr>
+                    <td class="text-pad ">
+                           @Html.PobierzTlumaczenie(Model.JezykMaila(), "<small class='wyszarz' style='text-transform: uppercase'>PAMIĘTAJ, ŻE...</small><br/>" +
+                                                                                      "Dane logowania są znane tylko Tobie. Prosimy o ich nie podawanie osobom trzecim.</br>" +
+                                                                                      "Podczas korzystania z Platformy B2B zapisywany jest Twój adres IP.", MiejsceFrazy.Newsletter)
+                        <br />
+                        <br />
+                    </td>
+                </tr>
+                </table>
+            </td>
+        </td>
+    </tr>
+</table>
+
+}

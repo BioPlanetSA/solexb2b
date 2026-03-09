@@ -1,0 +1,49 @@
+﻿@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model List<SklepyBll>
+@{
+    Layout = null;
+}
+
+@section Opis {
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Pole w pliku</th>
+            <th>Opis pola</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>kod_kreskowy</td>
+            <td>Kod kreskowy, typ: tekst</td>
+        </tr>
+    </tbody>
+</table>
+}
+
+@section Nazwa {
+   Uniwersalny plik XML
+}
+
+@section Szablon {@if (Model != null){<sklepy>
+            @foreach (SklepyBll p in Model)
+            {
+                <sklep>
+                    <id>@p.Id</id>
+                    <nazwa><![CDATA[@p.Nazwa]]></nazwa>
+                    <ulica><![CDATA[@p.UlicaNr]]></ulica>
+                    <kod><![CDATA[@p.KodPocztowy]]></kod>
+                    <miasto><![CDATA[@p.Miasto]]></miasto>
+                    <lokalizacja>
+                        <lat><![CDATA[@p.Lat]]></lat>
+                        <lon><![CDATA[@p.Lon]]></lon>
+                    </lokalizacja>
+                </sklep>
+            }
+        </sklepy>
+    }
+}

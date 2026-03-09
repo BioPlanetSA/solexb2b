@@ -1,0 +1,25 @@
+﻿@import "_ustawienia.scss";
+
+.menu-kolumnowe{
+    color:$font-menu-kolor;
+    font-family: $font-menu-rodzina;
+    a{
+         color:$font-menu-kolor;
+    }
+   
+
+    .menu-klasyczne-link{
+         font-size:15px;
+         line-height: 24px;
+    }
+
+
+    h6{
+        font-size: 18px;
+        color: $kolor-zaznaczone-menu;
+    }
+
+    &.wiersz-kolumny-bez-odstepow.row{
+        margin:0;
+    }
+}

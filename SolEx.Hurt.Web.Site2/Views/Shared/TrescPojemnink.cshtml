@@ -1,0 +1,80 @@
+﻿@using System.Diagnostics
+@using System.Reflection
+@using ServiceStack.Common.Utils
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Web.Site2.Controllers
+@using SolEx.Hurt.Web.Site2.Helper
+@model TrescKolumnaBll
+
+@{
+    try
+    {
+        IKontrolkaTresciBaza kontrolka = Model.Kontrolka();
+        kontrolka.AktualnyKlient = SolexHelper.AktualnyKlient;
+
+        string renderKontrolkiZawartosc = null;
+
+        //if (kontrolka is IKontrolkaTresciBaza_Renderowana)
+        //{
+        //    renderKontrolkiZawartosc = (kontrolka as IKontrolkaTresciBaza_Renderowana).Render(this.Request.RequestContext);
+        //}
+        //else
+        //{
+        //przechodzimy na funkcje render, ale tymczasowo jak nic nie zwroci to stare renderowanie AKCJI
+        var parametry = kontrolka.Parametry();
+
+        renderKontrolkiZawartosc = Html.Action(kontrolka.Akcja, kontrolka.Kontroler, parametry).ToHtmlString();
+        if (string.IsNullOrEmpty(renderKontrolkiZawartosc))
+        {
+            return; //nic nie renderujemy i wychodzimy
+        }
+   // }
+
+    string idobiektu = "kontrolka-" + kontrolka.Id;
+    bool zawijanie = !string.IsNullOrEmpty(kontrolka.AcordionNazwa);
+    string klasyAkordion = zawijanie && kontrolka.AcordionZwiniety ? " collapsed " : " in ";
+
+        <div class="tresc-pojemnik tresc-pojemnik-@Model.Id  @(zawijanie ? "akordion" : "")">
+            @if (zawijanie)
+            {
+                <a href="#" data-toggle="collapse" data-target="#@idobiektu" class="a-link bold akordion-naglowek c collapse-element @klasyAkordion">
+                    @Html.PobierzTlumaczenie(kontrolka.AcordionNazwa)
+                    <i class="fa"></i>
+                </a>
+            }
+            <div class="@Html.Raw(zawijanie ? "collapse akordion-tresc " + klasyAkordion : "") " id="@idobiektu">
+                @Html.Raw(renderKontrolkiZawartosc)
+            </div>
+        </div>
+    } catch (Exception ex)
+    {
+        if (ex.InnerException != null && ex.InnerException.GetType() == typeof(BrakIdentyfikatoraException))
+        {
+            <div style="font-weight: normal; text-transform: none; color: red">
+                Zła kontrolka o nazwie: <b>@Model.Kontrolka().Nazwa</b>, id: <b>@Model.Kontrolka().Id</b>, opis (komentarz): <b>@Model.Kontrolka().Opis</b>.<br/>
+                Kontrolka chce pokazać pole dla obiektu: <span title="QS: @((ex.InnerException as BrakIdentyfikatoraException).OczekiwanyKlucz)"><b>@ex.InnerException.Message</b></span>. <br/>
+                <br/>
+                Błąd jest powodowany użyciem złej kontrolki - np. kontrolki szczegóły produktu na stronie która pokazuje szczegóły kategorii - musisz zmienić kontrolkę na inną.<br/>
+                <br/><br/>
+            </div>
+        }
+        else
+        {
+            <div>
+                Błąd ładowania kontrolki <b>@Model.Kontrolka().Nazwa</b> <br/>
+                @ex.Message
+                @{
+                    Exception exc = ex;
+                    while (exc != null)
+                    {
+                        <div>Błąd: <i>@exc.Message</i></div>
+                        exc = exc.InnerException;
+                    }
+                }
+            </div>
+
+        }
+    }
+}

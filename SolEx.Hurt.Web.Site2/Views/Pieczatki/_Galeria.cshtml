@@ -1,0 +1,49 @@
+﻿@model List<string>
+<div class="modal galeria" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="text-align: left;" id="modal-galeria">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Wybierz gotowy wzór z listy poniżej.</h3>
+            </div>
+            <div class="modal-body">
+                <div id="gallery-list">
+                    <div class="clipart">
+                        <ul>
+                            @foreach (var item in Model)
+                            {
+                                <li>
+                                    <a href="/Zasoby/szablony_pieczatek/galeria/@item" class="shape-thumb pieczatka-element-obrazek svg">
+                                        <object type="image/svg+xml" data="/Zasoby/szablony_pieczatek/galeria/@item" src="/Zasoby/szablony_pieczatek/galeria/@item" style="max-width:150px; max-height:150px"></object>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        $(".shape-thumb").click(function (ev) {
+            fabric.loadSVGFromURL($(this).attr('href'), function (objects, options) {
+                var object = fabric.util.groupSVGElements(objects, options);
+                var wysokosc = $('.canvas-container').height();
+                var szerokosc = $('.canvas-container').width();
+                if (object.height > wysokosc) {
+                    object.scaleToHeight(wysokosc - 40);
+                }else if(object.width > szerokosc) {
+                    object.scaleToWidth(szerokosc - 20);
+                }               
+                object.setFill(PobierzKolor());
+                canvas.add(object);
+                object.center().setCoords();
+                canvas.calcOffset();
+                canvas.renderAll();
+            });
+            ev.preventDefault();
+            $('.modal').modal('hide');
+        });
+    </script>
+

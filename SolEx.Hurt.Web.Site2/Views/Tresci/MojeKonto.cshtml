@@ -1,0 +1,35 @@
+﻿@using System.Web.Mvc.Html
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Helper
+@model  Tuple<SolEx.Hurt.Web.Site2.Models.KontrolkiTresci.Tresci.MojeKonto, SolEx.Hurt.Core.ModelBLL.TrescBll>
+
+<div class="menu-moje-dane">
+    @if (Model.Item2 != null)
+    {
+        <div class="menu-klasyczne-rozwijane c" data-zaznacz-aktywne-menu>
+            @*nie dajemy linka bo chcemy zeby dotykowe ekrany dzialaly dobrze href="@Url.ZbudujLink(Model.Item2, SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk)"*@
+            <a class="clickable dropdown-toggle aktywny nav-link menu-klasyczne-link clickable" data-hover="dropdown" data-delay="1000" data-close-others="true">
+                <div class="mojedane-identyfikator">
+                    <span class="hidden-md-down">@SolexHelper.AktualnyKlient.PobierzWartoscPolaObiektu(Model.Item1.PoleKlienta)</span>
+                </div>
+            </a>
+            <div class="dropdown-menu cien-bez-topu">
+                <div class="zawartosc ">
+                    <ul class="nav nav-inline list-unstyled">
+                        @foreach (var elem in Model.Item2.Dzieci)
+                        {
+                            <li id="menu-opcja-@elem.Id" class="@elem.PobierzCss()">
+                                <a class="nav-link menu-klasyczne-link dropdown-item" tabindex="-1" href="@Url.ZbudujLink(elem, SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk)">@elem.Nazwa</a>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <span class="tresc-pojemnik">@SolexHelper.AktualnyKlient.Email</span>
+    }
+</div>

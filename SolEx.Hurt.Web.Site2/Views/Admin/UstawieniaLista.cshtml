@@ -1,0 +1,120 @@
+﻿@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@model  List<Ustawienie>
+@{
+    var ustawinie = Model.GroupBy(x => x.Grupa).ToList();
+}
+
+<div class="row">
+    <div class="col-md-2 przewijanie-pojemnik ustawienia-kategorie">
+        <nav id="przewijanie">
+            <ul class="nav bd-sidenav">
+                @foreach (var grupa in ustawinie)
+                {
+                    var podgrupy = grupa.Select(x => x).GroupBy(x => x.NazwaPodgrupy());
+                    <li data-gr="grupa-@grupa.Key">
+                        <a href="#grupa-@grupa.Key">@grupa.Key</a>
+                        <ul class="nav">
+                            @foreach (var pg in podgrupy)
+                            {
+                                if (pg.Key != "Brak")
+                                {
+                                    <li data-podgr="@pg.Key.Replace(" ","-")">
+                                        <a href="#grupa-@(grupa.Key)-podgrupa-@pg.Key.Replace(" ", "-")">@pg.Key</a>
+                                    </li>
+                                }
+
+                            }
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+    <div class="col-md-10">
+        <table id="ustawienia-szukanie-tabela" class="table table-condensed table-striped table-ustawienia czcionka-tekstowa-paragraf">
+            <thead>
+                <tr class="hidden-lg-down">
+                    <th class="ustawienie-nazwa">Nazwa</th>
+                    <th></th>
+                    <th>Wartość zalogowani</th>
+                    <th>Wartość niezalogowani</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var grupa in ustawinie)
+                {
+                    var podgrupy = grupa.Select(x => x).GroupBy(x => x.NazwaPodgrupy());
+                    <tr id="grupa-@grupa.Key" data-grupa="@grupa.Key" class="ustawienia-grupa-glowna">
+                        <td colspan="4">
+                            <h4 class="text-primary">@grupa.Key</h4>
+                        </td>
+                    </tr>
+
+                    foreach (var pg in podgrupy)
+                    {
+                        if (pg.Key != "Brak")
+                        {
+                            <tr id="grupa-@(grupa.Key)-podgrupa-@pg.Key.Replace(" ","-")"  data-podgr="@pg.Key.Replace(" ","-")" class="ustawienia-podgrupa">
+                                <td colspan="4"><h6 class="text-primary">@pg.Key</h6></td>
+                            </tr>
+                        }
+
+
+                        foreach (var u in pg)
+                        {
+                            string nazwaGrupy = "grupa-" + grupa.Key;
+                            if (string.IsNullOrEmpty(pg.Key))
+                            {
+                                nazwaGrupy += "-podgrupa-" + " - ";
+                            }
+                           
+                            string link = Url.Action("UstawienieEdycja", "Admin", new
+                                {
+                                    id = u.Id
+                                });
+                            <tr data-grupa="@nazwaGrupy" data-podgrupa="@(pg.Key != "Brak"?pg.Key:"")">
+                                <td class="ustawienie-nazwa">
+                                    @u.Opis
+                                    <div class="text-muted">@u.Symbol</div>
+                                </td>
+                                <td><a href="@link"><i class="fa fa-cog"></i></a></td>
+                                <td>
+                                    @if (u.Wartosc == null)
+                                    {
+                                        @*<span>Wartość domyślna</span>*@
+                                    }
+                                    else if (u.Typ == TypUstawienia.Bool)
+                                    {
+                                        <i class="fa fa-@Html.Raw(u.Wartosc.Equals("True",StringComparison.InvariantCultureIgnoreCase) || u.Wartosc == "1" ? "check" : "square-o")"></i>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw(u.Wartosc)
+                                    }
+                                </td>
+                                <td>
+                                    @if (u.WartoscDlaNiezalogowanych == null)
+                                    {
+                                        @*<span>Taka sama jak zalogowana </span>*@
+                                    }
+                                    else if (u.Typ == TypUstawienia.Bool)
+                                    {
+                                        <i class="fa f-@Html.Raw(u.WartoscDlaNiezalogowanych == "True" || u.WartoscDlaNiezalogowanych == "1" ? "check" : "square-o")"></i>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw(u.WartoscDlaNiezalogowanych)
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+

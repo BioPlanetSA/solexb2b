@@ -1,0 +1,39 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow
+@model ParametryDoElementuDrzewaKategorii
+
+<div class="level-@Model.Poziom tree-element kat-@Model.Kategoria.Id clickable @Model.Kategoria.KlasaCss @Html.Raw(Model.Kategoria.Dzieci.Any() ? "tree-has-childs" : "")">
+    <a data-katid="@Model.Kategoria.Id" class="link ramka-wykropkowana-dol">
+        @if (Model.ParametryDrzewaKategorii.Kontrolka.PokazujKategorieWPostaciObrazkow && Model.Kategoria.ObrazekId.HasValue)
+        {
+            <div class="c">
+                <img class="kategoria-obrazek c" src="@Model.Kategoria.Obrazek.LinkWWersji( Model.ParametryDrzewaKategorii.Kontrolka.RozmiarObrazka )" alt="@Model.Kategoria.Nazwa" />
+            </div>
+        }
+        else
+        {
+            if (Model.Kategoria.MiniaturaId.HasValue)
+            {
+                 <img class="kategoria-ikona" src="@Model.Kategoria.Miniatura.LinkWWersji("ikonaDzewkoKategorii")" alt="@Model.Kategoria.Nazwa"/>
+             }
+            if (Model.ParametryDrzewaKategorii.Kontrolka.PokazLiczbeProduktowWDrzewku)
+             {
+                 <span class="count text-muted pull-xs-right">@Model.ParametryDrzewaKategorii.SlownikIlosciProduktowWKategoriach[Model.Kategoria.Id]</span>
+             }
+            @Model.Kategoria.Nazwa
+        }
+    </a>
+    @{
+        if (Model.widoczneDzieciKategorii.Any())
+        {
+            foreach (KategorieBLL d in Model.widoczneDzieciKategorii)
+            {
+                Model.Poziom++;
+                @Html.Partial("_DrzewkoElement", new ParametryDoElementuDrzewaKategorii(d, Model.Poziom,  Model.ParametryDrzewaKategorii))
+                Model.Poziom--;
+            }
+        }
+    }
+</div>

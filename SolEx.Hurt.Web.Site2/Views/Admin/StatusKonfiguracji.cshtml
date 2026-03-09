@@ -1,0 +1,13 @@
+﻿<div id="testZawartosc"></div>
+<script type="text/javascript">
+    $(document).ready(WykonajTesty);
+    
+    function WykonajTesty() {
+        $('[data-containter="modal"]').children().modal('hide');
+        WczytajAjax($('#testZawartosc'), '/Admin/WykonajTesty', PoWczytaniuZawartosci);
+    }
+        
+    function PoWczytaniuZawartosci() {
+        $('body').scrollspy({ target: '#przewijanie'});
+    }
+</script>

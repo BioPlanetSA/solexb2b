@@ -1,0 +1,160 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.DokumentyBll
+@{
+    bool korekta = Model.NazwaDokumentu.StartsWith("KFS");
+    bool ukrywanie = Model.PobierzPozycjeDokumentu().Any(x => x.PozycjaDokumentuIlosc == 0);
+}
+<div class="modal fade dokument" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="text-align: left;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">
+                    <small>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Faktura")</small>
+                    @Model.NazwaDokumentu
+
+                    @if (korekta && Model.DokumentPowiazanyId != null)
+                    {
+                        var dokPowiazany = SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<SolEx.Hurt.Model.HistoriaDokumentu>(Model.DokumentPowiazanyId);
+                        if (dokPowiazany != null)
+                        {
+                            <small>do dokumentu</small>
+                            @dokPowiazany.NazwaDokumentu
+                        }
+
+                    }
+
+                </h3>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="dokument-dane-platnikodbiorca">
+                    <p class="pull-xs-right dokument-daty r">
+                        <span class="dokument-data-wystawienia">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Data wystawienia"): <b>@Model.DataUtworzenia.ToShortDateString()</b> </span>
+                        @if (Model.TerminPlatnosci.HasValue)
+                        {
+                            <br/>
+                            <span class="dokument-data-platnosci">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Termin płatności"): <b>@Model.TerminPlatnosci.Value.ToShortDateString()</b></span>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.NazwaPlatnosci))
+                        {
+                            <br/>
+                            <span class="dokument-forma-platnosci">
+                                    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Forma płatności"): <b>@Html.PobierzTlumaczenie(Model.NazwaPlatnosci)</b>
+                                </span>
+                        }
+                    </p>
+
+                    <p>
+                        <span class="dokument-platnik"> @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Płatnik"): <b>  @(SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Klient>(Model.DokumentPlatnikId).Nazwa)</b></span>
+                        @{
+                            IKlient odbiorca = SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Klient>(Model.DokumentOdbiorcaId);
+                            if (odbiorca != null)
+                            {<br/>
+                                <span class="dokument-odbiorca">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Odbiorca towaru"): <b>@odbiorca.Nazwa</b></span>
+                            }
+                        }
+                    </p>
+                </div>
+
+                @if (ukrywanie)
+                {
+                    <br/>
+                    <div class="alert alert-warning">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pozycje nie korygowane zostały ukryte")</div>
+                }
+
+                <table class="table table-condensed ">
+                    <thead>
+                    <tr>
+                        <th style="width: 300px;" class="c">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nazwa produktu")</th>
+                        <th class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ilość")</th>
+                        <th  class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Cena netto po rabacie")</th>
+                        <th  class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Stawka VAT")</th>
+                        <th class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Cena brutto  po rabacie")</th>
+                        <th class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wartość  po rabacie")</th>
+                        @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.PokazujDodajDoKoszykaFaktura)
+                        {
+                            <th class="fit-content"></th>
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var pozycja in Model.PobierzPozycjeDokumentu().Where(x => x.PozycjaDokumentuIlosc != 0))
+                    {
+                        <tr>
+                            <td class="l">
+                                @if (pozycja.ProduktBazowy != null)
+                                {
+                                    @Html.Action("Ulubione", "Koszyk", new {ProduktId = pozycja.ProduktId})
+                                    <span class="text-primary">@Html.Raw(pozycja.ProduktBazowy.Nazwa)</span>
+                                }
+                                else
+                                {
+
+                                    <span class="text-primary">@Html.Raw(pozycja.NazwaProduktu)</span>
+                                }
+                                @if (!string.IsNullOrEmpty(pozycja.Opis))
+                                {
+                                    <span class="dokument-pozycja-opis1">@pozycja.Opis</span>
+                                }
+
+                                @if (!string.IsNullOrEmpty(pozycja.Opis2))
+                                {
+                                    <span class="dokument-pozycja-opis2">@pozycja.Opis2</span>
+                                }
+                                @if (pozycja.ProduktBazowy != null && !string.IsNullOrEmpty(pozycja.ProduktBazowy.KodKreskowy) && SolexBllCalosc.PobierzInstancje.Konfiguracja.SzczegolyDokumentuKodKreskowyPokazuj)
+                                {
+                                    <div class="dokument-pozycja-kod ">@pozycja.ProduktBazowy.KodKreskowy</div>
+                                }
+                                @if (pozycja.ProduktBazowy != null && !string.IsNullOrEmpty(pozycja.ProduktBazowy.Kod) && SolexBllCalosc.PobierzInstancje.Konfiguracja.SzczegolyDokumentuKodPokazuj)
+                                {
+                                    <div class="dokument-pozycja-kod ">@pozycja.ProduktBazowy.Kod</div>
+                                }
+                                else
+                                {
+                                    <div class="dokument-pozycja-kod ">@pozycja.KodProduktu</div>
+                                }
+                            </td>
+                            <td class="r fit-content">@pozycja.PozycjaDokumentuIlosc</td>
+                            <td class="r">@Html.Raw(korekta && pozycja.PozycjaDokumentuCenaNetto > 0 ? "-" : "")@pozycja.PozycjaDokumentuCenaNetto</td>
+                            <td class="c">@pozycja.Vat.DoLadnejCyfry()%</td>
+                            <td class="r">@Html.Raw(korekta && pozycja.PozycjaDokumentuCenaBrutto > 0 ? "-" : "")@pozycja.PozycjaDokumentuCenaBrutto</td>
+                            <td class="r">
+                                @Html.Raw(korekta && pozycja.PozycjaDokumentuWartoscNetto > 0 ? "-" : "")@pozycja.PozycjaDokumentuWartoscNetto
+                                <div class="text-muted small">(@Html.PobierzTlumaczenie("brutto")):@Html.Raw(korekta && pozycja.PozycjaDokumentuWartoscBrutto > 0 ? "-" : "")@pozycja.PozycjaDokumentuWartoscBrutto</div>
+                            </td>
+                            @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.PokazujDodajDoKoszykaFaktura)
+                            {
+                                <td class="r fit-content">
+                                    @{ Html.RenderAction("DodawanieProduktuProdukt", "Koszyk", new {produkt = pozycja.ProduktBazowy}); }
+                                </td>
+                            }
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+                @if (!string.IsNullOrEmpty(Model.Uwagi) && SolexBllCalosc.PobierzInstancje.Konfiguracja.PokazywanieUwagWPodgladzie)
+                {
+                    <p class="dokument-uwagi">
+                        @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Uwagi do dokumentu"):<br />
+                        @Model.Uwagi
+                    </p>
+                }
+
+            </div>
+
+
+
+            <div class="modal-footer">
+                @Html.Action("ZglosBledneDane", "Dokumenty", new { dokument = Model.NazwaDokumentu })
+            </div>
+
+        </div>
+    </div>
+</div>

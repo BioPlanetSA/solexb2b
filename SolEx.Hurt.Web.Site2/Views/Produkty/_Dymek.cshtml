@@ -1,0 +1,94 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model Tuple<SolEx.Hurt.Core.ModelBLL.Interfejsy.IProduktBazowy, decimal, SolEx.Hurt.Model.JednostkaProduktu, decimal?>
+
+@{
+    if (!string.IsNullOrEmpty(Model.Item3.Komunikat))
+    {
+        <span class="komunikat">@Html.Raw(Model.Item3.Komunikat)</span> <br />
+    }
+}
+
+@{
+    bool iloscopakowaniu = (Model.Item1.IloscWOpakowaniu != 1 && Model.Item1.IloscWOpakowaniu > 0) || SolexBllCalosc.PobierzInstancje.Konfiguracja.KomunikatIloscWOpakowaniuGdyJednosc;
+    bool iloscminimalna = (Model.Item1.IloscMinimalna > 0 && Model.Item1.IloscMinimalna != 0) || SolexBllCalosc.PobierzInstancje.Konfiguracja.KomunikatIloscMinimalnaGdyJednosc;
+
+    if (iloscopakowaniu && !Model.Item1.WymaganeOz)
+    {
+        string informacja = SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ilość w op. zbiorczym: {0:0.######} {1}")+"";
+        if (!string.IsNullOrEmpty(informacja))
+        {
+            <span>@string.Format(informacja, Model.Item1.IloscWOpakowaniu, Model.Item1.JednostkaPodstawowa.Nazwa)</span>
+            <br />
+        }
+    }
+
+    if (iloscminimalna)
+    {
+        string informacja = SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Minimum logistyczne: {0:0.######} {1}") +"";
+        if (!string.IsNullOrEmpty(informacja))
+        {
+            <span> @string.Format(informacja, Model.Item1.IloscMinimalna, Model.Item1.JednostkaPodstawowa.Nazwa) </span>
+            <br />
+        }
+
+    }
+
+    if (iloscopakowaniu && Model.Item1.WymaganeOz)
+    {
+        <span> @SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Uwaga! Sprzedajemy wyłącznie wielokrotności tej liczby.")</span><br/>
+    }
+}
+
+@* przelcznik ilosci *@
+@{
+    if (Model.Item2 > 0 && Model.Item1.Jednostki.Count(a => a.Aktywna) > 1)
+    {
+        <span class="przeliczniki">
+            @{
+                var jednostkiAktywne = Model.Item1.Jednostki.Where(x => x.Aktywna);
+                foreach (var j in jednostkiAktywne)
+                {
+                    if (j == Model.Item3)
+                    {
+                        @:<b>
+                    }
+
+                    @( Math.Round((Model.Item2*Model.Item3.Przelicznik/j.Przelicznik), j.Zaokraglenie).ToString("0.###### "))
+                    @j.Nazwa
+
+                    if (j != jednostkiAktywne.Last())
+                    {
+                        @:=
+                    }
+
+                    if (j == Model.Item3)
+                    {
+                        @:</b>
+                    }
+                }
+            }
+        </span>
+    }
+}
+
+@* maskowanie stanów *@
+@if (Model.Item4.HasValue)
+{
+    if (Model.Item4.Value > 0)
+    {
+        <div>
+            <span class="przekroczoneStany">@string.Format(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Niestety aktualna dostępna ilość to:")+" {0}", Model.Item4.Value.ToString("0.######"))</span>
+        </div>
+    }
+    else
+    {
+        if (!string.IsNullOrEmpty( SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Niestety aktualnie nie posiadamy na stanie tego produktu")))
+        {
+            <div>
+                <span class="przekroczoneStany">@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Niestety aktualnie nie posiadamy na stanie tego produktu")</span>
+            </div>
+        }
+
+    }
+}

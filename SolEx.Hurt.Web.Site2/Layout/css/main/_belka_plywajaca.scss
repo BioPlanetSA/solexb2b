@@ -1,0 +1,56 @@
+﻿body {
+
+     #page-header{
+          top: 0;
+            width: 100%;
+            // transition: top 0.2s ease-in-out;
+            position: fixed;
+            //logo jesli jest z ustawienia to normalyn rozmiar - bedzie pomniejszane jak bedzie belka plywajaca pokazana ponizej
+            .pole-z-ustawienia.logo {
+                img {
+                    width: auto;
+                    max-width: 100%;
+                    max-height: 60px;
+                    padding: 5px;
+                }
+            }
+     }
+
+    &:not(.modal-open) {
+
+        #page-header {
+            &.belka-plywajaca-aktywna-dol {
+                height: auto !important;
+                background-color: rgba(255, 255, 255, 0.9);
+                z-index: 999999;
+                position: fixed;
+                -webkit-box-shadow: 0px 3px 15px -6px rgba(0, 0, 0, 0.15), 0px 3px 15px -6px rgba(0, 0, 0, 0.15);
+                -moz-box-shadow: 0px 3px 15px -6px rgba(0, 0, 0, 0.15), 0px 3px 15px -6px rgba(0, 0, 0, 0.15);
+                box-shadow: 0px 3px 15px -6px rgba(0, 0, 0, 0.15), 0px 3px 15px -6px rgba(0, 0, 0, 0.15);
+                //padding-bottom: 5px; - nie moze byc bo ktos moze miec tlo biale ktore nieladnie wyglada
+                .row {
+                    border-bottom: 0;
+                    box-shadow: none;
+                }
+                //logo jesli jest z ustawienia to pomniejszamy żeby belka byla mala a nie ogromna
+                .pole-z-ustawienia.logo {
+                    img {
+                        max-height: 45px;
+                        width: auto;
+                    }
+                }
+            }
+
+            &.belka-plywajaca-aktywna-gora {
+                top: -200px;
+            }
+
+
+            &.belka-plywajaca-aktywna-dol, &.belka-plywajaca-aktywna-gora {
+                .belka-plywajaca-ukryj {
+                    display: none;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model Tuple<long,HashSet<long>,bool>
+@{
+    //Model.Item1 - idProduktu
+    //Model.Item2 - czy produkt jest juz w ulubionych
+    //Model.Item3 = czy fraza tekstowa
+    var frazaDodawania = Html.PobierzTlumaczenie("Dodaj do ulubionych");
+    var frazaUsuwanie = Html.PobierzTlumaczenie("Usuń z ulubionych");
+    bool juzDodane = Model.Item2 != null && Model.Item2.Contains(Model.Item1);
+
+}
+<a data-dwustanowy="ulubiony" data-identyfikator="ulubione-@Model.Item1" onclick="Ulubione(this, '@Model.Item1')" class="dodaj-ulubione fa fa-star tooltip-dwustanowy @(juzDodane ? " dodano-info dwustanowy-jest" : "")"
+   data-dwustanowy-title-brak="@frazaDodawania" data-dwustanowy-title-jest="@frazaUsuwanie" title="@(juzDodane ? frazaUsuwanie : frazaDodawania)">
+    @if (Model.Item3)
+    {
+        <span class="jest">@frazaDodawania</span>
+        <span class="nie-jest">@frazaUsuwanie</span>
+    }
+</a>

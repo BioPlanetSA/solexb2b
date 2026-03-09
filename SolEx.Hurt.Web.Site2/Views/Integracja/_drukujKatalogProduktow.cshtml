@@ -1,0 +1,96 @@
+﻿@using System.Text
+@using ServiceStack.Text
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.AtrybutyKlas
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Helper
+@model  SolEx.Hurt.Web.Site2.Models.ParametrySzablonyKatalogow
+    <div class="modal fade szczegoly-produktu" id="szablon-drukowania" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="text-align: left;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">@Html.PobierzTlumaczenie("Zamknij")</span></button>
+                    <h4 class="modal-title">@Html.PobierzTlumaczenie("Wybierz szablon wydruku")</h4>
+                </div>
+                <div class="modal-body szablony-wydruku-okno-wyboru">
+                    <form action="@Url.Action("DrukujKatalogProduktow")" method="post" id="katalog-drukowanie">
+                        @Html.HiddenFor(x => x.TypKatalogu)
+
+                        <div class="szablony-wydruku">
+                            <select class="selectpicker" id="KatalogSzablon" data-width="auto" name="KatalogSzablon" onchange="drukowanieKatalogu.PokazOdpowiednieFormaty()">
+                                @{
+                                    foreach (KatalogSzablonModelBLL szablon in Model.DostepneSzablony)
+                                    {
+                                        <option value="@szablon.Id" data-formaty="@szablon.DozwoloneFormatyWydruku.ToCsv()">@szablon.Nazwa</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <br />
+                            <div class="form-group">
+                                <label for="edDesc">@Html.PobierzTlumaczenie("Opis do wydrukowania")</label>
+                                @Html.TextAreaFor(x => x.Opis, new { @class = "form-control" })
+                            </div>
+                            @{
+                                foreach (KatalogFormatZapisu format in typeof(KatalogFormatZapisu).GetEnumValues())
+                                {
+                                    string nazwaLadna = format.PobierzAtrybutDlaEnuma<FriendlyNameAttribute>().FriendlyName;
+                                    <input type="submit" class="btn-secondary btn btn-sm szablon-przycisk" id="@format" data-format="@format.ToString()" onclick="drukowanieKatalogu.DrukujSzablon(this);" value="@Html.PobierzTlumaczenie("Zapisz do pliku") @nazwaLadna">
+                                }
+                            }
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Html.PobierzTlumaczenie("Zamknij")</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+<script>
+    drukowanieKatalogu.PokazOdpowiednieFormaty();
+</script>
+
+
+
+@*<div class="modal szczegoly-produktu">
+    <div class="szablony-wydruku-okno-wyboru">
+        <div class="szablony-wydruku" data-szablon-id="">
+            <button type="button" class="btn dropdown-toggle btn-sm btn-secondary" data-toggle="dropdown" data-toggle="dropdown">
+                <span class="wybrany-szablon">@Html.PobierzTlumaczenie("Wybierz szablony wydruku katalogu")</span>
+            </button>
+            <div class="dropdown-menu" role="menu">
+                @foreach (var szablon in Model.DostepneSzablony)
+                {
+                    <a class="dropdown-item" data-id="@szablon.Id">
+                        <span class="text">@szablon.Nazwa</span>
+                    </a>
+                }
+            </div>
+        </div>
+        <div>
+            <br />
+
+            <div class="form-group">
+                <label for="edDesc">@Html.PobierzTlumaczenie("Opis do wydrukowania")</label>
+                @Html.TextAreaFor(x => x.Opis, new { @class = "form-control" })
+            </div>
+
+            @{
+                foreach (KatalogFormatZapisu format in typeof(KatalogFormatZapisu).GetEnumValues())
+                {
+                    string nazwaLadna = format.PobierzAtrybutDlaEnuma<FriendlyNameAttribute>().FriendlyName;
+                    <input type="submit" class="btn-secondary btn btn-sm szablon-przycisk" id="@format" data-format="@format.ToString()" onclick="DrukujSzablon(this);" value="@Html.PobierzTlumaczenie("Zapisz do pliku") @nazwaLadna">
+                }
+            }
+        </div>
+    </div>
+
+
+
+</div>*@

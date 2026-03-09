@@ -1,0 +1,29 @@
+﻿@import "_ustawienia.scss";
+
+.wymiary-logistyka{
+    .wymiar{
+        border: 1px solid #eeeeee;
+    }
+
+    th{
+        color: $kolor-text-muted;
+        font-weight: normal;
+        text-align: center;
+    }
+
+
+    .wymiar-op-zbiorcze {
+        th.wymiar-ilosc-op{
+            color: black;
+            font-weight: bold;
+        }
+             td.wymiar-ilosc-op{
+            font-size: 130%;
+            font-weight: bold;
+        }
+    }
+
+
+  
+        
+}

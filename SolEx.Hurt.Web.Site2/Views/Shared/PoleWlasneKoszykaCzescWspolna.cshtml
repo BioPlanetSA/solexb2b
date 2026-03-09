@@ -1,0 +1,15 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model  SolEx.Hurt.Core.BLL.Web.DodatkowePoleKoszyka
+
+
+<span>
+        @Model.Opis
+        <span class="fa fa-question-circle wlacz-tooltip" title="@Model.Komunikat"></span>
+    </span>
+
+    @if (Model.Wymagane)
+    {
+        <span class="wlacz-tooltip fa fa-asterisk @Html.Raw(string.IsNullOrEmpty(Model.WybraneWartosciString)?"alert-danger":"")" title="@Html.PobierzTlumaczenie("To pole jest obowiązkowe do uzupełnienia")"></span>
+    }
+    @Html.HiddenFor(x => x.IdModulu)
+    @Html.HiddenFor(x => x.Symbol)

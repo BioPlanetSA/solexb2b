@@ -1,0 +1,45 @@
+﻿@using System.Collections
+@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model  SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+@Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+@if (Model.Wartosc != null)
+    {
+        <table class="table table-condensed">
+            @foreach (var v in (IEnumerable) Model.Wartosc)
+            {
+                <tr>
+                    @if (v is KeyValuePair<string, string>)
+                    {
+                        KeyValuePair<string, string> obiekt = (KeyValuePair<string, string>) v;
+                        <td>@obiekt.Key</td>
+                        <td>@Html.Raw(obiekt.Value)</td>
+                        continue;
+                    }
+
+                    @if (v is OpisPolaObiektu)
+                    {
+                        OpisPolaObiektu obiekt = v as OpisPolaObiektu;
+                        <td>@obiekt.NazwaWyswietlana</td>
+                        <td>@Html.Raw(Refleksja.OpisWartosci(obiekt.Wartosc))</td>
+                        continue;
+                    }
+
+
+                    @try
+                    {
+                        var tmp = v.GetType().Name;
+                        @Html.Partial("EditorTemplates/Admin/ListaPodrzedna/" + tmp, v)
+                    }
+                    catch
+                    {
+                        <td colspan="2">@v.ToString()</td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+   
+

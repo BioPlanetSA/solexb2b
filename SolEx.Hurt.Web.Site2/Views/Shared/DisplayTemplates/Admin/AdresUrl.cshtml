@@ -1,0 +1,27 @@
+﻿@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Core.Helper
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@model OpisPolaObiektu
+@{
+   AdresUrl dane = (AdresUrl)Model.Wartosc;
+    if (dane == null)
+    {
+        dane = new AdresUrl();
+    }
+}
+<div class="adres-url">
+
+    <div>
+        @Html.Label("", "Adres url:")
+        @Html.Raw(dane.Url);
+      
+    </div>
+    <div>
+        @Html.Label("", "otwierane jako:")
+        @Html.Raw(Refleksja.PobierzLadnaWartoscEnuma(dane.Tryb, typeof(TrybOtwierania)));
+
+    </div>
+</div>

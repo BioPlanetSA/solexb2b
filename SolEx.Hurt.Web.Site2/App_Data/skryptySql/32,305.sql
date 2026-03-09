@@ -1,0 +1,1 @@
+﻿Delete from ProfilKlienta where TypUstawienia = 'PowiadomieniaMailowe'

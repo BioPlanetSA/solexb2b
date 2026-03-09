@@ -1,0 +1,72 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@model SolEx.Hurt.Web.Site2.Helper.DaneListaAdmin.DaneEdycjaAdmin
+    @{
+        string komunikat = ViewBag.Komunikat;
+        string naglowek = string.IsNullOrEmpty(ViewBag.Naglowek) ? "Edycja" : ViewBag.Naglowek;
+    }
+<div class="modal fade ustawienia-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@naglowek</h4>
+                @if (!string.IsNullOrEmpty(komunikat))
+                {
+                    <br />
+                    <span class="komunikat-brak-licencji">
+                        @komunikat
+                    </span>
+                }
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm(Model.AkcjaZapisz, "Admin", FormMethod.Post, new { id = "edycjaObiektuModal" }))
+                {
+                    Html.RenderPartial("_EdycjaZawartosc", Model);
+
+                    @Html.Hidden("akcja", AkcjaEdycjiObiektu.Nic)
+                    if (SolexBllCalosc.PobierzInstancje.DostepDane.CzyJestWlaczonyZapisZmiany(Model.Typ, Model.KluczWartosc) && SolexBllCalosc.PobierzInstancje.DostepDane.CzySaZmianyNaObiekcie(Model.Typ, Model.KluczWartosc))
+                    {
+                        @Html.ActionLink("Pokaż zmiany", "HistoriaZmian", "Admin", new { id = Model.KluczWartosc, typ = Model.Typ.PobierzOpisTypu() }, new { @class = "btn btn-secondary historia-zmian" , @target="_blank"})
+                    }
+                    <button type="submit" class="btn btn-secondary">Zapisz</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+    $('#edycjaObiektuModal').on('submit', function (e) {
+        e.preventDefault();
+
+        var forma = 'edycjaObiektuModal';
+        if (document.forms[forma].checkValidity()) {
+            var postData = $('#' + forma).serializeArray();
+            var formUrl = $('#' + forma).attr("action");
+            $.ajax({
+                url: formUrl,
+                type: "POST",
+                data: postData,
+                error: function () {
+                    alert('Błąd zapisu danych proszę odświeżyć stronę');
+                }
+            }).done(function () {
+                $('#' + forma).closest('.modal').modal('hide');
+            });
+        } else {
+            $('#' + forma + ' :submit').click();
+        }
+    });
+   // $('.historia-zmian').click(function (e) {
+    //    e.preventDefault();
+    //    var url = $(this).prop('href');
+    //    $.ajax({ url: url, method: 'Post' }).done(function (data) {
+    //        var pojemnik = $('[data-containter="indywidualny"]');
+    //        pojemnik.html(data);
+    //        InitModal(pojemnik);
+    //    });
+   // });
+</script>

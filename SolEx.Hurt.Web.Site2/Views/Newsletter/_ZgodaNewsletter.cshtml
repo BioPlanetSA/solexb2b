@@ -1,0 +1,34 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.Interfaces.IKlient
+@{
+    bool aktualniezgoda = Model.ZgodaNaNewsletter;
+    // string hashdozapisu = Model.Item2;
+    string login = Model.Login;
+    string linkWypisania = Url.WypiszZNewslettera(Model);
+    string linkZapisania = Url.ZapiszDoNewslettera(Model);
+}
+
+
+<div class="zapisz-do-newslettera zapisz-dla-zalogowanych">
+
+    <a class="b a-checkbox @(aktualniezgoda ? "a-checkbox-checked" : "") text-xs-left" href="@Html.Raw(aktualniezgoda ? linkWypisania : linkZapisania)">
+        @if (aktualniezgoda)
+        {
+            @Html.PobierzTlumaczenie("Jesteś zapisany do naszego newslettera")
+            <br />
+    <span>
+
+        @Html.PobierzTlumaczenie("Kliknij aby sie wypisać")
+    </span>
+        }
+        else
+        {
+            @Html.PobierzTlumaczenie("Nie jesteś zapisany do newslettera")
+            <br/>
+    <span>@Html.PobierzTlumaczenie("Kliknij aby otrzymywać nasz newslettera")</span>
+           
+        }
+    </a>
+
+
+</div>

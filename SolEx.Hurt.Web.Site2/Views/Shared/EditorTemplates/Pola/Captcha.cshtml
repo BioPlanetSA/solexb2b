@@ -1,0 +1,27 @@
+﻿@using SolEx.Hurt.Core.BLL
+@{
+    string id = "recaptcha_" + DateTime.Now.Ticks + "_" + Guid.NewGuid();
+}
+@if (!string.IsNullOrEmpty(SolexBllCalosc.PobierzInstancje.Konfiguracja.GoogleCaptchaKluczPubliczny))
+{
+
+    <script src="https://www.google.com/recaptcha/api.js?onload=ZaladujCaptcha&render=explicit" async=async defer=defer></script>
+    <div class="g-recaptcha recaptcha" data-sitekey="@SolexBllCalosc.PobierzInstancje.Konfiguracja.GoogleCaptchaKluczPubliczny" id="@id"></div>
+
+    <script>
+
+        var ZaladujCaptcha = function () {
+            $('.recaptcha').each(function () {
+                var el = $(this);
+                var id = el.attr('id');
+                var klucz = el.attr('data-sitekey');
+                grecaptcha.render(id, { 'sitekey': klucz });
+            });
+        };
+    </script>
+
+}
+else
+{
+    <div id="@id" class="recaptcha">@Html.Raw("Brak wprowadzonego klucza Captcha. Skontaktuj się z administratorem w celu uzupełnienia ustawienia.")</div>
+}

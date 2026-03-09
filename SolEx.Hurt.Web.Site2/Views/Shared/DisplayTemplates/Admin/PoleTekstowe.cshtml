@@ -1,0 +1,11 @@
+﻿@using SolEx.Hurt.Core.BLL
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+@if (Model.TypPrzechowywanejWartosci == typeof(decimal))
+{
+    @Html.Raw(Math.Round(Convert.ToDecimal(Model.Wartosc), 2))
+}
+else
+{
+    @Html.Raw(Model.Wartosc)
+}
+

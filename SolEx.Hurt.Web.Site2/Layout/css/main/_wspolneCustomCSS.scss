@@ -1,0 +1,45 @@
+﻿@import "_ustawienia.scss";
+
+%ramka-wykropkowana {
+    border: 0 solid transparent;
+    border-image-source: url('../../dots.svg');
+    border-image-slice: 7;
+    border-image-repeat: round;
+    border-width: 0;
+}
+
+.ramka-wykropkowana-dol {
+    @extend %ramka-wykropkowana;
+    border-bottom-width: 5px;
+}
+
+.ramka-wykropkowana-gora {
+    @extend %ramka-wykropkowana;
+   border-top-width: 5px;
+}
+
+.ramka-wykropkowana-prawa {
+    @extend %ramka-wykropkowana;
+    border-right-width: 5px;
+}
+
+.ramka-wykropkowana-lewa {
+    @extend %ramka-wykropkowana;
+    border-left-width: 5px;
+}
+
+.czcionka-tekstowa-paragraf, p {
+        font-family: $font-tekst-rodzina;
+        font-size: 14px;
+        line-height: 23px;
+}
+
+.czcionka-tekstowa{
+    font-family: $font-tekst-rodzina;
+    font-size: 14px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+

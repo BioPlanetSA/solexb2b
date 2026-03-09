@@ -1,0 +1,10 @@
+﻿
+@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    <div id="rejestracja" class="alert alert-success">
+       @Html.Raw(Model)
+        
+    </div>
+}

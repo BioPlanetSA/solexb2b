@@ -1,0 +1,254 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryPrzekazywaneDoNazwy
+@{
+    Dictionary<string, List<CechyBll>> slownikMetek = new Dictionary<string, List<CechyBll>>();
+    if (Model.RodzajMetki == RodzajMetki.ListaProduktow)
+    {
+        var metkiNadNazwa = Model.Produkt.PobierzMetkiLista(MetkaPozycjaLista.NadNazwa);
+        if (metkiNadNazwa != null && metkiNadNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.NadNazwa.ToString(), metkiNadNazwa);
+        }
+        var metkiPrzedNazwa = Model.Produkt.PobierzMetkiLista(MetkaPozycjaLista.PrzedNazwa);
+        if (metkiPrzedNazwa != null && metkiPrzedNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.PrzedNazwa.ToString(), metkiPrzedNazwa);
+        }
+        var metkiZaNazwa = Model.Produkt.PobierzMetkiLista(MetkaPozycjaLista.ZaNazwa);
+        if (metkiZaNazwa != null && metkiZaNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwa.ToString(), metkiZaNazwa);
+        }
+        var metkiZaNazwaPoPorawej = Model.Produkt.PobierzMetkiLista(MetkaPozycjaLista.ZaNazwaDoPrawej);
+        if (metkiZaNazwaPoPorawej != null && metkiZaNazwaPoPorawej.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwaDoPrawej.ToString(), metkiZaNazwaPoPorawej);
+        }
+
+    }
+
+    if (Model.RodzajMetki == RodzajMetki.KafleProduktu)
+    {
+        var metkiNadNazwa = Model.Produkt.PobierzMetkiKafle(MetkaPozycjaKafle.NadNazwa);
+        if (metkiNadNazwa != null && metkiNadNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.NadNazwa.ToString(), metkiNadNazwa);
+        }
+        var metkiPrzedNazwa = Model.Produkt.PobierzMetkiKafle(MetkaPozycjaKafle.PrzedNazwa);
+        if (metkiPrzedNazwa != null && metkiPrzedNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.PrzedNazwa.ToString(), metkiPrzedNazwa);
+        }
+        var metkiZaNazwa = Model.Produkt.PobierzMetkiKafle(MetkaPozycjaKafle.ZaNazwa);
+        if (metkiZaNazwa != null && metkiZaNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwa.ToString(), metkiZaNazwa);
+        }
+        var metkiZaNazwaPoPorawej = Model.Produkt.PobierzMetkiKafle(MetkaPozycjaKafle.ZaNazwaDoPrawej);
+        if (metkiZaNazwaPoPorawej != null && metkiZaNazwaPoPorawej.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwaDoPrawej.ToString(), metkiZaNazwaPoPorawej);
+        }
+
+    }
+
+
+    if (Model.RodzajMetki == RodzajMetki.KoszykDodanePrzezKlienta)
+    {
+        var metkiNadNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykProdukty(MetkaPozycjaKoszykProdukty.NadNazwa);
+        if (metkiNadNazwa != null && metkiNadNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.NadNazwa.ToString(), metkiNadNazwa);
+        }
+        var metkiPrzedNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykProdukty(MetkaPozycjaKoszykProdukty.PrzedNazwa);
+        if (metkiPrzedNazwa != null && metkiPrzedNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.PrzedNazwa.ToString(), metkiPrzedNazwa);
+        }
+        var metkiZaNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykProdukty(MetkaPozycjaKoszykProdukty.ZaNazwa);
+        if (metkiZaNazwa != null && metkiZaNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwa.ToString(), metkiZaNazwa);
+        }
+
+        var metkiZaNazwaDoPrawej = Model.Produkt.PobierzMetkaPozycjaKoszykProdukty(MetkaPozycjaKoszykProdukty.ZaNazwaDoPrawej);
+        if (metkiZaNazwaDoPrawej != null && metkiZaNazwaDoPrawej.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwaDoPrawej.ToString(), metkiZaNazwaDoPrawej);
+        }
+
+    }
+
+    if (Model.RodzajMetki == RodzajMetki.KoszykAutmoatyczne)
+    {
+        var metkiNadNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykAutomatyczne(MetkaPozycjaKoszykAutomatyczne.NadNazwa);
+        if (metkiNadNazwa != null && metkiNadNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.NadNazwa.ToString(), metkiNadNazwa);
+        }
+        var metkiPrzedNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykAutomatyczne(MetkaPozycjaKoszykAutomatyczne.PrzedNazwa);
+        if (metkiPrzedNazwa != null && metkiPrzedNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.PrzedNazwa.ToString(), metkiPrzedNazwa);
+        }
+        var metkiZaNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykAutomatyczne(MetkaPozycjaKoszykAutomatyczne.ZaNazwa);
+        if (metkiZaNazwa != null && metkiZaNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwa.ToString(), metkiZaNazwa);
+        }
+        var metkiZaNazwaDoPrawej = Model.Produkt.PobierzMetkaPozycjaKoszykAutomatyczne(MetkaPozycjaKoszykAutomatyczne.ZaNazwaDoPrawej);
+        if (metkiZaNazwaDoPrawej != null && metkiZaNazwaDoPrawej.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwaDoPrawej.ToString(), metkiZaNazwaDoPrawej);
+        }
+
+    }
+
+    if (Model.RodzajMetki == RodzajMetki.KoszykGratis)
+    {
+        var metkiNadNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykGratisy(MetkaPozycjaKoszykGratisy.NadNazwa);
+        if (metkiNadNazwa != null && metkiNadNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.NadNazwa.ToString(), metkiNadNazwa);
+        }
+        var metkiPrzedNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykGratisy(MetkaPozycjaKoszykGratisy.PrzedNazwa);
+        if (metkiPrzedNazwa != null && metkiPrzedNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.PrzedNazwa.ToString(), metkiPrzedNazwa);
+        }
+        var metkiZaNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykGratisy(MetkaPozycjaKoszykGratisy.ZaNazwa);
+        if (metkiZaNazwa != null && metkiZaNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwa.ToString(), metkiZaNazwa);
+        }
+        var metkiZaNazwaDoPrawej = Model.Produkt.PobierzMetkaPozycjaKoszykGratisy(MetkaPozycjaKoszykGratisy.ZaNazwaDoPrawej);
+        if (metkiZaNazwaDoPrawej != null && metkiZaNazwaDoPrawej.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwaDoPrawej.ToString(), metkiZaNazwaDoPrawej);
+        }
+        var metkiPodNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykGratisy(MetkaPozycjaKoszykGratisy.PodNazwa);
+        if (metkiPodNazwa != null && metkiPodNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.PodNazwa.ToString(), metkiPodNazwa);
+        }
+    }
+
+    if (Model.RodzajMetki == RodzajMetki.GratisyPopUp)
+    {
+        var metkiNadNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykGratisyPopUp(MetkaPozycjaKoszykGratisyPopUp.NadNazwa);
+        if (metkiNadNazwa != null && metkiNadNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.NadNazwa.ToString(), metkiNadNazwa);
+        }
+        var metkiPrzedNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykGratisyPopUp(MetkaPozycjaKoszykGratisyPopUp.PrzedNazwa);
+        if (metkiPrzedNazwa != null && metkiPrzedNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.PrzedNazwa.ToString(), metkiPrzedNazwa);
+        }
+        var metkiZaNazwa = Model.Produkt.PobierzMetkaPozycjaKoszykGratisyPopUp(MetkaPozycjaKoszykGratisyPopUp.ZaNazwa);
+        if (metkiZaNazwa != null && metkiZaNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwa.ToString(), metkiZaNazwa);
+        }
+
+        var metkiZaNazwaDoPrawej = Model.Produkt.PobierzMetkaPozycjaKoszykGratisyPopUp(MetkaPozycjaKoszykGratisyPopUp.ZaNazwaDoPrawej);
+        if (metkiZaNazwaDoPrawej != null && metkiZaNazwaDoPrawej.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwaDoPrawej.ToString(), metkiZaNazwaDoPrawej);
+        }
+    }
+
+    if (Model.RodzajMetki == RodzajMetki.SzczegolyProduku)
+    {
+        var metkiNadNazwa = Model.Produkt.PobierzMetkiSzczegoly(MetkaPozycjaSzczegoly.NadNazwa);
+        if (metkiNadNazwa != null && metkiNadNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.NadNazwa.ToString(), metkiNadNazwa);
+        }
+        var metkiPrzedNazwa = Model.Produkt.PobierzMetkiSzczegoly(MetkaPozycjaSzczegoly.PrzedNazwa);
+        if (metkiPrzedNazwa != null && metkiPrzedNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.PrzedNazwa.ToString(), metkiPrzedNazwa);
+        }
+        var metkiZaNazwa = Model.Produkt.PobierzMetkiSzczegoly(MetkaPozycjaSzczegoly.ZaNazwa);
+        if (metkiZaNazwa != null && metkiZaNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwa.ToString(), metkiZaNazwa);
+        }
+        var metkiZaNazwaDoPrawej = Model.Produkt.PobierzMetkiSzczegoly(MetkaPozycjaSzczegoly.ZaNazwaPoPrawej);
+        if (metkiZaNazwaDoPrawej != null && metkiZaNazwaDoPrawej.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwaDoPrawej.ToString(), metkiZaNazwaDoPrawej);
+        }
+    }
+
+
+
+    if (Model.RodzajMetki == RodzajMetki.WidokRodzinowy)
+    {
+        var metkiNadNazwa = Model.Produkt.PobierzMetkiRodzina(MetkaPozycjaRodziny.NadNazwa);
+        if (metkiNadNazwa != null && metkiNadNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.NadNazwa.ToString(), metkiNadNazwa);
+        }
+        var metkiPrzedNazwa = Model.Produkt.PobierzMetkiRodzina(MetkaPozycjaRodziny.PrzedNazwa);
+        if (metkiPrzedNazwa != null && metkiPrzedNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.PrzedNazwa.ToString(), metkiPrzedNazwa);
+        }
+        var metkiZaNazwa = Model.Produkt.PobierzMetkiRodzina(MetkaPozycjaRodziny.ZaNazwa);
+        if (metkiZaNazwa != null && metkiZaNazwa.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwa.ToString(), metkiZaNazwa);
+        }
+        var metkiZaNazwaDoPrawej = Model.Produkt.PobierzMetkiRodzina(MetkaPozycjaRodziny.ZaNazwaDoPrawej);
+        if (metkiZaNazwaDoPrawej != null && metkiZaNazwaDoPrawej.Any())
+        {
+            slownikMetek.Add(MetkaPozycjaLista.ZaNazwaDoPrawej.ToString(), metkiZaNazwaDoPrawej);
+        }
+    }
+
+}
+
+<span class="produkt-nazwa-naglowek">
+    @{
+        if (slownikMetek.ContainsKey(MetkaPozycjaLista.NadNazwa.ToString()))
+        {
+            string nazwa = MetkaPozycjaLista.NadNazwa.ToString();
+            Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(slownikMetek[nazwa], string.Format("metki {0}", nazwa)));
+        }
+        if (slownikMetek.ContainsKey(MetkaPozycjaLista.PrzedNazwa.ToString()))
+        {
+            string nazwa = MetkaPozycjaLista.PrzedNazwa.ToString();
+            Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(slownikMetek[nazwa], string.Format("metki {0}", nazwa)));
+        }
+
+        if (Model.PokazUlubione && SesjaHelper.PobierzInstancje.CzyKlientZalogowany)
+        {
+            Html.RenderPartial("~/Views/Koszyk/_Ulubione.cshtml", new Tuple<long,HashSet<long>,bool>(Model.Produkt.Id, Model.IdUlubionych,false));
+        }
+    }
+
+    <a href="@Model.Link" class="@Model.DodatkoweKlasy">
+        <span class="produkt-nazwa">
+            @(Model.ProduktRodzinowy ? Html.Raw(Model.Produkt.Rodzina) : Html.Raw(Model.Produkt.Nazwa))
+        </span>
+    </a>
+
+    @{
+        if (slownikMetek.ContainsKey(MetkaPozycjaLista.ZaNazwa.ToString()))
+        {
+            string nazwa = MetkaPozycjaLista.ZaNazwa.ToString();
+            Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(slownikMetek[nazwa], string.Format("metki {0}", nazwa)));
+        }
+        if (slownikMetek.ContainsKey(MetkaPozycjaLista.ZaNazwaDoPrawej.ToString()))
+        {
+            string nazwa = MetkaPozycjaLista.ZaNazwaDoPrawej.ToString();
+            Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(slownikMetek[nazwa], string.Format("metki {0}", nazwa)));
+        }
+
+    }
+</span>

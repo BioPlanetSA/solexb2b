@@ -1,0 +1,17 @@
+﻿@using SolEx.Hurt.Model
+@model Dictionary<string, List<KategoriaKlienta>>
+
+<span class="kategoria-klientow">
+    @foreach (var kat in Model)
+    {
+        <span class="atrybut">@Html.Raw(kat.Key)</span>
+        for (int i = 0; i < kat.Value.Count; i++)
+        {
+            <span>@kat.Value[i].Nazwa</span>
+            if (i < kat.Value.Count - 1)
+            {
+                @Html.Raw(", ")
+            }
+        }
+    }
+</span>

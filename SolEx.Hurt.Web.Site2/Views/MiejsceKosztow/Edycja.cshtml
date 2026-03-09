@@ -1,0 +1,30 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model MiejsceKosztow
+<div class="modal fade szablon-miejscKosztow-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            @using (Html.BeginForm("Edycja", "MiejsceKosztow", FormMethod.Post, new { id = "edycjaMpk" }))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        @(Model.Id == 0 ? "Nowe MPK" : "Edycja "+Model.Nazwa)
+                    </h4>
+
+                </div>
+                <div class="modal-body">
+                    @Html.HiddenFor(x => x.Id)
+                    @Html.HiddenFor(x => x.KlientId)
+                    @Html.LabelFor(x => x.Nazwa, Html.PobierzTlumaczenie("Nazwa").ToString())
+                    @Html.TextBoxFor(x => x.Nazwa, new { @class = "form-control", required = "required" })
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

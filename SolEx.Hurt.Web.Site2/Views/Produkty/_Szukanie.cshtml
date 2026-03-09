@@ -1,0 +1,13 @@
+﻿@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model Tuple<string, bool, string>
+
+<div class="wyszukiwanie-globalne" data-adres="@Url.LinkProdukty(SolexHelper.AktualnyJezyk)" data-czasPodpowiedzi="@SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja.CzasPodpowiedziSzukanie" data-szukanie="@Model.Item1">
+    <input placeholder="@Model.Item3" type="text" class="szukanie-fraza" autocomplete="off" value="@Model.Item1" onClick="this.select();"/>
+    <i class="fa fa-search fa-2x clickable"></i>
+</div>
+
+<script>
+    wyszukiwarkiProduktow_ZaladujSkrypty()
+</script>

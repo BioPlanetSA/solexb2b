@@ -1,0 +1,164 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+    string preset = "ikona155";
+    HashSet<PolaListaProduktowNoweZamowienie> pola =Model.Konfiguracja.KtorePolaProduktuPowiadomienieNoweZamowienie;
+}
+
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.NoweProduktyWSystemie
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    
+}
+@section Tytul
+{
+    @Html.PobierzTlumaczenie(Model.JezykMaila(), "Na Platformie B2B pojawiły się nowe produkty")
+
+}
+@section Naglowek
+{
+   <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Nowości produktowe")</h4>
+   
+}
+@section Tresc
+{
+<table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad">
+                        @Html.PobierzTlumaczenie(Model.JezykMaila(),"Na Platformie B2B pojawiły się nowe produkty.<br />Zachęcamy do zapoznania się z nowościami:")
+                        <br />
+                    </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+    
+    
+
+    <table class="row">
+        <tr>
+            <td>
+                        
+                <td class="wrapper last">
+                    <table class="twelve columns">
+                        <tr>
+                            <td class="text-pad wstawkiTlo">
+                                <br/>
+                                @{
+                                    int ileKolumn = 0;
+                                }
+
+                                <table style="width: 100%" class="tabela">
+                                    <tr class="naglowek">
+                                        @if (pola.Contains(PolaListaProduktowNoweZamowienie.Zdjecie) && Model.PokazujeZdjecia)
+                                        {
+                                            <td align="center" class="center @preset">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zdjęcie")</td>
+                                            ileKolumn++;
+                                        }
+                                        <td>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Nazwa")</td>
+                                        @{ ileKolumn++; }
+                                        <td align="right" class="r">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Cena")</td>
+                                        @{ ileKolumn++; }
+                                    </tr>
+                                    <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="@(ileKolumn)">&nbsp;</td></tr>
+
+                                    @{
+                                        if (Model.ListaProduktow != null)
+                                        {
+                                            foreach (var produktKlienta in Model.ListaProduktow)
+                                            {
+                                                <tr>
+                                                    <td class="vcenter">
+                                                        @if (pola.Contains(PolaListaProduktowNoweZamowienie.Zdjecie) && Model.PokazujeZdjecia)
+                                                        {
+                                                            if (produktKlienta.ZdjecieGlowne == null)
+                                                            {
+                                                                if (!string.IsNullOrEmpty(SolexBllCalosc.PobierzInstancje.Konfiguracja.DomyslneZdjecieSciezka))
+                                                                {
+                                                                    <img src="@Url.ZbudujLinkZewnetrzny(Model.BrakZdjecia)" alt=""/>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="@Url.ZbudujLinkZewnetrzny(produktKlienta.ZdjecieGlowne.LinkWWersji(preset))" alt="@produktKlienta.Nazwa.Replace('"', ' ')"/>
+                                                            }
+                                                        }
+                                                    </td>
+
+                                                    <td align="center" class="vcenter">
+                                                        <b>@produktKlienta.Nazwa</b>
+                                                        @if (pola.Contains(PolaListaProduktowNoweZamowienie.Symbol))
+                                                        {
+                                                            <br/>
+                                                            @produktKlienta.Kod
+                                                        }
+                                                        @if (pola.Contains(PolaListaProduktowNoweZamowienie.Ean))
+                                                        {
+                                                            <br/>
+                                                            @produktKlienta.KodKreskowy
+                                                        }
+
+                                                    </td>
+                                                    <td align="right" class="vcenter r">
+                                                        <small>@Html.PobierzTlumaczenie(Model.JezykMaila(), "netto")</small> @produktKlienta.FlatCeny.CenaNetto<br/>
+                                                        <b><small>@Html.PobierzTlumaczenie(Model.JezykMaila(), "brutto")</small> @produktKlienta.FlatCeny.CenaBrutto</b>
+                                                        @if (pola.Contains(PolaListaProduktowNoweZamowienie.Vat))
+                                                        {
+                                                            <br/>
+                                                            @Html.PobierzTlumaczenie(Model.JezykMaila(), "VAT")
+                                                            @produktKlienta.Vat
+                                                            <text>%</text>
+                                                        }
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td height="1" style="font-size: 1px; line-height: 1px;" class="hr belka" colspan="@ileKolumn">&nbsp;</td>
+                                                </tr>
+                                                <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="@ileKolumn">&nbsp;</td></tr>
+                                            }
+                                        }
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </td>
+        </tr>
+    </table>
+    
+    <table class="row">
+        <tr>
+            <td>
+                <td class="wrapper last">
+                    <table class="twelve columns">
+                        <tr>
+                            <td class="text-pad ">
+                                @Html.PobierzTlumaczenie(Model.JezykMaila(),
+                                    "<small>Przedstawiona oferta ma charakter informacyjny, nie stanowi oferty handlowej w rozumieniu Kodeksu Cywilnego," +
+                                    "oraz nie stanowi odzwierciedlenia aktualnych stanów magazynowych.<small>")
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </td>
+        </tr>
+    </table>
+}
+

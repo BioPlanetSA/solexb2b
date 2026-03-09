@@ -1,0 +1,48 @@
+<svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" >
+        <g id="Artboard-1"  transform="translate(-140.000000, -154.000000)">
+            <g id="dots" transform="translate(140.000000, 154.000000)">
+                <g id="dot" >
+                <g>
+                    <circle cx="1.0" cy="1.0" r="1.0" fill="#bcbec0" transform="translate(0.000000, 0.000000)"></circle>
+                </g>
+                </g>
+                <g id="dot" transform="translate(0.000000, 10.000000)" fill="#bcbec0">
+                    <g>
+                        <circle cx="1.0" cy="1.0" r="1.0"></circle>
+                    </g>
+                </g>
+                <g id="dot" transform="translate(0.000000, 20.000000)" fill="#bcbec0">
+                    <g>
+                        <circle cx="1.0" cy="1.0" r="1.0"></circle>
+                    </g>
+                </g>
+                <g id="dot" transform="translate(10.000000, 0.000000)"  fill="#bcbec0">
+                    <g>
+                        <circle cx="1.0" cy="1.0" r="1.0"></circle>
+                    </g>
+                </g>
+                <g id="dot" transform="translate(20.000000, 0.000000)" fill="#bcbec0">
+                    <g>
+                        <circle cx="1.0" cy="1.0" r="1.0"></circle>
+                    </g>
+                </g>
+                <g id="dot" transform="translate(10.000000, 20.000000)"  fill="#bcbec0">
+                    <g>
+                        <circle cx="1.0" cy="1.0" r="1.0"></circle>
+                    </g>
+                </g>
+                <g id="dot" transform="translate(20.000000, 20.000000)"  fill="#bcbec0">
+                    <g>
+                        <circle cx="1.0" cy="1.0" r="1.0"></circle>
+                    </g>
+                </g>
+                <g id="dot" transform="translate(20.000000, 10.000000)"  fill="#bcbec0">
+                    <g>
+                        <circle cx="1.0" cy="1.0" r="1.0"></circle>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,41 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model IList<SolEx.Hurt.Model.Adres>
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th>@Html.PobierzTlumaczenie("Nazwa")</th>
+            <th>@Html.PobierzTlumaczenie("Dane adresowe")</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tfoot style="display:table-header-group">
+        <tr>
+            <th>
+                <input type="text" class="form-control form-control-sm" />
+            </th>
+            <th>
+                <input type="text" class="form-control form-control-sm"/>
+            </th>
+            <th></th>
+        </tr>
+
+    </tfoot>
+    <tbody>
+        @foreach (var y in Model)
+        {
+            <tr>
+                <td>
+                    @y.Nazwa
+                </td>
+                <td>
+                    @y.ToString()
+                </td>
+                <td nowrap class="r fit-content">
+                    @Html.ActionLink(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Edytuj"), "Edycja", new { id = y.Id }, new { @class = "okno-modalne btn btn-sm btn-secondary" })
+                    @Html.ActionLink(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Usuń"), "Usun", new { id = y.Id }, new { @class = "btn btn-danger btn-sm btn-usun" })   @*btn-usun jest wazny bo daje znac ze usuwamy w JS*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

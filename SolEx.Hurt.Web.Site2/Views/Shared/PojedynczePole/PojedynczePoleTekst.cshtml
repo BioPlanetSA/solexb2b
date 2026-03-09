@@ -1,0 +1,21 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryPrzekazywaneDoSzegolow
+@if (!string.IsNullOrEmpty(Model.Naglowek))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Naglowek)
+}
+
+<div class="pole-pojedyncze-tekst pole-pojedyncze">
+    @Html.Raw(Model.Wartosc)
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Stopka))
+{
+        @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Stopka)
+ 
+}

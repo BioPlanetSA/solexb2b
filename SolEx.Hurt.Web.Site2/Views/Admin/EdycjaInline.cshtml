@@ -1,0 +1,14 @@
+﻿@model  SolEx.Hurt.Core.DostepDane.DaneObiektu.OpisPolaObiektuBaza
+
+<div class="widok" data-edytor="@Model.PobierzTypEdytora()">
+    @Html.DisplayFor(x=>x,"Admin\\" + Model.PobierzTypEdytora())
+</div>
+
+@if (Model.ParamatryWidocznosciAdmin.EdytowalneInline && !Model.PobieraneErp)
+{
+    @Html.Hidden("klucz", Model.IdentyfikatorObiektu)
+    <div class="edycja">
+        @Html.EditorFor(x => x, "Admin\\" + Model.PobierzTypEdytora())
+        <button type="submit" class="btn btn-secondary btn-sm zmienPole">Zapisz</button>
+    </div>
+}

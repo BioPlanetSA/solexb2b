@@ -1,0 +1,6 @@
+﻿@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@if (Model.Wartosc != null)
+{
+    @Html.Raw(((DateTime)Model.Wartosc).ToShortDateString())
+}

@@ -1,0 +1,20 @@
+﻿@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Core.DostepDane.DaneObiektu
+@using SolEx.Hurt.Helpers
+@{
+    var szukane = ViewData["szukana"];
+    OpisPolaObiektuBaza opis = (OpisPolaObiektuBaza)ViewData["opis"];
+
+    Dictionary<string, object> parametry = new Dictionary<string, object>();
+    parametry.Add("data-indywidualizacja-typ", "input");
+    parametry.Add("class", "form-control form-control-sm");
+
+}
+
+@Html.DropDownList("", opis.Slownik.Select(x => new SelectListItem() { Text = x.Key, Value = x.Value.ToString(), Selected = x.Value.ToString() == szukane }), " - ", new { @class = "form-control form-control-sm", form = "lista" })
+
+
+
+
+
+

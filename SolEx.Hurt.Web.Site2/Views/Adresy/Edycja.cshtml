@@ -1,0 +1,123 @@
+﻿@using System.Globalization
+@using System.Web.Mvc.Html
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.DostepDane.DaneObiektu
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model Adres
+@{
+    IList<Kraje> szablonyKraje = ViewBag.Kraje;
+    IList<Region> szablonRegion = ViewBag.Regiony;
+
+    Dictionary<string, object> parsemail = new Dictionary<string, object>();
+    parsemail.Add("class", "form-control");
+    parsemail.Add("type", "email");
+    if (SolexBllCalosc.PobierzInstancje.Konfiguracja.AdresyEmailWymagany)
+    {
+        parsemail.Add("required", "required");
+    }
+    Dictionary<string, object> parstelefon = new Dictionary<string, object>();
+    parstelefon.Add("class", "form-control");
+    if (SolexBllCalosc.PobierzInstancje.Konfiguracja.AdresyTelefonWymagany)
+    {
+        parstelefon.Add("required", "required");
+    }
+    //pobieramy tłumaczy słownik typów adresów
+   var slownikTyp = PobieranieParametrowKontrolek.PobierzSlownikEnumTlumaczony(typeof(TypAdresu), SolexHelper.AktualnyJezyk.Id).Select(x => new SelectListItem() { Value = x.Value.ToString(), Text = x.Key });
+}
+<div class="modal fade szablon-Adresy-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            @using (Html.BeginForm("Zapisz", "Adresy", FormMethod.Post, new { id = "edycjaAdresow" }))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">@(Model.Id == 0 ? Html.PobierzTlumaczenie("Nowy adres")+"" : (Html.PobierzTlumaczenie("Edycja adresu ") + Model.Nazwa))</h4>
+
+                </div>
+                <div class="modal-body">
+                    @Html.HiddenFor(x => x.Id)
+                    @Html.HiddenFor(x => x.AutorId)
+
+                    @Html.LabelFor(x => x.Nazwa, Html.PobierzTlumaczenie("Nazwa").ToString())
+                    @Html.TextBoxFor(x => x.Nazwa, new { @class = "form-control", required = "required" })
+
+                    @Html.LabelFor(x => x.UlicaNr, Html.PobierzTlumaczenie("Ulica").ToString())
+                    @Html.TextBoxFor(x => x.UlicaNr, new { @class = "form-control", required = "required" })
+
+                    @Html.LabelFor(x => x.KodPocztowy, Html.PobierzTlumaczenie("Kod pocztowy").ToString())
+                    @Html.TextBoxFor(x => x.KodPocztowy, new { @class = "form-control", required = "required" })
+
+                    @Html.LabelFor(x => x.Miasto, Html.PobierzTlumaczenie("Miasto").ToString())
+                    @Html.TextBoxFor(x => x.Miasto, new { @class = "form-control", required = "required" })
+
+                    @Html.LabelFor(x => x.KrajId, Html.PobierzTlumaczenie("Państwo").ToString())
+                    @Html.DropDownListFor(x => x.KrajId, szablonyKraje.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.KrajId }), "", new { @class = "form-control kraje", required = "required" })
+
+                    @Html.LabelFor(x => x.RegionId, Html.PobierzTlumaczenie("Region").ToString(), new { @class = "region" })
+                    @Html.DropDownListFor(x => x.RegionId, szablonRegion.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.RegionId }), "", new { @class = "form-control region", required = "required" })
+
+                    @Html.LabelFor(x => x.Telefon, Html.PobierzTlumaczenie("Telefon").ToString())
+                    @Html.TextBoxFor(x => x.Telefon, parstelefon)
+
+                    @Html.LabelFor(x => x.Email, Html.PobierzTlumaczenie("Adres email").ToString())
+                    @Html.TextBoxFor(x => x.Email, parsemail)
+
+                    @Html.LabelFor(x => x.Nip, Html.PobierzTlumaczenie("Numer NIP odbiorcy (niewymagane)").ToString())
+                    @Html.TextBoxFor(x => x.Nip, new { @class = "form-control" })
+
+                    @Html.LabelFor(x => x.TypAdresu, Html.PobierzTlumaczenie("Typ adresu").ToString())
+                    @*@Html.EnumDropDownListFor(x => x.TypAdresu, "",new { @class = "form-control" })*@
+
+                    @Html.DropDownList("TypAdresu", slownikTyp, new { @class = "form-control" })
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">@Html.PobierzTlumaczenie("Zapisz")</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">@Html.PobierzTlumaczenie("Anuluj")</button>
+                </div>
+            }
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script language="javascript" type="text/javascript">
+    //# sourceURL=adresyedycja.js
+    function InicalizacjaRegiony() {
+        UkrywanieRegionow();
+        $('select.kraje').on('change', function () {
+            var aktualne = $('select.region');
+            var kraj = $(this).val();
+            $('select.region option[value!=""]').remove();
+            UkrywanieRegionow();
+            if (kraj != '') {
+                $.ajax(
+                {
+                    url: '/Adresy/PobierzRegiony',
+                    dataType: 'json',
+                    data: { kraj: kraj },
+                    success: function (data) {
+                        $(data).each(function (nr, el) {
+                            var nowy = $('<option value="' + el.Id + '">' + el.Nazwa + '</option>');
+
+                            aktualne.append(nowy);
+                        });
+                        UkrywanieRegionow();
+                    }
+                });
+            }
+        });
+
+    }
+    function UkrywanieRegionow() {
+        if ($('select.region option[value!=""]').length == 0) {
+            $('.region').removeAttr('required');
+            $('.region').val('');
+            $('.region').hide();
+        } else {
+            $('.region').attr('required', 'required');
+            $('.region').show();
+        }
+    }
+    InicalizacjaRegiony();
+
+</script>

@@ -1,0 +1,139 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Web.Site2.Helper
+@using Klient = SolEx.Hurt.Core.Klient
+@model DokumentyBll
+
+<div class="modal fade dokument" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="text-align: left;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">
+                    <small>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zamówienie")</small>
+                    @Model.NazwaDokumentu
+
+                    @if (Model.PowiazaneZamowienieB2B != null && !string.IsNullOrEmpty(Model.PowiazaneZamowienieB2B.NumerWlasnyZamowieniaKlienta))
+                    {
+                        <small class="text-muted">[ @Model.PowiazaneZamowienieB2B.NumerWlasnyZamowieniaKlienta ]</small>
+                    }
+                  
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="dokument-dane-platnikodbiorca">
+                    <p class="pull-xs-right dokument-daty r dokument-data-wystawienia">
+                        @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Data wystawienia"): <b> @Model.DataUtworzenia.ToShortDateString()</b>
+                    </p>
+                    <p>
+                        <span class="dokument-platnik">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Płatnik (zamawiający)"): <b> @(SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Klient>(Model.DokumentPlatnikId).Nazwa)</b></span>
+                        <br/><span class="dokument-odbiorca"> @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Odbiorca towaru"): <b>@(SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Klient>(Model.DokumentOdbiorcaId).Nazwa)</b></span>
+                    </p>
+                </div>
+
+                @if (Model.PowiazaneZamowienieB2B != null)
+                {
+                    if (!Model.PowiazaneZamowienieB2B.CzyZlozonePrzezPracownika)
+                    {
+                        <div class="alert alert-info">@Html.PobierzTlumaczenie("Zamówienie zostało złożone przez platformę B2B w dniu: {0} z konta: {1}", Model.PowiazaneZamowienieB2B.DataUtworzenia, Model.PowiazaneZamowienieB2B.Klient.Login)</div>
+                    }
+                    else
+                    {
+                        var pracownik = SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Klient>(Model.PowiazaneZamowienieB2B.PracownikSkladajacyId.Value);
+                        <div class="alert alert-info">@Html.PobierzTlumaczenie("Zamówienie zostało złożone w Twoim imieniu przez naszego pracownika: <b>{1}</b>, w dniu: <b>{0}</b>", Model.PowiazaneZamowienieB2B.DataUtworzenia, pracownik?.Nazwa)</div>
+                    }
+                }
+
+                <table class="table table-condensed ">
+                    <thead>
+                    <tr>
+                        <th style="width: 300px" class="c">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nazwa produktu")</th>
+                        <th class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ilość")</th>
+                        <th  class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Cena netto po rabacie")</th>
+                        <th class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Stawka VAT")</th>
+                        <th class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Cena brutto po rabacie")</th>
+                        <th class="c fit-content">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wartość po rabacie")</th>
+                        <th class="c fit-content"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (DokumentyPozycje pozycja in Model.PobierzPozycjeDokumentu().Where(x => x.PozycjaDokumentuIlosc > 0))
+                    {
+                        <tr>
+                            <td>
+                                @if (pozycja.ProduktBazowy != null)
+                                {
+                                    @Html.Action("Ulubione", "Koszyk", new {ProduktId = pozycja.ProduktId})
+
+                                    if (!string.IsNullOrEmpty(pozycja.ProduktBazowy.Rodzina) && pozycja.ProduktBazowy.CechaUnikalnaRodzina != null)
+                                    {
+                                        <span class="text-primary">@pozycja.ProduktBazowy.Rodzina @pozycja.ProduktBazowy.CechaUnikalnaRodzina.Nazwa</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-primary">@Html.Raw(pozycja.ProduktBazowy.Nazwa)</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-primary">@Html.Raw(pozycja.NazwaProduktu)</span>
+                                }
+
+                                @if (!string.IsNullOrEmpty(pozycja.Opis))
+                                {
+                                    <span class="dokument-pozycja-opis1">@pozycja.Opis</span>
+                                }
+
+                                @if (!string.IsNullOrEmpty(pozycja.Opis2))
+                                {
+                                    <span class="dokument-pozycja-opis2">@pozycja.Opis2</span>
+                                }
+                                @if (pozycja.ProduktBazowy != null && !string.IsNullOrEmpty(pozycja.ProduktBazowy.KodKreskowy) && SolexBllCalosc.PobierzInstancje.Konfiguracja.SzczegolyDokumentuKodKreskowyPokazuj)
+                                {
+                                    <div class="dokument-pozycja-kod ">@pozycja.ProduktBazowy.KodKreskowy</div>
+                                }
+                                @if (pozycja.ProduktBazowy != null && !string.IsNullOrEmpty(pozycja.ProduktBazowy.Kod) && SolexBllCalosc.PobierzInstancje.Konfiguracja.SzczegolyDokumentuKodPokazuj)
+                                {
+                                    <div class="dokument-pozycja-kod ">@pozycja.ProduktBazowy.Kod</div>
+                                }
+                                else
+                                {
+                                    <div class="dokument-pozycja-kod ">@pozycja.KodProduktu</div>
+                                }
+                            </td>
+                            <td class="r">@pozycja.PozycjaDokumentuIlosc</td>
+                            <td class="r">@pozycja.PozycjaDokumentuCenaNetto</td>
+                            <td class="c">@pozycja.Vat.DoLadnejCyfry()%</td>
+                            <td class="r">@pozycja.PozycjaDokumentuCenaBrutto</td>
+                            <td class="r">
+                                @pozycja.PozycjaDokumentuWartoscNetto
+                                <div class="text-muted small">(@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "brutto")): @pozycja.PozycjaDokumentuWartoscBrutto</div>
+                            </td>
+                            <td class="r fit-content">
+                                @{
+                                    Html.RenderAction("DodawanieProduktuProdukt", "Koszyk", new { produkt = pozycja.ProduktBazowy as ProduktKlienta});
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+                @if (!string.IsNullOrEmpty(Model.Uwagi) && SolexBllCalosc.PobierzInstancje.Konfiguracja.PokazywanieUwagWPodgladzie)
+                {
+                    <p class="dokument-uwagi">
+                       @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Uwagi do dokumentu"):<br />
+                        @Model.Uwagi
+                    </p>
+                }
+               
+
+            </div>          
+            <div class="modal-footer">
+                @Html.Action("ZglosBledneDane", "Dokumenty", new { dokument = Model.NazwaDokumentu })
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,280 @@
+﻿@import "_ustawienia.scss";
+
+/* ordery dla flexow */
+
+@include zrob-klasy-dla-order-flexa(col, -1){
+    order: -1;
+}
+
+@include zrob-klasy-dla-order-flexa(col, -2){
+    order: -2;
+}
+
+@include zrob-klasy-dla-order-flexa(col, -3){
+    order: -3;
+}
+
+@include zrob-klasy-dla-order-flexa(col, 1){
+    order: 1;
+}
+
+@include zrob-klasy-dla-order-flexa(col, 2){
+    order: 2;
+}
+
+@include zrob-klasy-dla-order-flexa(col, 3){
+    order: 3;
+}
+
+@include zrob-klasy-dla-order-flexa(col, 4){
+    order: 4;
+}
+
+@include zrob-klasy-dla-order-flexa(col, 5){
+    order: 5;
+}
+
+/* KONIEC ordery dla flexow */
+
+.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12{
+    flex-shrink: 1;
+//    order: 0;
+}
+
+.btn-link:focus, .btn-link:hover{
+    text-decoration: none;
+}
+
+
+//breadcrumby - bootstrap nie ma ustawien do tego niestety
+
+.breadcrumb > li + li::before{
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.alert{
+    padding: 5px 15px;
+    margin-bottom: 5px;
+    font-family: $font-tekst-rodzina;
+}
+
+
+.btn-warning-outline{
+    color: black;
+    border-color: black;
+}
+
+
+.btn-lg{
+    letter-spacing: 0.03rem;
+}
+
+.btn-warning:hover{
+     background-color: #d20a15;
+}
+
+.label{
+    font-family: $font-tekst-rodzina;
+    &.label-border {
+        background-color: none;
+        border: 1px solid #cbcbcb;
+        color: #666666;
+    }
+
+}
+
+.btn{
+    > *{    //to musi być żeby wszystko w przycisku było do środka. Bez tego dziala tylko jesli jest jeden tekst, ale jak jest obrazek + tekst to bez tego stylu nie ma środka
+        vertical-align: middle;
+    }
+}
+
+
+.tooltip-inner {
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    font-family: $font-tekst-rodzina;
+    font-size: 13px;
+    //opacity: 0.96;
+}
+
+.btn-secondary-outline:hover, .btn-secondary-outline:focus, .btn-secondary-outline.focus, .btn-secondary-outline:active, .btn-secondary-outline.active, .open > .btn-secondary-outline.dropdown-toggle{
+    background-color: #D2D2D2;
+}
+
+//blad bootstrapa raz jest 0.25 a raz 0.275
+.form-control-sm, .input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn{
+    padding: 0.25rem 0.75rem;
+}
+
+ 
+@include zrob-klasy-dla-grida-gora-dol(col-bez-odstepow){
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.close-all.close{
+    font-size: 17px;
+}
+
+/*.close.fa-remove{
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+
+//font awesome
+.fa.fa-remove:not(.btn) {
+   // background-image: url(../../images/cros.svg);
+    background-repeat: no-repeat;
+    background-image: url(../../images/cros-red.svg);
+
+    &:before {
+        content: '';
+        height: 10px;
+        width: 13px;
+        display: block;
+    }
+
+    &:hover{
+        color: red;
+        background-image: url(../../images/cros-red.svg);
+    }
+}*/
+
+//fa remove naleyz zmienic na button.close-button
+button.close-button, a.close-button, .fa.fa-remove {
+	border: none;
+    background-color: transparent;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+    position: relative;
+	box-sizing: border-box;
+	display: inline-block;
+    vertical-align: middle;
+    
+    &:before, &:after {
+        opacity: 0.7;
+		transform: rotate(-45deg);
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+
+        width: 10px;
+        height: 18px;
+		margin-top: -9px;
+		margin-left: -5px;
+
+		display: block;
+		
+		background-color: red; //kolor znaku
+		transition: all 0.2s ease-out;
+	}
+
+    &:after {
+		transform: rotate(45deg);
+	}
+
+    &:hover {
+		&:before, &:after {
+			//transform: rotate(0deg);
+            opacity: 1;
+		}
+	}
+
+    //rozmiar maly standardowo
+    height: 20.78px;
+    width: 20.78px;    
+    line-height: 20px;
+    
+    &:before, &:after {
+        width: 16px;
+        height: 2px;
+		margin-top: -1px;  //-@height/2;
+		margin-left: -8px; //-@width/2;
+    }
+
+    &.fa.fa-remove{
+        &:before, &:after {
+               	margin-top: -2px; //przechwyt bo tak wyglda ladniej
+            }
+    }
+
+        &.ramka{
+            border:1px solid black;
+        }
+
+    &.close-button-lg{
+        height: 50px;
+        width: 50px;
+        line-height: 50px;
+         &:before, &:after {
+            width: 50px;
+            height: 10px;
+		    margin-top: -5px;  //-@height/2;
+		    margin-left: -25px; //-@width/2;
+        }
+    }
+}
+
+.media-left {
+  padding-right: 25px;
+}
+
+
+
+
+/*style dla cards bootstropowe - jak przejdziemy nav bootstrapa v4 stop trzeba skasowac*/
+/*
+.card{
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+
+    .card-header {
+        padding: .75rem 1.25rem;
+        margin-bottom: 0;
+        background-color: #f7f7f9;
+        border-bottom: 1px solid rgba(0,0,0,.125);
+
+        &:first-child {
+            border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+        }
+    }
+
+    .card-block {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 1 auto;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+    }
+
+    .card-title {
+        margin-bottom: .75rem;
+    }
+
+}*/
+
+
+
+
+.card {
+    .card-body {
+        padding: 1.25rem;
+    }
+}
+

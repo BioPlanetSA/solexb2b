@@ -1,0 +1,1 @@
+﻿delete from zadanie where ModulFullTypeName like 'SolEx.Hurt.Sync.App.Modules_.NoweModuly.Produkty.ProduktyIndywidualne%';

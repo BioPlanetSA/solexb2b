@@ -1,0 +1,62 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model Tuple<IKoszykiBLL, List<KoszykPozycje>, List<ElementyKoszykaPodglad>, bool>
+
+<span class="koszyk-podglad-nazwa">
+    @Model.Item1.Nazwa
+</span>
+
+<table class="table table-condensed ">
+    @{
+        foreach (KoszykPozycje pozycja in Model.Item2)
+        {
+            <tr>
+                @foreach (ElementyKoszykaPodglad item in Model.Item3)
+                {
+                    switch (item)
+                    {
+                        case ElementyKoszykaPodglad.Ilosc:
+                            <td class="ilosc">@pozycja.Ilosc.ToString("0.###") @pozycja.Jednostka().Nazwa</td>
+                            break;
+                        case ElementyKoszykaPodglad.Kod:
+                         <td class="nazwa kod">@pozycja.Produkt.Kod</td>
+                            break;
+                        case ElementyKoszykaPodglad.KodKreskowy:
+                        <td class="nazwa kodkreskowy">@pozycja.Produkt.KodKreskowy</td>
+                            break;
+                        case ElementyKoszykaPodglad.Nazwa:
+                            <td class="nazwa">@Html.Raw(pozycja.Produkt.Nazwa)</td>
+                            break;}
+                }
+            </tr>
+        }
+    }
+</table>
+<div class="sum">
+    <div class="line ramka-wykropkowana-dol">
+        <span>@Html.PobierzTlumaczenie("Produktów w koszyku") </span>
+        <span class="pull-xs-right">@Model.Item1.PobierzPozycje.Count</span>
+    </div>
+    @if (Model.Item4)
+    {
+        <div class="line ramka-wykropkowana-dol">
+            <span>@Html.PobierzTlumaczenie("Wartość koszyka netto") </span>
+            <span class="pull-xs-right">@Model.Item1.CalkowitaWartoscHurtowaNettoPoRabacie()</span>
+        </div>
+
+
+    <div class="line ramka-wykropkowana-dol">
+        <span>@Html.PobierzTlumaczenie("Wartość koszyka brutto") </span>
+        <span class="pull-xs-right">@Model.Item1.CalkowitaWartoscHurtowaBruttoPoRabacie()</span>
+    </div>
+    }
+</div>
+
+<div>
+  <a class="btn btn-success btn-sm" id="doKoszyka" href="@Url.ZbudujLinkKoszyka(SolexHelper.AktualnyJezyk)">
+        @Html.PobierzTlumaczenie("Przejdź do koszyka")
+    </a>
+</div>

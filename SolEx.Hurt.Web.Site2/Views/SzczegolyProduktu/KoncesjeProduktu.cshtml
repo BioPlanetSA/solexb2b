@@ -1,0 +1,26 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.SzczegolyProduktu.ParametryDoKoncesjiProduktu
+@if (!string.IsNullOrEmpty(Model.Naglowek))
+{
+    @Model.Naglowek
+}
+<div class="produkt-koncesje-lista">
+    <div class="koncesje-produktu ramka-wykropkowana-dol">
+        <span class="atrybut-produktu">
+
+            <span class="koncesje-nazwa text-muted">
+                @Html.PobierzTlumaczenie("Koncesje produktu"):
+            </span>
+                @foreach (string koncesja in Model.Koncesje)
+                {
+                    <span class="koncesje-opis">
+                        @Html.Raw(koncesja)
+                    </span>
+                }
+        </span>
+    </div>
+    </div>
+@if (!string.IsNullOrEmpty(Model.Stopka))
+{
+    @Model.Stopka
+}

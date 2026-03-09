@@ -1,0 +1,174 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Core
+@using SolEx.Hurt.Model.Enums
+@using System.Linq;
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoSzczegolowejListyDokumentow
+@{
+    WartoscLiczbowa razemnetto = new WartoscLiczbowa(Model.Dokumenty.Sum(x => x.DokumentWartoscNetto), Model.Dokumenty[0].walutaB2b);
+    WartoscLiczbowa razembrutto = new WartoscLiczbowa(Model.Dokumenty.Sum(x => x.DokumentWartoscBrutto), Model.Dokumenty[0].walutaB2b);
+
+    bool pokazywacSubkonta = SolexBllCalosc.PobierzInstancje.DostepDane.Pobierz<SolEx.Hurt.Core.Klient>(null, x => x.KlientNadrzednyId == SolexHelper.AktualnyKlient.Id ).Any();
+    bool pokazywacZaznaczanie = Model.PlatnosciOnline && Model.Dokumenty.Any(x => SolexBllCalosc.PobierzInstancje.DokumentyDostep.GetMozliwaPlatnosc(x) );
+}
+
+<table class="dokumenty table table-condensed ">
+    <thead>
+        <tr>
+            <th style="width:146px" data-pole-sort="DataUtworzenia" class="c ">
+                @Html.PobierzTlumaczenie("Data utworzenia")
+            
+
+            </th>
+            <th  data-pole-sort="NazwaDokumentu" class="c">
+                @Html.PobierzTlumaczenie("Numer dokumentu")
+
+            </th>
+            
+            @if (pokazywacSubkonta)
+            {
+                <th data-pole-sort="DokumentOdbiorca.Nazwa" class="c">@Html.PobierzTlumaczenie("Osoba składająca")</th>
+            }
+
+            <th  data-pole-sort="DokumentWartoscNetto" class="c ">
+                @Html.PobierzTlumaczenie("Wartość netto")
+
+
+            </th>
+            <th data-pole-sort="DokumentWartoscBrutto" class="c ">
+                @Html.PobierzTlumaczenie("Wartość brutto")
+
+            </th>
+            @if (Model.PokazujKolumneZrealizowane)
+            {
+                <th data-pole-sort="DokumentZrealizowany" class="c fit-content">
+                    @Html.PobierzTlumaczenie("Zrealizowane")
+
+                </th>
+            }
+            @if (pokazywacZaznaczanie)
+            {
+                <th class="c" style="width: 59px;font-size: 8px;">
+                    @Html.PobierzTlumaczenie("Zaznacz do zapłaty")
+                    <input type="checkbox" onchange="ZaznaczWszystkieZaplaty(this)" />
+                </th>
+            }
+            @if (Model.PokazujStatus)
+            {
+                <th class="c fit-content">@Html.PobierzTlumaczenie("Status dokumentu")</th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var d in Model.Dokumenty)
+    {
+        <tr>
+            <td class="c ">@d.DataUtworzenia.ToShortDateString()</td>
+            <td class="c">
+                
+                <span class="numer-dokumentu">
+                    <b>@d.NazwaDokumentu</b>
+                    @if (d.PowiazaneZamowienieB2B != null && !string.IsNullOrEmpty(d.PowiazaneZamowienieB2B.NumerWlasnyZamowieniaKlienta))
+                    {
+                        <div class="text-muted">
+                            <small>@Html.PobierzTlumaczenie("Nr własny klienta")</small> @d.PowiazaneZamowienieB2B.NumerWlasnyZamowieniaKlienta
+                        </div>
+                    }
+                </span>
+
+                @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.GetLicense(Licencje.TerminRealizacji) && !d.DokumentZrealizowany && d.DokumentTerminRealizacji != null && d.DokumentTerminRealizacji >= DateTime.Now.Date)
+                {
+                    <div class="text-muted">
+                        <small>@Html.PobierzTlumaczenie("Planowany termin dostawy")</small> @d.DokumentTerminRealizacji.Value.ToShortDateString()
+                    </div>
+                }
+            </td>
+
+            @if (pokazywacSubkonta)
+            {
+                
+                <td class="c">
+                    @if (d.DokumentOdbiorcaId != SolexHelper.AktualnyKlient.Id)
+                    {
+                        @d.NazwaKlienta
+                    }
+                    
+                </td>
+            }
+
+            <td class="r">@d.DokumentWartoscNetto</td>
+            <td class="r">@d.DokumentWartoscBrutto</td>
+            
+            @if (Model.PokazujKolumneZrealizowane)
+            {
+                <td class="c">
+                  
+                    @if (d.Zaplacono)
+                    {
+                        <span class="dokumenty-zaplacony-tak text-success">@Html.PobierzTlumaczenie("TAK")</span>
+
+                    }
+                    else
+                    {
+                        <span class="dokumenty-zaplacony-nie text-danger">@Html.PobierzTlumaczenie("NIE")</span>
+                    }
+                </td>
+            }
+            @if (pokazywacZaznaczanie)
+            {
+                <td class="c dokument-zaplata ">
+                    @if (SolexBllCalosc.PobierzInstancje.DokumentyDostep.GetMozliwaPlatnosc(d))
+                    {
+                        <input type="checkbox" value="@d.Id" onchange="ZaplacacDokument(this)" />
+                        if (Model.DaneDoPrzelewu)
+                        {
+                            <input data-dokument="@d.Id" type="text" data-dokument="@d.Id" value="@d.DokumentWartoscBrutto.Wartosc.DoLadnejCyfry()" style="display: none;" data-niepoprawna="@Html.PobierzTlumaczenie("Kwota musi być większa od 0")" />
+
+                        }
+                    }
+                </td>
+            }
+            @{
+                if (Model.PokazujStatus)
+                {
+
+                    var status = d.StatusId.HasValue? SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<StatusZamowienia>(d.StatusId, SolexHelper.AktualnyJezyk.Id ):null;
+                    if (status != null && status.Widoczny)
+                    {
+                        string stylKomorki = "";
+                        if (!string.IsNullOrEmpty(status.Kolor) || !string.IsNullOrEmpty(status.KolorCzcionki))
+                        {
+                            stylKomorki = string.Format("background-color: {0}; color: {1}", status.Kolor, status.KolorCzcionki);
+                        }
+
+                        <td style="@stylKomorki" class="c ">
+                            <span class="dokumenty-status"><b>@status.Nazwa</b></span>
+                    
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                }
+            }
+
+            <td class="c ">
+                @Html.Partial("_Pobieranie", d)
+            </td>
+        </tr>
+      
+    }
+    <tfoot>
+        <tr>
+            <td class="r b" colspan="@Html.Raw(pokazywacSubkonta ? 3 : 2)">@Html.PobierzTlumaczenie("Razem")</td>
+            <td class="r b">@razemnetto</td>
+            <td class="r b" >@razembrutto</td>
+           
+        </tr>
+    </tfoot>
+
+</table>
+@Html.Partial("_PodsumowanieLista", new Tuple<int, int, DocumentSummary, int>(400, 200, Model.DaneDoWykresu, Model.Dokumenty.Count))

@@ -1,0 +1,32 @@
+﻿@model SolEx.Hurt.Core.ModelBLL.TrescBll
+<div class="modal fade pobierz-szablon">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Ekport szablonu dla @Model.Nazwa</h4>
+
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="id" value="@Model.Id"/>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="dzieci" checked="checked"> Pobierz z dziećmi
+                    </label>
+                </div>
+                    <button id="pobierz" class="btn btn-primary">Pobierz</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script language="javascript" type="text/javascript">
+    $('#pobierz').on('click',function(e) {
+        e.preventDefault();
+        var parent = $(this).closest('.pobierz-szablon');
+        parent.modal('hide');
+        var id = parent.find('[name="id"]').val();
+        var dzieci = parent.find('[name="dzieci"]').is(':checked');
+        window.location = "/Admin/PobierzSzablonTresci/" + id + "?pobierzDzieci="+dzieci;
+    })
+</script>

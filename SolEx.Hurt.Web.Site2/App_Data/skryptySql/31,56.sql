@@ -1,0 +1,1 @@
+﻿DELETE FROM dbo.[Zadanie] where ModulFullTypeName='SolEx.Hurt.Sync.App.Modules_.NoweModuly.Dokumenty.FiltrujDokumenty,SolEx.Hurt.Sync.App.Modules_';

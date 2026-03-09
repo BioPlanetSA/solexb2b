@@ -1,0 +1,51 @@
+﻿@using System.Collections
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@{
+    var wartosc = (IEnumerable) Model.Wartosc;
+}
+
+@Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+
+
+@if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+{
+    <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+}
+
+        
+@if (string.IsNullOrEmpty(Model.IdentyfikatorObiektu))
+{
+    <div>Należy zapisać obiekt nadrzędny</div>
+}
+else
+{
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+              
+                <th colspan="99" style="text-align: right">@Html.ActionLink("Dodaj", "Dodaj", "Admin", new { nadrzedny = Model.IdentyfikatorObiektu, typ = Model.RodzajDanych.PobierzOpisTypu(), typNadrzednego = Model.RodzajDanychObiektuNadrzednego.PobierzOpisTypu() }, new { })</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+        @if (wartosc != null)
+        {
+            foreach (var w in wartosc)
+            {
+                <tr>
+                    @Html.EditorFor(x => w, "Admin/ListaPodrzedna/" + w.GetType().Name)
+                    <td>
+                        @Html.ActionLink("Edytuj", "Edycja", "Admin",
+                        new { nadrzedny = Model.IdentyfikatorObiektu, typ = Model.RodzajDanych.PobierzOpisTypu(), id = w.PobierzKlucz(), typNadrzednego = Model.RodzajDanychObiektuNadrzednego.PobierzOpisTypu() }, new { })
+                </td>
+            </tr>
+            }
+        } 
+        </tbody>
+    </table>
+}

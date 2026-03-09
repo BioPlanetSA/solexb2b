@@ -1,0 +1,11 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model Tuple<string, string>
+       
+
+<div class="dane-opiekuna">
+    @if(!string.IsNullOrEmpty(Model.Item2)){
+    <h4 class="dane-opiekuna-naglowek">@Html.PobierzTlumaczenie(Model.Item2)</h4>
+    }
+@Html.Raw(Model.Item1)
+</div>

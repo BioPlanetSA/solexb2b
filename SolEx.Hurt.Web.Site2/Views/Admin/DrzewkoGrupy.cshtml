@@ -1,0 +1,115 @@
+﻿@model Tuple<int?, int, string>
+<legend>Drzewko grupy: @Model.Item3</legend>
+
+<div id="drzewkoGrupy" class="col-md-4"></div>
+
+<script language="javascript" type="text/javascript">
+    var grupaId = @Model.Item1;
+
+    $(document).ready(function () {
+        var url = '/Admin/DrzewkoGrupyDane?jezyk=@Model.Item2&id=@Model.Item1';
+        var $treeview = $('#drzewkoGrupy');
+        $treeview.jstree({
+            'core': { 'data': { url: url }, 'check_callback': SprawdzOperacje, 'expand_selected_onload ': true },
+            'dnd': { 'is_draggable': MoznaPrzessunac },
+            'contextmenu': {
+                'items': function (wezel) {
+                    var items = {
+                        "edit": {
+                            "label": "Edytuj",
+                            "action": function(data) {
+                                var inst = $.jstree.reference(data.reference),
+                                    obj = inst.get_node(data.reference);
+                                window.location = "/Admin/Edycja/"+obj.id+"?typ=SolEx.Hurt.Model.KategoriaProduktu%2CSolEx.Hurt.Model";
+                            }
+                        },
+                        "rename": {
+                            "label": "Zmień nazwę",
+                            "action": function(data) {
+                                var inst = $.jstree.reference(data.reference),
+                                    obj = inst.get_node(data.reference);
+                                inst.edit(obj);
+                            }
+                        },
+                        "remove": {
+                            "label": "Usuń",
+                            "action": function(data) {
+                                var inst = $.jstree.reference(data.reference),
+                                    obj = inst.get_node(data.reference);
+                                if (inst.is_selected(obj)) {
+                                    inst.delete_node(inst.get_selected());
+                                } else {
+                                    inst.delete_node(obj);
+                                }
+                            }
+                        },
+                    };
+                    return items;
+                }
+            },
+            'plugins': ["dnd", "contextmenu", "sort"]
+        }).on('loaded.jstree', function () {
+            $treeview.jstree('close_all');
+        }).on('move_node.jstree', Aktualizuj).on('create_node.jstree ', Aktualizuj).on('rename_node.jstree ', ZmienNazwe).on('delete_node.jstree ', UsunWezel).on('select_node.jstree', PrzeladujWybranyPojemnik);
+    });
+    function UsunWezel(e, d) {
+        var obiekty = [];
+        obiekty.push(d.node.id);
+        $.ajax({ url: '/Admin/DrzewkoGrupyUsun', method: 'Post', contentType: 'application/json; charset=utf-8', data: JSON.stringify(obiekty) }).fail(function () {
+            alert('Błąd aktualizacji danych, proszę odświeżyć stronę');
+        });
+    }
+    function Wczytaj() {
+        $('#drzewkoGrupy').jstree(true).refresh();
+    }
+    function ZmienNazwe(e, d) {
+        var inst = $('#drzewkoGrupy').jstree(true),
+            node = inst.get_node(d.node.id),
+            parent = inst.get_node(node.parent);
+        var kolejnosc=$.inArray(node.id, parent.children);
+        var obiekty = [];
+        obiekty.push({ id: d.node.id, text: d.node.text, parent: parent.id, kolejnosc: kolejnosc });
+        Wyslij(obiekty);
+    }
+    function Aktualizuj(e, d) {
+        var parent = d.parent;
+        var instancja = d.instance;
+        var obiekty = [];
+        var nadrzedny = instancja.get_node(parent);
+        for (var i = 0; i < nadrzedny.children.length; i++) {
+            var wezel = instancja.get_node(nadrzedny.children[i]);
+            obiekty.push({ id: wezel.id, text: wezel.text, parent: wezel.parent, kolejnosc: i });
+        }
+        Wyslij(obiekty);
+    }
+    function Wyslij(obiekty) {
+        $.ajax({ url: '/Admin/DrzewkoGrupyAktualizujPojedynczyListe', method: 'Post', contentType: 'application/json; charset=utf-8', dataType: 'json', data: JSON.stringify(obiekty) }).done(function (odswiez) {
+            if (odswiez) {
+                Wczytaj();
+            }
+        }).fail(function () {
+            alert('Błąd aktualizacji danych, proszę odświeżyć stronę');
+        });
+    }
+    function MoznaPrzessunac(przesuwany) {
+        if (przesuwany[0].parent == '#') {
+            return false;
+        }
+        return true;
+    }
+    function SprawdzOperacje(operation, node, parent) {
+        if (operation === "move_node") {
+            return parent.id != "#"; //only allow dropping inside nodes of type 'Parent'
+        }
+        return true;
+    }
+    function PrzeladujWybranyPojemnik() {
+        var drzewko = $("#drzewkoGrupy").jstree(true);
+        var wybrany = drzewko.get_node(drzewko.get_selected());
+        var linkfake = '/Admin/ModelujDrzewko?grupaid=' + grupaId +'&id='+wybrany.id;
+        window.history.replaceState(null, null, linkfake);
+    }
+    function Przeladuj() {
+        Wczytaj();
+    }
+</script>

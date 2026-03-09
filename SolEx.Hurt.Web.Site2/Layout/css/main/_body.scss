@@ -1,0 +1,173 @@
+﻿@import "_ustawienia.scss";
+
+
+body {
+    font: $font-rozmiar $font-rodzina;
+    color: $font-kolor;
+
+    & > .ui-pnotify {
+        position: fixed;
+
+        .ui-pnotify-title {
+            display: none;
+        }
+    }
+}
+
+//to jest z powodu flex - np. slider bez tego nie działa
+* {
+    min-height: 0;
+    min-width: 0;
+    outline: 0 !important;
+}
+
+
+.page-header {
+    z-index: 10; //po to zeby mozna przesuwac elementy pod spod headera
+    &.centrujAbsolute {
+        //wycentrowac header jesli jest potrzeba
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+}
+
+.pozycja-relative {
+    position: relative;
+}
+
+
+.ustawJakoTopBanner {
+    display: none;
+}
+
+#topHeaderBanner > .ustawJakoTopBanner {
+    display: flex; //poslugujemy sie flexem a nie blockiem
+}
+
+//efekt nachodzenia tekstu na baner
+.container-fluid[data-class*="ustawJakoTopBanner"], .container[data-class*="ustawJakoTopBanner"] {
+    //tylko jesli wiecej niz md
+    @media (min-width: 940px) {
+        & + div {
+            margin-top: -100px;
+        }
+    }
+}
+
+.breadcrumb {
+    padding-left: 0;
+}
+
+
+#toTop {
+    background: #000;
+    width: 50px;
+    height: 50px;
+    opacity: 0.4;
+    z-index: 10;
+    color: white;
+    position: fixed;
+    vertical-align: middle;
+    right: 10%;
+    bottom: 0;
+
+    .fa {
+        height: 100%;
+        line-height: 1.5;
+    }
+}
+
+
+/*form{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}*/
+
+.nomargin {
+    margin: 0;
+}
+
+.highlight {
+    background-color: yellow;
+}
+
+.przepelnienie {
+    //DOCHODZI JESZCZE wyliczenie wysokosci JS msui byc bo musi byc ofset od gory konotrlki - height: calc(100vh - Xpx) -ten X px jest wazny
+    position: absolute;
+    overflow: auto;
+    width: 100%;
+    padding-bottom: 100px;
+}
+
+
+.tlumaczenie-w-locie {
+    border: 1px dotted red;
+    position: relative;
+    cursor: pointer;
+
+    &:hover{
+        font-style: italic;
+        color: red !important;
+    }
+
+    .hover-box {
+        display: none;
+        cursor: pointer;
+        background-color: red;
+        color: white;
+        padding: 10px;
+        z-index: 9999999999;
+        position: absolute;
+        top:-10px;  //musi tak byc bo czasem nie widac 
+        left:0;
+    }
+
+    &:hover, >*:hover  {
+        .hover-box, .hover-box:hover {
+            display: inline-block;
+        }
+    }
+}
+
+
+button, .btn {
+    .tlumaczenie-w-locie{
+        .hover-box{
+            display: block !important;
+        }
+    }
+}
+
+
+.input-validation-error{
+    border: 1px solid red;
+}
+
+
+@media print
+{    
+   /**{
+       font-size: 90% !important;
+   }*/
+
+    button.close{
+        display: none;
+    }
+
+}
+
+
+
+.belka.zalogowany-jako-przedstawiciel{
+    margin: 0;
+    z-index: 999999999; //zawsze on top
+    &, a{
+        color: white;
+    }
+
+    a{ text-decoration: underline }
+}

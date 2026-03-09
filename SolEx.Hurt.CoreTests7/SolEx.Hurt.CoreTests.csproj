@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\xunit.runner.visualstudio.2.8.2\build\net462\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.8.2\build\net462\xunit.runner.visualstudio.props')" />
+  <Import Project="..\packages\xunit.core.2.9.0\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.9.0\build\xunit.core.props')" />
+  <Import Project="..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6BD5F091-016C-43BB-9CE4-20A91E1B7D07}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SolEx.Hurt.CoreTests</RootNamespace>
+    <AssemblyName>SolEx.Hurt.CoreTests</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FakeItEasy, Version=3.1.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
+      <HintPath>..\packages\FakeItEasy.3.1.0\lib\net40\FakeItEasy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FastMember, Version=1.0.0.9, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="ImageProcessor, Version=2.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.2.5.3\lib\net45\ImageProcessor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.TestPlatform.CoreUtilities, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TestPlatform.ObjectModel.17.10.0\lib\net462\Microsoft.TestPlatform.CoreUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.TestPlatform.PlatformAbstractions, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TestPlatform.ObjectModel.17.10.0\lib\net462\Microsoft.TestPlatform.PlatformAbstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.ObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.TestPlatform.ObjectModel.17.10.0\lib\net462\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\Libs\ORMLite\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=3.9.60.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\ORMLite\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.103\lib\net451\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata, Version=1.4.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.6.0\lib\netstandard2.0\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit.assert, Version=2.9.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.9.0\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.9.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.9.0\lib\net452\xunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.9.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.9.0\lib\net452\xunit.execution.desktop.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BLL\CechyAtrybutyTests.cs" />
+    <Compile Include="BLL\ConfigBLLTests.cs" />
+    <Compile Include="BLL\AdresyBLLTests.cs" />
+    <Compile Include="BLL\KlienciDostepTests.cs" />
+    <Compile Include="BLL\KoszykiDostepTests.cs" />
+    <Compile Include="BLL\DokumentyDostepTests.cs" />
+    <Compile Include="BLL\ListyPrzewozoweBllTests.cs" />
+    <Compile Include="BLL\MaileBLLTests.cs" />
+    <Compile Include="BLL\PlikiBllTest.cs" />
+    <Compile Include="BLL\ProduktyBazoweTests.cs" />
+    <Compile Include="BLL\ProduktyKlientaTests.cs" />
+    <Compile Include="BLL\ProfilKlientaDostepTests.cs" />
+    <Compile Include="BLL\RegulyKoszyka\KredytKupieckiTests.cs" />
+    <Compile Include="BLL\RegulyKoszyka\RegulaKwotyTests.cs" />
+    <Compile Include="BLL\SposobyPokazywaniaStanowBLLTests.cs" />
+    <Compile Include="BLL\StatystykiTests.cs" />
+    <Compile Include="BLL\SzukanieTests.cs" />
+    <Compile Include="BLL\WidocznosciTypowBLLTests.cs" />
+    <Compile Include="BLL\ZadaniaBLLTests.cs" />
+    <Compile Include="BLL\ZadaniaDlaZamowienia\KopiujPoleProduktDoPolaPozycjiZamowieniaTest.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodajPozycjeDoKoszykaNaPodstawieInnegoTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodajPozycjeNaPodstawieProduktowZCechaTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodatkowePolaZPropertisaKoszykaDoUstawieniaWErpTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodawanieGratisowDoKoszykaBazaTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DostawaUbezpieczonaTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\EksportZamowieniaDoCSVTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KomunikatWagaKoszykaTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PozostawWKoszykuPozycjePonadStanTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PrzekroczoneStanyTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RabatySaturnTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RegulaRabatNaPozycjiTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RozbijanieDostawyNaPozycjeTests.cs" />
+    <Compile Include="BLL\ZamowieniaDostepTest.cs" />
+    <Compile Include="CacheBllTests.cs" />
+    <Compile Include="DostepDane\DostepDoDanychTests.cs" />
+    <Compile Include="DostepDane\OrmLiteWriteConnectionExtensionsExtensionsTests.cs" />
+    <Compile Include="Importy\ImportObiektuCsvTests.cs" />
+    <Compile Include="Importy\Koszyk\OptimaXmlTests.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KonfigurowalneUwagiTest.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\NoweProduktyWSystemieTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RabatyBllTests.cs" />
+    <Compile Include="Sync\KategorieKlientowWyszukiwanieTests.cs" />
+    <Compile Include="TworzenieFakeObiektowTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.Common\ServiceStack.Common.csproj">
+      <Project>{982416DB-C143-4028-A0C3-CF41892D18D3}</Project>
+      <Name>ServiceStack.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.OrmLite.Sqlite\ServiceStack.OrmLite.Sqlite.csproj">
+      <Project>{CF68A37D-D071-469D-AE04-68594CB95382}</Project>
+      <Name>ServiceStack.OrmLite.Sqlite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.OrmLite.SqlServer\ServiceStack.OrmLite.SqlServer.csproj">
+      <Project>{1887DC99-9139-43E3-A7AA-6D74714B3A5D}</Project>
+      <Name>ServiceStack.OrmLite.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.OrmLite\ServiceStack.OrmLite.csproj">
+      <Project>{96179AC6-F6F1-40C3-9FDD-4F6582F54C5C}</Project>
+      <Name>ServiceStack.OrmLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.Hurt.Core\SolEx.Hurt.Core.csproj">
+      <Project>{febdc3b5-ee97-48e4-8df0-2abea38df790}</Project>
+      <Name>SolEx.Hurt.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.Hurt.Helpers\SolEx.Hurt.Helpers.csproj">
+      <Project>{dcd68212-4853-411b-9da9-27c633694d8a}</Project>
+      <Name>SolEx.Hurt.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.Hurt.Model\SolEx.Hurt.Model.csproj">
+      <Project>{71AC3478-449A-4873-8C68-5596C4D06E4E}</Project>
+      <Name>SolEx.Hurt.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\xunit.analyzers.1.15.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <Analyzer Include="..\packages\xunit.analyzers.1.15.0\analyzers\dotnet\cs\xunit.analyzers.fixes.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\xunit.core.2.9.0\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.9.0\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.9.0\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.9.0\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.8.2\build\net462\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.8.2\build\net462\xunit.runner.visualstudio.props'))" />
+  </Target>
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets')" />
+  <Import Project="..\packages\xunit.core.2.9.0\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.9.0\build\xunit.core.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

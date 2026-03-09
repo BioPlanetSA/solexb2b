@@ -1,0 +1,145 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@model  IList<SolEx.Hurt.Core.DostepDane.OpisPolaObiektu>
+@{
+    Ustawienie u = ViewBag.Ustawienie;
+}
+<div class="modal fade ustawienia-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Edycja ustawienia @u.Symbol</h4>
+                <span>
+                    @u.Grupa
+                    @if (u.Podgrupa != null && u.Podgrupa != TypUstawieniaPodgrupa.Brak)
+                    {
+                        <span>\ </span>@u.Podgrupa
+                    }
+                </span>
+
+            </div>
+            @using (Html.BeginForm("ZapiszUstawienie", "Admin", FormMethod.Post, new { id = "edycjaObiektuModal", @class = "form-horizontal" }))
+            {
+
+                @Html.Hidden("id", u.Id)
+                <div class="modal-body">
+                    <p>@u.Opis</p>
+                </div>
+                <div>
+                    @Html.Label("", Model[0].NazwaWyswietlana)
+                    <span id="wartoscZalogwani" data-edytor="@Model[0].PobierzTypEdytora()">
+                        @Html.EditorFor(x => Model[0], "Admin\\" + Model[0].PobierzTypEdytora())
+                    </span>
+                    @Html.Label("wartoscDomyslna", "Ustaw wartość domyślną")
+                    @Html.CheckBox("wartoscDomyslna", u.Wartosc == null, new { id = "wartoscDomyslna", data_ukrywane = "#wartoscZalogwani" })
+                </div>
+                <div>
+                    @Html.Label("", Model[1].NazwaWyswietlana)
+                    <span id="wartoscNiezalogwani" data-edytor="@Model[0].PobierzTypEdytora()">
+                        @Html.EditorFor(x => Model[1], "Admin\\" + Model[1].PobierzTypEdytora())
+                    </span>
+                    @Html.Label("takaJakZalogowani", "Taka sama jak dla zalogowanych")
+                    @Html.CheckBox("wartoscDomyslnaNiezalogowani", u.WartoscDlaNiezalogowanych == null, new {id = "takaJakZalogowani",data_ukrywane="#wartoscNiezalogwani"})
+                </div>
+
+                <table class="table table-bordered">
+                    
+                    <tbody>
+                        <tr>
+                            <td>
+                                <b>Wartość domyślna</b>
+                            </td>
+                            <td>
+                                @if (string.IsNullOrEmpty(u.WartoscDomyslna))
+                                {
+                                    <p>Brak</p>
+                                }
+                                else
+                                {
+                                    @u.WartoscDomyslna
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Wartość domyślna dla niezalogowanych</b>
+                            </td>
+                            <td>
+                                @if (string.IsNullOrEmpty(u.WartoscDomyslnaDlaNiezalogowanych))
+                                {
+                                    <p>Brak</p>
+                                }
+                                else
+                                {
+                                    @u.WartoscDomyslnaDlaNiezalogowanych
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="modal-footer">
+                    @if (SolexBllCalosc.PobierzInstancje.DostepDane.CzyJestWlaczonyZapisZmiany(typeof(Ustawienie), u.Id) && SolexBllCalosc.PobierzInstancje.DostepDane.CzySaZmianyNaObiekcie(typeof(Ustawienie), u.Id))
+                    {
+                        @Html.ActionLink("Pokaż zmiany ustawienia", "HistoriaZmian", "Admin", new {id = u.Id, typ = typeof (Ustawienie).PobierzOpisTypu()}, new {@class = "btn btn-secondary historia-zmian", @target="_blank"})
+                    }
+                    <button type="submit" class="btn btn-secondary">Zapisz</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+    $('#edycjaObiektuModal').on('submit', function (e) {
+        e.preventDefault();
+        var forma = 'edycjaObiektuModal';
+        if (document.forms[forma].checkValidity()) {
+            var postData = $('#' + forma).serializeArray();
+            var formUrl = $('#' + forma).attr("action");
+            $.ajax({
+                url: formUrl,
+                type: "POST",
+                data: postData,
+                error: function () {
+                    alert('Błąd zapisu danych proszę odświeżyć stronę');
+                }
+            }).done(function () {
+                $('#' + forma).closest('.modal').modal('hide');
+
+            });
+        } else {
+            $('#' + forma + ' :submit').click();
+        }
+    });
+    UstawWidocznosc($('#wartoscDomyslna'));
+    $('#wartoscDomyslna').on('change', function() {
+        UstawWidocznosc($(this));
+    });
+    UstawWidocznosc($('#takaJakZalogowani'));
+    $('#takaJakZalogowani').on('change', function () {
+        UstawWidocznosc($(this));
+    });
+    function UstawWidocznosc(el) {
+        var eleme = el.data('ukrywane');
+        if (el.is(':checked')) {
+            $(eleme).hide();
+        } else {
+            $(eleme).show();
+        }
+    }
+    //$('.historia-zmian').click(function (e) {
+    //    e.preventDefault();
+    //    var url = $(this).prop('href');
+    //    $.ajax({ url: url, method: 'Post' }).done(function (data) {
+    //        var pojemnik = $('[data-containter="indywidualny"]');
+    //        pojemnik.html(data);
+    //        InitModal(pojemnik);
+    //    });
+    //});
+</script>

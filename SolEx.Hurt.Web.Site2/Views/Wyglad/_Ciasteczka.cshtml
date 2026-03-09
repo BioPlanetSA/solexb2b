@@ -1,0 +1,13 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model string
+<script>
+CookieAlert.init({
+	style: 'dark',
+	position: 'bottom',
+	opacity: '1',
+	displayTime: 0,
+	text: '@Html.PobierzTlumaczenie(Model)',
+    close:'@Html.PobierzTlumaczenie("Zamknij komunikat")'
+});
+</script>

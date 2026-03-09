@@ -1,0 +1,40 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@model List<SolEx.Hurt.Model.Plik>
+@{
+ 
+}
+<div class="pliki-do-produktu">
+    @foreach (var p in Model)
+    {
+        string przycisktresc = string.IsNullOrEmpty(p.HtmlPrzycisku) ? p.Nazwa : p.HtmlPrzycisku;
+        <div>
+            
+                @switch (p.SposobOtwierania)
+                {
+                        
+                    case SposobOtwierania.Link:
+                        <a href="@p.SciezkaWzgledna" download="download">
+                            @Html.Raw(przycisktresc)
+                        </a>
+                        break;
+                    case SposobOtwierania.OsadzonyJakoIframe:
+                        <iframe src="@p.SciezkaWzgledna" width="@p.SzerokoscOkna" height="@p.WysokoscOkna"></iframe>
+                        break;
+                    case SposobOtwierania.NoweOkno:
+                        string modalid = "plikmodal" + p.Id;
+                        <a href="@p.SciezkaWzgledna" onclick="PokazModalPlik(event,this,@p.WysokoscOkna.GetValueOrDefault(600),@p.SzerokoscOkna.GetValueOrDefault(600))">
+                            @Html.Raw(przycisktresc)
+                        </a>
+
+                        break;
+                }
+
+                       
+
+        </div>
+    }
+</div>

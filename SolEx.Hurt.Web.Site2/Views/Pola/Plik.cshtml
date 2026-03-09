@@ -1,0 +1,12 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.Web.ParametryPola
+
+<div class="fileinput fileinput-new  @Model.klasaCSS" data-provides="fileinput">
+    <span class="btn btn-secondary btn-file">
+        <span class="fileinput-new">@Html.Raw(Model.WyswietlanaNazwa)</span>
+        <span class="fileinput-exists">@Html.PobierzTlumaczenie("Zmień plik")</span>
+        <input type="file" name="@Model.Nazwa">
+    </span>
+    <span class="fileinput-filename"></span>
+    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+</div>     

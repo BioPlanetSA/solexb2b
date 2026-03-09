@@ -1,0 +1,41 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoPodsumowaniaDokumentow
+@{
+    string waluta = SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Waluta>(x => x.Id == Model.AktualnyKlient.WalutaId, null).WalutaErp;
+    waluta = string.IsNullOrEmpty(waluta) ? "" : waluta;
+}
+
+<div class="alert alert-info alert-mikro">
+    @if (Model.Podsumowanie.Niezaplacone != null && Model.Podsumowanie.Niezaplacone.IloscPozycji > 0)
+    {
+        @Html.Raw(Html.PobierzTlumaczenie("Do zapłaty: <b>{0}</b>", Model.Podsumowanie.Niezaplacone.IloscPozycji))
+
+        if (Model.Podsumowanie.Niezaplacone.Cena > 0)
+        {
+            <text> </text>
+            @Html.Raw(Html.PobierzTlumaczenie("na kwotę: <b>{0}</b> brutto.", Model.Podsumowanie.Niezaplacone.Cena))
+        }
+    }
+
+    @if (Model.Podsumowanie.Przeterminowane != null && Model.Podsumowanie.Przeterminowane.IloscPozycji > 0)
+    {
+        <span class="b col_r">
+            @Html.Raw(Html.PobierzTlumaczenie("Po terminie: <b>{0}</b>", Model.Podsumowanie.Przeterminowane.IloscPozycji))
+            @if (Model.Podsumowanie.Przeterminowane.Cena > 0)
+            {
+                <text> </text>
+                @Html.Raw(Html.PobierzTlumaczenie("na kwotę: <b>{0}</b> brutto.", Model.Podsumowanie.Przeterminowane.Cena))
+            }
+        </span>
+    }
+
+    @if (Model.AktualnyKlient.LimitKredytu > 0 && !Model.UkryjkredytKupiecki)
+    {
+        <div>
+            @Html.Raw(Html.PobierzTlumaczenie("Maksymalny kredyt: <b>{0} {1}</b>. Pozostały kredyt: <b>{2}</b>. Wykorzystany kredyt: <b>{3} {4}</b> ", Model.AktualnyKlient.LimitKredytu,waluta, Model.AktualnyKlient.IloscPozostalegoKredytu, Model.AktualnyKlient.IloscWykorzystanegoKredytu, waluta))
+        </div>
+    }
+</div>
+

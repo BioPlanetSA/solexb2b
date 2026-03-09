@@ -1,0 +1,329 @@
+﻿@import "_ustawienia.scss";
+
+.lista-produktow-zawartosc .produkty-dol {
+    & > div {
+        margin: 40px auto;
+    }
+}
+
+.belka-nad-produktami {  
+    padding: 0;
+    //menu rozsuwane -np. sortowanie
+    .dropdown-menu {
+        width: 200px; //nadpisujemy standard- filtry raczej nie beda szersze - ale jak by co to mozna napisac pod klienta
+        min-width: 200px;
+    }
+
+    .lista-produktow-sortowanie {
+        &, button {
+            text-transform: uppercase !important;
+        }
+    }
+
+    .btn-secondary {
+        border-color: $kolor-ramki-mocny !important;
+    }
+
+    button.sortowanie-dropdown {
+        font-size: 14px;
+        padding: 1px 12px;
+        min-width: 150px;
+
+        &:after {
+            top: -8px;
+        }
+    }
+
+    > div {
+        margin: auto 0;
+
+        > * {
+            margin: 5px auto;
+            /*vertical-align:middle;*/
+        }
+
+
+        > form {
+            display: inline-block;
+            vertical-align: middle;
+
+            &:not(:last-child) {
+                > button {
+                    margin-right: 3px;
+                }
+            }
+        }
+    }
+
+    .stronicowanie {
+        margin-left: 10px;
+    }
+
+    .wyczysc-filtry {
+        text-decoration: none;
+    }
+
+
+    .ukrywanie-pokazywanie-filtrow {
+        margin-left: 30px;
+        margin-right: 10px;
+        /*&.filtry-niepokazywane .btn{
+                    font-weight: bold;
+                }*/
+        position: relative;
+        text-transform: uppercase;
+
+        .fa {
+            font-size: 22px;
+            position: absolute;
+            top: -2px;
+            left: -20px;
+        }
+    }
+
+
+    .belka-nad-produktami-lewa  > div{
+        display: inline;
+    }
+
+}
+
+.lista-produktow-zawartosc {
+    .produkty-naglowek {
+        font-size: 40px;
+        font-weight: bold;
+        margin: 15px 0;
+        text-transform: uppercase;
+    }
+
+    .produkty-przyciski-nawigacja-nadole {
+        text-transform: uppercase;
+        margin: 20px auto;
+
+        a {
+            margin: 10px 10px;
+        }
+    }
+}
+
+
+.belka-dostepnosci{
+      width: 10px;
+   &.na_stanie {
+      background-color: $kolor-zaznaczenia-jasny !important;
+    }
+    &.brak {
+      background-color: #ff3737 !important;
+    }
+    &.w_dostawie {
+      background-color: #ff3737 !important;
+    }
+    &.cykliczna_dostawa {
+      background-color: #8080ff !important;
+    }
+    &.na_wyczerpaniu {
+      background-color: #f18d16 !important;
+    }
+    &.niedostepny_dluzszy_czas {
+      background-color: #595959 !important;
+    }
+    &.na_zamowienie {
+      background-color: #efa4f7 !important;
+    }
+    &.dropshiping {
+      background-color: #f9ff6b !important;
+    }
+    &.mozliwy_dropshiping {
+      background-color: #ffd800 !important;
+    }
+
+    &:not(th){
+        border: none !important;
+        border-top: 2px solid white !important;
+        border-bottom: 2px solid white !important;
+    }
+}
+
+.indywidualizacja-pozycje, .lista-produktow{
+     .foto > img {
+        border: 1px solid $kolor-ramki;
+        width: unset; //dlatego ze kolumna dazy do zwezenia maksymalnego i ukrywa zdjecia przez to
+    }
+}
+
+
+.lista-produktow{
+    tr.active.kategoria{
+        font-weight: bold; 
+        font-size: 107%;
+    }
+
+    .produkt-nazwa-naglowek .produkt-nazwa, .produkt-rabat {
+        font-size: 15px;
+    }
+
+     /*.foto > img {
+        border: 1px solid $kolor-ramki;
+        width: unset; //dlatego ze kolumna dazy do zwezenia maksymalnego i ukrywa zdjecia przez to
+    }*/
+
+    margin-top: 10px;
+
+    .rodzina-pozioma{
+        .rodzina-dzieci{
+            .rodzina-dziecko {
+                display: inline-block;
+                    padding-top: 10px;
+    padding-bottom: 5px;
+
+                    text-align: center;
+                  .rodzina-dziecko-dodawanie-do-koszyka,.cena {
+                      padding-top:2px;
+                      padding-bottom: 2px;
+                  }
+
+                &:not(:first-child){
+                    padding-left: 10px;
+                }
+                  &:not(:last-child){
+                   padding-right: 10px;
+                }
+            }
+        }
+    }
+
+}
+.dropdown-menu-rozmiar{
+    max-height: 400px;
+}
+
+//musi być taki selektor dlatego żeby nadpisać inne style np. table-condensed
+table.table.table-condensed.lista-produktow {
+    //------------------------------------
+    //lista produktów responsywność , (min-device-width: 768px) and (max-device-width: 1024px)
+    //-----------------------------------
+    @media only screen and (max-width: $lg) {
+        > thead, > thead > tr > th, > tbody, > tbody > tr > td, > tbody > tr {
+                display: inline-block;
+                width: 100%;
+        }
+
+        > thead > tr {
+            display: none;
+        }
+
+        > tbody > tr {
+            // border: 0 solid #b6ff00 !important;
+            &:not(:first-child) {
+                //nie dziala extend ramka-wykropkowana-gora
+                border: 0 solid transparent;
+                border-image-source: url('../../dots.svg');
+                border-image-slice: 7;
+                border-image-repeat: round;
+                border-width: 0;
+                border-bottom-width: 5px;
+            }
+
+            padding-top: 10px;
+            padding-bottom: 10px;
+            clear: both;
+        }
+
+        tr.active.kategoria{
+                td{
+                    display: inline-block;
+                }
+            }
+
+        > tbody > tr > td {
+            //ukrycie wszystkich poza wymieionymi
+            //domsylnie wszystko ukrywanie
+            display: none;
+
+            &.CenaPoRabacie, &.zdjecie, &.nazwa, &.kolumna-dodawanie-do-koszyka, &.gradacja {
+                display: inline;               
+            }
+
+            &.fit-content {
+                width: auto;
+            }
+
+            border: none !important;
+            position: relative;
+            padding: 0; //ustawimy na nowo paddingi
+            &.zdjecie {
+                display: inline;
+                a {
+                    display: inline;
+                }
+            }
+
+            &.rabat { 
+                display: inline;
+                margin-right: 10px;
+                vertical-align: middle;
+            }
+
+            &.nazwa {
+                white-space: normal;
+                //display: inline;
+                font-size: 12px;
+
+                display: block;
+                margin-bottom: 20px;
+
+                //przechwyt - na wysokosc zdjecia powinno byc. Jak ktos nie ma zdjec to bedzie problem bo ten styl rezrwuej miesjce na zdjecie ktorego nie ma i jest dziura. Przechywt z powodu krotkich nazw produktow
+                min-height: 70px;
+
+                .produkt-nazwa-naglowek, .produkt-nazwa {
+                    display: inline;
+                    font-size: 14px;
+                }
+            }
+
+            .konfekcja-mala{
+                float: none;
+            }
+
+            &.CenaPoRabacie {
+                display: inline;
+                vertical-align: middle;
+                margin-left: 20px;
+            }
+
+            img.zdjecie-produktu {
+                float: left;
+                margin-right: 10px;
+                border: none;
+            }
+
+            text-align: left !important; //wszystko do lewej - np ceny sa domyslnie do prawej
+            &.kolumna-dodawanie-do-koszyka {
+                text-align: right !important;
+                float: right;
+                display: inline-block;
+            }
+                        
+            //ukrywane elementy .metki,
+            .dodaj-ulubione, .vat, cena-separator, .rabat, .belka-dostepnosci {
+                display: none;
+            }
+            
+            //rozmiary ceny musi sie dobrze liczyc
+            .cena {
+                display: inline-block;
+                text-align: right;
+                vertical-align: middle;
+                //font zmiejszmy opisow netto brutto
+                  
+              .opis-cena-netto, .opis-cena-brutto{
+                  font-size: 12px;
+              }
+
+                > div:nth-child(1), > div:nth-child(2) {
+                    display: inline;
+                }
+            }
+        }
+    }
+}

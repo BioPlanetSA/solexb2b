@@ -1,0 +1,236 @@
+﻿@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+@if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+{
+    <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+}
+
+@{
+    string id = Model.IdentyfikatorObiektu + "-" + Model.NazwaPola;
+    string idEdytora = string.Format("{0}-checkbox", id);
+    Dictionary<string, object> pars = new Dictionary<string, object> { { "class", "form-control form-control-sm" },  { "id", id } };
+    if (Model.Wymagane)
+    {
+        pars.Add("required","required");
+    }
+    pars.Add("data-identyfikatorObiektu", Model.IdentyfikatorObiektu);
+    pars.Add("data-walidator",Model.WalidatorDanych!=null? Model.WalidatorDanych.PobierzOpisTypu():"");
+    if (Model.PobieraneErp)
+    {
+     
+        pars["class"] += " edytowaneErpNieWolnoEdytowac";
+    }
+    if (Model.PobieraneErp || Model.TylkoDoOdczytu)
+    {
+        pars.Add("readonly", "readonly");
+    }
+}
+
+@if (!Model.Wymagane)
+{
+    <div class="pole pole-edytor-tekstowy" data-s-tinymce="@(id)">
+        <a href="/HELP/efekty.html"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+        Nie pokazuj opisu <input type="checkbox" id="@(id)-checkbox" class="checkbox-nie-pokazuj-opisu" checked data-widocznosc-edytora/>
+        <div id="@(id)-edytor" style="display: none">
+            @Html.TextBoxFor(x => x.Wartosc, pars)
+        </div>
+    </div>
+}
+else
+{
+    @Html.TextBoxFor(x => x.Wartosc, pars)
+    <span style="display: none; color: red;" class="walidator-pola-tekstowe">Pole jest wymagane</span>
+}
+
+
+<script language="javascript" type="text/javascript">
+    var id = '@id';
+    $('#' + id).on('keyup', WalidujPole);
+    console.log(tinymce.execCommand('mceRemoveEditor', true, id));
+
+    tinyMCE.PluginManager.add('stylebuttons', function (editor, url) {
+        ['pre', 'p', 'code', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(function (name) {
+            editor.addButton("style-" + name, {
+                tooltip: "Toggle " + name,
+                text: name.toUpperCase(),
+                onClick: function() { editor.execCommand('mceToggleFormat', false, name); },
+                onPostRender: function() {
+                    var self = this,
+                        setup = function() {
+                            editor.formatter.formatChanged(name, function(state) {
+                                self.active(state);
+                            });
+                        };
+                    editor.formatter ? setup() : editor.on('init', setup);
+                }
+            });
+        });
+    });
+
+    $('#' + id).tinymce({
+        plugins: [
+            "jsplus_font_awesome noneditable advlist autolink lists link image charmap print hr preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste template stylebuttons",
+            "textcolor colorpicker"
+        ],
+        //bootstrapConfig: {
+        //    'bootstrapElements': {
+        //    //    'btn': true
+        //    }
+        //},
+
+        toolbar: "fullscreen code | jsplus_font_awesome | styleselect  | undo redo | copy paste | formatselect | fontsizeselect " +
+            "| bold italic underline | alignleft aligncenter alignright alignjustify |   bullist numlist outdent indent | link image media template | forecolor backcolor",
+        image_advtab: true,
+        height: 500,
+        forced_root_block: '',
+        external_filemanager_path: "/filemanager/",
+        filemanager_title: "Wybierz pliki",
+        external_plugins: { "filemanager": "/filemanager/plugin.min.js" },
+        entity_encoding : "raw",
+        templates: "/Szablony/Pobierz",
+        image_class_list: [
+            { title: 'Brak', value: ''},
+            { title: 'Dopasuj responsywnie', value: 'img-fluid' },
+            { title: 'Okrągły', value: 'img-circle' },
+            { title: 'Zaokrąglone rogi', value: 'img-rounded' }
+        ],
+        statusbar: false,
+        style_formats: [
+           { title: 'Belka szeroka', inline: 'div', classes: 'alert alert-success' },     // styles: { display: 'inline-block', border: '1px solid #2276d2', 'border-radius': '5px', padding: '2px 5px', margin: '0 2px', color: '#2276d2' } 
+           { title: 'Etykieta', inline: 'span', classes: 'label label-success' },
+           { title: 'Etykieta', inline: 'span', classes: 'label label-default' },
+           { title: 'Etykieta', inline: 'span', classes: 'label label-szara' },
+           { title: 'Przycisk', inline: 'a', classes: 'btn btn-success' },
+           { title: 'Kółko (zmień rozmiar tekstu po dodaniu)', block: 'div', classes: 'circle-bg circle-bg-red' },
+           { title: 'Kółko (zmień rozmiar tekstu po dodaniu)', block: 'div', classes: 'circle-bg circle-bg-grey' },
+           { title: 'Kółko (zmień rozmiar tekstu po dodaniu)', block: 'div', classes: 'circle-bg circle-bg-green' }
+
+           
+           //{ title: 'Table row 1', selector: 'tr', classes: 'tablerow1' }
+        ],
+      //  noneditable_noneditable_class: 'fa',
+        content_css: [
+           '/Content/bootstrap/bootstrap-flex.scss',
+           '/Layout/css/main/main.scss',
+           '/Layout/css/main/customCSS.scss',
+           '/Layout/css/font-awesome.min.css'
+        ],
+        extended_valid_elements: 'span[*],i[*]',
+        relative_urls: false,
+        setup: function (editor) {
+            editor.on('blur',
+                function(e) {
+                    tinyMCE.triggerSave();
+                    try {
+                        ZapiszTresc();
+                    } catch (ex) {
+                    }
+                });
+                @*.on('keyup', function () {
+                $('#@id').closest('.pole').find('.walidator-pola-tekstowe').hide();
+                })*@
+        },
+    });
+
+
+
+
+    var element = $('#@id');
+
+    var a = element.val();
+    if (a != '') {
+        $("#@(id)-edytor").show();
+        $("#@(id)-checkbox").prop("checked", false);
+    }
+
+    $(document).ready(function () {
+        $("#@(id)-checkbox").change(function () {
+            if (this.checked) {
+                $("#@(id)-edytor").hide();
+                var tekst = $('#@id').val();
+                $('#@(id)-checkbox').data('Opis', tekst);
+                $('#@id').val('');
+            } else {
+                $("#@(id)-edytor").show();
+                var data = $('#@(id)-checkbox').data("Opis");
+                $("#@id").val(data);
+            }
+        });
+    });
+
+(() => {
+    function enableTinyMCESourceModalFix(querySelectorPrefix) {
+        function waitForElement(querySelector) {
+            return new Promise(function (resolve) {
+                var existingElement = document.querySelector(querySelector);
+                if (existingElement) {
+                    return resolve(existingElement);
+                }
+ 
+                var observer = new MutationObserver(function () {
+                    var elementToWaitFor = document.querySelector(querySelector);
+                    if (elementToWaitFor) {
+                        resolve(elementToWaitFor);
+                        observer.disconnect();
+                    }
+                });
+ 
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        }
+ 
+        waitForElement(querySelectorPrefix + ' .mce-tinymce.mce-container.mce-panel')
+            .then(function (elem) {
+                return waitForElement(querySelectorPrefix + ' div[aria-label="Source code"]');
+            })
+            .then(function (sourceModal) {
+                var button = sourceModal.querySelector('button');
+                if (!button) return;
+ 
+                button.addEventListener('click', function () {
+                    document.body.classList.remove('modal-open');
+ 
+                    setTimeout(() => {
+                        var observer = new MutationObserver(function () {
+                            var blocker = document.querySelector('.mce-modal-block');
+                            if (!blocker) {
+                                document.body.classList.add('modal-open');
+                                observer.disconnect();
+                            }
+                        });
+ 
+                        observer.observe(document.body, {
+                            childList: true,
+                            subtree: true
+                        });
+                    }, { once: true });
+                }, 50)
+            })
+            .catch(function (error) {
+                console.warn('Błąd w TinyMCE modal fix:', error);
+            });
+    }
+ 
+    enableTinyMCESourceModalFix('[data-s-tinymce="@(id)"]');
+})();
+
+</script>
+@if (Model.Wymagane)
+{
+    <script language="javascript" type="text/javascript">
+        var element = $('#@id');
+        element.on('invalid', function() {
+            //     $(this).closest('.pole').find('.walidator-pola-tekstowe').show();
+          //  alert("test");
+        });
+    </script>
+}

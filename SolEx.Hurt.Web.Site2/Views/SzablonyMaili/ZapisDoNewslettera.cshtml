@@ -1,0 +1,77 @@
+﻿
+@{
+    Layout = "_Layout.cshtml";
+}
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.ZapisDoNewslettera
+           
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Dziękujemy za zapisanie do Newslettera")
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Nowa rejestracjado Newslettera", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa })
+    }
+}
+
+@section Naglowek
+{
+    <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zapisanie do Newslettera")</h4>
+}
+
+@section Tresc
+{
+    <table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad">
+
+                        @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+                        {
+                           @Html.PobierzTlumaczenie(Model.JezykMaila(), "<H5>Szanowny,</H5> Dziękujemy za wypełnienie formularza zapisu do Newslettera.<br />")
+                            <br />
+                            }
+                        else
+                        {
+                           @Html.PobierzTlumaczenie(Model.JezykMaila(), "Nowy zapisanie do Newslettera,<br/><br />")
+                           <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Dane,<br/>")</b>
+                            
+                        }
+                       
+                        <br />
+                        @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Zapis została wysłana w dniu: {0} z adresu IP: {1}", MiejsceFrazy.Brak, new object[] { Model.Zapisany.DataZapisania, Model.Zapisany.AdersIp})
+                    </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+}
+

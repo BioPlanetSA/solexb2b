@@ -1,0 +1,23 @@
+﻿@using SolEx.Hurt.Web.Site2.Models
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Tresci
+@model   SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Tresci.DaneDoMenu
+
+
+<div class="menu-kolumnowe row wiersz-kolumny-bez-odstepow text-xs-left" data-zaznacz-aktywne-menu>
+    @foreach (var elem in Model.Drzewo)
+    {
+        if (elem.Children.Any())
+        {
+            <div class="col-sm-@Model.SzekoroscKolumny menu-kolumnowe-element-@elem.Item.Id @elem.Item.TrescBll.PobierzCss()">
+                <h6 class="text-uppercase menu-kolumnowe-naglowek"><b>@elem.Item.Nazwa</b></h6>
+                <ul class="list-unstyled nav">
+                    @foreach (TreeItem<ElementMenu> d in elem.Children)
+                    {
+                        Html.RenderPartial("_MenuOpcja", new DaneDoMenuOpcja(d, Model.PokazujPodkategorie, Model.PokazujReklamy));
+                    }
+                </ul>
+            </div>
+        }
+
+    }
+</div>

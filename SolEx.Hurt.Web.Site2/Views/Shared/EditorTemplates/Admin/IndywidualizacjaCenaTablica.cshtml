@@ -1,0 +1,22 @@
+﻿@using System.Collections
+@using System.Web.Mvc.Html
+@using System.Web.Script.Serialization
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Core.Helper
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+@{
+    Model.Wartosci = (IndywidualizacjaCena[]) Model.Wartosc;
+}
+
+
+<div class="ceny-indywidualizacja">
+    @Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+
+
+    @Html.EditorFor(x => x.Wartosci, "Admin/IndywidualizacjaCena")
+    
+</div>

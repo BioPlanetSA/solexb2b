@@ -1,0 +1,15 @@
+﻿@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Filtry
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoStalychFiltrow
+
+@for (int i = 0; i < Model.Atrybuty.Count; ++i)
+{
+    AtrybutBll a = Model.Atrybuty[i];
+
+    if (i > 0 && a.ProviderWyswietlania != Model.Atrybuty[i - 1].ProviderWyswietlania)
+    {
+        <span class="przelamanie-@a.ProviderWyswietlania"></span>
+    }
+
+    @Html.Partial("Filtry/Typy/" + a.ProviderWyswietlania, new DaneDoFiltrow(a, Model.WybraneCechy, Model.Atrybuty, Model.StaleFiltry, true))
+}

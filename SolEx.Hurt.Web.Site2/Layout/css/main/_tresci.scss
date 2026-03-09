@@ -1,0 +1,272 @@
+﻿@import "_ustawienia.scss";
+
+.ajax-oczekiwanie {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $kolor-bialy-przezroczysty84;
+    z-index: 999999;
+
+    > img {
+        //REZYGNUJEMY Z OBRAZKA w srodku diva ktory sie kreci
+        /*margin-left: 50%;
+        margin-top: 50%;*/
+        position: fixed;
+        top: 0;
+        left: 50%;
+    }
+}
+
+.container {
+    position: relative;
+}
+
+.container-fluid[data-class*="tlo-rozciagnij"], .container[data-class*="tlo-rozciagnij"] {
+    background-size: cover;
+}
+
+.container-fluid[data-class*="tlo-do-prawej"], .container[data-class*="tlo-do-prawej"] {
+    background-position-x: 100%;
+    background-position: 100% 0; //dla glupiego firefoxa
+}
+
+
+.container-fluid[data-class*="tlo-do-dolu"], .container[data-class*="tlo-do-dolu"] {
+    background-position-y: 100%;
+    background-position: 0 100%; //dla glupiego firefoxa
+}
+
+
+//jednoczesnie do prawej i do dolu
+.container-fluid[data-class*="tlo-do-prawej"][data-class*="tlo-do-dolu"], .container[data-class*="tlo-do-prawej"][data-class*="tlo-do-dolu"] {
+    background-position-y: 100%;
+    background-position: 100% 100%; //dla glupiego firefoxa
+}
+
+
+.container-fluid[data-class*="kontener-z-index-20"], .container[data-class*="kontener-z-index-20"] {
+    z-index: 20;
+}
+
+.cien-dla-wiersza {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+.container-fluid[data-class*="tlo-wiersza-centruj-poziomie"], .container[data-class*="tlo-wiersza-centruj-poziomie"] {
+    //background-position: center center;
+    background-position-x: center;
+}
+
+.container-fluid[data-class*="tlo-wiersza-centruj-pionie"], .container[data-class*="tlo-wiersza-centruj-pionie"] {
+    //background-position: center center;
+    background-position-y: center;
+}
+
+
+//tlo-wiersza-usun
+@media (max-width: 543px) {
+    .container-fluid[data-class*="tlo-wiersza-usun-xs"], .container[data-class*="tlo-wiersza-usun-xs"] {
+        background-image: none !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .container-fluid[data-class*="tlo-wiersza-usun-md-down"], .container[data-class*="tlo-wiersza-usun-md-down"] {
+        background-image: none !important;
+    }
+}
+
+@media (max-width: 1199px) {
+    .container-fluid[data-class*="tlo-wiersza-usun-lg-down"], .container[data-class*="tlo-wiersza-usun-lg-down"] {
+        background-image: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .container-fluid[data-class*="tlo-wiersza-usun-sm-down"], .container[data-class*="tlo-wiersza-usun-sm-down"] {
+        background-image: none !important;
+    }
+}
+
+//wyzeruj-wysokosc
+.wyzeruj-wysokosc-xs-up {
+    height: 0 !important;
+}
+
+@media (min-width: 544px) {
+    .wyzeruj-wysokosc-sm-up {
+        height: 0 !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .wyzeruj-wysokosc-md-up {
+        height: 0 !important;
+    }
+}
+
+
+@media (min-width: 1200px) {
+    .wyzeruj-wysokosc-lg-up {
+        height: 0 !important;
+    }
+}
+
+
+/*
+
+    podstawowe typy związane z kolorami
+
+*/
+
+.bg-admin-wyroznienie {
+    background-color: $kolor-wyroznienie;
+}
+
+.bg-admin-wyroznienie2 {
+    background-color: $kolor-wyroznienie2;
+}
+
+
+.text-white {
+    color: white;
+}
+
+
+
+//dla kursywy
+em {
+    font-family: $font-kursywa;
+    line-height: 120%;
+}
+
+.bold, .b {
+    font-weight: bold;
+
+    .btn {
+        font-weight: bold;
+    }
+}
+
+
+input[type=text], input[type=password] {
+    font-family: $font-tekst-rodzina;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: black;
+}
+
+.bold {
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: bold;
+    }
+}
+
+a.a-link {
+    color: black;
+    text-decoration: none;
+}
+
+
+.row-center {
+    justify-content: center;
+}
+
+
+//pokazywanie pol
+.pole-opis-wartosc {
+    span.opis {
+        &:after {
+            content: ':';
+        }
+    }
+}
+
+.pole-opis-wartosc-w-jednej-linii {
+    .pole-opis-wartosc {
+        display: inline;
+    }
+}
+
+
+.r {
+    text-align: right !important;
+}
+
+.c {
+    text-align: center !important;
+}
+
+.l {
+    text-align: left !important;
+}
+
+
+//jak jest subrow to RESETUJEMY paddingi i marginesy - DLA MD !! czyli wtedy gdy subrowy sie stackuja
+.subrow {
+    @media (max-width: 720px) {
+        &, & > .row > [class*="col-"] {
+            //padding  dla komórek z bootstrapa domyslny
+            padding-left: 0.625rem !important;
+            padding-right: 0.625rem !important;
+            margin-right: unset !important;
+            margin-left: unset !important;
+        }
+    }
+}
+
+
+.tooltip-dwustanowy{
+    &.dwustanowy-jest{
+        .jest{
+            display: none;
+        }
+    }
+    &:not(.dwustanowy-jest){
+        .nie-jest{
+            display: none;
+        }
+    }
+}
+
+.inline-box{
+    > button, > div {
+        display: inline-block;
+    }
+}
+
+
+
+.circle-bg {
+    border-radius: 65px;
+    color: white;
+    height: 65px;
+    font-weight: bold;
+    width: 65px;
+    display: table;
+    margin: 20px auto;
+
+    &.circle-bg-red{
+       background: red;
+    }
+
+     &.circle-bg-green{
+       background: #7eb541;
+    }
+
+      &.circle-bg-grey{
+       background: #efefef;
+    }
+}
+
+.circle-bg p, .circle-bg span {
+    vertical-align: middle;
+    display: table-cell;
+    text-align: center;
+}
+
+.vertical-middle{
+    vertical-align: middle;
+}

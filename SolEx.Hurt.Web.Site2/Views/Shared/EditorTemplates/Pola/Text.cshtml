@@ -1,0 +1,27 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.Web.ParametryPola
+@*<input autocomplete="off" type="text" name="@Model.NazwaPola" @Html.Raw(Model.Wymagane ? "required" : "")
+    value="@Model.WartoscPola" placeholder="@Html.PobierzTlumaczenie(Model.WyswietlanaNazwaPola)" class="animacja" />*@
+
+<div>
+    @{
+        Dictionary<string, object> parametry = new Dictionary<string, object>();
+        parametry.Add("autofomplete", "off");
+        parametry.Add("class", "animacja " + Model.klasaCSS);
+        parametry.Add("name", Model.Nazwa);
+        parametry.Add("value", Model.Wartosc);
+        parametry.Add("rows","5");
+        parametry.Add("style","width:100%");
+        if (Model.Wymagane)
+        {
+            parametry.Add("required", "required");
+        }
+        if (!string.IsNullOrEmpty(Model.WyswietlanaNazwa))
+        {
+            parametry.Add("placeholder", SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.WyswietlanaNazwa));
+        }
+    }
+    @Html.TextArea(Model.Nazwa, parametry)
+    <span onclick="$('#@Model.Nazwa').val('')" class="close close-all">@Html.PobierzTlumaczenie("Wyczyść pole tekstowe")</span>
+</div>

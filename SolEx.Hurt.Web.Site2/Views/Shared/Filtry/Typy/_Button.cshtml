@@ -1,0 +1,7 @@
+﻿
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Filtry
+@model DaneDoFiltrow
+
+@{
+    @Html.Partial("Filtry/Typy/_CheckBox", new DaneDoFiltrow(Model.Atrybut, Model.WszystkieWybraneCechy, Model.Wszystkie, Model.StalyFiltr, true, false,true))
+}

@@ -1,0 +1,16 @@
+﻿@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Core.DostepDane.DaneObiektu
+@using SolEx.Hurt.Helpers
+@{
+    var szukane = (ViewData["szukana"]??"").ToString();
+    OpisPolaObiektuBaza opis = (OpisPolaObiektuBaza) ViewData["opis"];
+}
+@if (opis.Slownik.Count > 1000)
+{
+    @Html.Partial("EditorTemplates/Admin/Szukanie/EdytorTekstowy")
+}
+else
+{
+    @Html.DropDownList("", opis.Slownik.Select(x => new SelectListItem() { Text = x.Key, Value = x.Value.ToString(), Selected = x.Value.ToString() == szukane }), " - ", new { @class = "form-control form-control-sm", form = "lista" })
+}
+

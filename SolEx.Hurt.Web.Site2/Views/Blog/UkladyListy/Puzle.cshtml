@@ -1,0 +1,53 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.BlogModel
+    
+
+@*@if (!string.IsNullOrEmpty(Model.NaglowekWpisow))
+{
+    <p class="blogi-naglowek-wpisow text-center">
+        @Html.Raw(Model.NaglowekWpisow)
+    </p>
+}*@
+
+
+@foreach (var item in Model.BlogWpisList)
+{
+    if (item.ZdjecieId != null)
+    {
+        var adres = Url.ZbudujLink(item, Model.SymbolStronyWpisPojedynczy, SolexHelper.AktualnyJezyk);
+        string url = string.IsNullOrEmpty(adres) ? "" : string.Format("href=\"{0}\"", adres);
+        bool blank = item.LinkAlternetywny != null && item.LinkAlternetywny.Tryb == TrybOtwierania.NoweOkno;
+
+        <div class="blog-puzel hvr-fade">
+
+            <a @Html.Raw(url)  @(blank?"target=\"_blank\"":"")>
+                <img class="" src="@Html.Raw(SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(item.ZdjecieId.Value).LinkWWersji(Model.BlogPresetDoZdjec))">
+                
+                <div class="blog-puzle-pokaz-po-najechaniu">
+
+                    @if (Model.BlogPokazujTytul)
+                    {
+                        <h5 class="blog-puzle-tytul">@item.Tytul</h5>
+                    }
+
+                    @if (Model.BlogIloscPierwszychZnakow > 0)
+                    {
+                        <p class="blog-puzle-tresc">
+                            @Html.Raw(item.Tresc.PobierzSkrot(Model.BlogIloscPierwszychZnakow, "..."))
+                        </p>
+
+                        if (!string.IsNullOrEmpty(url) && !string.IsNullOrEmpty(Model.CzytajDalejTresc))
+                        {
+                            <span class="btn btn-success" style="border-radius: 25px; margin-top: 10px"> @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.CzytajDalejTresc) </span>
+                        }
+                    }
+                </div>
+            </a>
+
+        </div>
+    }
+}
+
+

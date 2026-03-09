@@ -1,0 +1,1 @@
+﻿  UPDATE [Ustawienie] SET Grupa='Produkty' WHERE Symbol like 'DeaktywujMinimumLogistyczneDlaWybranychKategoriiKlientow'

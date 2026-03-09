@@ -1,0 +1,13 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Web.Site2.Controllers
+@using SolEx.Hurt.Web.Site2.Factories
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryPrzekazywaneDoListyProduktow
+
+<div class="lista-produktow">
+    @Html.Action("ListaWczytaj", Model )
+</div>
+
+<script>
+        listaProduktow_ZaladujSkrypty();
+</script>

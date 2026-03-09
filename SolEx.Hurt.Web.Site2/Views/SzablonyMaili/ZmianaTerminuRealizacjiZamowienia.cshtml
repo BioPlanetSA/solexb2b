@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+
+}
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.ZmianaTerminuRealizacjiZamowienia
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Naglowek
+{
+    @Html.PobierzTlumaczenie(Model.JezykMaila(), "Zmiana terminu realizacji zamówienia")
+    
+}
+@section Tytul
+{
+@if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+{
+    @Html.PobierzTlumaczenie(Model.JezykMaila(), "Zmiana terminu realizacji zamówienia");
+}
+else
+{
+    @Html.PobierzTlumaczenie( Model.JezykMaila(), "Zmiana terminu realizacji zamówienia - {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+    ;
+}
+    
+
+}
+@section Tresc
+{
+    <div >
+        @Html.PobierzTlumaczenie( Model.JezykMaila(), "Witaj, <br />w Platformie B2B zmienił się termin realizacji Twojego zamówienia {0} .<br />Nowy termin realizacji to: {1}", MiejsceFrazy.Brak, new object[] { Model.Dokument.NazwaDokumentu, Model.NowyTermin })
+
+        @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+            <br/>
+            @Html.PobierzTlumaczenie(Model.JezykMaila(), "Pozostając do dyspozycji,<br />Serdecznie pozdrawiamy")
+        }
+        else
+        {
+            <br/>
+            @Html.PobierzTlumaczenie(Model.JezykMaila(), "Informacja dotyczy klienta: {0}, email: {1}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa, Model.Klient.Email})
+        }
+
+    </div>
+   
+
+}
+

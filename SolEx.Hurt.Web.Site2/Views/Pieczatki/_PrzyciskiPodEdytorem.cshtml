@@ -1,0 +1,53 @@
+﻿@model Tuple<SolEx.Hurt.Model.PieczatkiTyp, SolEx.Hurt.Model.Helpers.Pieczatki.PieczatkiSzablonyViewModel, SolEx.Hurt.Model.Interfaces.IKlient>
+
+<div id="buttons">
+    <!-----Wczytywanie szablonu---->
+    <button class="btn btn-secondary btn-primary" onclick=" ZacznijOdNowa()"><span class="fa fa fa-refresh"></span> Zacznij od nowa</button>
+    <button id="button-zapisz-szablon-do-pliku" class="btn btn-secondary btn-info"><span class="fa fa-floppy-disk"></span> Zapisz szablon na dysku</button>
+    @if (Model.Item3.CzyAdministrator)
+    {
+        <!-----Wyczyść okno---->
+        @*<button id="button-zacznij-od-nowa" class="btn btn-secondary btn-danger" onclick=" WyczyscOkno() "><span class="fa fa-erase"></span> Wyczyść wszystko</button>*@
+    }
+    <!-----Wybierz model pieczatki---->
+    <button id="button-model-pieczatki" class="btn btn-secondary btn-primary" onclick="WybierzAutomat()">Wybierz automat <span class="fa fa-arrow-right"></span></button>
+
+
+    <!-----  Zapisz szablon  ------>
+    @if (Model.Item3.CzyAdministrator)
+    {
+        <div id="zapisz-szablon">
+            <button id="button-zapisz-szablon" class="btn btn-secondary btn-info" onclick="ZapiszSzablonModal()"><span class="fa fa-floppy-disk"></span> Zapisz szablon</button>
+        </div>
+    }
+</div>
+
+<script>
+    function WybierzModel() {
+        PokazModal(this, '/pieczatki/wybierzmodel');
+    }
+    
+    function ZacznijOdNowa() {
+        bootbox.dialog({
+            message: "Czy na pewno chcesz zacząć od nowa?",
+            title: "Informacja",
+            buttons: {
+                danger: {
+                    label: "Tak",
+                    className: "btn-danger",
+                    callback: function () {
+                        location.reload();
+                    }
+                },
+                main: {
+                    label: "Anuluj",
+                    className: "btn btn-secondary"
+                }
+            }
+        });
+    }
+
+</script>
+
+
+

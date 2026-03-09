@@ -1,0 +1,57 @@
+﻿@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+
+
+@if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+{
+    <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+}
+
+@{
+    string id = Model.IdentyfikatorObiektu + "-" + Model.NazwaPola;
+    Dictionary<string, object> pars = new Dictionary<string, object> { { "class", "form-control form-control-sm" },  { "id", id} };
+    if (Model.Wymagane)
+    {
+        pars.Add("required","required");
+    }
+    pars.Add("type", "color");
+    pars.Add("data-identyfikatorObiektu", Model.IdentyfikatorObiektu);
+    pars.Add("data-walidator",Model.WalidatorDanych!=null? Model.WalidatorDanych.PobierzOpisTypu():"");
+    if (Model.PobieraneErp)
+    {
+        pars["class"] += " edytowaneErpNieWolnoEdytowac";
+    }
+    if (Model.PobieraneErp || Model.TylkoDoOdczytu)
+    {
+        pars.Add("readonly", "readonly");
+    }
+    Dictionary<string, object> parscb = new Dictionary<string, object> ();
+    if (string.IsNullOrEmpty((string)Model.Wartosc))
+    {
+        parscb.Add("checked","checked");
+    }
+} 
+@Html.HiddenFor(x=>x.Wartosc,new{data_wartosc="kolor"})
+@Html.TextBox("kolor",Model.Wartosc, pars)
+<label>Przezroczysty</label>
+@Html.CheckBox("Przezroczysty", parscb)
+    <script language="javascript" type="text/javascript">
+
+    $('#@(id)').on({keyup:WalidujPole,change:function() {
+        $(this).siblings('input[type="checkbox"]').prop('checked', false);
+        $(this).siblings('input[data-wartosc="kolor"]').val(this.value);
+        }
+        });
+    $('#@(id)').siblings('input[type="checkbox"]').on('change', function() {
+
+
+        if (this.checked) {
+       
+            $(this).siblings('input[data-wartosc="kolor"]').val('');
+        }
+    });
+    </script>

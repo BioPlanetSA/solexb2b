@@ -1,0 +1,26 @@
+﻿@using SolEx.Hurt.Core
+@model SolEx.Hurt.Web.Site2.Models.MetkaParametry
+
+@if (Model.ListaMetek != null && Model.ListaMetek.Any())
+{
+    int? atrid = null;
+    <span class="metki-produktu @Model.DodatkoweKlasy">
+                @foreach (var s in Model.ListaMetek)
+                {
+                    <span class="metka-produktu @Html.Raw(" c" + s.Id) @Html.Raw("a" + s.AtrybutId) ">
+                        @if (atrid != s.AtrybutId)
+                        {
+                            var atrybut = s.PobierzAtrybut();
+                            if (atrybut != null && atrybut.PokazujOpisMetki && !string.IsNullOrEmpty(atrybut.NazwaOpisowa))
+                            {
+                                <span class="metka-tytul">
+                                    @atrybut.NazwaOpisowa:
+                                </span>
+                            }
+                        }
+                        @Html.Raw(SesjaHelper.PobierzInstancje.CzyKlientZalogowany ? s.MetkaOpis : s.MetkaKatalog)
+                    </span>
+                    atrid = s.AtrybutId;
+                }
+    </span>
+}

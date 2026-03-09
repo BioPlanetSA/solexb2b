@@ -1,0 +1,17 @@
+﻿@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@model  SolEx.Hurt.Core.ModelBLL.ObiektyMaili.SzablonMailaNewslettera
+           
+    @foreach (IProduktKlienta p in Model.Produkty)
+    {
+        <tr style="width: 576px;">
+            <td style="width: 576px; border-collapse: collapse; border-spacing: 0; border: none; padding: 0; text-align: center">
+                @if (p.ZdjecieGlowne != null)
+                {
+                    <img src="@p.ZdjecieGlowne.LinkWWersji("ikona475beztla")" alt="@p.Nazwa" />
+                }
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="height: 15px; padding-left: 15px; padding-right: 15px;"><span style="display: block; width: 100%; height: 1px; background: #d8d8d8;">&nbsp;</span></td>
+        </tr>
+    }

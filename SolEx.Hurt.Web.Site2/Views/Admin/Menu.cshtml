@@ -1,0 +1,57 @@
+﻿@using System.Web.Mvc.Html
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model IList<SolEx.Hurt.Web.Site2.Helper.DaneListaAdmin.ElementMenu>
+<nav class="nav nav-inline menu-klasyczne-rozwijane" role="navigation" id="admin-menu-glowne">
+    <ul class="list-unstyled list-inline">
+        
+        <li class="nav-item">
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa-home fa"></i>
+            </a>
+        </li>
+
+        @foreach (var el in Model)
+        {
+            <li class="dropdown nav-item menu-pozycja ">
+                <a class="dropdown-toggle nav-link  clickable menu-klasyczne-link" data-toggle="dropdown" href="#" data-hover="dropdown" id="@el.Nazwa.Replace(" ", "")">
+                    @el.Nazwa<b class="caret"></b>
+                </a>
+                <div class="dropdown-menu cien-bez-topu">
+                    <ul class="list-unstyled">
+                        @foreach (var d in el.Dzieci)
+                        {
+                            string url = d.Link;
+                            if (d.Typ != null)
+                            {
+                                url = Url.ZbudujLinkDoAdmina(d.Typ, SolexHelper.AktualnyJezyk);
+                            }
+                            else
+                            {
+                                url = Url.ZbudujLink(url, SolexHelper.AktualnyJezyk);
+                            }
+                            <li>
+                                <a href="@url" class="nav-link menu-klasyczne-link dropdown-item">
+                                    @d.Nazwa.ToUpper()<br>
+                                    <span> @d.Opis</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </li>
+        }
+
+        <li class="nav-item">
+            @Html.ActionLink("Odśwież dane", "Odswiez", "Admin", new {adres = Request.RawUrl}, new {@class = "text-success hidden-lg-down"})
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Wyloguj", "Wylogowanie", "Logowanie", new {}, new {@class = "text-danger", title = SolexHelper.AktualnyKlient.Email, data_placement = "bottom" })
+        </li>
+
+        <li class="nav-item">
+            @Html.ZmianaJezyka()
+        </li>
+
+    </ul>
+</nav>

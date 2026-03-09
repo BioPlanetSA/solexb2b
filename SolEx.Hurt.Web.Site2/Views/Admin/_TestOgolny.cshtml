@@ -1,0 +1,85 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Helpers
+@model Tuple<List<KlasaOpakowanieTesty>, List<KlasaOpakowanieTesty>, List<KlasaOpakowanieTesty>>
+    
+<table id="Tabela-tabeletest" class="table table-condensed czcionka-tekstowa-paragraf">
+    <thead>
+        <tr>
+            <th scope="col" class="c" style="vertical-align: middle;">Test</th>
+            <th scope="col" class="c" style="vertical-align: middle;">Błąd</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (KlasaOpakowanieTesty tabela in Model.Item1)
+        {
+            string a = tabela.BladTestu ? "bg-danger prosty" : "text-muted prosty";
+
+            <tr class="@a">
+                <td>@tabela.NazwaTestu
+                <td>
+                    <ul>
+                        @foreach (var item in tabela.ListaBledow)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<table id="Tabela-tabeletest1" class="table table-condensed czcionka-tekstowa-paragraf">
+    <thead>
+        <tr>
+            <th scope="col" class="c" style="vertical-align: middle;">Moduł</th>
+            <th scope="col" class="c" style="vertical-align: middle;">Błąd - Warunek</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (KlasaOpakowanieTesty tabela in Model.Item2)
+        {
+            string a = tabela.BladTestu ? "text-warning prosty" : "text-muted prosty";
+            <tr class="@a">
+                <td class="">
+                    @{ string nazwa = string.IsNullOrEmpty(tabela.NazwaZadania) ? tabela.NazwaTestu : tabela.NazwaTestu + "->" + tabela.NazwaZadania; }
+                    @nazwa
+                    <td class="">
+                    <ul>
+                        @foreach (var item in tabela.ListaBledow)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<table id="Tabela-tabeleBaza" class="table table-condensed czcionka-tekstowa-paragraf">
+    <thead>
+        <tr>
+            <th scope="col" class="c" style="vertical-align: middle;">Nazwa Tabeli</th>
+            <th scope="col" class="c" style="vertical-align: middle;">Ilość wierszy danych w tabeli</th>
+            <th scope="col" class="c" style="vertical-align: middle;">Historia zmian</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (KlasaOpakowanieTesty tabela in Model.Item3)
+        {
+            string a = tabela.BladTestu ? "bg-danger prosty" : "";
+
+
+            <tr class="@a">
+                <td class="c">@tabela.NazwaTestu
+                <td class="c">@tabela.ListaBledow.First()</td>
+                <td class="c">@tabela.CzyMaHistorieZmian.TekstTakNie()</td>
+                <td class="c"><a href="/Admin/UsunDaneZTabeli?nazwa=@tabela.NazwaTestu" >Wyczysc</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

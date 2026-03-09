@@ -1,0 +1,565 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{71AC3478-449A-4873-8C68-5596C4D06E4E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SolEx.Hurt.Model</RootNamespace>
+    <AssemblyName>SolEx.Hurt.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TEST|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\TEST\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TESTLOG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FastMember, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.1.0\lib\net40\FastMember.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\Libs\ORMLite\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\Libs\ORMLite\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdresUrl.cs" />
+    <Compile Include="AkceptacjaKoszykow.cs" />
+    <Compile Include="AtrybutyKlas\ApiUprawnioneRole.cs" />
+    <Compile Include="AtrybutyKlas\FriendlyClassNameAttribute.cs" />
+    <Compile Include="AtrybutyKlas\MaksymalnaLiczbaZnakowAttribute.cs" />
+    <Compile Include="AtrybutyKlas\FriendlyNameAttribute.cs" />
+    <Compile Include="AtrybutyKlas\FriendlyNameToken.cs" />
+    <Compile Include="AtrybutyKlas\FriendlyPropertyName.cs" />
+    <Compile Include="AtrybutyKlas\GrupaAtttribute.cs" />
+    <Compile Include="AtrybutyKlas\Admin\IdentyfikatorObiektuNadrzednego.cs" />
+    <Compile Include="AtrybutyKlas\Admin\Licencja.cs" />
+    <Compile Include="AtrybutyKlas\LinkDokumentacji.cs" />
+    <Compile Include="AtrybutyKlas\LinkGeneratorAttribute.cs" />
+    <Compile Include="AtrybutyKlas\MenuAdminaPozycja.cs" />
+    <Compile Include="AtrybutyKlas\NieSprawdzajCzyIsnieje.cs" />
+    <Compile Include="AtrybutyKlas\NiezalecanaZmiana.cs" />
+    <Compile Include="AtrybutyKlas\ObslugaStronnicowaniaAttribute.cs" />
+    <Compile Include="AtrybutyKlas\Admin\PobieranieSlownika.cs" />
+    <Compile Include="AtrybutyKlas\Admin\PoleEdytowane.cs" />
+    <Compile Include="AtrybutyKlas\Admin\SyncSlownikNaPodstawieInnegoTypu.cs" />
+    <Compile Include="AtrybutyKlas\WalidatorDanych.cs" />
+    <Compile Include="AtrybutyKlas\Admin\WidoczneListaAdminAttribute.cs" />
+    <Compile Include="AtrybutyKlas\Admin\Wymagane.cs" />
+    <Compile Include="AtrybutyKlas\Admin\WymuszonyTypEdytora.cs" />
+    <Compile Include="BlogGrupa.cs" />
+    <Compile Include="BlogKategoria.cs" />
+    <Compile Include="BlogWpis.cs" />
+    <Compile Include="BlogWpisBlogKategoria.cs" />
+    <Compile Include="Enums\DodatkowePolaWKoszyku.cs" />
+    <Compile Include="Enums\ProviderPlatnosciOnline.cs" />
+    <Compile Include="Enums\RodzajLimitu.cs" />
+    <Compile Include="Enums\RodzajWynikowDoCache.cs" />
+    <Compile Include="Enums\SymboleModulowKoszyka.cs" />
+    <Compile Include="Enums\TrybOtwierania.cs" />
+    <Compile Include="Enums\BlogiKolejnosc.cs" />
+    <Compile Include="Enums\RelacjaJestNieJest.cs" />
+    <Compile Include="Enums\SposobSzukania.cs" />
+    <Compile Include="Enums\StatusImportuZamowieniaDoERP.cs" />
+    <Compile Include="Enums\SzukanieIdentyfikatora.cs" />
+    <Compile Include="Enums\TypDanychIntegracja.cs" />
+    <Compile Include="Enums\TypProduktuDoWiswietlania.cs" />
+    <Compile Include="Enums\BlokadaKoszyka.cs" />
+    <Compile Include="Enums\ZCzegoLiczycGradacje.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Helpers\JSonHelper.cs" />
+    <Compile Include="Helpers\Refleksja.cs" />
+    <Compile Include="IndywidualizacjaCena.cs" />
+    <Compile Include="Core\KlasaOpakowujacaDokumentyDoWyslania.cs" />
+    <Compile Include="Core\WartoscLiczbowaConverter.cs" />
+    <Compile Include="Core\WartoscLiczbowaZaokragalnaConverter.cs" />
+    <Compile Include="Core\WartoscLiczbowaZaokraglana.cs" />
+    <Compile Include="Core\WartoscLiczowa.cs" />
+    <Compile Include="CustomSearchCriteria\CechyProduktySearchCriteria.cs" />
+    <Compile Include="CustomSearchCriteria\ImportSearchCriteria.cs" />
+    <Compile Include="CustomSearchCriteria\KategorieKlientowSearchCriteria.cs" />
+    <Compile Include="CustomSearchCriteria\KlienciKategorieSearchCriteria.cs" />
+    <Compile Include="DokumentBazowy.cs" />
+    <Compile Include="DokumentuPozycjaBazowa.cs" />
+    <Compile Include="DzialaniaUzytkwonikowParametry.cs" />
+    <Compile Include="Enums\CyklKomunikatu.cs" />
+    <Compile Include="Enums\MiejsceFrazy.cs" />
+    <Compile Include="Enums\PrzyciskiDlaKlienta.cs" />
+    <Compile Include="Enums\SortowaniePlikow.cs" />
+    <Compile Include="Enums\MetkaPozycjaKafle.cs" />
+    <Compile Include="Enums\SposobLiczeniaCeny.cs" />
+    <Compile Include="Enums\StatusNewsletter.cs" />
+    <Compile Include="Enums\TrybPokazywaniaFiltrow.cs" />
+    <Compile Include="Enums\StatusPlatnosci.cs" />
+    <Compile Include="Enums\AkcjaEdycjiObiektu.cs" />
+    <Compile Include="AtrybutyKlas\DotyczyTypuAttribute.cs" />
+    <Compile Include="Enums\ERPProviderzy.cs" />
+    <Compile Include="Enums\KatalogFormatZapisu.cs" />
+    <Compile Include="Enums\KlasyCss.cs" />
+    <Compile Include="Enums\ModulyOptima.cs" />
+    <Compile Include="Enums\PieczatkiSymbol.cs" />
+    <Compile Include="Enums\PokazywanieOpisuKategorii.cs" />
+    <Compile Include="Enums\PolaDokument.cs" />
+    <Compile Include="Enums\PolaListaProduktow.cs" />
+    <Compile Include="Enums\PozycjaKetegoriWSzczegolach.cs" />
+    <Compile Include="Enums\RodzajCeny.cs" />
+    <Compile Include="Enums\RodzajMetki.cs" />
+    <Compile Include="Enums\RodzajPliku.cs" />
+    <Compile Include="Enums\MetkaPozycjaKoszykAutomatyczne.cs" />
+    <Compile Include="Enums\MetkaPozycjaKoszykGratisy.cs" />
+    <Compile Include="Enums\MetkaPozycjaKoszykGratisyPopUp.cs" />
+    <Compile Include="Enums\MetkaPozycjaKoszykProdukty.cs" />
+    <Compile Include="Enums\RodzajDanych.cs" />
+    <Compile Include="Enums\RodzajSklepu.cs" />
+    <Compile Include="Enums\SposobDopasowania.cs" />
+    <Compile Include="Enums\SposobIndywidualizacji.cs" />
+    <Compile Include="Enums\SposobOtwierania.cs" />
+    <Compile Include="Enums\SposobOtwieraniaModal.cs" />
+    <Compile Include="Enums\StanKoszyk.cs" />
+    <Compile Include="Enums\AccesLevel.cs" />
+    <Compile Include="Adres.cs" />
+    <Compile Include="Enums\StatusKoszyka.cs" />
+    <Compile Include="Enums\PozycjaNaWidokuKoszyka.cs" />
+    <Compile Include="Enums\UpsPaczki.cs" />
+    <Compile Include="Enums\WidcznoscProduktowWXl.cs" />
+    <Compile Include="Enums\WidocznoscTypoKierunek.cs" />
+    <Compile Include="Enums\ZdarzenieGrupaAttribute.cs" />
+    <Compile Include="HistoriaDokumentuPlatnosciOnline.cs" />
+    <Compile Include="Interfaces\IAdres.cs" />
+    <Compile Include="Interfaces\IKlient.cs" />
+    <Compile Include="Interfaces\IObiektWidocznyDlaOkreslonychGrupKlientow.cs" />
+    <Compile Include="GradacjaWidok.cs" />
+    <Compile Include="Interfaces\IObrazek.cs" />
+    <Compile Include="Interfaces\IPaymentProvider.cs" />
+    <Compile Include="Interfaces\IPoleJezyk.cs" />
+    <Compile Include="Interfaces\IKonfiguracjaDlaModulowCsv.cs" />
+    <Compile Include="Interfaces\IStringIntern.cs" />
+    <Compile Include="Interfaces\Sync\ILaczenieZamowien.cs" />
+    <Compile Include="Interfaces\Sync\IEksportZalacznikowNaDysk.cs" />
+    <Compile Include="Interfaces\Sync\IPobieranieProduktowUkrytych.cs" />
+    <Compile Include="Komunikaty.cs" />
+    <Compile Include="MaileKlasaOpakowywujacaApi.cs" />
+    <Compile Include="MiejsceKosztow.cs" />
+    <Compile Include="NewsletterZapisani.cs" />
+    <Compile Include="PlikIntegracjiSzablon.cs" />
+    <Compile Include="Rejestracja.cs" />
+    <Compile Include="RodzinyCechyUnikalne.cs" />
+    <Compile Include="Sesja.cs" />
+    <Compile Include="Slajd.cs" />
+    <Compile Include="Enums\TypPracownika.cs" />
+    <Compile Include="Enums\Wyrownanie.cs" />
+    <Compile Include="Helpers\GoogleTlumaczeniaViewModel.cs" />
+    <Compile Include="Interfaces\Modele\IProfilKlienta.cs" />
+    <Compile Include="KlientAdres.cs" />
+    <Compile Include="ProduktCecha.cs" />
+    <Compile Include="Enums\ArticleDisplayLink.cs" />
+    <Compile Include="Enums\BlokadaPowod.cs" />
+    <Compile Include="Enums\CoSprawdzamyOptima.cs" />
+    <Compile Include="Enums\ElementyKoszykaPodglad.cs" />
+    <Compile Include="Enums\GradacjaSposobPokazywania.cs" />
+    <Compile Include="Enums\JakieCenyPokazywac.cs" />
+    <Compile Include="Enums\KiedyWysylacMailaOZamowieniu.cs" />
+    <Compile Include="Enums\MetkaPozycjaSzczegolyWarianty.cs" />
+    <Compile Include="Enums\Licencje.cs" />
+    <Compile Include="Enums\MetkaPozycjaLista.cs" />
+    <Compile Include="Enums\MetkaPozycjaRodziny.cs" />
+    <Compile Include="Enums\MetkaPozycjaSzczegoly.cs" />
+    <Compile Include="Enums\MiejscaNaKaflach.cs" />
+    <Compile Include="Enums\MiejsceOpisuZbiorczegoZKategorii.cs" />
+    <Compile Include="Enums\PokazywanieKafliKategorii.cs" />
+    <Compile Include="Enums\PolaListaProduktowNoweZamowienie.cs" />
+    <Compile Include="Enums\SkadPowodyRozbicia.cs" />
+    <Compile Include="Enums\PozycjaKarta.cs" />
+    <Compile Include="Enums\PozycjaLista.cs" />
+    <Compile Include="Enums\OpiekunowiePrzedstawiciele.cs" />
+    <Compile Include="Enums\SposobyPokazyaniaStanowCyklicznaDostawa.cs" />
+    <Compile Include="Enums\Szerokosci.cs" />
+    <Compile Include="Enums\TypAdresu.cs" />
+    <Compile Include="Enums\TypDodatkowegoPolaKoszykowego.cs" />
+    <Compile Include="Enums\TypDokumentu.cs" />
+    <Compile Include="Enums\TypEdytora.cs" />
+    <Compile Include="Enums\Kierunek.cs" />
+    <Compile Include="Enums\DataOdKiedyLiczyc.cs" />
+    <Compile Include="Enums\EnovaRodzajDokumentu.cs" />
+    <Compile Include="Enums\KatalogKlientaTypy.cs" />
+    <Compile Include="Enums\KolejnoscSortowania.cs" />
+    <Compile Include="Enums\KomuPrzypisywac.cs" />
+    <Compile Include="Enums\Koszyk.cs" />
+    <Compile Include="Enums\KtorePoleCechyWypelniac.cs" />
+    <Compile Include="Enums\Opisy.cs" />
+    <Compile Include="Enums\PodpowiedziModul.cs" />
+    <Compile Include="Enums\RodzajDokumentu.cs" />
+    <Compile Include="Enums\RodzajKontrolki.cs" />
+    <Compile Include="Enums\RodzajZdarzenia.cs" />
+    <Compile Include="Enums\SposobPokazywaniaDodatkowegoRabatu.cs" />
+    <Compile Include="Enums\SposobUwzgledniania.cs" />
+    <Compile Include="Enums\StronaTyp.cs" />
+    <Compile Include="Enums\SubkontaRodzajAdministratora.cs" />
+    <Compile Include="Enums\TypKoszyka.cs" />
+    <Compile Include="Enums\TypPozycjiKoszyka.cs" />
+    <Compile Include="Enums\TypPozycjiZamowienia.cs" />
+    <Compile Include="Enums\TypProduktu.cs" />
+    <Compile Include="Enums\TypStanu.cs" />
+    <Compile Include="Enums\TypUstawienia.cs" />
+    <Compile Include="Enums\TypUstawieniaKlienta.cs" />
+    <Compile Include="Enums\TypUstawieniaPodgrupa.cs" />
+    <Compile Include="Enums\TypyPolDoMatchowania.cs" />
+    <Compile Include="Enums\TypyPowiadomienia.cs" />
+    <Compile Include="Enums\TypyUstawieniaSkrzynek.cs" />
+    <Compile Include="Enums\TypZadania.cs" />
+    <Compile Include="Enums\TypZasobu.cs" />
+    <Compile Include="Enums\UkladArtykulow.cs" />
+    <Compile Include="Enums\UkladKategoriiArtykulu.cs" />
+    <Compile Include="Enums\ustawieniaGrupa.cs" />
+    <Compile Include="Enums\Wartosc.cs" />
+    <Compile Include="Enums\WarunekRownosci.cs" />
+    <Compile Include="Enums\WfmagPola.cs" />
+    <Compile Include="Enums\WidcznoscProduktowWOptimie.cs" />
+    <Compile Include="Enums\WidcznoscProduktowWSubiekcie.cs" />
+    <Compile Include="Enums\ZakladkaAdmina.cs" />
+    <Compile Include="Extensions\DecimalExtension.cs" />
+    <Compile Include="Extensions\FileExtension.cs" />
+    <Compile Include="Extensions\ListExtension.cs" />
+    <Compile Include="Extensions\DateTimeExtension.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Helpers\BlokadaSystemuViewModel.cs" />
+    <Compile Include="Helpers\DateTimeHelper.cs" />
+    <Compile Include="Helpers\FormularzZapytanieModel.cs" />
+    <Compile Include="Helpers\ListaPlikowModel.cs" />
+    <Compile Include="Helpers\MojeDane\MojeDaneModel.cs" />
+    <Compile Include="Helpers\MojeDane\ResetHaslaModel.cs" />
+    <Compile Include="Helpers\MojeDane\ZmianaHaslaModel.cs" />
+    <Compile Include="Helpers\OperacjeZbiorach.cs" />
+    <Compile Include="Helpers\Pieczatki\PieczatkiSzablonyViewModel.cs" />
+    <Compile Include="Helpers\Pieczatki\PieczatkiTypProduktViewModel.cs" />
+    <Compile Include="Helpers\TypesHelper.cs" />
+    <Compile Include="Helpers\WalidacaDanychWynik.cs" />
+    <Compile Include="IFlatCeny.cs" />
+    <Compile Include="Interfaces\IConfigSynchro.cs" />
+    <Compile Include="Helpers\ITextHelper.cs" />
+    <Compile Include="Helpers\IWyswietlanieKomunikatu.cs" />
+    <Compile Include="Helpers\Kwoty.cs" />
+    <Compile Include="Helpers\Sql.cs" />
+    <Compile Include="Helpers\TextHelper.cs" />
+    <Compile Include="HistoriaDokumentuListPrzewozowy.cs" />
+    <Compile Include="Interfaces\IBindowalny.cs" />
+    <Compile Include="Interfaces\IObiektPrzechowujacyKontrolke.cs" />
+    <Compile Include="Interfaces\ISettingCollection.cs" />
+    <Compile Include="Interfaces\ISlownik.cs" />
+    <Compile Include="Interfaces\IPolaIDentyfikujaceRecznieDodanyObiekt.cs" />
+    <Compile Include="Interfaces\ITestowalna.cs" />
+    <Compile Include="Interfaces\IWalidatorDanych.cs" />
+    <Compile Include="Interfaces\IZadanieSynchronizacji.cs" />
+    <Compile Include="Interfaces\Modele\IHashPola.cs" />
+    <Compile Include="Interfaces\Modele\IKlienci.cs" />
+    <Compile Include="Interfaces\IConfigDataProvider.cs" />
+    <Compile Include="Interfaces\IObslugaDanychDrzewka.cs" />
+    <Compile Include="Interfaces\SyncModuly\IAktualizacjaProduktow.cs" />
+    <Compile Include="Interfaces\SyncModuly\IFakturyPDF.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulDokumenty.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulEksportImportXMLCSV.cs" />
+    <Compile Include="Interfaces\SyncModuly\IInformacjaODostepnosci.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulKategorieKlientow.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulPola.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulStany.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulCechyIAtrybuty.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulListyPrzewozowe.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulPoziomyCen.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulRabaty.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulWyliczanieGotowychCen.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulZamowienia.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulKategorieProduktow.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulKlienci.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulPliki.cs" />
+    <Compile Include="Interfaces\SyncModuly\IModulProdukty.cs" />
+    <Compile Include="Interfaces\SyncModuly\IPoZapisieZamowien.cs" />
+    <Compile Include="Interfaces\SyncModuly\IPrzedZapisemZamowien.cs" />
+    <Compile Include="Interfaces\SyncModuly\IZadaniaOglone.cs" />
+    <Compile Include="Interfaces\SyncModuly\SyncJakaOperacja.cs" />
+    <Compile Include="Interfaces\Sync\IPobieranieKodwKreskowych.cs" />
+    <Compile Include="Interfaces\Sync\IPobieranieKursuWaluty.cs" />
+    <Compile Include="Interfaces\Sync\IPobieranieZamiennikow.cs" />
+    <Compile Include="Interfaces\Sync\ITworzenieKategorii.cs" />
+    <Compile Include="Interfaces\Sync\IEksportZdjecNadysk.cs" />
+    <Compile Include="Interfaces\Sync\IPobieraniePolaDokumentu.cs" />
+    <Compile Include="Interfaces\Sync\IWyliczanieGotowychCen.cs" />
+    <Compile Include="Interfaces\Sync\IWystawianieDokumentu.cs" />
+    <Compile Include="Interfaces\Modele\IProdukty.cs" />
+    <Compile Include="ISklep.cs" />
+    <Compile Include="JednostkaProduktu.cs" />
+    <Compile Include="Jednostka.cs" />
+    <Compile Include="KategoriaKlienta.cs" />
+    <Compile Include="Core\Answer.cs" />
+    <Compile Include="Atrybut.cs" />
+    <Compile Include="CustomSearchCriteria\HiddenProductsSearchCriteria.cs" />
+    <Compile Include="CustomSearchCriteria\KatalogSzablonSearchCriteria.cs" />
+    <Compile Include="Enums\ElementySynchronizacji.cs" />
+    <Compile Include="Enums\Grupa.cs" />
+    <Compile Include="Grupa.cs" />
+    <Compile Include="Interfaces\Sync\IDrukowanieDokumentowPDF.cs" />
+    <Compile Include="KlientLimitIlosciowy.cs" />
+    <Compile Include="KlientKategoriaKlienta.cs" />
+    <Compile Include="Konfekcje.cs" />
+    <Compile Include="Kraje.cs" />
+    <Compile Include="KupowaneIlosci.cs" />
+    <Compile Include="LogWpis.cs" />
+    <Compile Include="MaileBledneDoPonownejWysylki.cs" />
+    <Compile Include="Obrazek.cs" />
+    <Compile Include="PieczatkiSzablony.cs" />
+    <Compile Include="PieczatkiTyp.cs" />
+    <Compile Include="Plik.cs" />
+    <Compile Include="Enums\StatusKoszykaHistoria.cs" />
+    <Compile Include="SzablonAkceptacji.cs" />
+    <Compile Include="SzablonAkceptacjiPoziomy.cs" />
+    <Compile Include="SzablonLimitow.cs" />
+    <Compile Include="TrescKolumna.cs" />
+    <Compile Include="PoziomCenowy.cs" />
+    <Compile Include="ProduktJednostka.cs" />
+    <Compile Include="ProduktyKodyDodatkowe.cs" />
+    <Compile Include="ProduktyZamienniki.cs" />
+    <Compile Include="ProduktKategoria.cs" />
+    <Compile Include="ProduktPlik.cs" />
+    <Compile Include="PunktyWpisy.cs" />
+    <Compile Include="Region.cs" />
+    <Compile Include="SklepKategoriaSklepu.cs" />
+    <Compile Include="StatusDokumentuPDF.cs" />
+    <Compile Include="SubkontoGrupa.cs" />
+    <Compile Include="ModulStowrzonyNaPodstawieZadania.cs" />
+    <Compile Include="Tresc.cs" />
+    <Compile Include="TrescWiersz.cs" />
+    <Compile Include="TypMailingu.cs" />
+    <Compile Include="UkladKolumn.cs" />
+    <Compile Include="UstawieniaSkrzynkiPocztowej.cs" />
+    <Compile Include="Waluta.cs" />
+    <Compile Include="Web\DaneDoWykresu.cs" />
+    <Compile Include="Web\DanePlik.cs" />
+    <Compile Include="Web\DodanieKomunikatuEventArgs.cs" />
+    <Compile Include="Web\DodawanieProduktuPrzyciski.cs" />
+    <Compile Include="Web\DynamicznePola.cs" />
+    <Compile Include="Web\IElementDoDrzewka.cs" />
+    <Compile Include="Web\IKontrolkaIndywidalizujaca.cs" />
+    <Compile Include="Web\IZaznaczanieElementu.cs" />
+    <Compile Include="Web\KolekcjaWartosci.cs" />
+    <Compile Include="Web\Komunikat.cs" />
+    <Compile Include="Web\OpisTypu.cs" />
+    <Compile Include="Web\ParametryPobieraniaDokumentu.cs" />
+    <Compile Include="Web\ParametryPola.cs" />
+    <Compile Include="Web\PlikDoEdycji.cs" />
+    <Compile Include="Web\StatusDokumentu.cs" />
+    <Compile Include="Web\WidocznoscKolumnKoszyk.cs" />
+    <Compile Include="Web\WierszRaportu.cs" />
+    <Compile Include="WidocznosciTypow.cs" />
+    <Compile Include="Zadanie.cs" />
+    <Compile Include="Interfaces\Sync\IStanyRoznicowe.cs" />
+    <Compile Include="AtrybutyKlas\ApiTypeDescriptor.cs" />
+    <Compile Include="AtrybutyKlas\DatabaseHide.cs" />
+    <Compile Include="AtrybutyKlas\Attribute.cs" />
+    <Compile Include="Core\IDocumentApiTypeVisible.cs" />
+    <Compile Include="Core\IDocumentApiVisible.cs" />
+    <Compile Include="Core\SendingDocs.cs" />
+    <Compile Include="Klient.cs" />
+    <Compile Include="CustomSearchCriteria\CustomerPriceSearchCriteria.cs" />
+    <Compile Include="CustomSearchCriteria\DokumentyPozycjeSearchCriteria.cs" />
+    <Compile Include="CustomSearchCriteria\DokumentySearchCriteria.cs" />
+    <Compile Include="CustomSearchCriteria\KategorieSearchCriteria.cs" />
+    <Compile Include="CustomSearchCriteria\KoszykiSearchCriteria.cs" />
+    <Compile Include="DokumentyStawkiVAT.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="FlatCeny.cs" />
+    <Compile Include="Enums\DiscountItemType.cs" />
+    <Compile Include="Enums\DiscountItemValueType.cs" />
+    <Compile Include="Helpers\CustomKeyValuePair.cs" />
+    <Compile Include="HistoriaDokumentu.cs" />
+    <Compile Include="DocumentSummary.cs" />
+    <Compile Include="Documents\EDocumentType.cs" />
+    <Compile Include="WiadomoscEmail.cs" />
+    <Compile Include="Extensions\ObjectExt.cs" />
+    <Compile Include="HistoriaDokumentuProdukt.cs" />
+    <Compile Include="Interfaces\Sync\IDokumentyRoznicowe.cs" />
+    <Compile Include="Interfaces\IModelSearcharable.cs" />
+    <Compile Include="Interfaces\IOrderImportProvider.cs" />
+    <Compile Include="Interfaces\IProviderDB.cs" />
+    <Compile Include="Interfaces\Sync\ISciaganieNowychRejestracji.cs" />
+    <Compile Include="Interfaces\Sync\ISyncProvider.cs" />
+    <Compile Include="Jezyk.cs" />
+    <Compile Include="KategoriaProduktu.cs" />
+    <Compile Include="CustomSearchCriteria\KoszykiPozycjeSearchCriteria.cs" />
+    <Compile Include="Enums\SposobPokazywaniaKategoriiKataloguBezLogowania.cs" />
+    <Compile Include="Magazyn.cs" />
+    <Compile Include="NavigationItem.cs" />
+    <Compile Include="NewsletterKampania.cs" />
+    <Compile Include="PageInfoClass.cs" />
+    <Compile Include="CenaPoziomu.cs" />
+    <Compile Include="Produkt.cs" />
+    <Compile Include="ProduktStan.cs" />
+    <Compile Include="ProduktUkryty.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rabat.cs" />
+    <Compile Include="Register.cs" />
+    <Compile Include="ReportTableOfContentItem.cs" />
+    <Compile Include="Enums\RoleType.cs" />
+    <Compile Include="SaveOrderException.cs" />
+    <Compile Include="SearchCriteria.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomSearchCriteria\AdressSearchCriteria.cs" />
+    <Compile Include="CustomSearchCriteria\BaseSearchCriteria.cs" />
+    <Compile Include="Helpers\Serializacje.cs" />
+    <Compile Include="KategoriaSklepu.cs" />
+    <Compile Include="Tlumaczenie.cs" />
+    <Compile Include="SposobPokazywaniaStanowRegula.cs" />
+    <Compile Include="TlumaczeniePole.cs" />
+    <Compile Include="TworzDynamicznieTabele.cs" />
+    <Compile Include="Ustawienie.cs" />
+    <Compile Include="ShippingDocumentCollection.cs" />
+    <Compile Include="Sklep.cs" />
+    <Compile Include="Statistic.cs" />
+    <Compile Include="StatisticRow.cs" />
+    <Compile Include="Enums\StatystykiRodzaj.cs" />
+    <Compile Include="StatystykiZdarzenie.cs" />
+    <Compile Include="SystemSettings.cs" />
+    <Compile Include="SzablonyEdytorow.cs" />
+    <Compile Include="TemplateItem.cs" />
+    <Compile Include="Templates\ITemplateBase.cs" />
+    <Compile Include="TradeCredit.cs" />
+    <Compile Include="Cecha.cs" />
+    <Compile Include="VAT.cs" />
+    <Compile Include="Web\MenuItem.cs" />
+    <Compile Include="Web\Podpowiedz.cs" />
+    <Compile Include="Web\ProduktKategoriaKomplamentarna.cs" />
+    <Compile Include="Web\TrybyListyProduktow.cs" />
+    <Compile Include="Zamowienie.cs" />
+    <Compile Include="ZamowieniaImport.cs" />
+    <Compile Include="ZamowienieDokumenty.cs" />
+    <Compile Include="ZamowienieProdukt.cs" />
+    <Compile Include="StatusZamowienia.cs" />
+    <Compile Include="ZamowienieSynchronizacja.cs" />
+    <Compile Include="Zdarzenie.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\Dokumenty\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.Common\ServiceStack.Common.csproj">
+      <Project>{982416db-c143-4028-a0c3-cf41892d18d3}</Project>
+      <Name>ServiceStack.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.OrmLite.SqlServer\ServiceStack.OrmLite.SqlServer.csproj">
+      <Project>{1887dc99-9139-43e3-a7aa-6d74714b3a5d}</Project>
+      <Name>ServiceStack.OrmLite.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.OrmLite\ServiceStack.OrmLite.csproj">
+      <Project>{96179ac6-f6f1-40c3-9fdd-4f6582f54c5c}</Project>
+      <Name>ServiceStack.OrmLite</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

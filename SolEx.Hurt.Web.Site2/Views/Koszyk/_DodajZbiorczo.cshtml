@@ -1,0 +1,26 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model Tuple<string,string>
+
+@{
+    string skrypt = "return DodajZbiorczo(this)";
+    string tekst = "Dodaj wybrane zbiorczo do koszyka";
+
+    //dodawanie indywidualizacji
+    if (Model != null)
+    {
+        if (!string.IsNullOrEmpty(Model.Item2))
+        {
+            skrypt = Model.Item2;
+        }
+        if (!string.IsNullOrEmpty(Model.Item1))
+        {
+            tekst = Model.Item1;
+        }
+
+    }
+}
+
+<div class="produkt-dodaj-zbiorczo-do-koszyka btn btn-success btn-sm" onclick="@skrypt">
+        <i class="nie-dodane fa fa-plus">&nbsp;</i>
+    @Html.PobierzTlumaczenie(@tekst)
+</div>

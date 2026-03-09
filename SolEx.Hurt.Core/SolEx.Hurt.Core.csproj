@@ -1,0 +1,747 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FEBDC3B5-EE97-48E4-8DF0-2ABEA38DF790}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SolEx.Hurt.Core</RootNamespace>
+    <AssemblyName>SolEx.Hurt.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TEST|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\TEST\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TESTLOG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TEST|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\TEST\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper, Version=3.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.3.0.0-beta7\lib\net451\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EDIFACT">
+      <HintPath>..\Libs\ediparser\EDIFACT.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="FakeItEasy, Version=3.1.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
+      <HintPath>..\packages\FakeItEasy.3.1.0\lib\net40\FakeItEasy.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.1.0\lib\net40\FastMember.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LumenWorks.Framework.IO">
+      <HintPath>..\Libs\LumenWorks.Framework.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler.Shared, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\MiniProfiler.Shared.4.3.8\lib\net461\MiniProfiler.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\Libs\ORMLite\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\Libs\ORMLite\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.103\lib\net451\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BLL\AdresyBLL.cs" />
+    <Compile Include="BLL\BllBazaPobieranieModyfikowanieModyfikowanieDanych.cs" />
+    <Compile Include="BLL\BlogDostep.cs" />
+    <Compile Include="BLL\BlogWpisBll.cs" />
+    <Compile Include="BLL\CechyProduktyDostep.cs" />
+    <Compile Include="BLL\DokumentPlatnosciOnline.cs" />
+    <Compile Include="BLL\Interfejsy\IAtrybutyDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IAdresyDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IBlogDostep.cs" />
+    <Compile Include="BLL\Interfejsy\ICechyProduktyDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IConfigBLL.cs" />
+    <Compile Include="BLL\Interfejsy\IListyPrzewozoweBll.cs" />
+    <Compile Include="BLL\Interfejsy\IPieczatkiBll.cs" />
+    <Compile Include="BLL\Interfejsy\IPliki.cs" />
+    <Compile Include="BLL\KomunikatyBll.cs" />
+    <Compile Include="BLL\OdpowiedzKoszyk.cs" />
+    <Compile Include="BLL\OpisImportera.cs" />
+    <Compile Include="BLL\RegulyKoszyka\AdresDodany.cs" />
+    <Compile Include="BLL\RegulyKoszyka\PozycjaJestProduktemWirtualnym.cs" />
+    <Compile Include="BLL\RegulyKoszyka\AdresRecznieDodany.cs" />
+    <Compile Include="BLL\RegulyKoszyka\CenaPozycji.cs" />
+    <Compile Include="BLL\Szukanie.SQL.cs" />
+    <Compile Include="BLL\WirtualneProduktyProvidery\ProduktyWirtualneProvider.cs" />
+    <Compile Include="BLL\Interfejsy\IProfilKlientaBll.cs" />
+    <Compile Include="BLL\Interfejsy\ISolexBllCalosc.cs" />
+    <Compile Include="BLL\Interfejsy\IRegionyDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IProduktyKategorieDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IProduktyJednostkiDostep.cs" />
+    <Compile Include="BLL\Interfejsy\ITestyKonfiguracji.cs" />
+    <Compile Include="BLL\Interfejsy\ITresciDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IPunktyDostep.cs" />
+    <Compile Include="BLL\Interfejsy\ISklepy.cs" />
+    <Compile Include="BLL\Interfejsy\IWidocznosciTypowBLL.cs" />
+    <Compile Include="BLL\Interfejsy\IWysylanieWiadomosciEmail.cs" />
+    <Compile Include="BLL\NiezalecanaZmiana.cs" />
+    <Compile Include="BLL\Obrazek.cs" />
+    <Compile Include="BLL\PieczatkiBll.cs" />
+    <Compile Include="BLL\RegulyKoszyka\IIloscLacznaBaza.cs" />
+    <Compile Include="BLL\RegulyKoszyka\IloscProduktowZAtrybutem.cs" />
+    <Compile Include="BLL\ProduktyJednostkiDostep.cs" />
+    <Compile Include="BLL\ProduktyKategorieDostep.cs" />
+    <Compile Include="BLL\ProfilKlientaDostep.cs" />
+    <Compile Include="BLL\RegionyDostep.cs" />
+    <Compile Include="BLL\RegulyKoszyka\LacznaIloscPunktow.cs" />
+    <Compile Include="BLL\RegulyKoszyka\ProduktMojKatalog.cs" />
+    <Compile Include="BLL\RegulyKoszyka\RegionKlienta.cs" />
+    <Compile Include="BLL\Testy\SprawdzenieDubliAtrybutow.cs" />
+    <Compile Include="BLL\Testy\SprawdzZapisyPdfNaDysku.cs" />
+    <Compile Include="BLL\Testy\TestSprawdzajacyWymaganeUstawienia.cs" />
+    <Compile Include="BLL\TresciDostep.cs" />
+    <Compile Include="BLL\WalidatoryDanych\Klienci\WalidatorMaila.cs" />
+    <Compile Include="BLL\WalidatoryDanych\Produkty\WalidatorKoduKreskowego.cs" />
+    <Compile Include="BLL\WalidatoryDanych\Liczbowe\WalidatorInteger.cs" />
+    <Compile Include="BLL\WalidatoryDanych\TrescPojemnik\WalidatorSzerokosc.cs" />
+    <Compile Include="BLL\WalidatoryDanych\Tresc\WalidatorSymbol.cs" />
+    <Compile Include="BLL\Web\DodatkowePoleKoszyka.cs" />
+    <Compile Include="BLL\Web\ParametryIlosciProduktu.cs" />
+    <Compile Include="BLL\Web\ParametryKoszykCalosc.cs" />
+    <Compile Include="BLL\Web\SortowanieHelper.cs" />
+    <Compile Include="BLL\Web\TrybyListyProduktow.cs" />
+    <Compile Include="BLL\ZadaniaDlaZamowienia\KopiujPoleProduktDoPolaPozycjiZamowienia.cs" />
+    <Compile Include="BLL\ZadaniaDlaZamowienia\ZadaniaPozycjiZamowienia.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\BlokadaFinalizacjiKoszykaZaPunkty.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodatkowePolaZPropertisaKoszykaDoUstawieniaWErp.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodawanieGratisowDoKoszykaIlosc.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodawanieGratisowDoKoszykaWartosc.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DostawaBaza.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\IModulKoszykGratisy.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\IModulWyboruMagazynuRealizujacego.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\IModulWyboruGratisow.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\IPoleWlasneKoszyka.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DataRealizacji.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KolorowaniePozycji.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KomunikatIloscSztukKoszyka.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KonfigurowalnePolaBaza.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PozostawWKoszykuPozycjePonadStan.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PrzekroczoneStanyBaza.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PrzeliczGradacjeNiespelnionePoziomy.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\ModulPosiadajacyWarunki.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PieczatkiPozycje.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\WyborMagazynuRealizujacegoZamowienie.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PoleDatoweKoszyk.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\NumerWlasnyZamowienia.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PoleUploadPlikow.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PoleTeskstoweKoszyk.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PytanieTakNie.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\ListaRozwijana.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RozbijanieKosztowCustomizacji.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\UkrywanieWyboruAdresuKoszyk.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\WyborProduktowGratisowych.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\WyborProduktowGratisowychPoCesze.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\ZmianaCenyKastomizacjaProduktu.cs" />
+    <Compile Include="CustomPatternLayout.cs" />
+    <Compile Include="DostepDane\BazaDostepDane.cs" />
+    <Compile Include="DostepDane\DaneObiektu\DaneDoListy.cs" />
+    <Compile Include="DostepDane\DaneObiektu\EdytowalnyAdmin.cs" />
+    <Compile Include="DostepDane\DaneObiektu\OpisObiektu.cs" />
+    <Compile Include="DostepDane\DaneObiektu\OpisPolaObiektuBaza.cs" />
+    <Compile Include="DostepDane\DostepDoDanych.cs" />
+    <Compile Include="DostepDane\EkstrakcjaParametrowLambda.cs" />
+    <Compile Include="DostepDane\IDaneDostep.cs" />
+    <Compile Include="DostepDane\DaneObiektu\OpisPolaObiektu.cs" />
+    <Compile Include="DostepDane\ParametrBindowaniaPobieraniaDanych.cs" />
+    <Compile Include="DostepDane\DaneObiektu\PobieranieParametrowKontrolek.cs" />
+    <Compile Include="DostepDane\SortowanieKryteria.cs" />
+    <Compile Include="DostepDane\SposobCachowania.cs" />
+    <Compile Include="DostepDane\SqlSettingProvider.cs" />
+    <Compile Include="ExtensionRozszerzeniaKlas\IObiektPrzechowujacyKontrolke.cs" />
+    <Compile Include="Helper\LockHelper.cs" />
+    <Compile Include="Helper\SlownikKlasProviderowWirtualnychProduktow.cs" />
+    <Compile Include="Helper\SlownikKoncesji.cs" />
+    <Compile Include="Helper\SlownikPanstwZSymbolem.cs" />
+    <Compile Include="Helper\SlownikPolPozycjiZamowienia.cs" />
+    <Compile Include="Helper\SlownikStatusowDokumentow.cs" />
+    <Compile Include="Helper\SlownikAtrybutowKoncesji.cs" />
+    <Compile Include="Helper\SlownikPlikow.cs" />
+    <Compile Include="Helper\SlownikPlikowBaza.cs" />
+    <Compile Include="Helper\SlownikSzablonowProduktowWNewsletterach.cs" />
+    <Compile Include="Helper\SlownikSzablonowNewsletterow.cs" />
+    <Compile Include="Helper\SlownikWidokowDlaWybranychProduktow.cs" />
+    <Compile Include="Helper\SlownikSzablonowRaportowPDF.cs" />
+    <Compile Include="Helper\Slownik_Integracja_Szablony.cs" />
+    <Compile Include="Importy\Eksporty\CsvExcel.cs" />
+    <Compile Include="Importy\Eksporty\CsvSymbol.cs" />
+    <Compile Include="Importy\Eksporty\DokumentyOptimaTxt.cs" />
+    <Compile Include="Importy\Eksporty\KamsoftAow.cs" />
+    <Compile Include="Importy\Eksporty\Kamsoft.cs" />
+    <Compile Include="Importy\Eksporty\SmallBussinesExp.cs" />
+    <Compile Include="Importy\Eksporty\WFMagXml.cs" />
+    <Compile Include="Importy\ImportObiektuCsv.cs" />
+    <Compile Include="Importy\Koszyk\OptimaXml.cs" />
+    <Compile Include="Importy\Koszyk\ImportZPolaTextowego.cs" />
+    <Compile Include="Indywidualizacja.cs" />
+    <Compile Include="IPozycjaDokumentuBll.cs" />
+    <Compile Include="ModelBLL\DzialaniaUzytkownikow.cs" />
+    <Compile Include="GrupaBLL.cs" />
+    <Compile Include="Helper\SlownikAtrybutow.cs" />
+    <Compile Include="Helper\SlownikAtrybutSposobyPokazywania.cs" />
+    <Compile Include="Helper\SlownikDrzewkoMenu.cs" />
+    <Compile Include="Helper\SlownikFormatZapisu.cs" />
+    <Compile Include="Helper\SlownikGoogleTlumaczTrybyWyswietlania.cs" />
+    <Compile Include="Helper\SlownikGrupy.cs" />
+    <Compile Include="Helper\SlownikGrupyBlogow.cs" />
+    <Compile Include="Helper\SlownikPolKategoriaProduktu.cs" />
+    <Compile Include="Helper\SlownikPolBlogWpis.cs" />
+    <Compile Include="Helper\SlownikRegionow.cs" />
+    <Compile Include="Helper\SlownikRodzajowMenu.cs" />
+    <Compile Include="Helper\SlownikSposobowPokazywaniaStanow.cs" />
+    <Compile Include="Helper\SlownikSzerokosciKolumny.cs" />
+    <Compile Include="Helper\SlownikJednostek.cs" />
+    <Compile Include="Helper\SlownikJezykow.cs" />
+    <Compile Include="Helper\SlownikKatalogZasoby.cs" />
+    <Compile Include="Helper\SlownikKategorieBlogow.cs" />
+    <Compile Include="Helper\SlownikKategoriiBloga.cs" />
+    <Compile Include="Helper\SlownikKategoriiKlientaNazwa.cs" />
+    <Compile Include="Helper\SlownikKlassCss.cs" />
+    <Compile Include="Helper\SlownikKlientow.cs" />
+    <Compile Include="Helper\SlownikNieKlientow.cs" />
+    <Compile Include="Helper\SlownikPolKlienta.cs" />
+    <Compile Include="Helper\SlownikPolProduktowTylkoOpisy.cs" />
+    <Compile Include="Helper\SlownikPolStringowychProduktu.cs" />
+    <Compile Include="Helper\SlownikPresetowDoZdjec.cs" />
+    <Compile Include="Helper\SlownikRodzin.cs" />
+    <Compile Include="Helper\SlownikKategoriiSklepow.cs" />
+    <Compile Include="Helper\SlownikKultur.cs" />
+    <Compile Include="Helper\SlownikSlajdow.cs" />
+    <Compile Include="Helper\SlownikTresci.cs" />
+    <Compile Include="Helper\SlownikTresciSystemowych.cs" />
+    <Compile Include="Helper\SlownikTypow.cs" />
+    <Compile Include="Helper\SlownikWidokowBaza.cs" />
+    <Compile Include="Helper\SlownikUkladowDlaBloga.cs" />
+    <Compile Include="Helper\SlownikUstawienieWartosc.cs" />
+    <Compile Include="Helper\SlownikWalut.cs" />
+    <Compile Include="Helper\SlownikRol.cs" />
+    <Compile Include="Helper\SlownikWidocznosci.cs" />
+    <Compile Include="Helper\SlownikWidokowSzczegolowProduktow.cs" />
+    <Compile Include="Helper\SlownikWidokowListyProduktow.cs" />
+    <Compile Include="Helper\SlownikGrupyKategoriiKlienta.cs" />
+    <Compile Include="Helper\SlownikPolProduktow.cs" />
+    <Compile Include="Helper\SlownikRozmiarZdjec.cs" />
+    <Compile Include="BLL\WarunkiRegulPunktow\KategoriaKlientow.cs" />
+    <Compile Include="Helper\SlownikSposobowImportuKoszyka.cs" />
+    <Compile Include="Helper\SlownikWidokowListyProduktowRodzinowych.cs" />
+    <Compile Include="Importy\Eksporty\EppKartoteki.cs" />
+    <Compile Include="Importy\Koszyk\AutodakolXls.cs" />
+    <Compile Include="Importy\Koszyk\BestautomaxXls.cs" />
+    <Compile Include="Importy\Koszyk\IntercarsXls.cs" />
+    <Compile Include="Importy\Model\PozycjaKoszyka.cs" />
+    <Compile Include="ModelBLL\AdministratorBLL.cs" />
+    <Compile Include="ModelBLL\BrakIdentyfikatoraException.cs" />
+    <Compile Include="ModelBLL\HarmonogramBLL.cs" />
+    <Compile Include="ModelBLL\IKontrolkaTresciBaza.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IDokument.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IFormatowanie.cs" />
+    <Compile Include="ModelBLL\Interfejsy\ISolexHelper.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IZastepczaNazwaWartosc.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IPrefixSofix.cs" />
+    <Compile Include="ModelBLL\Interfejsy\INaglowekStopka.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IPoleKlient.cs" />
+    <Compile Include="ModelBLL\AtrybutyBLL.cs" />
+    <Compile Include="BLL\BllBaza.cs" />
+    <Compile Include="BLL\CechyAtrybuty.cs" />
+    <Compile Include="BLL\ConfigBLL.cs" />
+    <Compile Include="BLL\DokumentyDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IKoszykiDostep.cs" />
+    <Compile Include="BLL\Interfejsy\GenerowanieDokumentu.cs" />
+    <Compile Include="BLL\Interfejsy\ISzukanie.cs" />
+    <Compile Include="Helper\SlownikKategoriiProduktow.cs" />
+    <Compile Include="Helper\SlownikStatusow.cs" />
+    <Compile Include="ModelBLL\IFlatCenyBLL.cs" />
+    <Compile Include="BLL\KlasaOpakowanieTesty.cs" />
+    <Compile Include="BLL\PlikiDostep.cs" />
+    <Compile Include="BLL\PunktyDostep.cs" />
+    <Compile Include="BLL\RegulyKoszyka\DarmowaWysylkaRegion.cs" />
+    <Compile Include="BLL\RegulyKoszyka\KredytKupiecki.cs" />
+    <Compile Include="BLL\RegulyKoszyka\ModulLojalnosciowy.cs" />
+    <Compile Include="BLL\RegulyKoszyka\ZlozonePrzezPracownika.cs" />
+    <Compile Include="BLL\RegulyKoszyka\Opiekun.cs" />
+    <Compile Include="BLL\RegulyKoszyka\CzyZalogowanyJakoOpiekun.cs" />
+    <Compile Include="BLL\RegulyPunktowe\PomnozeniePunktowPozycjiDokumentu.cs" />
+    <Compile Include="BLL\RegulyPunktowe\PomnozeniePunktow.cs" />
+    <Compile Include="BLL\RegulyPunktowe\PunktyZaWartoscPozycji.cs" />
+    <Compile Include="BLL\RegulyPunktowe\PunktyZaWartoscDokumentu.cs" />
+    <Compile Include="BLL\RegulyPunktowe\RegulaPunktowaCalegoDokumentu.cs" />
+    <Compile Include="BLL\RegulyPunktowe\RegulaPunktowaPozycjiDokumentu.cs" />
+    <Compile Include="BLL\RegulyPunktowe\RegulaPunktowa.cs" />
+    <Compile Include="BLL\Testy\CzyWalutaPln.cs" />
+    <Compile Include="BLL\Testy\TestKonfiguracjiSkrzynkiNewsletterow.cs" />
+    <Compile Include="BLL\Testy\TestUstawien.cs" />
+    <Compile Include="BLL\WarunkiRegulPunktow\IloscProduktow.cs" />
+    <Compile Include="BLL\WarunkiRegulPunktow\DataDokumentuPrzedzial.cs" />
+    <Compile Include="BLL\WarunkiRegulPunktow\IWarunekRegulyCalegoDokumentu.cs" />
+    <Compile Include="BLL\WarunkiRegulPunktow\IWarunekRegulyPozycjiDokumentu.cs" />
+    <Compile Include="BLL\WarunkiRegulPunktow\WarunekRegulyPunktowej.cs" />
+    <Compile Include="BLL\Interfejsy\IStaleFiltry.cs" />
+    <Compile Include="BLL\Interfejsy\IParametryStronicowania.cs" />
+    <Compile Include="BLL\Szukanie.cs" />
+    <Compile Include="BLL\Testy\CzyJestJednaRejestracja.cs" />
+    <Compile Include="BLL\Testy\CzyJestSposobPokazywaniaStanow.cs" />
+    <Compile Include="BLL\Testy\CzyKlientMaOpiekunow.cs" />
+    <Compile Include="BLL\Testy\CzyMetkiSaSkonfigurowane.cs" />
+    <Compile Include="BLL\Testy\CzySynchronizacjaWCiaguDoby.cs" />
+    <Compile Include="BLL\Testy\CzySynchronizacjeAutomatyczneSaAktywne.cs" />
+    <Compile Include="BLL\Testy\CzyWyslanyNewsletter.cs" />
+    <Compile Include="BLL\Testy\IloscAktynycgModulowKoszyka.cs" />
+    <Compile Include="BLL\Testy\IloscPracownikow.cs" />
+    <Compile Include="BLL\Testy\SprawdzenieDomyslnychCen.cs" />
+    <Compile Include="BLL\Testy\SprawdzenieIkoscAktywnychKlientow.cs" />
+    <Compile Include="BLL\Testy\SprawdzenieIlosciAktywnychProduktow.cs" />
+    <Compile Include="BLL\Testy\SprawdzenieIlosciDokumentow.cs" />
+    <Compile Include="BLL\Testy\SprawdzenieIlosciZamowien.cs" />
+    <Compile Include="BLL\Testy\SprawdzKatalogPdf.cs" />
+    <Compile Include="BLL\Testy\SprawdzKatalogZdjec.cs" />
+    <Compile Include="BLL\Testy\TestKonfiguracjiBaza.cs" />
+    <Compile Include="BLL\Testy\TestPrzechwytywanieMaili.cs" />
+    <Compile Include="BLL\Testy\TestSlabychHasel.cs" />
+    <Compile Include="BLL\Testy\TestyKonfiguracji.cs" />
+    <Compile Include="BLL\WidocznosciTypowBLL.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DostawaUbezpieczona.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KopiowanieParametrowIndywidualizacjiDoUwag.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\UstawMagazyn.cs" />
+    <Compile Include="Helper\EppHelper.cs" />
+    <Compile Include="Helper\Przedzial.cs" />
+    <Compile Include="Helper\SlownikBazowy.cs" />
+    <Compile Include="Helper\SlownikCech.cs" />
+    <Compile Include="Helper\SlownikKategoriiKlienta.cs" />
+    <Compile Include="Helper\SlownikMagazynow.cs" />
+    <Compile Include="Helper\SlownikMapowanePolaRejestracja.cs" />
+    <Compile Include="Helper\SlownikKrajow.cs" />
+    <Compile Include="Helper\SlownikStronAdmina.cs" />
+    <Compile Include="Helper\SlownikPoziomuCen.cs" />
+    <Compile Include="Helper\SlownikPracownikow.cs" />
+    <Compile Include="Helper\SlownikProduktow.cs" />
+    <Compile Include="Helper\SlownikPanstw.cs" />
+    <Compile Include="Helper\SlownikSposobyDostawy.cs" />
+    <Compile Include="Helper\SlownikSposobyPlatnosci.cs" />
+    <Compile Include="Helper\SlownikSzablonow.cs" />
+    <Compile Include="ModelBLL\Interfejsy\ICechyBll.cs" />
+    <Compile Include="Importy\Koszyk\ZabkaTxt.cs" />
+    <Compile Include="BLL\Interfejsy\IPoziomyCenBll.cs" />
+    <Compile Include="BLL\Interfejsy\ISesjaHelper.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IProduktDoSzablonu.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IProduktKlienta.cs" />
+    <Compile Include="ModelBLL\CenaDoPokazania.cs" />
+    <Compile Include="Importy\Eksporty\PcMarket.cs" />
+    <Compile Include="Importy\Eksporty\Kucharscy.cs" />
+    <Compile Include="Importy\Eksporty\Xml.cs" />
+    <Compile Include="Importy\Eksporty\Csv.cs" />
+    <Compile Include="Importy\Eksporty\Pdf.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IKatalogSzablonModelBLL.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IKoszykiBLL.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IKoszykPozycja.cs" />
+    <Compile Include="BLL\Interfejsy\IDokumentyDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IMaileBLL.cs" />
+    <Compile Include="BLL\Interfejsy\ICechyAtrybuty.cs" />
+    <Compile Include="BLL\Interfejsy\IKategorieDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IKlienciDostep.cs" />
+    <Compile Include="BLL\Interfejsy\IModulyStanyZZewnatrz.cs" />
+    <Compile Include="BLL\Interfejsy\IProduktyBazowe.cs" />
+    <Compile Include="BLL\Interfejsy\IRabatyBLL.cs" />
+    <Compile Include="BLL\Interfejsy\ISklepyBll.cs" />
+    <Compile Include="BLL\Interfejsy\IZadaniaBLL.cs" />
+    <Compile Include="BLL\Interfejsy\IStatystyki.cs" />
+    <Compile Include="BLL\Interfejsy\IProduktyKlienta.cs" />
+    <Compile Include="BLL\Interfejsy\IProduktyStanBll.cs" />
+    <Compile Include="BLL\Interfejsy\IZamowieniaDostep.cs" />
+    <Compile Include="BLL\KategorieDostep.cs" />
+    <Compile Include="BLL\KlienciDostep.cs" />
+    <Compile Include="BLL\KoszykiDostep.cs" />
+    <Compile Include="BLL\KupowaneIlosciBLL.cs" />
+    <Compile Include="BLL\ProduktyBazowe.cs" />
+    <Compile Include="BLL\ProduktyKlienta.cs" />
+    <Compile Include="BLL\ProduktyKodyDodatkoweBll.cs" />
+    <Compile Include="BLL\Languages.cs" />
+    <Compile Include="BLL\LimityIloscioweBLL.cs" />
+    <Compile Include="BLL\ListyPrzewozoweBll.cs" />
+    <Compile Include="BLL\LockSystem.cs" />
+    <Compile Include="BLL\MaileBLL.cs" />
+    <Compile Include="BLL\PlikiBLL.cs" />
+    <Compile Include="BLL\Produkty_stanBLL.cs" />
+    <Compile Include="BLL\RegulyKoszyka\AktualnaData.cs" />
+    <Compile Include="BLL\RegulyKoszyka\TypVAT.cs" />
+    <Compile Include="BLL\RegulyKoszyka\WartoscVAT.cs" />
+    <Compile Include="BLL\RegulyKoszyka\LacznaIloscProduktowWKoszyku.cs" />
+    <Compile Include="BLL\RegulyKoszyka\ObjetoscCalegoKoszyka.cs" />
+    <Compile Include="BLL\RegulyKoszyka\ObjetoscPozycjiKoszyka.cs" />
+    <Compile Include="BLL\RegulyKoszyka\ProduktJednostka.cs" />
+    <Compile Include="BLL\RegulyKoszyka\ProduktKategoria.cs" />
+    <Compile Include="BLL\RegulyKoszyka\ProduktWIlosciZbiorczej.cs" />
+    <Compile Include="BLL\RegulyKoszyka\ProduktyZCechaPozycje.cs" />
+    <Compile Include="BLL\RegulyKoszyka\PoczatekKategoriaKlienta.cs" />
+    <Compile Include="BLL\RegulyKoszyka\IloscProduktowZCecha.cs" />
+    <Compile Include="BLL\RegulyKoszyka\IRegulaKoszyka.cs" />
+    <Compile Include="BLL\RegulyKoszyka\KategoriaKlienta.cs" />
+    <Compile Include="BLL\RegulyKoszyka\KrajKlienta.cs" />
+    <Compile Include="BLL\RegulyKoszyka\LacznaWartoscKoszyka.cs" />
+    <Compile Include="BLL\RegulyKoszyka\PozycjaIlosc.cs" />
+    <Compile Include="BLL\RegulyKoszyka\IRegulaCalegoKoszyka.cs" />
+    <Compile Include="BLL\RegulyKoszyka\RegulaKwoty.cs" />
+    <Compile Include="BLL\RegulyKoszyka\IRegulaPozycji.cs" />
+    <Compile Include="BLL\RegulyKoszyka\SposobDostawy.cs" />
+    <Compile Include="BLL\RegulyKoszyka\SposobPlatnosci.cs" />
+    <Compile Include="BLL\RegulyKoszyka\WagaKilogramaZamowienia.cs" />
+    <Compile Include="BLL\RegulyKoszyka\WartoscProduktowMojKatalog.cs" />
+    <Compile Include="BLL\RegulyKoszyka\WybraneProdukty.cs" />
+    <Compile Include="BLL\Sklepy.cs" />
+    <Compile Include="BLL\Statystyki.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\BlokadaFinalizacjiKoszyka.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodajDoUwag.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodajPozycjeDoKoszyka.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodajPozycjeDoKoszykaNaPodstawieInnego.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodajPozycjeNaPodstawieProduktowZCecha.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodajPozycjeNaPodstawieZestawu.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodatkowePolaDoUstawieniaWErp.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DodawaniePozycjiBaza.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\IndywidualizacjaProduktu.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KomunikatKoszyk.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\MozliwoscWczytywaniaKoszyka.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DomyslnaDostawaZKategorii.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KomunikatDarmowaDostawa.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KomunikatWagaKoszyka.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PrzypisanieZamowieniuKategorii.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RabatKwotowyNaPozycje.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RabatNaPodstawieSprzedazy.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RabatySaturn.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KonfigurowalneUwagi.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\DostawaZaleznaOdWagi.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\EksportZamowieniaDoCSV.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\IGrupaZadania.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\ISposobDostawy.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\ISposobPlatnosci.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KosztDostawy.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KoszykLimityIloscioweSubkont.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\KoszykLimityWartoscioweSubkont.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\MinimalnaKwotaZamowienia.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\Platnosc.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\PrzekroczoneStany.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RabatZaZestaw.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RegulaRabatNaPozycji.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\RozbijanieDostawyNaPozycje.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\UstawDefinicjeDokumentuERP.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\ZadanieCalegoKoszyka.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\ZadanieKoszyka.cs" />
+    <Compile Include="BLL\RegulyKoszyka\RegulaKoszykaWaga.cs" />
+    <Compile Include="BLL\zadaniaBLL.cs" />
+    <Compile Include="BLL\ZadaniaKoszyka\ZadaniePozycjiKoszyka.cs" />
+    <Compile Include="BLL\ZamowieniaDostep.cs" />
+    <Compile Include="CacheBLL.cs" />
+    <Compile Include="ModelBLL\CechyBLL.cs" />
+    <Compile Include="BLL\Interfejsy\ICacheBll.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IJednostkaPRoduktuBll.cs" />
+    <Compile Include="ModelBLL\Interfejsy\ITemplateParser.cs" />
+    <Compile Include="Importy\Eksporty\OptimaXml.cs" />
+    <Compile Include="Importy\Koszyk\Eldorado2000.cs" />
+    <Compile Include="Importy\Koszyk\PlikiEpp.cs" />
+    <Compile Include="Importy\Koszyk\RcHurt.cs" />
+    <Compile Include="Importy\Koszyk\Sdf.cs" />
+    <Compile Include="Importy\Koszyk\SmallBussines.cs" />
+    <Compile Include="ModelBLL\DokumentyBLL.cs" />
+    <Compile Include="ModelBLL\DokumentyPozycje.cs" />
+    <Compile Include="ModelBLL\FlatCenyBLL.cs" />
+    <Compile Include="Importy\Eksporty\Epp.cs" />
+    <Compile Include="Importy\Koszyk\BioplanetCsv.cs" />
+    <Compile Include="Importy\Koszyk\BioplanetXls.cs" />
+    <Compile Include="Importy\Koszyk\FriscoXLS.cs" />
+    <Compile Include="Importy\Koszyk\PlikiEdifact.cs" />
+    <Compile Include="Importy\Koszyk\ImportBaza.cs" />
+    <Compile Include="Importy\Koszyk\ImportCsv.cs" />
+    <Compile Include="Importy\ManagerImportow.cs" />
+    <Compile Include="Importy\Koszyk\MarcPol.cs" />
+    <Compile Include="Importy\Koszyk\PcMarket7.cs" />
+    <Compile Include="JednostkaProduktuBll.cs" />
+    <Compile Include="KategorieBLL.cs" />
+    <Compile Include="Klient.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IProduktBazowy.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\MailProduktyPrzyjeteNaMagazyn.cs" />
+    <Compile Include="ModelBLL\Sortowanie.cs" />
+    <Compile Include="ModelBLL\KoszykBll.cs" />
+    <Compile Include="ModelBLL\KoszykPozycjaApi.cs" />
+    <Compile Include="ModelBLL\KoszykPozycje.cs" />
+    <Compile Include="ModelBLL\KrajeBLL.cs" />
+    <Compile Include="ModelBLL\LimitIlosciowyBLL.cs" />
+    <Compile Include="ModelBLL\DocumentCollection.cs" />
+    <Compile Include="ModelBLL\Interfejsy\IPrzetwarzanieKoszyka.cs" />
+    <Compile Include="ModelBLL\KatalogSzablonModelBLL.cs" />
+    <Compile Include="ModelBLL\ModulSynchronizacji.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\BladImportu.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\GenerowanieKluczaApi.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\PowiadomienieZKoszykiem.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\PowiadomienieZZamowieniem.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ProsbaOInformacjeODostepnosci.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\PojawienieSieProduktow.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\Formularz.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ListyPrzewozowe.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\NoweProduktyWSystemie.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\NoweZamowienie.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\NowyDokument.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\NowyKlient.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\SzablonMailaBaza.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\PobranieFaktury.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\PowitanieSzef.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\PrzeterminowanePlatnosci.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\SzablonMailaNewslettera.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ZapisDoNewslettera.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\Rejestracja.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ResetHasla.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ZamowienieDoAkceptacji.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ZamowienieOdrzucone.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ZamowienieZaakceptowane.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ZmianaAdresuIP.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ZmianaStatusuDokumentu.cs" />
+    <Compile Include="ModelBLL\ObiektyMaili\ZmianaTerminuRealizacjiZamowienia.cs" />
+    <Compile Include="ModelBLL\KontrolkaTresciBaza.cs" />
+    <Compile Include="ModelBLL\OpisProduktuGratisowego.cs" />
+    <Compile Include="ModelBLL\Owner.cs" />
+    <Compile Include="ModelBLL\Pracownik.cs" />
+    <Compile Include="ModelBLL\ProfilKlientaBll.cs" />
+    <Compile Include="ModelBLL\RabatBLL.cs" />
+    <Compile Include="ModelBLL\RepreznetowyTypModulow.cs" />
+    <Compile Include="ModelBLL\SposobPokazywaniaStanow.cs" />
+    <Compile Include="ModelBLL\SyncModul.cs" />
+    <Compile Include="ModelBLL\SzablonAkceptacjiBll.cs" />
+    <Compile Include="ModelBLL\TrescKolumnaBll.cs" />
+    <Compile Include="ModelBLL\TrescBll.cs" />
+    <Compile Include="ModelBLL\TrescWierszBll.cs" />
+    <Compile Include="ModelBLL\ZadanieBll.cs" />
+    <Compile Include="ModelBLL\ZmianaObiektu.cs" />
+    <Compile Include="Api\Platnosci24.cs" />
+    <Compile Include="Sync\AtrybutyWyszukiwanie.cs" />
+    <Compile Include="Sync\ProduktyWyszukiwanie.cs" />
+    <Compile Include="Sync\KategorieKlientowWyszukiwanie.cs" />
+    <Compile Include="Sync\SubiektBaza.cs" />
+    <Compile Include="PoziomyCenBll.cs" />
+    <Compile Include="ModelBLL\ProduktBazowy.cs" />
+    <Compile Include="ProduktKlienta.cs" />
+    <Compile Include="ProduktKlientZaPunktyLubGratis.cs" />
+    <Compile Include="ProduktyUkryteBLL.cs" />
+    <Compile Include="RabatyBLL.cs" />
+    <Compile Include="ProductBLL.cs" />
+    <Compile Include="BLL\TemplateBLL.cs" />
+    <Compile Include="Configuration\SettingTester.cs" />
+    <Compile Include="SesjaHelper.cs" />
+    <Compile Include="ModelBLL\SklepyBll.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="SettingCollection.cs" />
+    <Compile Include="SposobyPokazywaniaStanowBLL.cs" />
+    <Compile Include="Sync\KategorieProduktowSyncHelper.cs" />
+    <Compile Include="Sync\LogiFormatki.cs" />
+    <Compile Include="Sync\SyncManager.cs" />
+    <Compile Include="TworzenieFakeObiektow.cs" />
+    <Compile Include="ZamowieniaBLL.cs" />
+    <Compile Include="ZamowieniaProduktyBLL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FastDBF\SocialExplorer.FastDBF.csproj">
+      <Project>{9cf5ed11-6d2b-4fef-8a0a-b2e12de59867}</Project>
+      <Name>SocialExplorer.FastDBF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.Common\ServiceStack.Common.csproj">
+      <Project>{982416db-c143-4028-a0c3-cf41892d18d3}</Project>
+      <Name>ServiceStack.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.OrmLite.Sqlite\ServiceStack.OrmLite.Sqlite.csproj">
+      <Project>{cf68a37d-d071-469d-ae04-68594cb95382}</Project>
+      <Name>ServiceStack.OrmLite.Sqlite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.OrmLite.SqlServer\ServiceStack.OrmLite.SqlServer.csproj">
+      <Project>{1887dc99-9139-43e3-a7aa-6d74714b3a5d}</Project>
+      <Name>ServiceStack.OrmLite.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.OrmLite\ServiceStack.OrmLite.csproj">
+      <Project>{96179ac6-f6f1-40c3-9fdd-4f6582f54c5c}</Project>
+      <Name>ServiceStack.OrmLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.Hurt.Helpers\SolEx.Hurt.Helpers.csproj">
+      <Project>{DCD68212-4853-411B-9DA9-27C633694D8A}</Project>
+      <Name>SolEx.Hurt.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.Hurt.Model\SolEx.Hurt.Model.csproj">
+      <Project>{71AC3478-449A-4873-8C68-5596C4D06E4E}</Project>
+      <Name>SolEx.Hurt.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

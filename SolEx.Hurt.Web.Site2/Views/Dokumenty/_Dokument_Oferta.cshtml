@@ -1,0 +1,117 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model DokumentyBll
+@{
+//ArtykulyKategoriaBLL art = ArtykulyBLL.PobierzInstancje.PobierzKategorieArtykolow("oferty-opis", Model.DokumentPlatnik,
+//    SesjaHelper.PobierzInstancje.JezykID);
+}
+<div class="modal fade dokument" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="text-align: left;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">
+                    <small>@Html.PobierzTlumaczenie("Oferta")</small>
+                    @Model.NazwaDokumentu
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="dokument-dane-platnikodbiorca">
+                    <p class="dokument-daty dokument-data-wystawienia">
+                         @Html.PobierzTlumaczenie("Data wystawienia"): <b>@Model.DataUtworzenia.ToShortDateString()</b>
+                    </p>
+                    @if (Model.OfertaDoKiedyWazna.HasValue)
+                    {
+                        <p class="pull-xs-right dokument-daty r dokument-data-wystawienia">
+                           @Html.PobierzTlumaczenie("Data ważności"): <b>@Model.OfertaDoKiedyWazna.Value.ToShortDateString()</b>
+                        </p>
+                    }
+                </div>
+            
+                <table class="table table-condensed ">
+                    <thead>
+                        <tr>
+                            <th style="width: 300px;" class="c">@Html.PobierzTlumaczenie("Nazwa produktu")</th>
+                            <th  class="c fit-content">@Html.PobierzTlumaczenie("Ilość")</th>
+                            <th class="c fit-content">@Html.PobierzTlumaczenie("Cena netto po rabacie")</th>
+                            <th  class="c fit-content">@Html.PobierzTlumaczenie("Stawka VAT")</th>
+                            <th class="c fit-content">@Html.PobierzTlumaczenie("Cena brutto po rabacie")</th>
+                            <th class="c fit-content">@Html.PobierzTlumaczenie("Wartość po rabacie")</th>
+                            <th class="c fit-content"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pozycja in Model.PobierzPozycjeDokumentu().Where(x => x.PozycjaDokumentuIlosc > 0))
+                        {
+                            <tr>
+                                <td class="l">
+                                    @if (pozycja.ProduktBazowy != null)
+                                    {
+                                        @Html.Action("Ulubione", "Koszyk", new { ProduktId = pozycja.ProduktId })
+                                    }
+                                    @if (!string.IsNullOrEmpty(pozycja.ProduktBazowy.Rodzina) && pozycja.ProduktBazowy.CechaUnikalnaRodzina != null)
+                                    {
+                                        <span class="text-primary">@pozycja.ProduktBazowy.Rodzina @pozycja.ProduktBazowy.CechaUnikalnaRodzina.Nazwa</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-primary">@pozycja.ProduktBazowy.Nazwa</span>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(pozycja.Opis))
+                                    {
+                                        <span class="dokument-pozycja-opis1">@pozycja.Opis</span>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(pozycja.Opis2))
+                                    {
+                                        <span class="dokument-pozycja-opis2">@pozycja.Opis2</span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(pozycja.ProduktBazowy.KodKreskowy) && SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja.SzczegolyDokumentuKodKreskowyPokazuj)
+                                    {
+                                        <div class="dokument-pozycja-kod ">@pozycja.ProduktBazowy.KodKreskowy</div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(pozycja.ProduktBazowy.Kod) && SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja.SzczegolyDokumentuKodPokazuj)
+                                    {
+                                        <div class="dokument-pozycja-kod ">@pozycja.ProduktBazowy.Kod</div>
+                                    }
+                                </td>
+                                <td class="r">@pozycja.PozycjaDokumentuIlosc</td>
+                                <td class="r">@pozycja.PozycjaDokumentuCenaNetto</td>
+                                <td class="c">@pozycja.Vat.DoLadnejCyfry()%</td>
+                                <td class="r">@pozycja.PozycjaDokumentuCenaBrutto</td>
+                                <td class="r">
+                                    @pozycja.PozycjaDokumentuWartoscNetto
+                                    <div class="text-muted small">(@Html.PobierzTlumaczenie("brutto")): @pozycja.PozycjaDokumentuWartoscBrutto</div>
+                                </td>
+                                <td>
+                                    @if (pozycja.ProduktBazowy != null)
+                                {
+                                    Html.RenderAction("DodawanieProduktuProdukt", "Koszyk", new { produkt = pozycja.ProduktBazowy });
+                                }
+                            </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (!string.IsNullOrEmpty(Model.Uwagi) && SolexBllCalosc.PobierzInstancje.Konfiguracja.PokazywanieUwagWPodgladzie)
+                {
+                    <p class="dokument-uwagi">
+                        @Html.PobierzTlumaczenie("Uwagi do dokumentu"):<br />
+                        @Model.Uwagi
+                    </p>
+                }
+
+            </div>
+
+
+
+            <div class="modal-footer">
+                @Html.Action("ZglosBledneDane", "Dokumenty", new { dokument = Model.NazwaDokumentu })
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+﻿@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Model.Web
+@{
+    IConfigBLL config = SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja;
+    var    k = new Komunikat("Odrzuciłeś koszyk", KomunikatRodzaj.success, "System");
+    
+}
+<div>
+        @Html.Partial("Komunikat", new List<Komunikat>{k})
+</div>

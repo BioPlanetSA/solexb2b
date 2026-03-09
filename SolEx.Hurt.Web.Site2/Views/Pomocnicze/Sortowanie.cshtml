@@ -1,0 +1,14 @@
+﻿@using SolEx.Hurt.Model.Enums
+@model Tuple<string,KolejnoscSortowania, string>
+@if (Model.Item1 == Model.Item3)
+{
+    <span class="fa
+          @if (Model.Item2 == KolejnoscSortowania.desc)
+          {
+              @Html.Raw("fa-sort-by-attributes-alt")
+          }
+          else
+          {
+              @Html.Raw("fa-sort-by-attributes")
+          }"> </span>
+}

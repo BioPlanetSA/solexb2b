@@ -1,0 +1,2 @@
+﻿UPDATE [Zadanie] SET ModulFullTypeName = 'SolEx.Hurt.Sync.App.Modules_.NoweModuly.Stany.StanyZPlikuCsv,SolEx.Hurt.Sync.App.Modules_'
+  WHERE ModulFullTypeName like 'SolEx.Hurt.Sync.App.Modules_.NoweModuly.Stany.StanyZPliku,SolEx.Hurt.Sync.App.Modules_'

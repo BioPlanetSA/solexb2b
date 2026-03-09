@@ -1,0 +1,12 @@
+﻿@import "_ustawienia.scss";
+
+.zarzadzanie
+    {
+     ul
+      {
+       min-height:100px;
+         li {
+                 border:1px solid $kolor-ramki
+            }
+       }
+}

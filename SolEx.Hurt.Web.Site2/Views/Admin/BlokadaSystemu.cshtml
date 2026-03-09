@@ -1,0 +1,71 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@model SolEx.Hurt.Model.Helpers.BlokadaSystemuViewModel
+@using (Html.BeginForm("BlokadaSystemu", "Admin", FormMethod.Post, new { id = "blokadasystemu" }))
+{
+    <div class="akcja pull-xs-right">
+        <button type="submit" class="btn btn-secondary">Zastosuj</button>
+    </div>
+    <p><label for="blokada-systemu-checkbox">Aktywuj blokadę</label></p>
+    @Html.CheckBoxFor(x=>x.Zablokowany, new {@id="blokada-systemu-checkbox", @class="form-control"})
+    <div id="blokada-systemu-kontrolki" style="display: none">
+        <p><label for="datepickerStart">Blokada ważna od: </label>@Html.TextBoxFor(x => x.GodzinaStart, new { id = "datepickerStart", @class = "form-control", required = "required" })</p>
+        <p><label for="datepickerKoniec">Blokada ważna do: </label>@Html.TextBoxFor(x => x.GodzinaKoniec, new { id = "datepickerKoniec", @class = "form-control", required = "required" })</p>
+        <p><label for="Powód blokady:">Powód blokady:</label> @Html.TextBoxFor(x => x.Powod, new { id = "powod-blokady", @class = "form-control", required = "required" })</p>
+    </div>
+}
+
+<script language="javascript" type="text/javascript">
+    jQuery(function () {
+        if ($("#blokada-systemu-checkbox").is(":checked")) {
+            $("#blokada-systemu-kontrolki").show();
+        }
+
+        $("#blokada-systemu-checkbox").click(function() {
+            if ($("#blokada-systemu-checkbox").is(":checked")) {
+                $("#blokada-systemu-kontrolki").show('slow');
+            } else {
+                $("#blokada-systemu-kontrolki").hide('slow');
+            }
+        });
+ 
+        var startDateTextBox = $('#datepickerStart');
+        var endDateTextBox = $('#datepickerKoniec');
+        startDateTextBox.datetimepicker({
+            currentText: 'Teraz',
+            closeText: 'Zamknij',
+            onClose: function (dateText) {
+                if (endDateTextBox.val() !== '') {
+                    var testStartDate = startDateTextBox.datetimepicker('PobierzDate');
+                    var testEndDate = endDateTextBox.datetimepicker('PobierzDate');
+                    if (testStartDate > testEndDate)
+                        endDateTextBox.datetimepicker('setDate', testStartDate);
+                }
+                else {
+                    endDateTextBox.val(dateText);
+                }
+            },
+            onSelect: function () {
+                endDateTextBox.datetimepicker('option', 'minDate', startDateTextBox.datetimepicker('PobierzDate'));
+            }
+        });
+        endDateTextBox.datetimepicker({
+            currentText: 'Teraz',
+            closeText: 'Zamknij',
+            onClose: function (dateText) {
+                if (startDateTextBox.val() !== '') {
+                    var testStartDate = startDateTextBox.datetimepicker('PobierzDate');
+                    var testEndDate = endDateTextBox.datetimepicker('PobierzDate');
+                    if (testStartDate > testEndDate)
+                        startDateTextBox.datetimepicker('setDate', testEndDate);
+                }
+                else {
+                    startDateTextBox.val(dateText);
+                }
+            },
+            onSelect: function () {
+                startDateTextBox.datetimepicker('option', 'maxDate', endDateTextBox.datetimepicker('PobierzDate'));
+            }
+        });
+    });
+</script>

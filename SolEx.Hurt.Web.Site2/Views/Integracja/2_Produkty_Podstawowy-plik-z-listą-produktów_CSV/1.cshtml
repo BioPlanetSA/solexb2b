@@ -1,0 +1,141 @@
+﻿@using System.Globalization
+@using System.Text
+@using CsvHelper
+@using CsvHelper.Configuration
+@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Web.Site2.Helper
+@using CsvWriter = CsvHelper.CsvWriter
+@model List<ProduktKlienta>
+@{
+    Layout = null;
+}
+@section Opis {
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Pole w pliku</th>
+            <th>Opis pola</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>kod_kreskowy</td>
+            <td>Kod kreskowy, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>produkt_id</td>
+            <td>Id produktu, typ: liczba całkowita</td>
+        </tr>
+        <tr>
+            <td>kod</td>
+            <td>Symbol, typ: tekst</td>
+        </tr>
+    <tr>
+        <td>nazwa</td>
+        <td>Nazwa produktu, typ: tekst</td>
+    </tr>
+        <tr>
+            <td>Marka</td>
+            <td>Nazwa marki, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>opis</td>
+            <td>Opis, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>LinkDoProduktu</td>
+            <td>Link do produktu, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>ZdjecieGlowneLinkUrl</td>
+            <td>Adres do głównego zdjęcia , typ: tekst</td>
+        </tr>
+    <tr>
+        <td>Kategoria</td>
+        <td>Scieżki do kategorii w których jest produkt. Separatorem jest znak ;, typ: tekst</td>
+    </tr>
+        <tr>
+            <td>JednostkaPodstawowa</td>
+            <td>Podstawowa jednostka miary, typ: tekst</td>
+        </tr>
+     
+       
+        <tr>
+            <td>waga</td>
+            <td>Waga brutto, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>PKWiU</td>
+            <td>PKWiU, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>NaStanie</td>
+            <td>Czy produkt jest aktualnie na stanie, typ: wartość logiczna</td>
+        </tr>
+        <tr>
+            <td>ilosc_w_opakowaniu</td>
+            <td>Ilość w opakowaniu zbiorczym, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>wymagane_OZ</td>
+            <td>Czy jest wymóg zakupu pełnego opakowania zbiorczego, typ: wartość logiczna</td>
+        </tr>
+        <tr>
+            <td>ilosc</td>
+            <td>Ilość ograniczona do maksymalnego pokazywanego stanu, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>CenaPrzedRabatemNetto</td>
+            <td>Cena netto przed rabatem, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>CenaPoRabacieNetto</td>
+            <td>Cena netto po rabacie, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>vat</td>
+            <td>Stawka vat, typ: wartość liczbowa zaokrąglona</td>
+        </tr>
+        <tr>
+            <td>CenaDetalicznaBrutto</td>
+            <td>Cena brutto detaliczna, typ: liczba ułamkowa</td>
+        </tr>
+    </tbody>
+</table>
+}
+@section Nazwa {
+   Uniwersalny plik CSV
+}
+@section Szablon{
+    @if (Model != null)
+    {
+        List<object> obiektyDoCSV = new List<object>();
+        foreach(ProduktKlienta p in Model)
+        {
+            object obiekt = new
+            {
+                kod_kreskowy = @p.KodKreskowy, produkt_id = @p.Id, kod = p.Kod, nazwa = p.Nazwa,  Marka = p.MarkaNazwa,
+                opis = p.Opis, LinkDoProduktu = Url.ZbudujLink(p),
+                ZdjecieGlowneLinkUrl = p.ZdjecieGlowne != null ? p.ZdjecieGlowne.LinkOryginal : "",
+                Kategoria = @p.Kategorie.Where(x => x.Widoczna).Select(x => x.Sciezka.ToString()).Join(";"),
+                JednostkaPodstawowa = p.JednostkaPodstawowa.Nazwa,
+                waga = p.Waga.HasValue ? p.Waga.Value.DoLadnejCyfry() : "",
+                PKWiU = p.PKWiU,
+                NaStanie = p.NaStanie,
+                ilosc_w_opakowaniu = p.IloscWOpakowaniu.DoLadnejCyfry(),
+                wymagane_OZ = p.WymaganeOz,
+                ilosc = p.IloscOgraniczonaDoMax.DoLadnejCyfry(),
+                CenaPrzedRabatemNetto = p.FlatCeny.CenaHurtowaNetto.Wartosc.DoLadnejCyfry(),
+                CenaPoRabacieNetto = p.FlatCeny.CenaNetto.Wartosc.DoLadnejCyfry(),
+                vat = p.Vat.DoLadnejCyfry(),
+                CenaDetalicznaBrutto = p.FlatCeny.CenaDetalicznaBrutto.Wartosc.DoLadnejCyfry(),
+            };
+            obiektyDoCSV.Add(obiekt);
+        }
+
+        StringWriter textwriter = (new CSVHelperExt()).WygenerujCsvDlaListyObiektow(obiektyDoCSV);
+        @Html.Raw(textwriter)
+    }
+}

@@ -1,0 +1,15 @@
+﻿@using SolEx.Hurt.Core.BLL
+
+@{
+    string favicon = SolexBllCalosc.PobierzInstancje.Konfiguracja.SciezkaFavicon;
+}
+
+@if (!string.IsNullOrEmpty(SolexBllCalosc.PobierzInstancje.Konfiguracja.GoogleTranslateKey))
+{
+    <meta name="google-translate-customization" content="@SolexBllCalosc.PobierzInstancje.Konfiguracja.GoogleTranslateKey" />
+}
+
+@if (!String.IsNullOrEmpty(favicon))
+{ 
+    <link rel="Shortcut icon" href="@favicon" />
+}

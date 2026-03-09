@@ -1,0 +1,19 @@
+﻿@using SolEx.Hurt.Core.BLL
+@model SolEx.Hurt.Model.Web.ParametryPola
+@*<input autocomplete="off" type="password" name="@Model.NazwaPola" @Html.Raw(Model.Wymagane ? "required" : "")
+       placeholder="@Html.PobierzTlumaczenie(Model.WyswietlanaNazwaPola)" class="@Model.klasaCSS" />*@
+
+<div>
+    @{
+        Dictionary<string, object> parametry = new Dictionary<string, object>();
+        parametry.Add("autofomplete", "off");
+        parametry.Add("class", Model.klasaCSS);
+        parametry.Add("type", "password");
+        parametry.Add("name", Model.Nazwa);
+        parametry.Add("required", Model.Wymagane ? "required" : "");
+        parametry.Add("placeholder", SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.WyswietlanaNazwa));
+    }
+    @Html.TextBoxFor(x => x.Wartosc, "", parametry)
+    @Html.HiddenFor(x => x.Typ)
+    @Html.HiddenFor(x => x.Nazwa)
+</div>

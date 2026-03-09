@@ -1,0 +1,159 @@
+﻿<!----- Główne moduły--- -->
+<div id="modules-container">
+    <!----- Edycja tekstu ----->
+    <div id="text-editor">
+        <div id="text-editor-textarea">
+            <textarea id="textarea" placeholder="Wprowadź tekst" title="Wprowadź tekst"></textarea>
+        </div>
+        <div id="text-editor-controls">
+            <!----- Drop Down rodzaj czcionki ----->
+            <select id="ddFont" title="Wybór rodzaju czionki">
+                <option value="Arial"> Arial </option>
+                <option vlaue="Impact"> Impact </option>
+                <option value="Courier"> Courier </option>
+                <option value="Tahoma"> Tahoma </option>
+                <option value="TimesNewRoman" selected> Times New Roman </option>
+                <option value="Verdana"> Verdana </option>
+            </select>
+            <!----- Drop Down rozmiar czcionki ----->
+            <select id="ddFontSize" title="Wybór rozmiaru czcionki">
+                <option value="10"> 10 </option>
+                <option value="12"> 12 </option>
+                <option value="14" selected> 14 </option>
+                <option value="16"> 16 </option>
+                <option value="18"> 18 </option>
+                <option value="20"> 20 </option>
+                <option value="22"> 22 </option>
+                <option value="24"> 24 </option>
+                <option value="26"> 26 </option>
+                <option value="28"> 28 </option>
+                <option value="30"> 30 </option>
+            </select>
+            <!----- Przyciski B, I, U, i Tx - czyść formatowanie ----->
+            
+            <div class="inline-element">
+                <button class="btn btn-primary btn-sm wlacz-tooltip" id="bold" style="font-weight: bold;" data-original-title="Pogrubienie tekstu">B</button>
+                <button class="btn btn-primary btn-sm wlacz-tooltip" id="italic" style="font-style:italic;" data-original-title="Pochylenie tekstu">I</button>
+                <button class="btn btn-primary btn-sm wlacz-tooltip" id="underline" style="text-decoration:underline;" data-original-title="Podkreślenie tekstu">U</button>
+            </div>
+            @*<button class="btn btn-primary btn-sm wlacz-tooltip" id="removeFormatting" data-original-title="Wyczyść formatowanie">Tx</button>*@
+
+            <!----- Centowanie w pionie i poziomie ----->
+            <div id="dodaj-tekst-moduly">
+                <div>Centrowanie obiektów:<br></div>
+                <div class="object-button">
+                    <button class="object-align-center-v btn btn-primary btn-sm wlacz-tooltip" data-original-title="Centruj w pionie"></button>
+                    <button class="object-align-center-h btn btn-primary btn-sm wlacz-tooltip" data-original-title="Centruj w poziomie"></button>
+                </div>
+
+                <div style="margin: 10px 0 10px;">
+                    <div class="inline-element">
+                        <div class="inline-element">Kąt: </div>
+                    </div>
+                    <input type="number" name="quantity" step="1" min="0" max="359" id="angle" pattern="[0-9]" oninput="setAngle(this);">
+                </div>  
+            </div>
+            
+
+
+            <div id="text-editor-buttons">
+                @*<button id="button-dodaj-tekst" class="btn btn-primary btn-sm" title="Dodaje pole tekstowe"onclick="DodajPoleTekstowe()">Dodaj pole tekstowe</button>*@
+            </div>
+            <div id="curvedTextOptions" style="display: none;">
+                <div class="inline-element">
+                    Odwrócone :
+                    <input type="checkbox" name="reverse" id="reverse" /><br><br>
+                </div>
+                <div class="inline-element">
+                    <div class="inline-element">Promień: </div>
+                    <div class="inline-element"><output for=radius id=text-radius>50</output></div>
+                    <input type="range" min="0" max="250" value="50" id="radius" /><br>
+                </div>
+                <div class="inline-element">
+                    <div class="inline-element">Rozstaw: </div>
+                    <div class="inline-element"><output for=spacing id=text-spacing>20</output></div>
+                    <input type="range" min="0" max="40" value="20" id="spacing" />
+                </div>
+            </div>
+            <br /><button id="button-usun-tekst" class="btn btn-danger btn-sm" title="Usuwa pole tekstowe" onclick="UsunPoleTekstowe()">Usuń pole tekstowe</button>
+            <button id="convert" class="btn btn-primary btn-sm">Tekst prosty/zakrzywiony</button>
+        </div>
+    </div>
+    <!---- Moja grafika  ---->
+    <div id="my-graphic">
+        <div style="margin-bottom:15px">Grafika</div>
+        <input type="file" id="imageLoader" class="btn btn-primary btn-sm" name="imageLoader" accept="image/*" />
+        <div id="my-graphic-settings" style="display:none">
+            <div class="inline-element">Kąt: </div>
+            <div class="inline-element">
+                <input type="number" name="quantity" step="1" min="0" max="359" pattern="[0-9]" id="imageRange" oninput="setAngle(this);">
+            </div>
+        </div>
+        <div><br />Centrowanie obiektów:<br /><br /></div>
+        <div>
+            <button class="object-align-center-v btn btn-primary btn-sm wlacz-tooltip" data-original-title="Centruj w pionie"></button>
+            <button class="object-align-center-h btn btn-primary btn-sm wlacz-tooltip" data-original-title="Centruj w poziomie"></button>
+        </div>
+        <br /><br />
+        <div id="my-graphic-button-usun">
+            <input type="button" value="Usuń zaznaczoną grafikę" id="imageRemove" class="btn btn-danger btn-sm" name="imageRemove" />
+        </div>
+    </div>
+
+    <!---- Galeria  ---->
+    <div id="gallery" style="display:none">
+        <div style="margin-bottom:15px">Galeria</div>
+        <div id="gallery-text-and-button">
+            <a href="/Pieczatki/WczytajGalerie/" class="btn btn-primary btn-sm" onclick="return PokazModal(this)"> Wybierz grafikę z listy</a>
+            <input type="button" id="gallery-delete-button" class="btn btn-danger btn-sm" data-original-title="Usuń" value="Usuń grafikę " /><br /><br />
+            <div id="gallery-settings" style="">
+                <div class="inline-element">Kąt: </div>
+                <div class="inline-element">
+                    <input type="number" name="quantity" step="1" min="0" max="359" pattern="[0-9]" id="gallery-angle" oninput="setAngle(this);">
+                </div>
+            </div>
+            <br />
+            <div>Centrowanie obiektów:<br /><br /></div>
+            <div>
+                <button class="object-align-center-v btn btn-primary btn-sm wlacz-tooltip" data-original-title="Centruj w pionie"></button>
+                <button class="object-align-center-h btn btn-primary btn-sm wlacz-tooltip" data-original-title="Centruj w poziomie"></button>
+            </div>
+        </div>
+    </div>
+
+    <!---- Figury  ---->
+    <div id="figures">
+        <div style="margin-bottom:15px">Dodaj obiekt:</div>
+        <div class="figures-buttons">
+            <input type="button" value="Prostokąt" id="add-rectangle" class="btn btn-primary btn-sm" />
+            <input type="button" value="Okrąg" id="add-circle" class="btn btn-primary btn-sm" />
+            <input type="button" value="Linia" id="add-line" class="btn btn-primary btn-sm" />
+            <input type="button" value="Obramowanie" id="add-border" class="btn btn-primary btn-sm" style="" />
+            <br /><br />
+
+            <div>Operacja na warstwach:<br /><br /></div>
+            <div>
+
+                <input type="button" value="Przesuń na spód" id="send-to-back" class="btn btn-primary btn-sm" />
+                <input type="button" value="Przenieś na wierzch" id="send-to-front" class="btn btn-primary btn-sm" />
+                <div class="inline-element"><div id="index-warstwy"></div></div>
+            </div><br />
+            <div>Centrowanie obiektów:<br /><br /></div>
+            <div>
+                <button class="object-align-center-v btn btn-primary btn-sm wlacz-tooltip" data-original-title="Centruj w pionie"></button>
+                <button class="object-align-center-h btn btn-primary btn-sm wlacz-tooltip" data-original-title="Centruj w poziomie"></button>
+            </div><br />
+
+
+            <div>Szerokość obramowania obiektu:<br /><br /></div>
+            <div>
+                <button class="btn btn-primary btn-sm" onclick="ZmniejszObramowanie()">-</button>
+                <button class="btn btn-primary btn-sm" onclick="ZwiekszObramowanie()">+</button>
+            </div><br />
+
+            <div>
+                <input type="button" value="Usuń zaznaczoną figurę" id="delete-figure" class="btn btn-danger btn-sm" />
+            </div>
+        </div>
+    </div>
+</div>

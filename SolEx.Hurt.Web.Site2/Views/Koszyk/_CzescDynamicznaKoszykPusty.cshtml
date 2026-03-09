@@ -1,0 +1,20 @@
+﻿@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Web
+@model SolEx.Hurt.Web.Site2.Models.ParametryKoszyka
+@{
+    IConfigBLL config = SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja;
+    var gorne = Model.Komunikaty.Where(x => x.PozycjaPokazania == PokazywanieKomunikatu.NaGorze || x.PozycjaPokazania == PokazywanieKomunikatu.NaGorzeIDole);
+    var dolne = Model.Komunikaty.Where(x => x.PozycjaPokazania == PokazywanieKomunikatu.NADole || x.PozycjaPokazania == PokazywanieKomunikatu.NaGorzeIDole);
+
+    Komunikat k;
+    k = new Komunikat(config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Koszyk jest pusty"), KomunikatRodzaj.danger, "System");
+}
+<div>
+    @Html.Partial("Komunikat", gorne)
+    <div>
+        @Html.Partial("Komunikat", new List<Komunikat> {k})
+    </div>
+    @Html.Partial("Komunikat", dolne)
+</div>
+

@@ -1,0 +1,45 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoRejestracji
+
+<form method="POST" enctype="multipart/form-data" class="rejestracja-forma czcionka-tekstowa-paragraf text-xs-left" id="rejestracja">
+    <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+    <input style="display:none" type="text" name="fakeusernameremembered" />
+    <input style="display:none" type="password" name="fakepasswordremembered" />
+    <h3 class="c text-uppercase bold">
+        @Html.PobierzTlumaczenie("Rejestracja nowego klienta")
+    </h3>
+    @Html.HiddenFor(x => x.Odpowiedz)
+    @Html.HiddenFor(x => x.CzyPokazywacCaptche)
+    @if (Model.Bledy != null && Model.Bledy.Any())
+    {
+        foreach (string s in Model.Bledy)
+        {
+            <div class="alert alert-danger">
+                @Html.PobierzTlumaczenie(s)
+            </div>
+        }
+    }
+
+    @foreach (var p in Model.Pola)
+    {
+        p.klasaCSS += " form-control";
+        <fieldset class="form-group">
+            @Html.Partial("EditorTemplates/Pola/" + p.Typ, p)
+        </fieldset>
+    }
+    @if (Model.CzyPokazywacCaptche)
+    {
+        <fieldset class="form-group">
+            @Html.Partial("EditorTemplates/Pola/Captcha")
+        </fieldset>
+    }
+
+    <fieldset class="c">
+        <input type="submit" name="rejestracja" value="@Html.PobierzTlumaczenie("ZAREJESTRUJ SIĘ")" class="btn btn-lg btn-warning rejestracja-btn">
+    </fieldset>
+
+</form>
+
+
+

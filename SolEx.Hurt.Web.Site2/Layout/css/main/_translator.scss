@@ -1,0 +1,87 @@
+﻿@import "_ustawienia.scss";
+
+#google_translate_element{
+
+
+    .goog-te-gadget-simple{
+        border: 1px solid black;
+       
+
+        padding: 0.275rem 0;
+        font-size: 14px;
+        line-height: 1.5;
+
+        font-size: 14px;
+
+        img{
+            display: none;
+        }
+
+        > span{
+            &:before{
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale; //tylko dla firefoxa zeby rozmyl ikony
+                font-smoothing: antialiased;
+                display: inline-block;
+                font: normal normal normal 14px/1 FontAwesome;
+                content: "\f0e5";
+                -moz-transform: scale(-1, 1);
+                -ms-transform: scale(-1, 1);
+                -o-transform: scale(-1, 1);
+                -webkit-transform: scale(-1, 1);
+                transform: scale(-1, 1);
+                font-size: 23px;
+                font-weight: bold;
+                margin-right: 5px;
+            }
+        }
+
+        .goog-te-menu-value{
+            //usuwamy wszystkie spany, zeby tylko pierwszy zostal
+            span{
+                display: none;
+            }
+            span:first-child{
+                display: inline;
+            }
+
+            font-family: $font-tekst-rodzina;
+            font-size: 13px;
+            color: $kolor-text-muted;
+
+
+            @media only screen and (max-width: $lg) {
+                  display: none;
+                  //na malym nie pokazujemy napisu wybierz jezyk
+            }
+        }
+
+        &, & a{
+            text-decoration: none;
+            color: black;
+        }
+
+    }
+
+
+}
+
+.goog-te-menu2{
+        border: 1px solid white !important;
+            
+
+        .goog-te-menu2-item, .goog-te-menu2-item *{
+            font-family: $font-menu-rodzina !important;
+            color: black !important;
+            &:hover{
+                background: none !important;
+                color: $kolor-zaznaczenia-hover !important;
+            }
+        }
+
+}
+
+
+.goog-te-gadget-simple {
+    border: none !important;
+}

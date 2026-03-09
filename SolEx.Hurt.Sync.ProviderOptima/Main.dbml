@@ -1,0 +1,927 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CDN_MIL__D_FRASUNKIEWICZ" Class="MainDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=MILO-BIURO\OPTIMA;Initial Catalog=CDN_MIL__D_FRASUNKIEWICZ;Persist Security Info=True;User ID=sa" SettingsObjectName="SolEx.Hurt.Sync.ProviderOptima.Properties.Settings" SettingsPropertyName="CDN_MIL__D_FRASUNKIEWICZConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="CDN.DefAtrybuty" Member="DefAtrybuties">
+    <Type Name="DefAtrybuty">
+      <Column Name="DeA_DeAId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DeA_Typ" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_Kod" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_Nazwa" Type="System.String" DbType="VarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_Format" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_Zalezny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_CzyKopiowacFA" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_CzyKod" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_CzyPrzenosic" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_CzyDrukowac" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_CzyKopiowacDoVAT" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_ESklep" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="DeA_TS_Export" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DeA_ImportAppId" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="DeA_ImportRowId" Type="System.String" DbType="VarChar(36)" CanBeNull="true" />
+      <Column Name="DeA_OpeZalID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DeA_StaZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DeA_TS_Zal" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_OpeModID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DeA_StaModId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DeA_TS_Mod" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_CzyPrzenosicNaDostawy" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DeA_CzyObowiazkowyDostawy" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="DefAtrybuty_KntAtrybuty" Member="KntAtrybuties" ThisKey="DeA_DeAId" OtherKey="KnA_DeAId" Type="KntAtrybuty" />
+      <Association Name="DefAtrybuty_TwrAtrybuty" Member="TwrAtrybuties" ThisKey="DeA_DeAId" OtherKey="TwA_DeAId" Type="TwrAtrybuty" />
+    </Type>
+  </Table>
+  <Table Name="CDN.DefCeny" Member="DefCenies">
+    <Type Name="DefCeny">
+      <Column Name="DfC_DfCId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DfC_Lp" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DfC_Nazwa" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="DfC_Aktualizacja" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DfC_Marza" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="DfC_Zaokraglenie" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="DfC_Offset" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="DfC_Waluta" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="DfC_Typ" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DfC_XL_Lp" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DfC_Nieaktywna" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.FormyPlatnosci" Member="FormyPlatnoscis">
+    <Type Name="FormyPlatnosci">
+      <Column Name="FPl_FPlId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FPl_Nazwa" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="FPl_Typ" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="FPl_BRaId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FPl_Termin" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="FPl_NieAktywny" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="FPl_TS_Export" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="FPl_ImportAppId" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="FPl_ImportRowId" Type="System.String" DbType="VarChar(36)" CanBeNull="true" />
+      <Column Name="FPl_XLID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FPl_Rabat" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Association Name="FormyPlatnosci_BnkZdarzenia" Member="BnkZdarzenias" ThisKey="FPl_FPlId" OtherKey="BZd_FPlId" Type="BnkZdarzenia" />
+      <Association Name="FormyPlatnosci_TraNag" Member="TraNags" ThisKey="FPl_FPlId" OtherKey="TrN_FPlId" Type="TraNag" />
+      <Association Name="FormyPlatnosci_Kontrahenci" Member="Kontrahencis" ThisKey="FPl_FPlId" OtherKey="Knt_FplID" Type="Kontrahenci" />
+    </Type>
+  </Table>
+  <Table Name="CDN.KntAtrybuty" Member="KntAtrybuties">
+    <Type Name="KntAtrybuty">
+      <Column Name="KnA_KnAId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="KnA_DeAId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="KnA_PodmiotTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="KnA_PodmiotId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="KnA_WartoscTxt" Type="System.String" DbType="VarChar(1024) NOT NULL" CanBeNull="false" />
+      <Column Name="KnA_CzyKopiowac" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="KnA_CzyKod" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="KnA_CzyPrzenosic" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="KnA_CzyDrukowac" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="KnA_CzyKopiowacDoVAT" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="DefAtrybuty_KntAtrybuty" Member="DefAtrybuty" ThisKey="KnA_DeAId" OtherKey="DeA_DeAId" Type="DefAtrybuty" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.KntOdbiorcy" Member="KntOdbiorcies">
+    <Type Name="KntOdbiorcy">
+      <Column Name="Odb_OdbID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Odb_KntOdbID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Odb_OdbKntID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Odb_Domyslny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TwrAtrybuty" Member="TwrAtrybuties">
+    <Type Name="TwrAtrybuty">
+      <Column Name="TwA_TwAId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TwA_DeAId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_TwrId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwA_Zalezny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_WartoscTxt" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_CzyKopiowac" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_CzyKod" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_CzyPrzenosic" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_CzyDrukowac" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_ESklep" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TwA_DABID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwA_SrUId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwA_SrRId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwA_SrZId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwA_CzyObowiazkowySerwis" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_CzyPrzenosicNaDostawy" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_CzyObowiazkowyDostawy" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwA_RodzajId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwA_UrzId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwA_SourceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="DefAtrybuty_TwrAtrybuty" Member="DefAtrybuty" ThisKey="TwA_DeAId" OtherKey="DeA_DeAId" Type="DefAtrybuty" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Towary_TwrAtrybuty" Member="Towary" ThisKey="TwA_TwrId" OtherKey="Twr_TwrId" Type="Towary" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TwrCeny" Member="TwrCenies">
+    <Type Name="TwrCeny">
+      <Column Name="TwC_TwCID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TwC_TwrID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_TwCNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_Typ" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_Wartosc" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_Waluta" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_Aktualizacja" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_Zaokraglenie" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_Marza" Type="System.Decimal" DbType="Decimal(7,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_MarzaWStu" Type="System.Decimal" DbType="Decimal(7,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_Offset" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TwC_TwrTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TwC_TwrFirma" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwC_TwrNumer" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwC_TwrLp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Association Name="Towary_TwrCeny" Member="Towary" ThisKey="TwC_TwrID" OtherKey="Twr_TwrId" Type="Towary" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TwrGrupy" Member="TwrGrupies">
+    <Type Name="TwrGrupy">
+      <Column Name="TwG_TwGID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TwG_GIDTyp" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwG_GIDFirma" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwG_GIDNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwG_GIDLp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TwG_GrOTyp" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwG_GrOFirma" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwG_GrONumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwG_GrOLp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TwG_Kod" Type="System.String" DbType="VarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TwG_Nazwa" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="TwG_CzasModyfikacji" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TwrJm" Member="TwrJms">
+    <Type Name="TwrJm">
+      <Column Name="TwJ_TwrTyp" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TwJ_TwrFirma" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TwJ_TwrNumer" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TwJ_TwrLp" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TwJ_KcaTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TwJ_KcaFirma" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwJ_KcaNumer" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwJ_KcaLp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TwJ_JmZ" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
+      <Column Name="TwJ_JmFormat" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TwJ_TypJm" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TwJ_Calkowita" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TwJ_PrzeliczM" Type="System.Decimal" DbType="Decimal(15,0)" CanBeNull="true" />
+      <Column Name="TwJ_PrzeliczL" Type="System.Decimal" DbType="Decimal(15,0)" CanBeNull="true" />
+      <Column Name="TwJ_Prog" Type="System.Decimal" DbType="Decimal(11,4)" CanBeNull="true" />
+      <Column Name="TwJ_Obowiazek" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TwJ_Waga" Type="System.Decimal" DbType="Decimal(7,3)" CanBeNull="true" />
+      <Column Name="TwJ_WJm" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="TwJ_EAN" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="TwJ_WyliczPrzySpr" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TwJ_ObjetoscL" Type="System.Decimal" DbType="Decimal(5,0)" CanBeNull="true" />
+      <Column Name="TwJ_ObjetoscM" Type="System.Decimal" DbType="Decimal(5,0)" CanBeNull="true" />
+      <Column Name="TwJ_WagaBrutto" Type="System.Decimal" DbType="Decimal(7,3)" CanBeNull="true" />
+      <Column Name="TwJ_WJmBrutto" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.Rabaty" Member="Rabaties">
+    <Type Name="Rabaty">
+      <Column Name="Rab_RabId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Rab_Typ" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Rab_TypCenyNB" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Rab_TwrId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Rab_PodmiotTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Rab_PodmiotId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Rab_Rabat" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Rab_Cena" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Rab_Waluta" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="Rab_Opis" Type="System.String" DbType="VarChar(254) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TraElem" Member="TraElems">
+    <Type Name="TraElem">
+      <Column Name="TrE_TrEID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TrE_TrNId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_ZwrId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_TrEIdProd" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_PdRId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_Lp" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_LpPow" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_TypDokumentu" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Aktywny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_DataDok" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_RabatPromocyjny" Type="System.Decimal" DbType="Decimal(15,4)" CanBeNull="true" />
+      <Column Name="TrE_RabatKorekta" Type="System.Decimal" DbType="Decimal(15,4)" CanBeNull="true" />
+      <Column Name="TrE_Promocje" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_DataOpe" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_PodmiotTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TrE_PodID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_KatID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_TwrId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_MagId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_TwrNazwa" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_TwrEAN" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_TwrNumerKat" Type="System.String" DbType="VarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_TwrKod" Type="System.String" DbType="VarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_TwrOpis" Type="System.String" DbType="VarChar(254) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_TwrSWW" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Stawka" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Flaga" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Zrodlowa" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_TwCNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_TypNB" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Cena0" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Rabat" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_CenaW" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Waluta" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Kaucja" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_KursNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_KursL" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_KursM" Type="System.Decimal" DbType="Decimal(5,0) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_CenaT" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Ilosc" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_IloscKW" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Jm" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_JmZ" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_JmCalkowite" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_JMPrzelicznikL" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_JMPrzelicznikM" Type="System.Decimal" DbType="Decimal(7,0) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_IloscJM" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_IloscJMKW" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_WartoscNetto" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_WartoscBrutto" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_KosztUslugi" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Cena0WD" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_CenaWWD" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_WartoscNettoWal" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_WartoscBruttoWal" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr1_DeAId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_Atr1_Kod" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr1_Wartosc" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr2_DeAId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_Atr2_Kod" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr2_Wartosc" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr3_DeAId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_Atr3_Kod" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr3_Wartosc" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr4_DeAId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_Atr4_Kod" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr4_Wartosc" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr5_DeAId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_Atr5_Kod" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Atr5_Wartosc" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Prog" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_UpustTyp" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_Upust" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_UpustKnt" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_UpustKntTyp" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_WartoscZakupuWylicz" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrE_LpPowRel" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrE_WartoscZakupu" Type="System.Decimal" DbType="Decimal(16,2)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="TrE_WyborDostaw" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Association Name="Towary_TraElem" Member="Towary" ThisKey="TrE_TwrId" OtherKey="Twr_TwrId" Type="Towary" IsForeignKey="true" />
+      <Association Name="TraNag_TraElem" Member="TraNag" ThisKey="TrE_TrNId" OtherKey="TrN_TrNID" Type="TraNag" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.BnkZdarzenia" Member="BnkZdarzenias">
+    <Type Name="BnkZdarzenia">
+      <Column Name="BZd_BZdID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BZd_RelTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="BZd_RelID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_PrwTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="BZd_PrwID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_BRaID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_DDfID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_DokumentTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="BZd_DokumentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_NumerPelny" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_NumerObcy" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Numer" Type="System.String" DbType="VarChar(30)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="BZd_PodmiotTyp" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_PodmiotID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_PodmiotRachunekLp" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_BNaID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_RachunekNr" Type="System.String" DbType="VarChar(51) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_IBAN" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_KatID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_FPlId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_DataDok" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Termin" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_DataReal" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_KwotaSys" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_KwotaRozSys" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Kwota" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_KwotaRoz" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Waluta" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_WalutaDok" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_KursNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_KursL" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_KursM" Type="System.Decimal" DbType="Decimal(5,0) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_DataRoz" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BZd_Kierunek" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_DataKur" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Zwloka" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Priorytet" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Rozliczono" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Rozliczono2" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Stan" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_ElixirO1" Type="System.String" DbType="VarChar(35) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_ElixirO2" Type="System.String" DbType="VarChar(35) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_ElixirO3" Type="System.String" DbType="VarChar(35) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_ElixirO4" Type="System.String" DbType="VarChar(35) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_Opis" Type="System.String" DbType="VarChar(254) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_KontoPrzeciwstawne" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_OpeWysId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_TS_Wys" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BZd_OpePotwId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_TS_Potw" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BZd_TS_Export" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BZd_ImportAppId" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="BZd_ImportRowId" Type="System.String" DbType="VarChar(36)" CanBeNull="true" />
+      <Column Name="BZd_IdSynchro" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_TypDokumentuKB" Type="System.Int32" DbType="Int NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="BZd_OpeZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_StaZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_TS_Zal" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="BZd_StaModId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_OpeModId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BZd_TS_Mod" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="FormyPlatnosci_BnkZdarzenia" Member="FormyPlatnosci" ThisKey="BZd_FPlId" OtherKey="FPl_FPlId" Type="FormyPlatnosci" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.Magazyny" Member="Magazynies">
+    <Type Name="Magazyny">
+      <Column Name="Mag_MagId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Mag_GIDNumer" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Mag_MagazynZwrotnyXL" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="Mag_Typ" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_Symbol" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_Nazwa" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_Opis" Type="System.String" DbType="VarChar(254) NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_Rejestr" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_NieAktywny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_MagIdXL" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Mag_Unijny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_UEKraj" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_KodTransakcji" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_OpeZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Mag_StaZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Mag_TS_Zal" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Mag_OpeModId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Mag_StaModId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Mag_TS_Mod" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Magazyny_TwrIlosci" Member="TwrIloscis" ThisKey="Mag_MagId" OtherKey="TwI_MagId" Type="TwrIlosci" />
+      <Association Name="Magazyny_TraNag" Member="TraNags" ThisKey="Mag_MagId" OtherKey="TrN_MagDocId" Type="TraNag" />
+      <Association Name="Magazyny_TraNag1" Member="TraNags1" ThisKey="Mag_MagId" OtherKey="TrN_MagZrdId" Type="TraNag" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TwrIlosci" Member="TwrIloscis">
+    <Type Name="TwrIlosci">
+      <Column Name="TwI_TwIId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TwI_TwrId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwI_MagId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TwI_Data" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TwI_Ilosc" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TwI_Wartosc" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TwI_Braki" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TwI_Rezerwacje" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TwI_Zamowienia" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Association Name="Magazyny_TwrIlosci" Member="Magazyny" ThisKey="TwI_MagId" OtherKey="Mag_MagId" Type="Magazyny" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Towary_TwrIlosci" Member="Towary" ThisKey="TwI_TwrId" OtherKey="Twr_TwrId" Type="Towary" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.DaneBinarne" Member="DaneBinarnes">
+    <Type Name="DaneBinarne">
+      <Column Name="DAB_DABID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DAB_Typ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DAB_TwAID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DAB_Wartosc" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="DAB_Rozmiar" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DAB_RozmiarWartosci" Type="System.Int32" DbType="Int" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="DAB_NazwaPliku" Type="System.String" DbType="VarChar(254) NOT NULL" CanBeNull="false" />
+      <Column Name="DAB_Nazwa" Type="System.String" DbType="VarChar(128)" CanBeNull="true" />
+      <Column Name="DAB_Rozszerzenie" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="DAB_OpeZalID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DAB_StaZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DAB_TS_Zal" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DAB_OpeModID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DAB_StaModId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DAB_TS_Mod" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="CDN.Grupy" Member="Grupies">
+    <Type Name="Grupy">
+      <Column Name="Gru_GruID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Gru_Typ" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Gru_Nazwa" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Gru_Opis" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Gru_Flaga" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TraNagRelacje" Member="TraNagRelacjes">
+    <Type Name="TraNagRelacje">
+      <Column Name="TrR_TrRId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TrR_TrNTyp" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrR_TrNId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrR_FaTyp" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrR_FaId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrR_Flaga" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.Towary" Member="Towaries">
+    <Type Name="Towary">
+      <Column Name="Twr_TwrId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Twr_Typ" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Produkt" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Kod" Type="System.String" DbType="VarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_PLU" Type="System.String" DbType="VarChar(18) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_NumerKat" Type="System.String" DbType="VarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_SWW" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_EAN" Type="System.String" DbType="VarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Nazwa" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_NazwaFiskalna" Type="System.String" DbType="VarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_TwGGIDNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_URL" Type="System.String" DbType="VarChar(254) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KatId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_Kategoria" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KatZakId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_KategoriaZak" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Opis" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_EdycjaNazwy" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KopiujOpis" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_EdycjaOpisu" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_JM" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_JMZ" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_JMPrzelicznikL" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_JMPrzelicznikM" Type="System.Decimal" DbType="Decimal(7,0) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_JMCalkowite" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Kaucja" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_TwCNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_UdostepniajWCenniku" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Waluta" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KursNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KursL" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KursM" Type="System.Decimal" DbType="Decimal(5,0) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_MinCenaMarza" Type="System.Decimal" DbType="Decimal(15,3) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_TypMinimum" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KosztUslugiWal" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KosztUslugi" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KosztUslugiTyp" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_KosztKGO" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_SONId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_KntId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_KodDostawcy" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_IloscMin" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_IloscMinJM" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_IloscMax" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_IloscMaxJM" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_IloscZam" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_IloscZamJM" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Stawka" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Flaga" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Zrodlowa" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_StawkaExport" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_FlagaExport" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_ZrodlowaExport" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_StawkaZak" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_FlagaZak" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_ZrodlowaZak" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Prog" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_Upust" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_UpustData" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_UpustDataOd" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_UpustDataDo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_UpustGodz" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_UpustGodzOd" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_UpustGodzDo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_BezRabatu" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_MarzaMin" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_NieAktywny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_ESklep" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="Twr_KCNId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_Masa" Type="System.Decimal" DbType="Decimal(15,3) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_WagaKG" Type="System.Decimal" DbType="Decimal(15,4)" CanBeNull="true" />
+      <Column Name="Twr_KrajPochodzenia" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_JmPomPrzelicznikL" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_JmPomPrzelicznikM" Type="System.Decimal" DbType="Decimal(7,0) NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_OpeZalID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_StaZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_TS_Zal" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_OpeModID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_StaModId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_TS_XL" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Twr_TS_Mod" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Twr_GIDTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Twr_GIDFirma" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_GIDNumer" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Twr_GIDLp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Twr_OdwrotneObciazenie" Type="System.Int16" DbType="tinyint" CanBeNull="false" />
+      <Association Name="Towary_TwrAtrybuty" Member="TwrAtrybuties" ThisKey="Twr_TwrId" OtherKey="TwA_TwrId" Type="TwrAtrybuty" />
+      <Association Name="Towary_TwrCeny" Member="TwrCenies" ThisKey="Twr_TwrId" OtherKey="TwC_TwrID" Type="TwrCeny" />
+      <Association Name="Towary_TraElem" Member="TraElems" ThisKey="Twr_TwrId" OtherKey="TrE_TwrId" Type="TraElem" />
+      <Association Name="Towary_TwrIlosci" Member="TwrIloscis" ThisKey="Twr_TwrId" OtherKey="TwI_TwrId" Type="TwrIlosci" />
+      <Association Name="Towary_Zamienniki" Member="Zamiennikis" ThisKey="Twr_TwrId" OtherKey="ZAM_TwrId" Type="Zamienniki" />
+      <Association Name="Towary_TwrJMZ" Member="TwrJMZs" ThisKey="Twr_TwrId" OtherKey="TwJZ_TwrID" Type="TwrJMZ" />
+      <Association Name="Kontrahenci_Towary" Member="Kontrahenci" ThisKey="Twr_KntId" OtherKey="Knt_KntId" Type="Kontrahenci" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TwrGrupyView" Member="TwrGrupyViews">
+    <Type Name="TwrGrupyView">
+      <Column Name="TwGId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Sciezka" Type="System.String" DbType="VarChar(6000)" CanBeNull="true" />
+      <Column Name="Kod" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="Nazwa" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="Poziom" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GIDNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GrONumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="CDN.PracownicyView" Member="PracownicyViews">
+    <Type Name="PracownicyView">
+      <Column Name="PracSynchId" Type="System.String" DbType="VarChar(36)" CanBeNull="true" />
+      <Column Name="PracId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Kod" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Nazwisko" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Imie" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="NIP" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
+      <Column Name="Pesel" Type="System.String" DbType="NVarChar(11) NOT NULL" CanBeNull="false" />
+      <Column Name="URL" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Opis" Type="System.String" DbType="NVarChar(1024) NOT NULL" CanBeNull="false" />
+      <Column Name="Aktywny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="MldKraj" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="MldWojewodztwo" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="MldUlica" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="MldNrDomu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="MldNrLokalu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="MldMiasto" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="MldKodPocztowy" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="MldPoczta" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="MldGmina" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="MldPowiat" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamKraj" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamWojewodztwo" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamUlica" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamNrDomu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamNrLokalu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamMiasto" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamKodPocztowy" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamPoczta" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamGmina" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="ZamPowiat" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="KorKraj" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="KorWojewodztwo" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="KorUlica" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="KorNrDomu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="KorNrLokalu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="KorMiasto" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="KorKodPocztowy" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="KorPoczta" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="KorGmina" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="KorPowiat" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Telefon1" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Telefon2" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Telefon3" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Fax" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="EMail" Type="System.String" DbType="NVarChar(127) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TraNag" Member="TraNags">
+    <Type Name="TraNag">
+      <Column Name="TrN_TrNID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TrN_RelTrNId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_FVMarza" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TrN_FVMarzaRodzaj" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TrN_DDfId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_TypDokumentu" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_ZwrId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_ZwrIdWZKK" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_FaId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_NumerNr" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_NumerString" Type="System.String" DbType="VarChar(31) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_NumerPelny" Type="System.String" DbType="NVarChar(30)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="TrN_Bufor" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Anulowany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_VaNId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_DataDok" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_DataWys" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_DataOpe" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_NumerObcy" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_DataKur" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_NumerPelnyPrw" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_TaxFreePotwierdzony" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Korekta" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Fiskalna" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_FiskalnaErr" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_StatusString" Type="System.String" DbType="NVarChar(10)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="TrN_StatusInt" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_RabatPromocyjny" Type="System.Decimal" DbType="Decimal(11,4)" CanBeNull="true" />
+      <Column Name="TrN_RabatKorekta" Type="System.Decimal" DbType="Decimal(11,4)" CanBeNull="true" />
+      <Column Name="TrN_Detal" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Rodzaj" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodmiotTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TrN_PodID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_PodNazwa1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodNazwa2" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodNazwa3" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodKraj" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodWojewodztwo" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodPowiat" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodGmina" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodUlica" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodNrDomu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodNrLokalu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodMiasto" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodKodPocztowy" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodPoczta" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodAdres2" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodNipKraj" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodNipE" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodmiotGLN" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Finalny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodatekVat" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Pesel" Type="System.String" DbType="NVarChar(11) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Export" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_ZwolnionyZAkcyzy" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbiorcaTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TrN_OdbID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_OdbNazwa1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbNazwa2" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbNazwa3" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbKraj" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbWojewodztwo" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbPowiat" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbGmina" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbUlica" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbNrDomu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbNrLokalu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbMiasto" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbKodPocztowy" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbPoczta" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbAdres2" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbNipKraj" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbNipE" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbiorcaGLN" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OdbiorcaDocTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TrN_OdbDocID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_OdbTelefon" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="TrN_OdbWiadomoscEmail" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="TrN_PlatnikTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TrN_PlatnikID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_FADokumentDostawy" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_FinalnyWegiel" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_NrListuPrzewozowego" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_KatID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_Kategoria" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_FPlId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_Termin" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_TerminZwrotuKaucji" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrN_RazemNetto" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_RazemVAT" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_RazemBrutto" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_WartoscZakupu" Type="System.Decimal" DbType="Decimal(15,2)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="TrN_RazemNettoWal" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_RazemVATWal" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_RazemBruttoWal" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Waluta" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_KursNumer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_KursL" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_KursM" Type="System.Decimal" DbType="Decimal(5,0) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PlatElemWalSys" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_VatDlaDokWal" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PlatKaucje" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PodmiotZalTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TrN_PodZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_BlokadaPlatnosci" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_MagZrdId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_MagDocId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_TypNB" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Rabat" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_RabatWartosc" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Odebral" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_Opis" Type="System.String" DbType="NVarChar(1024) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_ZwroconoCalaIlosc" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TrN_NotaKorPrzed" Type="System.String" DbType="NVarChar(254) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_NotaKorPo" Type="System.String" DbType="NVarChar(254) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_TrSTyp" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_DekId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_TS_Export" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrN_ImportAppId" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="TrN_ImportRowId" Type="System.String" DbType="VarChar(36)" CanBeNull="true" />
+      <Column Name="TrN_OpeZalID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_StaZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_TS_Zal" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_OpeModID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_StaModId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_TS_Mod" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_GIDTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TrN_GIDFirma" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_GIDNumer" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_GIDLp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TrN_eSklepID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_NieOkreslonaWartoscKor" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_OFFPrawoDoFAPA" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TrN_OFFPrawoDoAnulowania" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TrN_OFFExportMag" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="TrN_Centrala" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_KodTransakcji" Type="System.String" DbType="NVarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_IsNId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_DataTransportu" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrN_KodKraju" Type="System.String" DbType="NVarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_DabId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_DataEFaktura" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrN_OpeWysylajacy" Type="System.String" DbType="NVarChar(60)" CanBeNull="true" />
+      <Column Name="TrN_EFakturaGUID" Type="System.String" DbType="VarChar(36)" CanBeNull="true" />
+      <Column Name="TrN_DataPtwTaxFree" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrN_PreDekID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrN_TrybNettoVAT" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_AkcyzaMiejsceOdbioru" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="TrN_AkcyzaMiejsceWydania" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="TrN_AkcyzaDataRozpoczeciaPrzem" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrN_AkcyzaDataOdbioruOd" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrN_AkcyzaDataOdbioruDo" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrN_Srw" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="TrN_PARodzajKor" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_MetodaKasowa" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_KorektaZTytulu" Type="System.String" DbType="NVarChar(1024) NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_EdycjaTabelkiVAT" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_PlatnoscNaWZ" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_BzpId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrN_RezerwacjaWew" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="TraNag_TraElem" Member="TraElems" ThisKey="TrN_TrNID" OtherKey="TrE_TrNId" Type="TraElem" />
+      <Association Name="Magazyny_TraNag" Member="Magazyny" ThisKey="TrN_MagDocId" OtherKey="Mag_MagId" Type="Magazyny" IsForeignKey="true" />
+      <Association Name="Magazyny_TraNag1" Member="Magazyny1" ThisKey="TrN_MagZrdId" OtherKey="Mag_MagId" Type="Magazyny" IsForeignKey="true" />
+      <Association Name="FormyPlatnosci_TraNag" Member="FormyPlatnosci" ThisKey="TrN_FPlId" OtherKey="FPl_FPlId" Type="FormyPlatnosci" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.Zamienniki" Member="Zamiennikis">
+    <Type Name="Zamienniki">
+      <Column Name="ZAM_ZamId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ZAM_TwrId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ZAM_ZamTwrId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ZAM_Lp" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Towary_Zamienniki" Member="Towary" ThisKey="ZAM_TwrId" OtherKey="Twr_TwrId" Type="Towary" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.TwrJMZ" Member="TwrJMZs">
+    <Type Name="TwrJMZ">
+      <Column Name="TwJZ_TwJZId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TwJZ_TwrID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwJZ_JM" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TwJZ_JMPrzelicznikL" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TwJZ_JMPrzelicznikM" Type="System.Decimal" DbType="Decimal(7,0) NOT NULL" CanBeNull="false" />
+      <Column Name="TwJZ_eSklepID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TwJZ_eSklepDomyslna" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TwJZ_CenaJednostkowa" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="Towary_TwrJMZ" Member="Towary" ThisKey="TwJZ_TwrID" OtherKey="Twr_TwrId" Type="Towary" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="CDN.Kontrahenci" Member="Kontrahencis">
+    <Type Name="Kontrahenci">
+      <Column Name="Knt_KntId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Knt_PodmiotTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Knt_Kod" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_GLN" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_EAN" Type="System.String" DbType="VarChar(16) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Grupa" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Nazwa1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Nazwa2" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Nazwa3" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Kraj" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Wojewodztwo" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Powiat" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Gmina" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Ulica" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_NrDomu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_NrLokalu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Miasto" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_KodPocztowy" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Poczta" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Adres2" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_NipKraj" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_NipE" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Nip" Type="System.String" DbType="VarChar(13) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Regon" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Pesel" Type="System.String" DbType="NVarChar(11) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Telefon1" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Telefon2" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_TelefonSms" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Fax" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_WiadomoscEmail" Type="System.String" DbType="NVarChar(127) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_URL" Type="System.String" DbType="VarChar(254) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_KrajISO" Type="System.String" DbType="NVarChar(9) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Zezwolenie" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_KodTransakcji" Type="System.String" DbType="NVarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_BazaBR_GUID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="Knt_BNaID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_RachunekNr" Type="System.String" DbType="NVarChar(51) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_IBAN" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_RachunekNr0" Type="System.String" DbType="NVarChar(51)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Knt_OsTytul" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsPlec" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsNazwisko" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsKraj" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsWojewodztwo" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsPowiat" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsGmina" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsUlica" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsNrDomu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsNrLokalu" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsMiasto" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsKodPocztowy" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsPoczta" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsAdres2" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsTelefon" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsGSM" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OsWiadomoscEmail" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Informacje" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Upust" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_LimitFlag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_LimitKredytu" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_LimitPrzeterKredytFlag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_LimitPrzeterKredytWartosc" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Ceny" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_FplID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_MaxZwloka" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_TerminPlat" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Termin" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_KontoOdb" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_KontoDost" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_KatID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_KatZakID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_BlokadaDok" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_LimitKredytuWal" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_LimitKredytuWykorzystany" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_NieRozliczac" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_PodatekVat" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Finalny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_FinalnyWegiel" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Export" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Rodzaj" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Rodzaj_Dostawca" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Rodzaj_Odbiorca" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Rodzaj_Konkurencja" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Rodzaj_Partner" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Rodzaj_Potencjalny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Medialny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_MalyPod" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Rolnik" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Nieaktywny" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Chroniony" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Opis" Type="System.String" DbType="NVarChar(254) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OdbiorcaId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_OpiekunTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Knt_OpiekunId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_OpiekunKsiegTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Knt_OpiekunKsiegID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_OpiekunKsiegDomyslny" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="Knt_OpiekunPiKTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Knt_OpiekunPiKID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_OpiekunPiKDomyslny" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="Knt_TerminZwrotuKaucji" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_NaliczajPlatnosc" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_ZakazDokumentowHaMag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_ZgodaNaEFaktury" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_TypWymiany" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="Knt_PowiazanyUoV" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_MetodaKasowa" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_UWDId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_UWDOddzial" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Knt_UWDWiadomoscEmail" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Knt_TS_Export" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Knt_ImportAppId" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="Knt_ImportRowId" Type="System.String" DbType="VarChar(36)" CanBeNull="true" />
+      <Column Name="Knt_OpeZalID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_StaZalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_TS_Zal" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_OpeModID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_StaModId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_TS_Mod" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_GIDTyp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Knt_GIDFirma" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_GIDNumer" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_GIDLp" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Knt_eSklepID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_FCzynnosci" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_FCzesci" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_KorKraj" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="Knt_KorMiasto" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="Knt_KorKodPocztowy" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="Knt_KorPoczta" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="Knt_KorUlica" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="Knt_KorNrDomu" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Knt_KorNrLokalu" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Knt_NieNaliczajOdsetek" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_ESklep" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_ZwolnionyZAkcyzy" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_WindykacjaSchematId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_WindykacjaOsobaId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Knt_WindykacjaEMail" Type="System.String" DbType="NVarChar(127) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_WindykacjaTelefonSms" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_Komornik" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Knt_KomornikOkreg" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Column Name="Knt_KomornikMiasto" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="Knt_KomornikRewir" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Association Name="Kontrahenci_Towary" Member="Towaries" ThisKey="Knt_KntId" OtherKey="Twr_KntId" Type="Towary" />
+      <Association Name="Kontrahenci_Kontrahenci" Member="Kontrahencis" ThisKey="Knt_KntId" OtherKey="Knt_OdbiorcaId" Type="Kontrahenci" />
+      <Association Name="FormyPlatnosci_Kontrahenci" Member="FormyPlatnosci" ThisKey="Knt_FplID" OtherKey="FPl_FPlId" Type="FormyPlatnosci" IsForeignKey="true" />
+      <Association Name="Kontrahenci_Kontrahenci" Member="Kontrahenci1" ThisKey="Knt_OdbiorcaId" OtherKey="Knt_KntId" Type="Kontrahenci" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Function Name="CDN.TwrIlosciID" Method="TwrIlosciID" IsComposable="true">
+    <Parameter Name="TwrId" Parameter="twrId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="MagId" Parameter="magId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Data" Parameter="data" Type="System.DateTime" DbType="DateTime" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

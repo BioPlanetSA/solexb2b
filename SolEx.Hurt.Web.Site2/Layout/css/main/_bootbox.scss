@@ -1,0 +1,54 @@
+﻿@import "_ustawienia.scss";
+
+.bootbox{
+
+    .modal-body {
+        padding: 25px;
+    }
+
+    .bootbox-close-button{
+        font-family: $font-tekst-rodzina;
+        font-size: 40px;
+        color: #7a7a7a;
+    }
+
+    .bootbox-body {
+        font-family: $font-rodzina-georgia;
+        font-size: 16px;
+        font-style: italic;
+
+        h6{
+            font-size: 28px;
+            padding-bottom: 8px;
+        }
+    }
+
+    .modal-footer{
+        border-top: none;
+    }
+}
+
+.select-picker + .dropdown-menu{
+
+    & >ul >li > a{
+
+    //kopia klasy .dropdown-item bootstrapa
+    display: block;
+    width: 100%;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.5;
+    color: black;
+    text-align: inherit;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover{
+        color: $kolor-zaznaczenia;
+    }
+
+        }
+
+}

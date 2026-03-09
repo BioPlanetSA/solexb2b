@@ -1,0 +1,25 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.Web.ParametryPola
+
+@{
+    Dictionary<string, object> param = new Dictionary<string, object>() {{"type", "file"}, {"data-text", Html.PobierzTlumaczenie(Model.Nazwa)}, {"class", @Model.Nazwa } };
+
+}
+
+
+<div>
+    @(Model.NazwaJakoNameDlaPola ? Html.TextBox(Model.Nazwa, null, param) : Html.TextBoxFor(x => x.Plik, null, param))
+
+    @Html.HiddenFor(x => x.Typ)
+    <p id="scizka-@Model.Nazwa"></p>
+</div>
+
+
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $('.@Model.Nazwa').change(function () {
+            var wartosc = $('.@Model.Nazwa').val().split('\\');
+            $('p#scizka-@Model.Nazwa').append(wartosc[wartosc.length - 1]);
+        });
+    });
+</script>

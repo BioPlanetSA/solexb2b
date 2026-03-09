@@ -1,0 +1,55 @@
+﻿@import "_ustawienia.scss";
+
+
+
+
+
+
+
+.tresci-wiersze {
+
+    .row > [class^=col-] {
+        padding-top: .75rem;
+        padding-bottom: .75rem;
+    }
+
+    .wiersz {
+
+
+        .tresc-wiersz-naglowek {
+            border-bottom: 1px solid $kolor-wyroznienie;
+            background-color: $kolor-tlo;
+
+            > div:last-child {
+                padding-bottom: 0;
+                padding-top: 5px;
+            }
+        }
+
+        .kolumny {
+            min-height: 50px;
+
+            .tresc-wiersz-kolumna {
+                background-color: white;
+                overflow: hidden;
+                border: 10px solid $kolor-szary-ledwowidoczny;
+                margin-bottom:7px;
+            }
+
+            //klasa jak przeciagamy kontener - automatyczne miejsce dla elementu
+            .ui-sortable-placeholder{
+                    background: gray;
+                    visibility: visible !important;
+            }
+
+        }
+    }
+}
+
+//dlatego żeby jak ktos zmieni czcionki w systemie, to pozostaly w edytorze wlasciwe monobloki
+.ace_editor {
+    * {
+        font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+        direction: ltr;
+    }
+}

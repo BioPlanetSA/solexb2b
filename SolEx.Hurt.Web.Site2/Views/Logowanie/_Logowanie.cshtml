@@ -1,0 +1,65 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+
+@{
+    string komunikaty = Model.Item1;
+    LockSystem locksys = Model.Item2;
+    string resethaslaLink = Url.LinkResetuHasla(SolexHelper.AktualnyJezyk);
+}
+
+   @if (locksys.IsLock)
+   {
+       <div style="text-align: center;">
+           <div class="alert alert-danger blokada">
+               <b>@Html.PobierzTlumaczenie("System zablokowany")) </b>
+               <br>
+               @locksys.Message
+           </div>
+       </div>
+   }
+   
+<form method="POST" >
+    <div id="login-form" class="text-xs-left">
+        <h3 class="c text-uppercase bold">
+            @Html.PobierzTlumaczenie("Logowanie")
+        </h3>
+
+        @if ( !string.IsNullOrEmpty(komunikaty ))
+        {
+            <div class="komunikat-blad c text-danger czcionka-tekstowa-paragraf">
+               <div>@Html.PobierzTlumaczenie(komunikaty)</div>
+            </div>
+        }
+
+        <fieldset class="form-group">
+            <input name="Uzytkownik" type="text" id="Uzytkownik" class="form-control" required placeholder="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Login")">
+        </fieldset>
+        <fieldset class="form-group">
+            <input name="Haslo" type="password" id="Haslo" class="form-control" required placeholder="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Hasło")">
+        </fieldset>
+        @*@if (logowaniePokazujCaptcha)
+            {
+                Html.RenderPartial("~/views/Pola/Captcha.cshtml", new ParametryPola());
+            }*@
+
+
+        <div class="login-btns czcionka-tekstowa-paragraf">
+            @{
+                if (!string.IsNullOrEmpty(resethaslaLink))
+                {
+                    <fieldset class="reset-box pull-xs-left">
+                        @Html.PobierzTlumaczenie("Zapomniałeś hasła?")<br/>
+                        <a href="@resethaslaLink" class="reset-link">@Html.PobierzTlumaczenie("Resetuj hasło") </a>
+                    </fieldset>
+                }
+            }
+
+                <fieldset class="pull-xs-right">
+                    <input type="submit" name="logowanie" value="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "ZALOGUJ")" class="btn btn-warning btn-lg btn-zaloguj" 
+                           formaction="@Request.Url">
+            </fieldset>
+        </div>          
+    </div>
+</form>

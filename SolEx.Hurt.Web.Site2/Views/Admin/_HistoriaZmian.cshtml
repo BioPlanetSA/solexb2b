@@ -1,0 +1,71 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model  SolEx.Hurt.Web.Site2.Models.ParametryDoHistoriiZmian
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    DateTime data = DateTime.Now.AddDays(-SolexBllCalosc.PobierzInstancje.Konfiguracja.CzasPrzechowywaniaZmian);
+}
+
+<div class="panel-group historia-zmian-lista" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Historia zmian od dnia @data.ToShortDateString()</h2> 
+        </div>
+        <div class="panel-body">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                @foreach (var g in Model.Zmiany)
+                {
+                    <div class="panel panel-default ramka-wykropkowana-dol">
+                        <div class="panel-heading" role="tab" id="sekcja-@g.Key">
+                            <h4 class="panel-title">
+                                @*<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#zamyka-@g.Key" aria-expanded="false" aria-controls="collapseTwo"> </a>*@
+                                @g.Value[0].DataZmiany
+                                @if (g.Value[0].RodzajZmiany == 2)
+                                {
+                                    <span> Utworzenie </span>
+                                }
+                            </h4>
+                        </div>
+                        <div id="zamyka-@g.Key" class="panel-collapse" role="tabpanel" aria-labelledby="sekcja-@g.Key">
+                            <div class="panel-body">
+
+                                <table class="table table-condensed historia-zmian-pola">
+                                    <thead>
+                                    <tr>
+                                        <th>Pole</th>
+                                        <th>Stara wartość</th>
+                                        <th>Nowa wartość</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var k in g.Value)
+                                    {
+                                        <tr>
+                                            <td class="r fit-content">@k.Pole</td>
+                                            <td class="r original word-wrap">@k.StaraWartosc</td>
+                                            <td class="l changed word-wrap">@k.NowaWartosc</td>
+                                            <td class="diff text-muted word-wrap"></td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                                @Html.ActionLink("Przywróć wersje", "PrzywrocZmiany", "Admin", new {typ = Model.Typ.PobierzOpisTypu(), Data = g.Value[0].DataZmiany, Znacznik = g.Key, id = Model.IdObj}, new {@class = "btn btn-danger historia-zmian"})
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).one('ready', function () {
+        $(".historia-zmian-pola tr").prettyTextDiff({
+            cleanup: true,
+            diffContainer: ".diff"
+        });
+    })
+</script>

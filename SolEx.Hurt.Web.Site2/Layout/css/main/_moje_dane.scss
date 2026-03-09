@@ -1,0 +1,61 @@
+﻿
+
+.menu-moje-dane {
+    position: relative;
+    display: block;
+
+    
+    .menu-klasyczne-rozwijane{
+        margin:0;
+        overflow: hidden;
+
+        min-width: 23px;
+        min-height: 23px;
+
+          .dropdown-menu {
+            padding-top: 0;
+            min-width: 0 !important;
+            width: auto;
+            .dropdown-item {
+                width: auto;
+            }
+
+            ul {
+                text-align: center;
+            }
+        }
+    }
+
+    .mojedane-identyfikator { 
+        margin-left: 30px;
+        // display: inline-block;
+        //  font-size: 13px;
+        position: relative;
+        font-family: $font-tekst-rodzina;
+        font-size: 13px;
+        color: $kolor-text-muted;
+      
+        line-height: 23px;
+       
+
+        &:before {
+            content: ' ';
+            background: url("../../images/user.svg");
+            width: 22px;
+            height: 22px;
+            display: inline-block;
+            background-repeat: no-repeat;
+            //top: -3px;
+            position: absolute;
+            //left: 0;
+            left: -30px;
+            //top: -3px;
+            line-height: 13px;
+        }
+
+    }
+
+    
+      
+
+}

@@ -1,0 +1,129 @@
+﻿@using System.Web.Mvc.Html
+@using ServiceStack.Common
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow
+@model SolEx.Hurt.Core.ModelBLL.SzablonAkceptacjiBll
+@{
+    var uzywani = new HashSet<long>(Model.Poziomy.SelectMany(x => x.Klienci));
+    List<DaneDoTabow> taby = new List<DaneDoTabow> { new DaneDoTabow("#tabOglone", "Ogólne", true, null), new DaneDoTabow("#tabZarzadzanie", "Zarządzanie", false, null) };
+}
+<div class="modal fade szablon-akceptacji-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            @using (Html.BeginForm("Edycja", "SzablonyAkceptacji", FormMethod.Post, new { id = "edycjaLimitow" }))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">@(Model.Id == 0 ? "Nowy szablon akceptacji" : "Edycja szablonu akceptacji " + Model.Nazwa)</h4>
+
+                </div>
+                <div class="modal-body">
+                    @Html.Partial("_Taby", taby)
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="tabOglone">
+                            @Html.HiddenFor(x => x.Id)
+                            @Html.HiddenFor(x => x.Tworca)
+                            @Html.LabelFor(x => x.Nazwa, Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nazwa szablonu").ToString())
+                            @Html.TextBoxFor(x => x.Nazwa, new { @class = "form-control", required = "required" })
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tabZarzadzanie">
+                            <div class="zarzadzanie">
+                                <button class="btn btn-secondary dodaj-poziom">@Html.PobierzTlumaczenie("Dodaj poziom")</button>
+                                <ul class="szablony-akceptacji-uklad row list-unstyled">
+                                    @for (int i = 0; i < Model.Poziomy.Count; i++)
+                                    {
+                                        <li class="col-md-12 poziom">
+                                            <span class='poziom-nr'>@Model.Poziomy[i].Id</span><br/>
+                                            <button class="btn btn-danger usun">@Html.PobierzTlumaczenie("Usuń")</button>
+                                            <input type="hidden" name="poziomAkceptacji" value="@Model.Poziomy[i].Id">
+                                            <ul class="row list-unstyled klienci-poziom">
+                                                @foreach (var kl in Model.Klienci.Where(x => Model.Poziomy[i].Klienci.Contains(x.Id)))
+                                                {
+                                                    Html.RenderPartial("EdycjaKlient", new Tuple<int, Klient>(Model.Poziomy[i].Poziom, kl));
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+
+                                </ul>
+                                <div>@Html.PobierzTlumaczenie("Klienci nie przypisani do żadnego z poziomów")</div>
+                                <ul class="row list-unstyled klienci">
+                                    @foreach (var k in Model.Klienci.Where(x => !uzywani.Contains(x.Id)))
+                                    {
+                                        Html.RenderPartial("EdycjaKlient", new Tuple<int, Klient>(-1, k));
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+                </div>
+            }
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script language="javascript" type="text/javascript">
+    //# sourceURL=szablonakceptacji.js
+    $('.szablony-akceptacji-uklad').sortable({ stop: StopPoziom });
+    $('.szablony-akceptacji-uklad .usun').on('click', Usun);
+    $('.klienci').sortable({ connectWith: '.szablony-akceptacji-uklad .poziom .klienci-poziom', stop: StopKlient });
+    $('.szablony-akceptacji-uklad .poziom .klienci-poziom').sortable({
+        connectWith: '.szablony-akceptacji-uklad .poziom .klienci-poziom,.klienci',
+        stop: StopKlient
+    });
+    $('.zarzadzanie .dodaj-poziom').on('click', function (e) {
+        e.preventDefault();
+        var usuntext = '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Usuń")';
+        var poziom = $('.klienci-poziom').length + 1;
+        var btnusun = $('<button class="btn btn-danger usun">' + usuntext + '</button>');
+        btnusun.on('click', Usun);
+        var wewn = $('<ul class="row list-unstyled klienci-poziom"></ul>');
+        var poziomel = $('<input type="hidden" name="poziomAkceptacji" value="' + poziom + '">');
+        var elemment = $('<li class="col-md-12 poziom"></li>');
+        wewn.sortable({
+            connectWith: '.szablony-akceptacji-uklad .poziom .klienci-poziom,.klienci',
+            stop: StopKlient
+        });
+        elemment.append(btnusun);
+        elemment.append(poziomel);
+        elemment.append(wewn);
+        $('.zarzadzanie .szablony-akceptacji-uklad').append(elemment);
+    });
+
+    function StopKlient(event, ui) {
+        var elem = $(ui.item);
+        var poziom = elem.closest('.poziom').find('[name="poziomAkceptacji"]').val();
+        if (poziom == undefined) {
+            poziom = -1;
+        }
+        elem.find('[name="Poziom"]').val(poziom);
+    }
+    function Usun(e) {
+        e.preventDefault();
+        var usuwany = $(this).parent();
+        var poziomId = $(this).closest('.poziom-nr');
+        var dzieci = usuwany.find('.klient-wpis');
+        dzieci.each(function(nr, el) {
+            $(el).find('[name="poziomAkceptacji"]').val(-1);
+        });
+        $('.klienci').append(dzieci);
+        usuwany.remove();
+        poziomId.remove();
+        StopPoziom();
+    }
+    function StopPoziom() {
+        $('.szablony-akceptacji-uklad .poziom').each(function(nr, el) {
+            el = $(el);
+            var poziom = nr + 1;
+            el.find('[name="poziomAkceptacji"]').val(poziom);
+            el.find('[name="Poziom"]').val(poziom);
+        });
+      
+    }
+</script>

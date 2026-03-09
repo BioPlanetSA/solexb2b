@@ -1,0 +1,105 @@
+﻿@using ServiceStack.Net30
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model System.Tuple<List<ParametrIndywidualizacji>, string, string>
+
+@{
+    List<ParametrIndywidualizacji> produkty = Model.Item1;
+    string wiadomosc = Model.Item2;
+    string rozmiarZdjecia = Model.Item3;
+}
+
+<div id="indywidualizacja-produktu" class="modal fade" data-indywidualizacja="panel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="text-align: left;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title ">
+                    @Html.PobierzTlumaczenie("Indywidualizaca zamawianych produktów, każdy wiersz to jedna pozycja")
+                </h3>
+            </div>
+            <div class="modal-body ">
+                @if (!string.IsNullOrEmpty(wiadomosc))
+                {
+                    <div class="alert alert-danger c">
+                        @Html.PobierzTlumaczenie(wiadomosc)
+                    </div>
+                }
+                <table class="table indywidualizacja-pozycje">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th scope="col" class="c NaglowekNazwa" style="vertical-align: middle">
+                            @Html.PobierzTlumaczenie("NAZWA")
+                        </th>
+                        <th scope="col" class="c" style="vertical-align: middle;">
+                            @Html.PobierzTlumaczenie("ZAMAWIANA ILOŚĆ")
+                        </th>
+                        <th scope="col" class="c" style="vertical-align: middle;">
+                            @Html.PobierzTlumaczenie("INDYWIDUALIZACJA")
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var p in produkty)
+                    {
+
+                        decimal ilosc = p.Produkt.IndiwidualizacjeProduktu.All(x => x.SposobIndywidualizacji == SposobIndywidualizacji.Indywidualna) ? p.Ilosc : 1;
+                        for (int i = 0; i < ilosc; i++)
+                        {
+                            decimal iloscProd = p.Ilosc/ilosc;
+                            <tr data-indywidualizacja="@p.Produkt.Id" data-indywidualizacja-jednostka="@p.JednostkaId" data-indywidualizacja-bazowy="@p.Produkt.bazoweID" data-typpozycji="@p.TypPozycji" data-iloscpozycji="@iloscProd">
+                                <td class="fit-content c zdjecie">
+                                    @{
+                                        Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(p.Produkt, rozmiarZdjecia, true, RodzajMetki.ListaProduktow, "foto link-szczegoly", null));
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (p.Produkt.CechaUnikalnaRodzina != null)
+                                    {
+                                        <div class="rodzina-dziecko-cechy ikonki">
+                                            <div class="label label-border wieksze-litery-100 rodzina-dziecko-cecha">
+                                                @{ Html.RenderPartial("~/Views/Produkty/_AtrybutProduktu.cshtml", p.Produkt.CechaUnikalnaRodzina); }
+                                            </div>
+                                        </div>
+                                    }
+                                    <span class="text-muted">
+                                            @p.Produkt.Nazwa
+                                        </span>
+                                </td>
+
+                                <td class="c">
+                                    <span class="text-muted">
+                                            @(iloscProd)
+                                        </span>
+                                </td>
+
+                                <td class="parametry-indywidualizacji">
+                                    @foreach (Indywidualizacja ind in p.Produkt.IndiwidualizacjeProduktu)
+                                    {
+                                        IndywidualizacjaWartosc wartosc = new IndywidualizacjaWartosc(ind, p.Produkt.Id, null);
+                                        @Html.EditorFor(x => wartosc)
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+                <div class="r">
+                    @if (SesjaHelper.PobierzInstancje.CzyKlientZalogowany)
+                    {
+                        @Html.Partial("~/Views/Koszyk/_DodajZbiorczo.cshtml", new System.Tuple<string, string>("Dodaj produkty indywidualne", "return DodajIndywidualne(this)"))
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

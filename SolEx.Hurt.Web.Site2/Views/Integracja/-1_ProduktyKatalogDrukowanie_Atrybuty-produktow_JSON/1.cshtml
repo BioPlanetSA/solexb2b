@@ -1,0 +1,68 @@
+﻿@using System.Dynamic
+@using System.Globalization
+@using System.Text
+@using System.Web.Script.Serialization
+@using CsvHelper
+@using CsvHelper.Configuration
+@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.App_Start
+@using SolEx.Hurt.Web.Site2.Helper
+@using CsvWriter = CsvHelper.CsvWriter
+@model  SolEx.Hurt.Web.Site2.Models.ParametrDoKataloguProduktow
+@{
+    Layout = null;
+}
+@section Opis {
+}
+@section Nazwa {
+   Uniwersalny plik JSON do drukowania katalogów
+}
+@section Szablon{
+    @if (Model != null)
+    {
+        List<dynamic> produkty = new List<dynamic>();
+        foreach (IProduktKlienta p in Model.ListaProduktow) //wszystkie cechy musza byc w pliku, nie tylko widoczne
+        {
+            dynamic atrybuty = new ExpandoObject();
+
+            var slownik = (atrybuty as IDictionary<string, Object>);
+
+            slownik.Add("ProduktId", p.Id);
+
+            foreach (var cecha in p.Cechy.Values)
+            {
+                if (!cecha.AtrybutId.HasValue)
+                {
+                    continue;
+                }
+
+                string klucz = "Atrybut_" + cecha.AtrybutId.Value;
+                if (slownik.ContainsKey(klucz))
+                {
+                    continue;
+                }
+
+                slownik.Add(klucz, p.CechyDlaAtrybutu(cecha.AtrybutId.Value, false).Select(x=>x.Nazwa).ToList().ToCsv().TrimEnd("\r\n"));
+            }
+
+            produkty.Add(atrybuty);
+        }
+
+        object listaDoJson = new {Atrybuty = produkty};
+
+        System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        serializer.MaxJsonLength = Int32.MaxValue;
+        serializer.RegisterConverters(new JavaScriptConverter[] { new ExpandoJSONConverter() });
+
+        ViewBag.ObiektModelu = listaDoJson;
+
+            @Html.Raw(serializer.Serialize(listaDoJson));
+        }
+    }

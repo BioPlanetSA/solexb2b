@@ -1,0 +1,113 @@
+﻿@import "_ustawienia.scss";
+
+.cien {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.cien-bez-topu {
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+.maska-kropki {
+    background-color: white;
+    background-image: linear-gradient(45deg, black 25%, transparent 25%, transparent 75%, black 75%, black), linear-gradient(45deg, black 25%, transparent 25%, transparent 75%, black 75%, black);
+    background-size: 100px 100px;
+    background-position: 0 0, 50px 50px;
+}
+
+
+//maska przezroczyta stala
+@media (max-width: 543px) {
+    .maska-przezroczysta-stala-xs {
+        background-color: $kolor-szary-przezroczysty90;
+    }
+}
+
+
+//tlo-wiersza-usun
+@media (max-width: 543px) {
+    .container-fluid[data-class*="tlo-wiersza-usun-xs"], .container[data-class*="tlo-wiersza-usun-xs"] {
+        background-image: none !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .container-fluid[data-class*="tlo-wiersza-usun-md-down"], .container[data-class*="tlo-wiersza-usun-md-down"] {
+        background-image: none !important;
+    }
+}
+
+@media (max-width: 1199px) {
+    .container-fluid[data-class*="tlo-wiersza-usun-lg-down"], .container[data-class*="tlo-wiersza-usun-lg-down"] {
+        background-image: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .container-fluid[data-class*="tlo-wiersza-usun-sm-down"], .container[data-class*="tlo-wiersza-usun-sm-down"] {
+        background-image: none !important;
+    }
+}
+
+
+
+//efekt checkboxa
+
+.a-checkbox {
+        position: relative;
+        margin-left: 35px;
+        
+        &, &:hover{
+            color: black;
+            text-decoration: none;
+        }
+
+    &:before {
+        content: ' ';
+        position: absolute;
+        left: -35px;
+        top: -3px;
+        width: 25px;
+        height: 25px;
+        display: block;
+        background: white;
+        border: 1px solid $kolor-ramki-mocny;
+    }
+
+    &.a-checkbox-checked:after {
+        content: ' ';
+        position: absolute;
+        left: -35px;
+        top: -3px;
+        width: 23px;
+        height: 23px;
+        display: block;
+        z-index: 1;
+        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjE4MS4yIDI3MyAxNyAxNiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAxODEuMiAyNzMgMTcgMTYiPjxwYXRoIGQ9Ik0tMzA2LjMgNTEuMmwtMTEzLTExM2MtOC42LTguNi0yNC04LjYtMzQuMyAwbC01MDYuOSA1MDYuOS0yMTIuNC0yMTIuNGMtOC42LTguNi0yNC04LjYtMzQuMyAwbC0xMTMgMTEzYy04LjYgOC42LTguNiAyNCAwIDM0LjNsMjMxLjIgMjMxLjIgMTEzIDExM2M4LjYgOC42IDI0IDguNiAzNC4zIDBsMTEzLTExMyA1MjQtNTI0YzctMTAuMyA3LTI1LjctMS42LTM2eiIvPjxwYXRoIGZpbGw9IiMzNzM3MzciIGQ9Ik0xOTcuNiAyNzcuMmwtMS42LTEuNmMtLjEtLjEtLjMtLjEtLjUgMGwtNy40IDcuNC0zLjEtMy4xYy0uMS0uMS0uMy0uMS0uNSAwbC0xLjYgMS42Yy0uMS4xLS4xLjMgMCAuNWwzLjMgMy4zIDEuNiAxLjZjLjEuMS4zLjEuNSAwbDEuNi0xLjYgNy42LTcuNmMuMy0uMS4zLS4zLjEtLjV6Ii8+PHBhdGggZD0iTTExODcuMSAxNDMuN2wtNTYuNS01Ni41Yy01LjEtNS4xLTEyLTUuMS0xNy4xIDBsLTI1My41IDI1My41LTEwNi4yLTEwNi4yYy01LjEtNS4xLTEyLTUuMS0xNy4xIDBsLTU2LjUgNTYuNWMtNS4xIDUuMS01LjEgMTIgMCAxNy4xbDExNC43IDExNC43IDU2LjUgNTYuNWM1LjEgNS4xIDEyIDUuMSAxNy4xIDBsNTYuNS01Ni41IDI2Mi0yNjJjNS4yLTMuNCA1LjItMTIgLjEtMTcuMXpNMTYzNC4xIDE2OS40bC0zNy43LTM3LjdjLTMuNC0zLjQtOC42LTMuNC0xMiAwbC0xNjkuNSAxNjkuNS03MC4yLTcxLjljLTMuNC0zLjQtOC42LTMuNC0xMiAwbC0zNy43IDM3LjdjLTMuNCAzLjQtMy40IDguNiAwIDEybDc3LjEgNzcuMSAzNy43IDM3LjdjMy40IDMuNCA4LjYgMy40IDEyIDBsMzcuNy0zNy43IDE3NC43LTE3Ni40YzEuNi0xLjcgMS42LTYuOS0uMS0xMC4zeiIvPjwvc3ZnPg==') no-repeat center center;
+    }
+}
+
+
+.ZnakiWKolku{
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 3px;
+    background: #ff6a00;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 27px;
+
+    //font: 32px Arial, sans-serif;
+}
+
+.span-rozdziel-spacjami{
+    span {
+            &:not(:last-child):after {
+                content: '  ';
+            }
+        }
+}

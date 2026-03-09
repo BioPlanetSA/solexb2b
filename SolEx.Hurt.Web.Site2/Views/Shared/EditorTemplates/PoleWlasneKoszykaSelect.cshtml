@@ -1,0 +1,32 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@using SolEx.Hurt.Model.Web
+@model  SolEx.Hurt.Core.BLL.Web.DodatkowePoleKoszyka
+<div class="row row-xs-center koszyk-parametr ramka-wykropkowana-dol">
+    <div class="parametr-nazwa col-xs-3">
+        @Html.Partial("PoleWlasneKoszykaCzescWspolna", Model)
+    </div>
+    <div class="col-xs-9">
+        @{
+            Dictionary<string, object> parametry = new Dictionary<string, object>();
+            parametry.Add("data-modul", Model.IdModulu);
+            parametry.Add("data-symbol", Model.Symbol);
+
+            parametry.Add("class", "selectpicker");
+            if (Model.Wymagane)
+            {
+                parametry.Add("required", "required");
+            }
+        }
+        @if (Model.MultiWybor)
+        {
+            parametry.Add("title", "-");
+            @Html.ListBoxFor(x => x.WybraneWartosci, Model.WartosciMozliwe.Select(x => new SelectListItem() { Text = x, Value = x, Selected = Model.WybraneWartosci.Contains(x) }), parametry)
+        }
+        else
+        {
+
+            @Html.DropDownListFor(n => n.WybraneWartosciString, new SelectList(Model.WartosciMozliwe, Model.WybraneWartosciString), "-", parametry)
+        }
+        </div>
+    </div>

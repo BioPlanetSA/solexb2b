@@ -1,0 +1,277 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model SolEx.Hurt.Web.Site2.Models.ParametryKoszyka
+@{
+    IConfigBLL config = SolexBllCalosc.PobierzInstancje.Konfiguracja;
+    bool utratacen = !Model.ZmianaCen && Model.KoszykObiekt.PobierzPozycje.Any(x => x.WymuszonaCenaNettoPrzedstawiciel.HasValue);
+
+    var gorne = Model.Komunikaty.Where(x => !string.IsNullOrEmpty(x.Wiadomosc) &&  (x.PozycjaPokazania == PokazywanieKomunikatu.NaGorze || x.PozycjaPokazania == PokazywanieKomunikatu.NaGorzeIDole));
+    var dolne = Model.Komunikaty.Where(x => !string.IsNullOrEmpty(x.Wiadomosc) &&(x.PozycjaPokazania == PokazywanieKomunikatu.NADole || x.PozycjaPokazania == PokazywanieKomunikatu.NaGorzeIDole));
+    var zwykle = Model.KoszykObiekt.PobierzPozycje.Count(x => x.TypPozycji == TypPozycjiKoszyka.Zwykly);
+    var automatyczne = Model.KoszykObiekt.PobierzPozycje.Count(x => x.TypPozycji == TypPozycjiKoszyka.Automatyczny);
+    var gratisowe = Model.KoszykObiekt.PobierzPozycje.Count(x => x.TypPozycji == TypPozycjiKoszyka.Gratis);
+    var zaPunkty = Model.KoszykObiekt.PobierzPozycje.Count(x => x.TypPozycji == TypPozycjiKoszyka.ZaPunkty);
+    var maxUwag = Model.KontrolkaKoszyka.DopuszczalnaDlugoscUwag;
+    Dictionary<string, object> parametrylistwzorcowe = new Dictionary<string, object> {{"required", "required"}, {"class", "selectpicker"}};
+}
+    @Html.Partial("Komunikat", gorne)
+
+<div id="koszyk-lista-pozycji" data-utrata-cen="@utratacen">
+    <div class="belka-nad-produktami kafle kafle-na-boki ramka-wykropkowana-dol" id="belka-zarzadzanie-koszyk" data-szukanie-placeholder="@config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Szukaj w koszyku")">
+        <div class="belka-nad-produktami-lewa c">
+            <a class="przelicz-koszyk btn-xs btn btn-secondary fa fa-refresh" title="@config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Przelicz koszyk")"></a>
+            <a class="btn-xs  btn btn-secondary close-button ramka wyczysc-koszyk" title="@config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Usuń wszystkie pozycje koszyka")"></a>
+            @if (!string.IsNullOrEmpty(Model.PoprzedniaStrona))
+            {
+                <a href="@Model.PoprzedniaStrona" class="btn-xs  btn btn-secondary fa fa-arrow-left" title="@config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wróć do wyboru produktów")"></a>
+            }
+            @if (Model.ModulyGratisow.Any())
+            {
+                <a class="btn-xs  btn btn-secondary fa fa-th-list" @Html.Raw($"title=\"{config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Otwórz listę i wybierz gratisy")}\" onclick=\"PokazWyborGratisow(event)\"")></a>
+            }
+            @if (Model.Finalizacja)
+            {
+                <a class="btn-xs btn btn-primary finalizuj fa fa-check" title="@config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zatwierdź koszyk i złóż zamówienie")"></a>
+            }
+        </div>
+        <div class="belka-nad-produktami-prawa c">
+            @Html.Action("Sortowanie", "Koszyk")
+        </div>
+    </div>
+    @{
+        WidocznoscKolumnKoszyk wid = Model.WidocznoscKolumnProdukty();
+        ViewBag.WidocznoscKolumn = wid;
+        ViewBag.IloscElemntow = 1;
+        @Html.Partial("_CzescDynamicznaProdukty", Model)
+    }
+    @if (Model.ModulyGratisow.Any())
+    {
+        //'/Koszyk/GratisyWybor'
+        <div class="SekcjaKoszykNadTabelami"> @Html.PobierzTlumaczenie("Pozycje gratisowe") </div>
+        @Html.Partial("Komunikat", Model.ModulyGratisow.Select(x => x.Wartosc))
+        <button class="wlacz-tooltip btn btn-secondary PrzyciskWyboruGratisow" onclick="PokazModal(this)" data-url="/Koszyk/GratisyWybor/@Model.Id" title="@Html.PobierzTlumaczenie("Otwórz listę i wybierz gratisy")">
+            <span class="fa fa-th-list"></span> @Html.PobierzTlumaczenie("Wybierz gratisy")
+        </button>
+        if (gratisowe != 0)
+        {
+            <div class="SekcjaKoszykNadTabelami">@Html.PobierzTlumaczenie("Wybrane gratisy")</div>
+            WidocznoscKolumnKoszyk widGratisy = Model.WidocznoscKolumnProduktyGratisy();
+            ViewBag.WidocznoscKolumn = widGratisy;
+            ViewBag.IloscElemntow = zwykle + 1;
+            @Html.Partial("_CzescDynamicznaProdukty", Model)
+        }
+    }
+    @if (zaPunkty > 0)
+    {
+        <div class="SekcjaKoszykNadTabelami">@Html.PobierzTlumaczenie("Wybrane produkty kupowane za punkty")</div>
+        WidocznoscKolumnKoszyk widZapunkty = Model.WidocznoscKolumnProduktyZaPkt();
+        ViewBag.WidocznoscKolumn = widZapunkty;
+        ViewBag.IloscElemntow = zwykle + 1;
+        @Html.Partial("_CzescDynamicznaProdukty", Model)
+    }
+    @if (automatyczne != 0)
+    {
+        <div class="SekcjaKoszykNadTabelami">@Html.PobierzTlumaczenie("Pozycje dodane automatycznie")</div>
+        WidocznoscKolumnKoszyk widAuto = Model.WidocznoscKolumnProduktyAutomatyczne();
+        ViewBag.WidocznoscKolumn = widAuto;
+        ViewBag.IloscElemntow = gratisowe + zwykle + 1;
+        @Html.Partial("_CzescDynamicznaProdukty", Model)
+    }
+    <div class="r koszyk-przyciski">
+        @Html.Partial("_PokazDrukowanieKataloguZKoszyka")    
+
+        @if (!string.IsNullOrEmpty(Model.PoprzedniaStrona))
+        {
+            <a href="@Model.PoprzedniaStrona" class="btn btn-secondary wlacz-tooltip" title="@config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wróć do wyboru produktów")"><span class="fa fa-arrow-left"></span> @Html.PobierzTlumaczenie("Produkty")</a>
+        }
+        <a class="przelicz-koszyk wlacz-tooltip btn btn-secondary" title="@config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Przelicz koszyk")"><span class="fa fa-refresh"></span> @Html.PobierzTlumaczenie("Przelicz")</a>
+    </div>
+    <div class="row parametry-koszyk-wybor c">
+        <div class="col-md-12 col-xs-12">
+            @if (Model.PolaWlasneKoszyka.Any(x => x.Pozycja == PozycjaNaWidokuKoszyka.Centralnie))
+            {
+                <div class="parametry-dodatkowe">
+                    <div class="przeladowanie">
+                        @{
+                            var ob = Model.PolaWlasneKoszyka.First(x => x.Pozycja == PozycjaNaWidokuKoszyka.Centralnie);
+                            int index = Array.IndexOf(Model.PolaWlasneKoszyka, ob);
+                            for (int i = 0; i < ob.Pola.Length; i++)
+                            {
+                                int id = i;
+                                @Html.EditorFor(x => x.PolaWlasneKoszyka[index].Pola[id], "PoleWlasneKoszyka" + ob.Pola[i].TypPola)
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-5 col-xs-12">
+            <div class="koszyk-opis koszyk-parametr">
+                @Html.TextAreaFor(x => x.KoszykObiekt.Uwagi, new { rows = 1, cols = 20, @class = "border form-control", id = "koszyk-uwagi", css = "overflow=hidden", placeholder = config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, $"Tu wpisz swoje uwagi do zamówienia. Maksymalna ilość znaków: {maxUwag}"), maxlength = maxUwag })
+            </div>
+            @if (Model.PolaWlasneKoszyka.Any(x => x.Pozycja == PozycjaNaWidokuKoszyka.ZLewej))
+            {
+                <div class="parametry-dodatkowe">
+                    <div class="przeladowanie ramka-wykropkowana-gora ">
+                        @{
+                            var ob = Model.PolaWlasneKoszyka.First(x => x.Pozycja == PozycjaNaWidokuKoszyka.ZLewej);
+                            int index = Array.IndexOf(Model.PolaWlasneKoszyka, ob);
+                            for (int i = 0; i < ob.Pola.Length; i++)
+                            {
+                                int id = i;
+                                @Html.EditorFor(x => x.PolaWlasneKoszyka[index].Pola[id], "PoleWlasneKoszyka" + ob.Pola[i].TypPola)
+                            }
+                        }
+                    </div>
+                </div>
+                
+            }
+        </div>
+        <div class="col-md-7 col-xs-12 ramka-wykropkowana-lewa">
+            @if (Model.Adresy.Any() && !Model.KoszykObiekt.UkryjAdresy)
+            {
+                bool dodawanieNowegoAdresu = !SolexHelper.AktualnyKlient.AdresWysylkiBlokada && Model.KontrolkaKoszyka.DodawanieNowegoAdresu;
+
+                bool brakWyboru = true;
+                var pard = new Dictionary<string, object>(parametrylistwzorcowe);
+                pard.Add("data-modul", DodatkowePolaWKoszyku.Adresy);
+                var wd = Model.KoszykObiekt.AdresId;
+                if (Model.KoszykObiekt.AdresId.HasValue)
+                {
+                    brakWyboru = false;
+                }
+
+                if (Model.Adresy.Length < 2 || Model.KoszykObiekt.Klient.AdresWysylkiBlokada)
+                {
+                    wd = Model.Adresy.First().Klucz;
+                    pard.Add("disabled", "disabled");
+                    brakWyboru = false;
+                }
+
+                pard.Add("data-live-search", true);
+
+                <div class="row row-xs-center koszyk-parametr przeladowanie ramka-wykropkowana-dol adresy @Html.Raw(!SolexHelper.AktualnyKlient.AdresWysylkiBlokada ? "aktywne-dodawanie" : "")  @Html.Raw(!brakWyboru ? "" : "brak-wyboru")">
+                    <div class="parametr-nazwa col-xs-3">
+                        @Html.PobierzTlumaczenie("Adres dostawy")
+                    </div>
+                    <div class="parametr-nazwa @(dodawanieNowegoAdresu ? "col-xs-8" : "col-xs-9") ">
+                        @Html.DropDownListFor(n => n.KoszykObiekt.AdresId, new SelectList(Model.Adresy, "Klucz", "Wartosc", wd), config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Proszę wybrać adres"), pard)
+                    </div>
+                    @if (dodawanieNowegoAdresu)
+                {
+                        <div class="col-xs-1">
+                            @Html.ActionLink(" ", "DodajAdres", "Adresy", new { }, new { @class = "fa fa-plus c okno-modalne clickable wlacz-tooltip", @title = config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Dodaj nowy adres") })
+                        </div>
+                    }
+                </div>
+            }
+            @if (Model.Dostawy.Any())
+            {
+                var pard = new Dictionary<string, object>(parametrylistwzorcowe);
+                pard.Add("data-modul", DodatkowePolaWKoszyku.Dostawy);
+                var wd = Model.KoszykObiekt.AdresId;
+                if (Model.Dostawy.Length < 2)
+                {
+                    wd = Model.Dostawy.First().Klucz;
+                    pard.Add("disabled", "disabled");
+                }
+                bool brakWyboru = Model.KoszykObiekt.KosztDostawyId.HasValue || Model.Dostawy.Length < 2;
+                <div class="row row-xs-center koszyk-parametr przeladowanie ramka-wykropkowana-dol @Html.Raw(brakWyboru ? "" : "brak-wyboru")">
+                    <div class="parametr-nazwa col-xs-3">
+                        @Html.PobierzTlumaczenie("Sposób dostawy")
+                    </div>
+                    <div class="col-xs-8">
+                        @Html.DropDownListFor(n => n.KoszykObiekt.KosztDostawyId, new SelectList(Model.Dostawy, "Klucz", "Wartosc", wd), config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Proszę wybrać dostawę"), pard)
+                    </div>
+                </div>
+            }
+            @if (Model.Platnosci.Any())
+            {
+                var pard = new Dictionary<string, object>(parametrylistwzorcowe);
+                pard.Add("data-modul", DodatkowePolaWKoszyku.Platnosci);
+                bool jestWybor = Model.KoszykObiekt.PlatnoscId.HasValue || Model.Platnosci.Length < 2;
+                var wd = Model.KoszykObiekt.PlatnoscId;
+                if (Model.Platnosci.Length < 2)
+                {
+                    wd = Model.Platnosci.First().Klucz;
+                    pard.Add("disabled", "disabled");
+                }
+
+                <div class="row row-xs-center koszyk-parametr przeladowanie ramka-wykropkowana-dol  @Html.Raw(jestWybor?string.Empty:"brak-wyboru")">
+                    <div class="parametr-nazwa col-xs-3">
+                        @Html.PobierzTlumaczenie("Sposób płatności")
+                    </div>
+                    <div class="col-xs-9">
+                        @Html.DropDownListFor(n => n.KoszykObiekt.PlatnoscId, new SelectList(Model.Platnosci, "Klucz", "Wartosc", wd), config.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Proszę wybrać sposób płatności"), pard)
+                    </div>
+                </div>
+
+            }
+
+            @if (Model.DostepneMagazyny.Any())
+            {
+                var pard = new Dictionary<string, object>(parametrylistwzorcowe);
+                pard.Add("data-modul", DodatkowePolaWKoszyku.DostepneMagazyny);
+                var wd = Model.KoszykObiekt.MagazynRealizujacy;
+                if (string.IsNullOrEmpty(wd))
+                {
+                    wd = SolexHelper.AktualnyKlient.MagazynDomyslny;
+                    if (string.IsNullOrEmpty(wd))
+                    {
+                        wd = Model.DostepneMagazyny.First();
+                    }
+                }
+                if (Model.DostepneMagazyny.Count < 2)
+                {
+                    //Zakomentowałem przypisanie to przeniesione do kontrolera
+                    //wd = Model.DostepneMagazyny.First();
+                    pard.Add("disabled", "disabled");
+                }
+
+                <div class="row row-xs-center koszyk-parametr przeladowanie ramka-wykropkowana-dol ">
+                    <div class="col-xs-3 parametr-nazwa">
+                        @Html.PobierzTlumaczenie("Wybierz magazyn realizujący")<br />
+                    </div>
+                    <div class="col-xs-9">
+                        @Html.DropDownListFor(x => x.KoszykObiekt.MagazynRealizujacy, Model.DostepneMagazyny.Select(x => new SelectListItem {Text = x, Value = x, Selected = x == wd}), pard)
+                    </div>
+                </div>
+            }
+            @if (Model.PolaWlasneKoszyka.Any(x => x.Pozycja == PozycjaNaWidokuKoszyka.ZPrawej))
+            {
+                <div class="parametry-dodatkowe">
+                    <div class="przeladowanie">
+                        @{
+                            var ob = Model.PolaWlasneKoszyka.First(x => x.Pozycja == PozycjaNaWidokuKoszyka.ZPrawej);
+                            int index = Array.IndexOf(Model.PolaWlasneKoszyka, ob);
+                            for (int i = 0; i < ob.Pola.Length; i++)
+                            {
+                                int id = i;
+                                @Html.EditorFor(x => x.PolaWlasneKoszyka[index].Pola[id], "PoleWlasneKoszyka" + ob.Pola[i].TypPola)
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+    <div style="clear: both">
+        @Html.Partial("Komunikat", dolne)
+    </div>
+    @if (Model.WidoczneCeny)
+    {
+        @Html.Partial("_CzescDynamicznaPodsumowanie", Model)
+    }
+    else
+    {
+        <div class="col-md-3 c" style="float: none" id="finalizacja">
+            @Html.Partial("_CzescDynamicznaFinalizacjaPrzycisk", Model)
+        </div>
+    }
+</div>

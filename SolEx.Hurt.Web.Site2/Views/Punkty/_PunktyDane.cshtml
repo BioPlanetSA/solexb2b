@@ -1,0 +1,54 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@*@model Tuple<List<SolEx.Hurt.Core.DokumentyBll>, string,KolejnoscSortowania,List<Tuple<string, decimal, string, string>>>*@
+@{
+    List<PunktyWpisy> dokumenty = Model.Item1;
+    decimal lacznie = Model.Item2;
+    //DocumentSummary danedoWykresu = Model.Item4;
+    //WartoscLiczbowa razemnetto = new WartoscLiczbowa(dokumenty.Sum(x => x.DokumentWartoscNetto), dokumenty[0].walutaB2b);
+    //WartoscLiczbowa razembrutto = new WartoscLiczbowa(dokumenty.Sum(x => x.DokumentWartoscBrutto), dokumenty[0].walutaB2b);
+}
+<table class="dokumenty table table-condensed ">
+    <thead>
+        <tr>
+            <th style="width:146px" data-pole-sort="Data">
+                @Html.PobierzTlumaczenie("Data dodania")
+
+
+            </th>
+            <th data-pole-sort="Opis">
+                @Html.PobierzTlumaczenie("Opis")
+
+            </th>
+            
+         
+            <th data-pole-sort="IloscPunktow">
+                @Html.PobierzTlumaczenie("Ilość punktów")
+            </th>
+          
+        </tr>
+    </thead>
+    @foreach (var d in dokumenty)
+    {
+        <tr>
+            <td class=" c" >@d.Data.ToShortDateString()</td>
+            <td class=" c">
+@d.Opis
+            </td>
+
+            <td class=" r" >@d.IloscPunktow.DoLadnejCyfry()</td>
+          
+
+        </tr>
+      
+    }
+    <tfoot>
+        <tr>
+            <td class=" r b" colspan="2">@Html.PobierzTlumaczenie("Suma wszystkich puntków")</td>
+            <td class=" r">@lacznie.DoLadnejCyfry()</td>
+           
+        </tr>
+    </tfoot>
+
+</table>

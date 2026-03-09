@@ -1,0 +1,47 @@
+﻿@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model  SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+    @{
+
+        Type typPods = Model.TypPrzechowywanejWartosci.PobierzPodstawowyTyp();
+    }
+   @if (typPods.IsEnum)
+   {
+       string war = Refleksja.PobierzLadnaWartoscEnuma(Model.Wartosc, Model.TypPrzechowywanejWartosci);
+       @war
+   }
+   @*else if (Model.TypPrzechowywanejWartosci.Implements(typeof(IEnumerable)))
+   {
+       if (typPods == typeof(long))
+       {
+           IEnumerable<long> wartosci = (IEnumerable<long>)Model.Wartosc;
+           foreach (var val in Model.Slownik)
+           {
+               if (wartosci.Contains((long)val.Value))
+               {
+                @val.Key
+               }
+           }
+       }
+       if (typPods == typeof(int))
+       {
+           IEnumerable<int> wartosci = (IEnumerable<int>)Model.Wartosc;
+           foreach (var val in Model.Slownik)
+           {
+               if (wartosci.Contains((int)val.Value))
+               {
+                @val.Key
+               }
+           }
+       }
+
+   }*@
+   else if (Model.Slownik.Any())
+   {
+     @Html.Partial("DisplayTemplates/Admin/PoleZeSlownikiem",Model)
+   }
+   else
+   {
+       @Model.Wartosc
+   }
+

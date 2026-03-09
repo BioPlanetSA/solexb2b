@@ -1,0 +1,122 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+
+}
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.ZmianaAdresuIP
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Odblokuj swoje konto na platformie b2b")
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie( Model.JezykMaila(), "Zmiana ip klienta {0} ", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+    }
+     
+
+}
+@section Naglowek
+{
+    <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zmiana adresu IP klienta")</h4>
+}
+@section Tresc
+{
+    
+    <table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad">
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+                        {
+                            @Html.PobierzTlumaczenie(  Model.JezykMaila(),
+                                "Chwile temu ktoś próbował logować się na Twoje konto z nieznanego adresu IP. <br/>" +
+                                "Nasz system bezpieczeństwa zablokował to logowanie.<br/>" +
+                                "<br/>" +
+                                "Stary adres IP: <b>{0}</b>" +
+                                "<br/>   Nowy adres IP: <b>{1}</b><br/>" +
+                                "<br/>" +
+                                "Jeśli wszystko jest w porządku i potwierdzasz zmianę adresu IP po prostu odblokuj dostęp do systemu B2B.<br />" +
+                                "<br/>" +
+                                "Jeśli podejrzewasz próbę włamania na swoje konto, natychmiast zgłoś to do swojego opiekuna." +
+                                "", MiejsceFrazy.Brak, new object[] { Model.StareIp, Model.NoweIp})
+                        }
+                        else
+                        {
+                            @Html.PobierzTlumaczenie(  Model.JezykMaila(),
+                                "Zmiana adresu ip klienta <b>{0}</b>" +
+                                "Stary adres IP: <b>{1}</b>" +
+                                "<br/>Nowy adres IP: <b>{2}</b><br/>", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa, Model.Klient.Email, Model.StareIp, Model.NoweIp })
+                        }
+        <br />
+                </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+
+        <table class="row">
+            <tr>
+                <td class="wrapper offset-by-four">
+                    <table class="four columns">
+                        <tr>
+                            <td>
+
+                                <table class="button akcja">
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.ZbudujLinkZmianaAdresuIpKlienta(Model.Klient)">
+                                                @Html.PobierzTlumaczenie(Model.JezykMaila(), "Odblokuj dostęp")
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                            <td class="expander"></td>
+                        </tr>
+                    </table>
+
+
+                </td>
+                <td class="wrapper last offset-by-four"></td>
+            </tr>
+        </table>
+
+
+        <br />
+
+
+       
+
+
+}
+

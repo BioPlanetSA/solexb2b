@@ -1,0 +1,25 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryDoWeryfikacji
+
+<div>
+    <div>@Html.PobierzTlumaczenie("Numer płatności: ") @Model.NumerPlatnosci</div>
+    <div>@Html.PobierzTlumaczenie("Kwota płatności: ") @Model.Kwota </div>
+    <div>@Html.PobierzTlumaczenie("Status płatności: ") @Model.Status </div>
+    @if (!string.IsNullOrEmpty(Model.Error))
+    {
+        <div>@Html.PobierzTlumaczenie("Błędy: ") @Model.Error </div>
+    }
+    @if (Model.NumerPlatnosci == null)
+    {
+        <div>
+            @Html.ActionLink(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Dokonaj Wpłaty"), "PrzekierowanieDoPlatnosci", "PlatnosciOnline", new RouteValueDictionary { { "token",Model.Token }}, new { @class = "btn btn-primary" })
+        </div>
+    }else
+    {
+        <div>
+            @Html.ActionLink(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Sprawdź status"), "ZweryfikujPlatnosc", "PlatnosciOnline", new RouteValueDictionary { {"kluczDokumentu", Model.KluczDokumentu}}, new {@class = "btn btn-primary"})
+        </div>
+    }
+</div>

@@ -1,0 +1,20 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Web.Site2.Helper
+   
+@{
+    List<KatalogSzablonModelBLL> szablonyKatalogowDlaKlienta = SolexBllCalosc.PobierzInstancje.Klienci.PobierzSzablonyWidoczneDlaKlienta(SolexHelper.AktualnyPrzedstawiciel != null ? SolexHelper.AktualnyPrzedstawiciel : SolexHelper.AktualnyKlient);
+
+    if (szablonyKatalogowDlaKlienta != null && szablonyKatalogowDlaKlienta.Any())
+    {
+        <div class="drukuj-katalog">
+            <button class="drukarka btn btn-secondary is-closed btn-sm" type="button" data-url="@Url.ZbudujLinkDoDrukowaniaKataloguKoszyka(SolexHelper.AktualnyJezyk)" onclick="PokazModal(this)">
+                <i class="fa fa-print"></i>&nbsp;@Html.PobierzTlumaczenie("Drukuj katalog")
+            </button>
+        </div>
+    }
+}
+
+
+
+  

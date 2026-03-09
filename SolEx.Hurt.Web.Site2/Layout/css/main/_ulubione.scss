@@ -1,0 +1,48 @@
+﻿@import "_ustawienia.scss";
+
+.dodaj-ulubione {
+    //background: url("../images/star.png") no-repeat scroll left center;
+    display: inline-block;
+    min-width: 16px;
+    min-height: 16px;
+    //padding-left: 18px;
+    font-size: 17px;
+    cursor: pointer;
+
+    span {
+        padding-left: 8px;
+        font-family: $font-menu-rodzina;
+        color: $kolor-text-muted;
+        opacity: 1;
+        font-size: 14px;
+    }
+
+    &:before{
+        opacity: 0.3;
+    }
+    
+
+    &.dodano-info{   
+        &:before{
+            opacity: 1;
+            color: $kolor-ulubione-zolty !important;
+        }     
+    }
+
+    margin-bottom: -2px;
+
+
+    @media only screen and (max-width: $lg) {
+        
+        font-size: 30px;
+
+        span{
+            font-size: 18px;
+        }
+
+        
+
+    }
+
+
+}

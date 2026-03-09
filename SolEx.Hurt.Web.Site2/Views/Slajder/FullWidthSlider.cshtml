@@ -1,0 +1,51 @@
+﻿@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model SlajderDane
+
+<div class="slider-full slide-slick" data-slick='{"slidesToShow": 1, "slidesToScroll": 1, "autoplay": @(Model.CzasPrzeskoku == 0 ? "false" : "true"), "fade": true, "dots": true}'>
+    @foreach (Slajd sl in Model.ListaSlajdow)
+    {
+        string url = Url.ZbudujLink(sl.LinkUrl, SolexHelper.AktualnyJezyk);
+        <div class="slide">
+            <a @(!string.IsNullOrEmpty(url) ? string.Format(" href={0} {1}", url, sl.LinkUrl.Tryb==TrybOtwierania.NoweOkno? "target=\"_blank\"" : "") : "")>
+                @if (sl.PlikTlaId != null)
+                {
+                    var obrazek = SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Plik>(sl.PlikTlaId);
+                    if (obrazek != null)
+                    {
+                        if (!string.IsNullOrEmpty(sl.KolorTla))
+                        {
+                            <div style="background-color: @sl.KolorTla; height: @(sl.WysokoscTla)px; width: 100%">&nbsp;</div>
+                        }
+
+                        <img src="@(obrazek.SciezkaWzgledna)" id="slajd@(obrazek.Id)"/>
+
+                    }
+                }
+            </a>
+
+            @if (sl.CzyPokazywacTytul || !string.IsNullOrEmpty(sl.Opis))
+            {
+                <div class="slide_content">
+                    <div class="slide_content_wrap">
+                        @if (sl.CzyPokazywacTytul)
+                        {
+                            <span class="title"> @Html.Raw(sl.Nazwa)</span>
+                            <br/>
+                        }
+                        @if (!string.IsNullOrEmpty(sl.Opis))
+                        {
+                            <span class="description">@Html.Raw(sl.Opis)</span>
+                        }
+                    </div>
+                </div>
+            }
+            
+        </div>
+    }
+</div>
+
+
+

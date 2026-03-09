@@ -1,0 +1,387 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Core.DostepDane.DaneObiektu
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Helper.DaneListaAdmin
+@model DaneLista
+@{
+    decimal stron = Model.Lacznie / (decimal)Model.RozmiarStrony;
+    int liczbastron = (int)stron + (stron % 1 == 0 ? 0 : 1);
+    bool pokazacZadaniaZbiorcze = Model.ModulyZbiorcze.Any();
+}
+
+<div class="row">
+    <div class="naglowek-glowny czcionka-tekstowa-paragraf col-xs-12">
+        <h5>
+            @Model.NazwaObiektu
+        </h5>
+        <span>@Model.OpisObiektu</span>
+
+        <div class="akcje pull-xs-right">
+            <div class="wybor-listy-kolumn">
+                @{ Html.RenderAction("ListaKolumn", "Admin", new { typ = Model.Typ.PobierzOpisTypu() }); }
+            </div>
+
+            @if (Model.Typ == typeof(Klient))
+            {
+                <a href="/Admin/WyslijMaile" data-tresc="Czy napewno chcesz wysłać wiadomości powitalne do klienta?" class="btn btn-warning btn-sm mail-zbiorczy komunikat-alert hidden-lg-down" data-typ="info">Wyślij maile powitalne</a>
+            }
+
+            @Html.ActionLinkWithList("Pobierz Csv", "ListaCsv", "Admin", new { typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn btn-success btn-sm hidden-lg-down", download = "download" })
+
+            @Html.ActionLink("Import Csv", "importForm", "Admin", new { typ = Model.Typ.PobierzOpisTypu(), modal = "m" }, new { @class = "btn btn-success btn-sm import-csv hidden-lg-down" })
+
+
+            @if (SolexBllCalosc.PobierzInstancje.DostepDane.CzyJestWlaczonyZapisZmiany(Model.Typ, null) && SolexBllCalosc.PobierzInstancje.DostepDane.CzySaZmianyNaObiekcie(Model.Typ, null))
+            {
+                @Html.ActionLink("Pokaż zmiany", "HistoriaZmian", "Admin", new { typ = Model.Typ.PobierzOpisTypu() }, new { @class = "btn btn-success btn-sm historia-zmian hidden-lg-down" })
+            }
+        </div>
+    </div>
+    @if (Model.Komunikaty != null && Model.Komunikaty.Any())
+    {
+        <div class="col-xs-12">
+            @Html.Partial("Komunikat", Model.Komunikaty)
+        </div>
+    }
+</div>
+
+<div class="row">
+    @if (pokazacZadaniaZbiorcze)
+    {
+        using (Html.BeginForm("WykonajZadanieZbiorcze", "Admin", FormMethod.Post, new {id = "modulyZbiorcze"}))
+        {
+            <div class="col-xs-12" id="operpacjeZbiorzczeWybor" style="display: none;">
+
+                @Html.EditorFor(x => x.Typ)
+                @{ Html.RenderPartial("ListaModulyZbiorcze", Model.ModulyZbiorcze); }
+            </div>
+            <div id="operacjeZbiorczeUstawienia"></div>
+        }
+    }
+
+    <div class="col-xs-12">
+        @using (Html.BeginForm(Model.Akcja, "Admin", FormMethod.Get, new { id = "lista" }))
+        {
+            @Html.EditorFor(x => x.Typ)
+        }
+        <table class="table table-striped table-hover tabela-admin table-naglowek">
+            <thead class="table-warning">
+                <tr>
+                    @if (pokazacZadaniaZbiorcze)
+                    {
+                        <th class="kolumna-zaznaczanie"></th>
+                    }
+                    @foreach (OpisPolaObiektuBaza t in Model.KolumnyWidoczne)
+                    {
+                        if (t.AdminDozwoloneSortowanieLiscie)
+                        {
+                            <th>
+                                @{ string link = Url.ActionLinkWithList(Model.Akcja, "Admin", new
+                                   {
+                                       typ = Model.Typ.PobierzOpisTypu(),
+                                       numerStrony = 1,
+                                       szukanie = Model.Szukanie,
+                                       sortowanie = t.NazwaPola,
+                                       sortowanieKolejnosc = (t.NazwaPola == Model.Sortowanie && Model.Kierunek == KolejnoscSortowania.asc) ? KolejnoscSortowania.desc : KolejnoscSortowania.asc
+                                   }); }
+                                <a href="@link">
+                                    @t.NazwaWyswietlana
+                                    @if (t.NazwaPola == Model.Sortowanie)
+                                    {
+                                        if (Model.Kierunek == KolejnoscSortowania.asc)
+                                        {
+                                            <span class="fa fa-sort-by-attributes"></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="fa fa-sort-by-attributes-alt"></span>
+                                        }
+                                    }
+                                </a>
+                            </th>
+                        }
+                        else
+                        {
+                            <th>@t.NazwaWyswietlana <i class="fa fa-info-circle" title="Kolumna wyliczana - edycja ograniczona"></i> </th>
+                        }
+                    }
+                    <th>
+                        @if (Model.MoznaDodawacNowe)
+                        {
+                            @Html.ActionLink("Dodaj", Model.AkcjaDodaj, "Admin", new { typ = Model.Typ.PobierzOpisTypu() }, new { })
+                        }
+                    </th>
+                </tr>
+                <tr class="admin-filtry">
+                    @if (pokazacZadaniaZbiorcze)
+                    {
+                        <th><input type="checkbox" id="zaznaczZbiorczo"/></th>
+                    }
+                    @for (int i = 0; i < Model.KolumnyWidoczne.Count; i++)
+                    {
+                        if (Model.KolumnyWidoczne[i].AdminDozwoloneFiltrowanieLiscie)
+                        {
+                            <th>
+                                @Html.Editor(string.Format("szukanie[{0}]", i), "Admin/Szukanie/" + Model.KolumnyWidoczne[i].PobierzTypEdytora(), new {szukana = Model.Szukanie != null ? Model.Szukanie[i] : "", opis = Model.KolumnyWidoczne[i]})
+                            </th>
+                        }
+                        else
+                        {
+                            <th>
+                                @Html.Hidden(string.Format("szukanie[{0}]", i), "", new {form = "lista"})
+                            </th>
+                        }
+                    }
+                    <th>
+                        <button type="submit" class="btn btn-secondary btn-sm" form="lista">Szukaj</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var o in Model.ObiektyDoPokazania)
+                {
+                    <tr class="@o.KlasaCssWiersza">
+                        @if (pokazacZadaniaZbiorcze)
+                        {
+                            <td><input type="checkbox" value="@o.Klucz" name="wybrane" class="zaznaczanieElementu" form="modulyZbiorcze"/></td>
+                        }
+                        @for (int i = 0; i < o.Pola.Count; i++)
+                        {
+                            <td class="@Html.Raw(Model.KolumnyWidoczne[i].ParamatryWidocznosciAdmin.EdytowalneInline && !o.Pola[i].Wartosc.PobieraneErp ? "edytowanie" : "") @o.Pola[i].KlasaCssPola" style="@o.Pola[i].Wartosc.ParamatryWidocznosciAdmin.StyleCss">                              
+                                @using (Html.BeginForm("EdytujPole", "Admin", FormMethod.Post, new {@class = "edycjaInline", id = string.Format("edycja-obiekt-{0}-pole{1}", o.Klucz, Model.KolumnyWidoczne[i].NazwaPola) }))
+                                {
+                                    @Html.EditorFor(x => x.Typ)
+
+                                    <span class="dane">
+                                        @Html.Partial("EdycjaInline", o.Pola[i].Wartosc)
+                                    </span>
+                                }
+                            </td>
+                        }
+                        <td>
+                            @if (o.MoznaEdytowac || o.MoznaUsuwac || o.Funkcje.Any())
+                            {
+                                <div class="dropdown ">
+                                    <a href="#" id="dLabel@(o.Klucz)" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hover="dropdown">
+                                        <i class="fa fa-cog fa-2x"></i>
+                                        <span class="caret"></span>
+                                    </a>
+
+                                    @{
+                                        IDictionary<string, object> atrybuty = new Dictionary<string, object>();
+                                        atrybuty.Add("class", "nav-link menu-klasyczne-link dropdown-item text-uppercase");
+                                        //RouteValueDictionary routerValue = new RouteValueDictionary(new {typ = Model.Typ.PobierzOpisTypu(), id = o.Klucz});
+                                    }
+
+                                    <ul class="dropdown-menu dropdown-menu-right opcje-dodatkowe" aria-labelledby="dLabel(o.Klucz)">
+                                        @*@if (o.MoznaEdytowac)
+                                        {
+                                            <li>@Html.ActionLink("Edycja", "Edycja", routerValue, atrybuty)</li>
+                                        }
+                                        @if (o.MoznaUsuwac)
+                                        {
+                                            <li>@Html.ActionLink("Usuń", "Usuwanie", routerValue, atrybuty)</li>
+                                        }*@
+
+                                        @foreach (var ddf in o.Funkcje)
+                                        {
+                                            atrybuty = new Dictionary<string, object>();
+                                            atrybuty.Add("class", "nav-link menu-klasyczne-link dropdown-item text-uppercase");
+
+                                            if (ddf.KomunikatJavascriptCzyNapewno != null)
+                                            {
+                                                atrybuty["class"] += " komunikat-alert ";
+                                                atrybuty.Add("data-tresc", ddf.KomunikatJavascriptCzyNapewno.Wiadomosc);
+                                                atrybuty.Add("data-typ", ddf.KomunikatJavascriptCzyNapewno.Typ.ToString());
+                                            }
+
+                                            <li>@Html.SimpleLink(ddf.Adres, ddf.Nazwa, atrybuty.ToDictionary(x => x.Key, x => (object) x.Value))</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6 ">
+        <div class="btn-group pull-xs-right dropup" role="group">
+            @if (liczbastron > 1)
+            {
+                int start = 1;
+                int end = liczbastron;
+                int cur = Model.NrStrony;
+                int przedzial = 5;
+                if (end > przedzial)
+                {
+                    int strodek = (int)Math.Ceiling(przedzial / 2.0);
+                    int granica = strodek - 1;
+                    start = (cur < strodek ? 1 : cur - granica);
+                    end = (cur > end - strodek ? end : cur + granica);
+                }
+                if (cur > 1)
+                {
+                    @Html.ActionLinkWithList("<<", Model.Akcja, "Admin", new { numerStrony = cur - 1, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn btn-secondary" })
+
+                }
+                if (start > 1)
+                {
+                    @Html.ActionLinkWithList("1", Model.Akcja, "Admin", new { numerStrony = 1, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn " + (1 == Model.NrStrony ? " btn-primary" : "btn-secondary") })
+                }
+                if (start > 2)
+                {
+                    @Html.ActionLinkWithList("...", Model.Akcja, "Admin", new { numerStrony = cur - 1, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn btn-secondary" })
+
+                }
+                for (int i = start; i <= end; ++i)
+                {
+                    @Html.ActionLinkWithList(i.ToString(), Model.Akcja, "Admin", new { numerStrony = i, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn " + (i == Model.NrStrony ? " btn-primary" : "btn-secondary") })
+                }
+                if (end < liczbastron)
+                {
+                    if (end < liczbastron - 1)
+                    {
+                        @Html.ActionLinkWithList("...", Model.Akcja, "Admin", new { numerStrony = cur + 1, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn btn-secondary" })
+                    }
+                    @Html.ActionLinkWithList(liczbastron.ToString(), Model.Akcja, "Admin", new { numerStrony = liczbastron, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn " + (liczbastron == Model.NrStrony ? " btn-primary" : "btn-secondary") })
+                }
+                if (cur < liczbastron)
+                {
+                    @Html.ActionLinkWithList(">>", Model.Akcja, "Admin", new { numerStrony = cur + 1, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn btn-secondary" })
+                }
+            }
+            @if (Model.Lacznie > 10)
+            {
+                <button type="button" class="btn btn-secondary dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @Model.RozmiarStrony wyników na stronie <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu ">
+                    <li>
+                        @Html.ActionLinkWithList("10 wyników na stronie", Model.Akcja, "Admin", new { rozmiarStrony = 10, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn btn-link" })
+                    </li>
+                    <li>
+                        @Html.ActionLinkWithList("20 wyników na stronie", Model.Akcja, "Admin", new { rozmiarStrony = 20, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn btn-link" })
+                    </li>
+                    <li>
+                        @Html.ActionLinkWithList("50 wyników na stronie", Model.Akcja, "Admin", new { rozmiarStrony = 50, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn btn-link" })
+                    </li>
+                    <li>
+                        @Html.ActionLinkWithList("100 wyników na stronie", Model.Akcja, "Admin", new { rozmiarStrony = 100, typ = Model.Typ.PobierzOpisTypu(), szukanie = Model.Szukanie }, new { @class = "btn btn-link" })
+                    </li>
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+
+    if (!Modernizr.formattribute) {
+        //mamy IE ktore nie wspiera podawania formy do ktorej odnosimy sie w inpucie
+        $.getScript('/Scripts/polyfill/formattribute.js');
+        console.log('zaladowana poprawka dla IE - nie mozna podawac formy w inputach');
+    } 
+
+    $('#zaznaczZbiorczo').on('change', function () {
+        $('.zaznaczanieElementu').prop('checked', this.checked);
+        UstawLiczbeZaznaczony();
+    });
+
+    $('.zaznaczanieElementu').on('click', UstawLiczbeZaznaczony);
+    $('.edytowanie').on('click', function () {
+        var inne = $('.edytowanie').not(this);
+        $('.widok', inne).show();
+        $('.edycja', inne).hide();
+        $('.widok', this).toggle();
+        $('.edycja', this).toggle();
+        $('input,select,textarea, button', this).off('click').on('click', function (e) {
+            e.stopPropagation();
+        });
+    });
+
+    $('.komunikat-alert')
+        .on('click',
+            function(e) {
+                var tresc = $(this).attr('data-tresc');
+                var href = $(this).attr('href');
+                e.preventDefault();
+                PotwierdzenieAlert(this,
+                    '',
+                    tresc,
+                    '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Tak")',
+                    '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nie")',
+                    function() {
+                        window.location.href = href;
+                    });
+            });
+
+    ZdarzeniaListyAdmina();
+
+    function ZdarzeniaListyAdmina() {
+        $('.edycjaInline').on('submit', function (e) {
+            var forma = $(this);
+            var oldValue = forma.find('textarea').val();
+            forma.find('textarea').val(escape(oldValue));
+            e.preventDefault();
+            var postData = forma.serializeArray();
+            var formURL = forma.attr("action");
+            $.ajax(
+            {
+                url: formURL,
+                type: "POST",
+                data: postData,
+                success: function (data) {
+                    forma.find('.dane').html(data);
+                    forma.find('textarea').val(oldValue);
+                }
+            });
+        });
+    }
+
+    function UstawLiczbeZaznaczony() {
+        var zaznaczonych = $('.zaznaczanieElementu:checked').length;
+        $('#liczbaZaznaczonych').html(zaznaczonych);
+        if (zaznaczonych === 0) {
+            $('#operacjeZbiorczeUstawienia').hide();
+            $('#operpacjeZbiorzczeWybor').hide();
+            $('#operacjeZbiorczeUstawienia').html('');
+            $('#operpacjeZbiorzczeWybor select').val('');
+        } else {
+            $('#operacjeZbiorczeUstawienia').show();
+            $('#operpacjeZbiorzczeWybor').show();
+        }
+    }
+
+    function UstawWartosc(wartosc, start, end) {
+        wartosc.val(start.val() + ';' + end.val());
+    }
+
+    $(".data-od").each(function (nr, el) {
+        var start = $(el);
+        var end = start.siblings('.data-do');
+        var wartosc = start.siblings('.data-wartosc');
+        start.datepicker({
+
+            onSelect: function (selectedDate) {
+                end.datepicker("option", "minDate", selectedDate);
+                UstawWartosc(wartosc, start, end);
+            }
+        });
+        end.datepicker({
+            onSelect: function (selectedDate) {
+                start.datepicker("option", "maxDate", selectedDate);
+                UstawWartosc(wartosc, start, end);
+            }
+        });
+        $(end).add(start).on('change', function () {
+            UstawWartosc(wartosc, start, end);
+        });
+    });
+
+</script>

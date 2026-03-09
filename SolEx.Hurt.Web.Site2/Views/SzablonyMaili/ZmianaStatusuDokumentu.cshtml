@@ -1,0 +1,72 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+
+}
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.ZmianaStatusuDokumentu
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Zmiana statusu dokumentu {0} na platformie B2B", MiejsceFrazy.Brak, new object[] { Model.Dokument.NazwaDokumentu})
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie( Model.JezykMaila(), "Zmiana statusu dokumentu dla klienta - {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+    }
+
+
+}
+@section Naglowek
+{
+    <p class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zmiana statusu dokumentu")</p>
+}
+@section Tresc
+{
+    <div>
+        @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+            var status = SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<StatusZamowienia>(Model.Dokument.StatusId, Model.JezykMaila());
+            @Html.PobierzTlumaczenie(Model.JezykMaila(), "Witaj,") <br />
+            @Html.PobierzTlumaczenie(  Model.JezykMaila(), "informujemy o zmianie statusu dla dokumentu {0} na Platformie B2B<br />Nowy status dokumentu to: {1}", MiejsceFrazy.Brak, new object[] { Model.Dokument.NazwaDokumentu, string.IsNullOrEmpty(status?.Symbol)?Model.Dokument.StatusId.ToString(): status?.Symbol })
+            <br />
+           @Html.PobierzTlumaczenie(Model.JezykMaila(), "Pozostając do dyspozycji,<br />Serdecznie pozdrawiamy")<br /><br />
+        }
+        else
+        {
+            var status = SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<StatusZamowienia>(Model.Dokument.StatusId, Model.JezykMaila());
+            <br />
+            @Html.PobierzTlumaczenie( Model.JezykMaila(), "Nowy status dla dokumentu {0}<br /> to: {1}", MiejsceFrazy.Brak, new object[] { Model.Dokument.NazwaDokumentu, string.IsNullOrEmpty(status?.Symbol) ? Model.Dokument.StatusId.ToString() : status?.Symbol })
+            <br />
+            @Html.PobierzTlumaczenie( Model.JezykMaila(), "Informacja dotyczy klienta: {0}, email: {1}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa, Model.Klient.Email})
+            <br/>
+            @Html.PobierzTlumaczenie(Model.JezykMaila(), "Pozdrawiamy");
+        }
+    </div>
+
+
+}
+

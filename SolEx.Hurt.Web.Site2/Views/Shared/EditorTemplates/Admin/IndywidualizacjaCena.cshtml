@@ -1,0 +1,43 @@
+﻿@using System.Web.Script.Serialization
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Core.Helper
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@model  IndywidualizacjaCena[]
+@{
+    var waluty = SolexBllCalosc.PobierzInstancje.DostepDane.Pobierz<Waluta>(SolexHelper.AktualnyKlient).ToDictionary(x => x.Id, x => x);
+}
+
+
+    <table id="tabela-cen-indywidualizacji" class="table table-striped table-hover tabela-admin table-naglowek">
+        <thead>
+            <tr>
+                <th>Waluta</th>
+                <th>Wartość Ceny</th>
+                <th>Typ narzutu</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Length; ++i)
+            {
+                <tr>
+                    <td>
+                        @Html.HiddenFor(x => x[i].Id)
+                        @Html.HiddenFor(x => x[i].WalutaId)
+                        @waluty[Model[i].WalutaId].WalutaErp
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(x => x[i].Cena, "{0:0.####}")
+                    </td>
+                    <td>
+                        @Html.DropDownList("[" + i + "].NarzutTyp", Enum.GetNames(typeof(NarzutTyp)).Select(x => new SelectListItem { Text = x, Value = x, Selected = x == Model[i].NarzutTyp.ToString() }), new { @class = "form-control", id = "kierunek" })
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+

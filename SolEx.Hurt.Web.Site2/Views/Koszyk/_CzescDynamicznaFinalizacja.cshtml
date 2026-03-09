@@ -1,0 +1,11 @@
+﻿@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Model.Web
+@model string
+@{
+    IConfigBLL config = SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja;
+    Komunikat k = new Komunikat(Model, KomunikatRodzaj.success, "System");
+    
+}
+<div>
+        @Html.Partial("Komunikat", new List<Komunikat>{k})
+</div>

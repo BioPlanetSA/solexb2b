@@ -1,0 +1,177 @@
+﻿@*@model SolEx.Hurt.Model.Helpers.Pieczatki.PieczatkiTypProduktViewModel
+
+
+<link rel="stylesheet" type="text/css" href="~/Layout/jquery/token-input.css">
+<link rel="stylesheet" type="text/css" href="~/Layout/jquery/token-input-mac.css">
+<link rel="stylesheet" type="text/css" href="~/Layout/jquery/token-input-facebook.css">
+
+<div class="nowy-typ">
+    <div class="pieczatka-element-naglowek">
+        <h4>
+            <strong>Edycja typu: @Model.PieczatkiTyp.Nazwa</strong>
+            
+        </h4>
+    </div>
+    <div class="pieczatka-element-kontener">
+        <div class="nowy-typ-opis">
+            <div class="forma">
+                <div class="alert alert-danger" role="alert">Zmiana rodzaju i rozmiaru typu spowodują problemy z wyświetlaniem szablonów w edytorze!</div>
+
+                <form></form>
+                <form method="POST" id="dodaj-typ-forma">
+                    @Html.HiddenFor(x=>x.PieczatkiTyp.Id)
+                    <div>
+                        Powiązane produkty
+                        @Html.Partial("~/Views/Shared/EditorTemplates/Admin/PoleZeSlownikiem.cshtml", Model.OpisPolaObiektu, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "ParametrModulow" } })
+                        <br />
+                    </div>
+
+                    <div>
+                        Nazwa @Html.TextBoxFor(x => x.PieczatkiTyp.Nazwa, new { @class = "form-control", @required = "required" })
+                    </div>
+                    <div>
+                        <label>Rodzaj:</label>
+                        <select class="form-control" id="PieczatkiTyp_SymbolTypu" name="PieczatkiTyp.SymbolTypu">
+                            <option value="pieczatka_prostokatna"> Prostokątna </option>
+                            <option value="pieczatka_okragla"> Okrągła </option>
+                            <option value="pieczatka_owalna"> Owalna </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label id="label-wysokosc">Wysokość(mm):</label>
+                        @Html.TextBoxFor(model => model.PieczatkiTyp.Wysokosc_mm, new { type = "number", min = 1, max = 100, @class = "form-control", @required = "required" })
+
+                        <label id="label-szerokosc">Szerokość(mm):</label>
+                        @Html.TextBoxFor(model => model.PieczatkiTyp.Szerokosc_mm, new { type = "number", min = 1, max = 100, @class = "form-control", @required = "required" })
+                    </div>
+                    <div>
+                        <label id="label-wysokosc">Kolory dla całej pieczątki</label>
+                        <input type='text' id="dodaj-typ-spectrum" />
+                        @Html.TextBoxFor(x => x.PieczatkiTyp.DozwoloneKoloryCalejPieczatki, new { @class = "form-control", @placeholder = "Jeżeli nie wybierzesz żadnego koloru pieczątka będzie mieć ustawiony domyślny kolor na czarny" })
+                    </div>
+                    <div id="dodaj_szablon_nazwa_opis">
+
+                        <div>
+                            Opis @Html.TextAreaFor(x => x.PieczatkiTyp.OpisHtml, new { @rows = 6, @cols = 70, @class = "form-control" })
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary btn-sm zapisz-typ" id="zapisz-button">Zapisz</button>
+                        <a href="/pieczatki/" class="btn btn-danger btn-sm zapisz-typ">Anuluj</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#zapisz-button').click(function () {
+        var nazwaid = document.getElementById("PieczatkiTyp_Nazwa");
+        var wysokoscid = document.getElementById("PieczatkiTyp_Szerokosc_mm");
+        var szerokoscid = document.getElementById("PieczatkiTyp_Wysokosc_mm");
+        var wybor = $('#PieczatkiTyp_SymbolTypu').val();
+        if (wybor == 'pieczatka_okragla') {
+            $('#PieczatkiTyp_Wysokosc_mm').val($('#PieczatkiTyp_Szerokosc_mm').val());
+            if (nazwaid.checkValidity() && wysokoscid.checkValidity()) {
+                $('#dodaj-typ-forma').submit();
+            }
+        }
+        if (nazwaid.checkValidity() && wysokoscid.checkValidity() && szerokoscid.checkValidity()) {
+            $('#dodaj-typ-forma').submit();
+        }
+    });
+
+    $("#dodaj-typ-spectrum").spectrum({
+        preferredFormat: "hex",
+        showInput: true,
+        showPalette: true,
+        palette: [
+            ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
+            ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
+            ["#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc"],
+            ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
+            ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
+            ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+            ["#900", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
+            ["#600", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
+        ]
+    });
+
+    $(".sp-choose").click(function () {
+        var color = $("#dodaj-typ-spectrum").spectrum("get");
+        var c = color.toHexString();
+
+        if ($('#PieczatkiTyp_DozwoloneKoloryCalejPieczatki').val() == "") {
+            $('#PieczatkiTyp_DozwoloneKoloryCalejPieczatki').val(c);
+        } else {
+            $('#PieczatkiTyp_DozwoloneKoloryCalejPieczatki').val($('#PieczatkiTyp_DozwoloneKoloryCalejPieczatki').val() + ',' + c);
+        }
+    });
+
+    tinymce.init({
+        mode: "textareas",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste responsivefilemanager template"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media template",
+        image_advtab: true,
+        height: 300,
+        external_filemanager_path: "/filemanager/",
+        filemanager_title: "Responsive Filemanager",
+        external_plugins: { "filemanager": "/filemanager/plugin.min.js" },
+        templates: "/SzablonListyProduktowy/Pobierz"
+    });
+
+    $('button').click(function () {
+        var wybor = $('#PieczatkiTyp_SymbolTypu').val();
+        var wysokosc = $('#PieczatkiTyp_Wysokosc_mm').val();
+        var szerokosc = $('#PieczatkiTyp_Szerokosc_mm').val();
+        if (wybor == 'pieczatka_okragla') {
+            $('#PieczatkiTyp_Wysokosc_mm').val($('#PieczatkiTyp_Szerokosc_mm').val());
+            wysokosc = szerokosc;
+        }
+
+        if (wybor == 'pieczatka_owalna' && wysokosc == szerokosc) {
+            alert("Wybierz typ Okragla jeżeli chcesz pieczątki o tych samych wymiarach.");
+            return;
+        }
+
+        if (wysokosc > 0 && szerokosc > 0) {
+            if (wybor == 'pieczatka_prostokatna' && wybor != 'pieczatka_okragla') {
+                $("#dodaj-szablon-forma").submit();
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var wybor = '@Model.PieczatkiTyp.SymbolTypu';
+        if (wybor == 'pieczatka_okragla') {
+            $('#label-szerokosc').text('Średnica(mm):');
+            $('#label-wysokosc').hide();
+            $('#PieczatkiTyp_Wysokosc_mm').hide();
+        }
+        $('#PieczatkiTyp_SymbolTypu').change(function () {
+            wybor = $('#PieczatkiTyp_SymbolTypu').val();
+            if (wybor == 'pieczatka_okragla') {
+                $('#label-szerokosc').text('Średnica(mm):');
+                $('#label-wysokosc').hide();
+                $('#PieczatkiTyp_Wysokosc_mm').hide();
+            } else {
+                $('#label-szerokosc').text('Szerokość(mm):');
+                $('#label-wysokosc').show();
+                $('#PieczatkiTyp_Wysokosc_mm').show();
+            }
+        });
+
+        var item = $('#PieczatkiTyp_SymbolTypu').find("option");
+        var szukana = '@(Model.PieczatkiTyp.SymbolTypu)';
+        $(item).each(function (index) {
+            if (item[index].value == szukana) {
+                item[index].selected = true;
+            }
+        });
+    });
+</script>*@
+

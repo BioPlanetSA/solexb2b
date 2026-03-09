@@ -1,0 +1,89 @@
+﻿@import "_ustawienia.scss";
+
+.wyszukiwanie-globalne {
+    width: 100%;
+    position: relative;
+    white-space: nowrap; //bo lupa ma byc na koncu i nie spadac
+ //   margin-top: 10px;
+
+
+        input {
+            
+           // margin-bottom: 10px;
+
+            right:0;
+            width: 100%;
+        //    max-width: calc(100% - 30px); //ograniczamy wersje bez focus zeby sie miescila do wszystkiego gdzie jest
+            padding: 0.375rem 0.75rem;
+            line-height: 2;
+            background-color: #fefefe;
+            border: 1px solid #acabab; // wczesniej byl kolor: #fbfbfb - jasny i #EAEAEA - ciemny 1px solid #bfbfbf
+            font-size: 13px;
+            outline: none;
+            padding-right: 30px; //miejsce dla lupy
+            transition: all .5s;
+            float:right;    //na maxa do prawej - zeby animacja byla do lewej
+
+            /*//na malym ekranie nie pokazujemy inputa - chyba ze on focus na nim jest
+            @media (max-width: $lg) {
+                opacity:0;
+            }*/
+
+            &:focus {
+               // max-width: none;
+               // min-width: 230px; //minimum bo inaczej nic nie widać
+                position: relative; //bo chcemy zeby w razie potrzeby wydluyc sie na sasiednie pola
+                z-index: 999; //i przykryc je
+              //  background-color: #fff;
+             //   border: 1px solid #fafafa;
+
+                & + .fa-search {
+                    color: #cf242a;
+                }
+
+                 //na malym ekranie nie pokazujemy inputa - chyba ze on focus na nim jest
+                   /*@media (max-width: $lg) {
+                        opacity:1;
+                    }*/
+            }
+        }
+        //lupa
+        .fa-search {
+                position: absolute;
+                top: 10px;
+                font-size: 21px;
+                z-index: 1000;
+                right: 5px;
+        }
+    
+
+
+}
+
+
+//wyszukiwanie wewnwtrzne
+    .wyszukiwanie-wewnetrzne {
+        position: relative;
+
+        input {
+            font-family: $font-menu-rodzina;
+            width: 100%;
+            color: black;
+            border: 1px solid $kolor-ramki-mocny;
+            outline: none !important;
+            padding-left: 10px;
+            vertical-align: bottom;
+            font-family: $font-menu-rodzina;
+        }
+
+        .fa-search {
+            color: darkgray;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 20px;
+        }
+    }
+
+
+//szukanie-wewnetrzne

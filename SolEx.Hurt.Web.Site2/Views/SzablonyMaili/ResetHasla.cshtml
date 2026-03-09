@@ -1,0 +1,94 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+}
+
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.ResetHasla
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+
+}
+@section Tytul
+{
+    @Html.PobierzTlumaczenie(Model.JezykMaila(), "Resetowanie hasła do Platformy B2B")
+}
+@section Naglowek
+{<br />
+    <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Resetowanie hasła do Platformy B2B")</h4>
+<br /><br />
+}
+@section Tresc
+{
+    <table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad">
+                       @Html.PobierzTlumaczenie(Model.JezykMaila(), "Otrzymaliśmy prośbę o restart Twojego hasła. " +
+                            "<br/>Poniżej przesyłamy link do ustawienia nowego hasła. ")
+                        <br /><br />
+                    </td>
+
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+    
+<table class="row">
+    <tr>
+        <td class="wrapper offset-by-four">
+            <table class="four columns">
+                <tr>
+                    <td>
+
+                        <table class="button akcja">
+                            <tr>
+                                <td>
+                                    <a href="@Model.LinkZmianyHaslaKlienta(Model.Klient)">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Ustaw nowe hasło")</a>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+
+
+        </td>
+        <td class="wrapper last offset-by-four"></td>
+    </tr>
+</table>
+    
+<table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad"><br />
+                        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Jeśli nie prosiłeś o reset hasła, natychmiast poinformuj swojego opiekuna o tym zdarzeniu - być może ktoś próbuje włamać się na Twoje konto.")
+                        <br /><br /><br />
+                       @Html.PobierzTlumaczenie(Model.JezykMaila(), "<small class='wyszarz' style='text-transform: uppercase'>PAMIĘTAJ, ŻE...</small><br/>" +
+                                                                                      "Dane logowania są znane tylko Tobie. Prosimy o ich nie podawanie osom trzecim.</br>" +
+                                                                                      "Podczas korzystania z Platformy B2B zapisywany jest Twój adres IP.")
+                        <br /><br />
+                    </td>
+
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+}

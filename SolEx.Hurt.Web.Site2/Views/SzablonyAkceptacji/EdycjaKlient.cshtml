@@ -1,0 +1,8 @@
+﻿@model Tuple<int,SolEx.Hurt.Core.Klient>
+           
+
+<li class="col-md-3 klient-wpis">
+    @Html.Hidden("Poziom", Model.Item1)
+    @Html.Hidden("Klient", Model.Item2.Id)
+    @Model.Item2.Nazwa
+</li>

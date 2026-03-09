@@ -1,0 +1,29 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model  Tuple< SolEx.Hurt.Web.Site2.Models.KontrolkiTresci.MenuHamburger, bool, string>
+
+    <div class="background">
+        <div class="menu-content">
+            <button class="close-button close-button-lg hide-navbar"></button>
+
+            @if (Model.Item2 && Model.Item1.PokazujKategorieProduktow)
+            {
+                <div class="kategorie-produktow">
+                    @Html.Action("Drzewko", "KategorieProduktowe", new { id = Model.Item1.Id, szukanieGlobalne =  Model.Item3})
+                </div>
+            }
+            <div class="clearfix">&nbsp;</div>
+            @Html.Action("Menu", new { id = Model.Item1.Id })
+             
+            @*tylko dla zalogowanych*@
+            @if (Model.Item1.PokazujWyloguj && SolexHelper.AktualnyKlient.Id != 0)
+            {
+                <div class="wyloguj">
+                    <a href="/logout" class="a-link bold akordion-naglowek">
+                        @Html.PobierzTlumaczenie("WYLOGUJ")
+                        <i class="fa fa-power-off"></i>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+

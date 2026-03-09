@@ -1,0 +1,56 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoGradacji
+@{
+    var najlepszyPoziom = Model.Widoki.Last();
+    var aktualnaCena = Model.Widoki.FirstOrDefault(x => x.AktualnaCena);
+}
+@if (!string.IsNullOrEmpty(Model.KontrolkaGradacji.Naglowek))
+{
+    @Html.PobierzTlumaczenie(Model.KontrolkaGradacji.Naglowek)
+}
+<table class="gradacje table table-condensed">
+    <tr>
+        <td class="c">
+            @Html.PobierzTlumaczenie("Zakupiłeś już")
+        </td>
+        <td colspan="2" class="c">
+            <b>@Model.WyliczonaIloscProduktu.DoLadnejCyfry() @Model.Produkt.JednostkaPodstawowa.Nazwa</b>
+            @Html.PobierzTlumaczenie("tego produktu")
+        </td>
+    </tr>
+
+    @if (najlepszyPoziom.IleBrakujeDoSpelnieniaPoziomu > 0)
+    {
+        <tr class="c">
+            <td>@Html.PobierzTlumaczenie("Do lepszej ceny brakuje")</td>
+            <td class="zamow-jeszcze" colspan="2">@najlepszyPoziom.IleBrakujeDoSpelnieniaPoziomu.DoLadnejCyfry() @Model.Produkt.JednostkaPodstawowa.Nazwa</td>
+        </tr>
+    }
+
+    <tr class="c gradacja-aktualna-cena">
+        <td rowspan="2">@Html.PobierzTlumaczenie("Twoja aktualna cena")</td>
+        <td>@Html.PobierzTlumaczenie("Netto")</td>
+        <td>@Html.PobierzTlumaczenie("Brutto") (Vat @Model.Produkt.Vat.ToString("0.##") %)</td>
+    </tr>
+
+    <tr class="gradacja-aktualna-cena">
+        <td class="c cena-netto">@aktualnaCena.CenaNetto</td>
+        <td class="c cena-brutto">@aktualnaCena.CenaBrutto</td>
+    </tr>
+
+    @if (najlepszyPoziom.IleBrakujeDoSpelnieniaPoziomu > 0)
+    {
+        <tr class="c gradacja-najlepsza-cena">
+            <td class="c">@Html.PobierzTlumaczenie("Najlepsza cena (od {0} {1})", najlepszyPoziom.PrzedzialOdRzeczywisty.DoLadnejCyfry(), Model.Produkt.JednostkaPodstawowa.Nazwa)</td>
+            <td class="c b">@najlepszyPoziom.CenaNetto</td>
+            <td class="c b">@najlepszyPoziom.CenaBrutto</td>
+        </tr>
+    }
+
+</table>
+@if (!string.IsNullOrEmpty(Model.KontrolkaGradacji.Stopka))
+{
+    @Html.PobierzTlumaczenie(Model.KontrolkaGradacji.Stopka)
+}

@@ -1,0 +1,10 @@
+﻿@using SolEx.Hurt.Core.BLL
+@model SolEx.Hurt.Model.Web.ParametryPola
+
+@{
+    Dictionary<string, object> parametry = new Dictionary<string, object>();
+    if(Model.Wymagane) { parametry.Add("required","");}
+        bool wartosc = (Model.Wartosc != null) && (bool) Model.Wartosc;
+}
+@Html.CheckBox(Model.Nazwa, wartosc, parametry)
+@Html.Label(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.WyswietlanaNazwa) )

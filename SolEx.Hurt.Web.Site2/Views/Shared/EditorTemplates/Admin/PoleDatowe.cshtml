@@ -1,0 +1,35 @@
+﻿@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+
+
+
+
+@if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+{
+    <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+}
+
+@{
+    string id = Model.IdentyfikatorObiektu + "-" + Model.NazwaPola;
+    Dictionary<string, object> pars = new Dictionary<string, object> { { "class", "form-control form-control-sm" }, { "type", "date" }, { "id", id } };
+    if (Model.Wymagane)
+    {
+        pars.Add("required", "required");
+    }
+    pars.Add("data-identyfikatorObiektu", Model.IdentyfikatorObiektu);
+    pars.Add("data-walidator", Model.WalidatorDanych != null ? Model.WalidatorDanych.PobierzOpisTypu() : "");
+    if (Model.PobieraneErp || Model.TylkoDoOdczytu)
+    {
+          pars.Add("readonly", "readonly");
+    }
+}
+@Html.TextBoxFor(x => x.Wartosc, "{0:yyy-MM-dd}", pars)
+<script language="javascript" type="text/javascript">
+
+        $('#@(id)').on('keyup', WalidujPole);
+
+</script>

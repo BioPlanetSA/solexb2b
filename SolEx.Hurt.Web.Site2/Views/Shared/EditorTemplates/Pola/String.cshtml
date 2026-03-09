@@ -1,0 +1,35 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.Web.ParametryPola
+@*<input autocomplete="off" type="text" name="@Model.NazwaPola" @Html.Raw(Model.Wymagane ? "required" : "")
+    value="@Model.WartoscPola" placeholder="@Html.PobierzTlumaczenie(Model.WyswietlanaNazwaPola)" class="animacja" />*@
+
+<div>
+    @{
+        Dictionary<string, object> parametry = new Dictionary<string, object>();
+        parametry.Add("autofomplete", "off");
+        parametry.Add("class", "animacja " + Model.klasaCSS);
+        parametry.Add("name", Model.Nazwa);
+        if (Model.Wymagane)
+        {
+            parametry.Add("required", "required");
+        }
+        if (!string.IsNullOrEmpty(Model.WyswietlanaNazwa))
+        {
+            parametry.Add("placeholder", SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.WyswietlanaNazwa));
+        }
+    }
+    @if (Model.NazwaJakoNameDlaPola)
+    {
+        @Html.TextBox(Model.Nazwa, Model.Wartosc??"", parametry)
+    }
+    else
+    {
+        @Html.TextBoxFor(x => x.Wartosc, Model.Wartosc.ToString(), parametry)
+        @Html.HiddenFor(x => x.Typ)
+        @Html.HiddenFor(x => x.Nazwa)
+    }
+   
+
+   
+</div>

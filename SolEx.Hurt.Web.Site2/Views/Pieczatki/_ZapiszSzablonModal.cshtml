@@ -1,0 +1,92 @@
+﻿@*@model SolEx.Hurt.Model.Helpers.Pieczatki.PieczatkiSzablonListyProduktowyViewModel
+
+@{
+    var nazwaTypu = SolEx.Hurt.Core.BLL.PieczatkiBll.PobierzInstancje.PobierzTypPieczatkiPoId(Model.Id);
+    }
+
+
+
+<div class="modal fade" id="zapiszSzablobModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Zamknij</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Zapisz szablon (@nazwaTypu.Nazwa)
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Nazwa</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="nazwa-szablonu" placeholder="Nazwa szablonu" name="nazwa" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Blokada edycji</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline"><input type="radio" name="optradio" checked value="true">Tak</label>
+                            <label class="radio-inline"><input type="radio" name="optradio" value="false">Nie</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Opis</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="opis-szablonu" placeholder="Opis szablonu" name="opis" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @if (Model.TypId == 2)
+                        {
+                            <label class="col-sm-2 control-label">Średnica:</label>
+                            <label class="col-md-3 control-label" style="text-align: left">Ø @(Model.Szerokosc_mm) mm</label>
+                        }
+                        else
+                        {
+                            <label class="col-sm-2 control-label">Rozmiar:</label>
+                            <label class="col-md-3 control-label" style="text-align: left">Wysokość: @Model.Wysokosc_mm mm Szerokość: @Model.Szerokosc_mm mm</label>
+                        }
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="zapisz-button" onclick="ModalZapiszSzablonListyProduktow()">
+                    Zapisz
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        tinymce.remove();
+        $('#zapisz-button').click(function () {
+        });
+        tinymce.init({
+            selector: "#opis-szablonu",
+            plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste responsivefilemanager template"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media template",
+            image_advtab: true,
+            height: 300,
+            external_filemanager_path: "/filemanager/",
+            filemanager_title: "Responsive Filemanager",
+            external_plugins: { "filemanager": "/filemanager/plugin.min.js" },
+            templates: "/SzablonListyProduktowy/Pobierz"
+        });
+    });
+
+</script>*@

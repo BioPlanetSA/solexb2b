@@ -1,0 +1,74 @@
+﻿@import "_ustawienia.scss";
+
+
+.dropdown-menu {
+    @extend .cien-bez-topu;
+    padding-left: 5px;
+    padding-right: 5px;
+    line-height: 20px;
+    font-size: 14px;
+    min-width: 260px;
+
+    a {
+        cursor: pointer;
+        color: black;
+        text-decoration: none;
+
+        &:hover {
+            color: $kolor-zaznaczenia-hover;
+        }
+    }
+
+    border: 1px solid $kolor-ramki-mocny;
+
+
+    .dropdown-item > span {
+        white-space: initial;
+    }
+
+    li.hidden{
+        display: none;
+    }
+
+    .zawartosc{
+        display: flex;
+    }
+
+}
+
+.btn-group {
+    //zastepujemy kreski boostrpowe, naszymi
+    .dropdown-toggle {
+        //element po tozeby ucinac dobrze srodkowe tresci - zeby nie wychodzili poza obszar
+        .opcje, > span {
+            width: calc(100% - 10px); //20 px to tyle ile strzalka po prawej stronie
+            overflow: hidden;
+            margin-right: 10px; //powoduje wyrównanie tego co zabrał końcowy haczyk
+        }
+
+        &::after {
+            font-family: FontAwesome;
+            content: "\f107";
+            color: black;
+            border: none;
+            position: absolute;
+            top: -4px;
+            right: 15px;
+            font-size: 25px;
+        }
+    }
+
+     &.open {
+        .dropdown-toggle::after {
+            content: "\f106";
+        }
+    }
+}
+
+
+
+.btn.dropdown-toggle, .btn-file{
+    border-color: #acabab !important;
+    background-color: white;
+    outline:0 !important;
+}

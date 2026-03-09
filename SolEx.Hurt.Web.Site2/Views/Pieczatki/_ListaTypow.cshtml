@@ -1,0 +1,90 @@
+﻿@model Tuple<List<SolEx.Hurt.Model.PieczatkiTyp>, SolEx.Hurt.Model.Interfaces.IKlient>
+
+<div class="pieczatka-kontener">
+    @if (Model.Item2.CzyAdministrator)
+    {
+        <a href="/pieczatki/dodajtyp" class="btn btn-primary link-ladujszablon" style="margin:0">Dodaj nowy typ</a>
+    }
+    
+    <div class="page-header">
+        <h2>Lista typów</h2>
+    </div>
+    
+    <ul class="group-main-area">
+        @foreach (var item in Model.Item1)
+        {
+            <li style="list-style: none">
+                <div id="@item.SymbolTypu">
+                    <div class="pieczatka-element-naglowek">
+                        <h4>
+                            <strong>@item.Nazwa</strong> 
+                            @if (Model.Item2.CzyAdministrator)
+                            {
+                                <a href="#" data-href="/pieczatki/usuntyp/@item.Id" data-typ="@item.Nazwa" data-toggle="modal" class="pieczatki-kontener-naglowek-link" data-target="#confirm-delete">Usuń</a>
+                                <a href="/pieczatki/edytujtyp/@item.Id" class="pieczatki-kontener-naglowek-link">Edytuj</a>    
+                            }
+                        </h4>
+                    </div>
+                    <div class="pieczatka-element-kontener">
+                        <div class="pieczatka-element-tekst">
+                            @Html.Raw(item.OpisHtml)
+                        </div>
+                        <a href="/pieczatki/szablony/@item.Id" class="btn btn-success link-ladujszablon">
+                            Wybierz
+                        </a>
+                    </div>
+
+                </div>
+            </li>
+        }
+    </ul>
+    
+    <form></form>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="page-header">
+            <h2>Wczytaj z pliku</h2>
+            <div>
+                Wczytaj z pliku szablonu poprzednio zapisanego... cos tu dodam sobie pozniej
+            </div>
+
+        </div>
+        <div class="fileinput fileinput-new animacja" data-provides="fileinput">
+            <span class="btn btn-secondary btn-file">
+                <span class="fileinput-new">Wybierz szablon z dysku</span>
+                <span class="fileinput-exists">Zmień szablon</span>
+                <input type="file" name="zalacznik">
+            </span>
+            <span class="fileinput-filename"></span>
+            <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+            <button type="submit" class="btn btn-info">Wczytaj szablon do edytora</button>
+        </div>
+    </form>
+</div>
+
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="kasuj-typ" style="color:white"></div>
+            </div>
+            <div class="modal-body">
+                Czy na pewno chcesz usunąć wybrany typ i znajdujące się w nim szablony?
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger btn-ok" style="color:white">Usuń</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#confirm-delete').on('show.bs.modal', function (e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        $('#kasuj-typ').text($(e.relatedTarget).data('typ'));
+    });
+</script>
+
+
+

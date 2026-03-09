@@ -1,0 +1,13 @@
+﻿@model Tuple<int, string>
+<div id="koszyk-calosc-holder" data-id-kontrolki="@Model.Item1">
+    <div id="ukrytePola">
+       @Html.Action("CzescDynamiczna", Model)
+        @*@Html.EditorForModel()*@
+    </div>
+    @*<div id="koszyk-lista-produktow" class="koszyk-calosc">
+
+    </div>*@
+</div>
+<script>
+        koszyk_ZaladujSkrypty();
+</script>

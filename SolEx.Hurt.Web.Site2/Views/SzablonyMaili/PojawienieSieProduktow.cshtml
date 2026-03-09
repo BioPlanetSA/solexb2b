@@ -1,0 +1,155 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+
+    HashSet<PolaListaProduktowNoweZamowienie> pola = Model.Konfiguracja.KtorePolaProduktuPowiadomienieDostepneProdukty;
+    string preset = Model.Konfiguracja.ZdjecieRozmiarWPowiadomieniach;
+}
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.PojawienieSieProduktow
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Na Platformie B2B pojawiły się produkty na które oczekiwałeś ")
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Na Platformie B2B pojawiły się produkty na które oczekiwałeś - {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+    }
+}
+@section Naglowek
+{
+    <p class="center lead">
+        @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+            @Html.PobierzTlumaczenie(Model.JezykMaila(), "Na Platformie B2B pojawiły się produkty na które oczekiwałeś")<br />
+        }
+        else
+        {
+            @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Pojawiły się produkty na które oczekiwał klient {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa })<br />
+        }
+    </p>
+}
+
+@section Tresc
+{
+    <div>
+        @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+            @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Witaj, <br/> na Platformie B2B pojawiły się produkty, którymi byłeś zainteresowany: {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa })
+        }
+        else
+        {
+            @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Witaj, <br/> na Platformie B2B pojawiły się produkty, którymi byłeś zainteresowany:", MiejsceFrazy.Brak, new object[] { })
+            <br />
+            @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Informacja dotyczy klienta: {0}, email: {1}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa, Model.Klient.Email })
+        }
+        <table class="row bodyTlo">
+            <tr>
+                <td class="center" align="center">
+                    <table class="container">
+                        <tr>
+                            <td class="wrapper">
+                                <table class="twelve columns">
+                                    <tr>
+                                        <td class="panel bialy">
+                                            <table class="container">
+                                                <tr>
+                                                    @if (pola.Contains(PolaListaProduktowNoweZamowienie.Zdjecie))
+                                                    {
+                                                        <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zdjecie")</td>
+                                                    }
+                                                    <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Nazwa")</td>
+                                                    @if (pola.Contains(PolaListaProduktowNoweZamowienie.Symbol))
+                                                    {
+                                                        <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Symbol")</td>
+                                                    }
+                                                    @if (pola.Contains(PolaListaProduktowNoweZamowienie.Ean))
+                                                    {
+                                                        <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Kod kreskowy")</td>
+                                                    }
+                                                </tr>
+
+                                                @{
+                                                    if (Model.ListaProduktow != null)
+                                                    {
+                                                        for (int i = 0; i < Model.ListaProduktow.Count; ++i)
+                                                        {
+                                                            IProduktKlienta p = Model.ListaProduktow[i];
+                                                            <tr>
+                                                                @if (pola.Contains(PolaListaProduktowNoweZamowienie.Zdjecie))
+                                                                {
+                                                                    <td align="center" class="vcenter">
+                                                                        @if (p.ZdjecieGlowne == null)
+                                                                        {
+                                                                            if (!string.IsNullOrEmpty(Model.Konfiguracja.DomyslneZdjecieSciezka))
+                                                                            {
+                                                                                string sciezka = string.Format("{0}?preset={1}", Model.Konfiguracja.DomyslneZdjecieSciezka, Model.Konfiguracja.ZdjecieRozmiarWPowiadomieniach);
+                                                                                <img src="@Url.ZbudujLinkZewnetrzny(sciezka)" alt="" />
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <img src="@p.ZdjecieGlowne.LinkWWersji(preset)" alt="@p.Nazwa.Replace('"', ' ')" />
+                                                                        }
+                                                                    </td>
+                                                                }
+                                                                <td align="left" class="vcenter">
+                                                                    @p.Nazwa
+                                                                </td>
+                                                                @if (pola.Contains(PolaListaProduktowNoweZamowienie.Symbol))
+                                                                {
+                                                                    <td align="center" class="vcenter">
+                                                                        @p.Kod
+                                                                    </td>
+                                                                }
+                                                                @if (pola.Contains(PolaListaProduktowNoweZamowienie.Ean))
+                                                                {
+                                                                    <td align="center" class="vcenter">
+                                                                        @p.KodKreskowy
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+            @Html.PobierzTlumaczenie(Model.JezykMaila(), "Pozostając do dyspozycji,<br />Serdecznie pozdrawiamy")
+            <br/>
+        }
+    </div>
+}
+

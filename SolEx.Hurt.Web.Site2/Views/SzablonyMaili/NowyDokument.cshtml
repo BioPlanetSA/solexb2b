@@ -1,0 +1,186 @@
+﻿
+@{
+    Layout = "_Layout.cshtml";
+
+}
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.NowyDokument
+    
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Nowa faktura na Platforma B2B")
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie( Model.JezykMaila(), "Nowa faktura na Platforma B2B - {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+    }
+}
+
+@section Naglowek
+{
+    <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Nowe faktury")</h4>
+    
+}
+@section Tresc
+{
+    
+    <table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad">
+                        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Informujemy, że wystawiliśmy nowe faktury dla Twojej firmy. Faktury można pobrać po zalogownaiu do systemu B2B, w zakładce historia faktur.")
+                        @if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun || Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel || Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun)
+                        {
+                            <br />
+                            @Html.PobierzTlumaczenie( Model.JezykMaila(), "Informacja dotyczy klienta: {0}, email{1}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa, Model.Klient.Email})
+                        }
+                        <br />
+                    </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+    
+
+   
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                    <tr>
+                        <td class="text-pad wstawkiTlo">
+                            <br/>
+                            <table style="width: 100%" class="tabela">
+
+
+                                <tr class="naglowek">
+                                    <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Data")</td>
+                                    <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Numer")</td>
+                                    <td align="right" class="r">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Wartość")</td>
+                                    <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Termin płatności")</td>
+                                    <td align="center" class="center"></td>
+                                </tr>
+
+                                <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="5">&nbsp;</td></tr>
+
+                                @{
+                                    foreach (var dokument in Model.Dokumenty)
+                                    {
+                                        <tr>
+                                            <td align="center" class="vcenter center">
+                                                @dokument.DataUtworzenia.ToShortDateString()
+                                            </td>
+                                            <td align="center" class="vcenter center">
+                                                @dokument.NazwaDokumentu
+                                            </td>
+
+                                            <td align="right" class="r vcenter">
+                                                <small>@Html.PobierzTlumaczenie(Model.JezykMaila(), "netto")</small> @dokument.DokumentWartoscNetto<br />
+                                                <b><small>@Html.PobierzTlumaczenie(Model.JezykMaila(), "brutto")</small> @dokument.DokumentWartoscBrutto</b>
+                                            </td>
+                                            
+                                            <td align="center" class="vcenter center">
+                                                @(dokument.TerminPlatnosci.HasValue ? dokument.TerminPlatnosci.Value.ToShortDateString() : "")
+                                                @{
+                                                    if (dokument.DniDoTerminuZaplaty().HasValue && dokument.DniDoTerminuZaplaty() > 0)
+                                                    {
+                                                        string fraza = "za <b>{0}</b> dni";
+                                                        if (dokument.DniDoTerminuZaplaty() == 1)
+                                                        {
+                                                            fraza = "<span class='blad'>to już jutro!</span>";
+                                                        }
+
+                                                        <br />
+                                                        <i>@Html.PobierzTlumaczenie( Model.JezykMaila(),fraza, MiejsceFrazy.Brak, new object[] { dokument.DniDoTerminuZaplaty() })</i>
+                                                    }
+                                                }
+
+                                            </td>
+                                            
+                                            <td align="center" class="vcenter center">
+                                                <a href="@(Model.SciezkaDoPlikuPokaz(dokument))">
+                                                    @Html.PobierzTlumaczenie(Model.JezykMaila(), "podgląd")
+                                                </a>
+
+                                                @if (!string.IsNullOrEmpty(Model.SciezkaDoPlikuPobierz(dokument)))
+                                                {
+                                                    <br />
+                                                    <a href="@(Model.SciezkaDoPlikuPobierz(dokument))">
+                                                        @Html.PobierzTlumaczenie(Model.JezykMaila(), "PDF")
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    
+                                        <tr>
+                                            <td height="1" style="font-size: 1px; line-height: 1px;" class="hr belka" colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="5">&nbsp;</td></tr>
+
+                                    }
+                                }
+
+                            </table>
+
+                        </td>
+
+                    </tr>
+                </table>
+
+                          
+            </td>
+        </tr>
+    </table>
+    
+
+<table class="row">
+    <tr>
+        <td>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad ">
+                        <br/><br />
+                        @Html.PobierzTlumaczenie(Model.JezykMaila(), "<small class='wyszarz' style='text-transform: uppercase'>PAMIĘTAJ, ŻE...</small><br/>" +
+                                                                                   "Na Platformie B2B możesz przeglądać wszystkie swoje faktury i zamówienia - możesz również pobierać faktury w postaci elektronicznej w różnych formatach. <br/>" +
+                                                                                   "Mamy gotowe pliki dla różnych systemów np. SubiektGT, Comarch Optima, PC Market i inne.<br/>" +
+                                                                                   "Już dziś spróbuj importować nasze faktury do swojego systemu!<br/>")
+                        <br />
+                        <br /><br />
+                    </td>
+                </tr>
+            </table>
+        </td>
+        </td>
+    </tr>
+</table>
+    
+}
+

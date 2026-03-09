@@ -1,0 +1,26 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoNawigacjiProduktu
+
+<div class="produkt-nawigacja">
+    @if (Model.Prev != null)
+    {
+        <a class="produkt-nawigacja-poprzedni" href="@Url.ZbudujLink(Model.Next,SolexHelper.AktualnyJezyk)">
+            <i class="fa fa-angle-left fa-2x"></i>
+            <span>@Html.PobierzTlumaczenie("POPRZEDNI")</span>
+        </a>
+    }
+
+    <span class="produkt-nawigacja-pozycje">
+        <span class="produkt-nawigacja-pozycje-aktualna">@Model.PozycjaAktualnegoProduktu</span> <span >z</span> <span class="produkt-nawigacja-licznik">@Model.IloscWszystkichProduktów</span>
+    </span>
+
+    @if (Model.Next != null)
+    {
+        <a class="produkt-nawigacja-nastepny  " href="@Url.ZbudujLink(Model.Next,SolexHelper.AktualnyJezyk)">
+            <span>@Html.PobierzTlumaczenie("NASTĘPNY")</span>
+            <i class="fa fa-angle-right fa-2x"></i>
+        </a>
+    }
+</div>

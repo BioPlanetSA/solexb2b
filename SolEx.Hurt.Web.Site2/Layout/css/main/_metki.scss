@@ -1,0 +1,112 @@
+﻿@import "_ustawienia.scss";
+
+a.label, a.label:hover {
+    color: white;
+}
+
+.label.ogonek {
+    font-size: 100%;
+    //na mniejszym ekranie chcemy zeby font byl mniejszy
+    @media (max-width: 767px) {
+        font-size: 75%;
+    }
+
+    position: relative;
+    border-radius: 2px; //metki chcemy zeby byly zaokraglone
+    margin-bottom: 10px;
+
+    &:after {
+        content: ' ';
+        position: absolute;
+        width: 0;
+        height: 0;
+        right: 0;
+        top: 96%; //dzieki temu ze nie ma 100% ukrywamy drobne niedociagniecia ramki
+        border-width: 5px 4px;
+        border-style: solid;
+    }
+
+    &.label-danger:after {
+        border-color: #9f171b #9f171b transparent transparent;
+    }
+
+    &.label-success:after {
+        border-color: #62a73b #62a73b transparent transparent;
+    }
+
+    &.label-warning:after {
+        border-color: #ee7203 #ee7203 transparent transparent;
+    }
+
+    &.label-lg {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    &.label-xl {
+        font-size: 20px;
+        font-weight: bold;
+    }
+}
+
+
+//metki w szczegolach galerii produktów muszą być większe niż stadnardowe - 200%. I zmieniamy fonta na  paragra
+.galeria-produktu .metki {
+    font-size: 200%;
+}
+
+//pozycje metek
+.metki-produktu.metki.NaZdjeciuDol {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+}
+
+.metki-produktu.metki.NaZdjeciuGora {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+
+    .metka-produktu {
+        display: block;
+        margin-bottom: 10px;
+    }
+}
+
+//naspisanie dla kafli - metki NA zdjeciu musza byc w samym rogu dlatego ze kafel jest maly i nie ma sensu zabierac zbednego miejsca
+.kafel-photo {
+    .metki-produktu.metki.NaZdjeciuDol {
+        bottom: 0;
+        right: 0;
+    }
+
+    .metki-produktu.metki.NaZdjeciuGora {
+        top: 0;
+        right: 0;
+    }
+}
+
+.metki-produktu.metki.NadNazwa {
+    display: block;
+}
+
+
+.metki-produktu.metki.ZaNazwaDoPrawej {
+    float: right;
+}
+
+.produkt-zdjecie {
+    position: relative; //musi tak byc bo metki na zdjeciuowe maja absolute
+}
+
+.metki-ListaProduktow {
+    .metki-produktu.metki.NaZdjeciuGora {
+        top: 0;
+        right: 0;
+    }
+
+    .metki-produktu.metki.NaZdjeciuDol {
+        bottom: 0;
+        right: 0;
+    }
+}

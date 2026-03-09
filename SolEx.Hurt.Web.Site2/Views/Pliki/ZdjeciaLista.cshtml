@@ -1,0 +1,18 @@
+﻿@model SolEx.Hurt.Web.Site2.Models.ParametryDoFileManagera
+
+<div class="modal fade wybor-pliku">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">@Model.NazwaNaglowka</h4>
+            </div>
+            <div class="modal-body" >
+                <iframe src="@Model.Link"  style="overflow: scroll; overflow-x: hidden; overflow-y: scroll; width: 100%; min-height: 500px"></iframe>
+            </div>
+        </div>
+    </div>
+    </div>
+<script language="javascript" type="text/javascript">
+    $('.modal:not(.wybor-pliku)').addClass('nie-zamykac');
+</script>

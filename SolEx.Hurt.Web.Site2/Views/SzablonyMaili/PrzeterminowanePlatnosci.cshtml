@@ -1,0 +1,364 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+    //bool czySaFaktoringowe = Model.Faktoringowe != null && Model.Faktoringowe.Any();
+    //bool czySaWlasne = Model.Wlasne != null && Model.Wlasne.Any();
+    //bool czySaPrzeterminowane = Model.Przeterminowane != null && Model.Przeterminowane.Any();
+    //bool czySaNadchodzace = Model.Nadchodzace != null && Model.Nadchodzace.Any();
+}
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.PrzeterminowanePlatnosci
+
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Przypomnienie o płatnościach")
+    }
+    else
+    {
+        @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Przypomnienie o płatnościach - {0}", MiejsceFrazy.Brak, new object[] { Model.Klient.Nazwa})
+    }
+    
+
+}
+@section Naglowek
+{
+    <h4 class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Przypomnienie o płatnościach")</h4>
+}
+@section Tresc
+{
+
+    
+<table class="row">
+    <tr>
+        <td class="wrapper last">
+            <table class="twelve columns">
+                <tr>
+                    <td class="text-pad">
+                        <p>
+                            @Html.PobierzTlumaczenie(Model.JezykMaila(), "Informujemy, że na Pani/Pana koncie widnieją nieuregulowane należności. Wynikają one z następujących dokumentów:")
+                        </p>
+                    </td>
+                    <td class="expander"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+        
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                    <tr>
+                        <td class="text-pad wstawkiTlo">
+                            <br/>
+                            <table style="width: 100%" class="tabela">
+                                <tr class="naglowek">
+                                    <td></td>
+                                    <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Ilość dokumentów")</td>
+                                    <td align="right" class="r">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Pozostało do zapłaty brutto")</td>
+                                </tr>
+                                
+                                 @if (Model.Przeterminowane.Count > 0)
+                                 {
+                                     <tr>
+                                         <td align="center" class="center vcenter">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Przeterminowane")</td>
+                                         <td align="center" class="c vcenter">@Model.Przeterminowane.Count()</td>
+                                         <td align="right" class="r vcenter">
+                                             @{
+                                                 if (Model.WlasnePrzeterminowaneDoZaplaty > 0)
+                                                 {
+                                                     <div class="r">@(Model.WlasnePrzeterminowaneDoZaplaty)</div>
+                                                 }
+
+                                                 if (Model.FaktoringowePrzeterminowaneCzySa)
+                                                 {
+                                                     <div class="r">
+                                                         <span class="label label-danger">Faktoring</span>
+                                                     </div>
+                                                 }
+                                             }
+                                         </td>
+                                     </tr>
+                                <tr>
+                                    <td height="1" style="font-size: 1px; line-height: 1px;" class="hr belka" colspan="3">&nbsp;</td>
+                                </tr>
+                                <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="3">&nbsp;</td></tr>
+                                 }
+                                 
+                                @if (Model.Nadchodzace.Count > 0)
+                                {
+                                    <tr>
+                                        <td align="center" class="center naglowek">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Nadchodzące")</td>
+                                        <td align="center" class="c vcenter">
+                                            @Model.Nadchodzace.Count
+                                        </td>
+                                        <td align="right" class="r vcenter">
+                                            @{
+                                                if (Model.WlasneNadchodzaceDoZaplaty > 0)
+                                                {
+                                                    <div class="r">@(Model.WlasneNadchodzaceDoZaplaty)</div>
+                                                }
+
+                                                if (Model.FaktoringoweNadchodzaceCzySa)
+                                                {
+                                                    <div class="r"><span class="label label-danger">Faktoring</span></div>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                
+                                <tr>
+                                    <td height="1" style="font-size: 1px; line-height: 1px;" class="hr belka" colspan="3">&nbsp;</td>
+                                </tr>
+                                <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="3">&nbsp;</td></tr>
+
+                            </table>
+                            
+                            @*suma*@
+                            @if (Model.WszystkoDoZaplatyBrutto > 0)
+                            {
+                                <p class="bold r">
+                                    @Html.PobierzTlumaczenie(Model.JezykMaila(), "W sumie do zapłaty brutto"):
+                                    @Model.WszystkoDoZaplatyBrutto
+                                </p>
+                            }
+                        </td>
+
+                    </tr>
+                </table>
+
+            </td>
+                     
+                
+        </tr>
+    </table>
+
+        @if (Model.Przeterminowane.Any())
+        {
+          <br/>
+            <table class="row">
+                <tr>
+                    <td class="wrapper last">
+                        <table class="twelve columns">
+                            <tr>
+                                <td class="text-pad">
+                                    @Html.PobierzTlumaczenie(Model.JezykMaila(), "Przeterminowane płatności")
+                                    <br />
+                                </td>
+                                <td class="expander"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="row">
+                <tr>
+                    <td class="wrapper last">
+                        <table class="twelve columns">
+                            <tr>
+                                <td class="text-pad wstawkiTlo">
+                                    <br/>
+                                    <table style="width: 100%" class="tabela">
+                                        <tr class="naglowek">
+                                            <td align="left">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Numer faktury")</td>
+                                            <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Data faktury")</td>
+                                            <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Termin płatności")</td>
+                                            <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Dni po terminie")</td>
+                                            <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Pozostało do zapłaty brutto")</td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="6">&nbsp;</td></tr>
+
+                                        @foreach (var p in Model.Przeterminowane.OrderByDescending(x=>x.DokumentDniSpoznienia))
+                                        {
+                                            <tr>
+                                                <td align="left" class="vcenter">
+                                                    @p.NazwaDokumentu
+                                                </td>
+                                                <td align="center" class="vcenter">@p.DataUtworzenia.ToShortDateString()</td>
+                                                <td align="center" class="vcenter center">@(@p.TerminPlatnosci.HasValue ? p.TerminPlatnosci.Value.ToShortDateString() : null)</td>
+                                                <td align="center" class="center vcenter blad"><b>@p.DokumentDniSpoznienia</b></td>
+                                                <td align="center" class="center vcenter">
+                                                    @{
+                                                        StatusZamowienia status = p.StatusId!=null? SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<StatusZamowienia>(p.StatusId, Model.JezykMaila()):null;
+                                                    }
+                                                    @if (status != null && status.TraktujJakoFaktoring)
+                                                    {
+                                                        <span class="label label-danger">Faktoring</span>
+                                                    }
+                                                    @p.DokumentWartoscNalezna
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td height="1" style="font-size: 1px; line-height: 1px;" class="hr belka" colspan="6">&nbsp;</td>
+                                            </tr>
+                                            <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="6">&nbsp;</td></tr>
+                                        }
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                          
+                </tr>
+            </table>
+        }
+       
+        @if (Model.Nadchodzace.Any())
+        {
+            <br />
+            <table class="row">
+                <tr>
+                    <td class="wrapper last">
+                        <table class="twelve columns">
+                            <tr>
+                                <td class="text-pad">
+                                    @Html.PobierzTlumaczenie(Model.JezykMaila(), "Nadchodzące płatności ")<br />
+                                </td>
+                                <td class="expander"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="row">
+                <tr>
+                    <td class="wrapper last">
+                        <table class="twelve columns">
+                            <tr>
+                                <td class="text-pad wstawkiTlo">
+                                    <br />
+                                    <table style="width: 100%" class="tabela">
+                                        <tr class="naglowek">
+                                            <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Numer faktury")</td>
+                                            <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Data faktury")</td>
+                                                            
+                                            <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Termin płatności")</td>
+                                            <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Dni do terminu")</td>
+                                            <td align="center" class="center">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Pozostało do zapłaty")</td>
+                                            <td></td>
+                                        </tr>
+                                                        
+                                        <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="6">&nbsp;</td></tr>
+
+                                        @foreach (var p in Model.Nadchodzace)
+                                        {
+                                            <tr>
+                                                <td align="left" class="vcenter">
+                                                    @p.NazwaDokumentu
+                                                    @{ StatusZamowienia status = SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<StatusZamowienia>(p.StatusId, Model.JezykMaila(), Model.Klient); }
+                                                    @if (status != null && status.TraktujJakoFaktoring)
+                                                    {
+                                                        <span class="label label-danger">Faktoring</span>
+                                                    }
+                                                </td>
+                                                <td align="center" class="vcenter center">@p.DataUtworzenia.ToShortDateString()</td>
+                                                                
+                                                <td align="center" class="vcenter center">@(p.TerminPlatnosci.HasValue ? p.TerminPlatnosci.Value.ToShortDateString() : null)</td>
+                                                <td align="center" class="vcenter center"><b>@(p.TerminPlatnosci.HasValue ? (p.TerminPlatnosci.Value - DateTime.Now.Date).Days : (int?) null)</b></td>
+
+                                                <td align="center" class="vcenter center">@p.DokumentWartoscNalezna</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td height="1" style="font-size: 1px; line-height: 1px;" class="hr belka" colspan="6">&nbsp;</td>
+                                            </tr>
+                                            <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="6">&nbsp;</td></tr>
+
+                                        }
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                               
+                </tr>
+            </table>
+
+
+        }
+       <br />
+        @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+            <table class="row">
+                <tr>
+                    <td class="wrapper last">
+                        <table class="twelve columns">
+                            <tr>
+                                <td class="text-pad">
+                                    <p>
+                                        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Prosimy o pilne opłacenie kwoty zaległości w celu uniknięcia blokady sprzedaży." +
+                                                                                                   "Zachęcamy do korzystania z Platformy B2B. W zakładce Faktury znajdują się szczegółowe informacje dotyczące płatności.")
+                                    </p><br />
+                                </td>
+                                <td class="expander"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+    <table class="row">
+        <tr>
+            <td class="wrapper offset-by-four">
+                <table class="four columns">
+                    <tr>
+                        <td>
+
+                            <table class="button akcja">
+                                <tr>
+                                    <td>
+                                        <a href="@Url.ZbudujLinkZewnetrzny(Url.LinkLogowania())"> @Html.PobierzTlumaczenie(Model.JezykMaila(), "Zobacz liste faktur na Platformie B2B") </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td class="expander"></td>
+                    </tr>
+                </table>
+
+
+            </td>
+            <td class="wrapper last offset-by-four"></td>
+        </tr>
+    </table>
+
+    <br /><br />
+
+        }
+
+}
+

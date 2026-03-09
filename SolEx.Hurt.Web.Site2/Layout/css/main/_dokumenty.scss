@@ -1,0 +1,63 @@
+﻿@import "_ustawienia.scss";
+
+.dokumenty-lista {
+
+    .faktury-taby,  .dokumenty-filtry{
+        font-family: $font-tekst-rodzina;
+
+        .nav-link:not(.active){
+            color: $kolor-text-muted;
+           &:not(:hover){
+                border-color: #f6f6f6 #f6f6f6 #ddd; //ramka udajaca taba nieaktywnego
+           }
+        }
+
+    }
+
+    .dokumenty-filtry {
+        .kafel {
+            margin: 10px 0;
+
+            > div, > a {
+                margin-left: 10px;
+                margin: auto 10px;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    .dokumenty-input-platnosci {
+        font-size: 12px;
+        width: 75px;
+        padding: 2px 5px;
+    }
+
+    .dokumenty-podsumowanie {
+        font-family: $font-tekst-rodzina;
+
+        #legenda {
+            li {
+                margin-top: 10px;
+
+                span {
+                    display: inline-block;
+                    width: 15px;
+                    height: 50px;
+                    margin-right: 5px;
+                }
+            }
+        }
+
+        .dokumenty-legenda {
+            text-align: left;
+            display: inline-block;
+            vertical-align: top;
+        }
+    }
+
+
+
+}

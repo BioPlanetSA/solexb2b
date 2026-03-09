@@ -1,0 +1,340 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ListaDane
+@{
+    int iloscKolumn = 0;
+    bool czyKlientZalogowany = SolexHelper.AktualnyKlient.Id != 0;
+    bool zastepujCeneZerowaIkonkaTelefonu = SolexBllCalosc.PobierzInstancje.Konfiguracja.ZastepujCeneZerowaIkonkaTelefonu;
+    HashSet<long> idUlubionych = SolexHelper.AktualnyKlient.IdUlubionych;
+    var akcesorRefleksjiProduktow = typeof(ProduktKlienta).PobierzRefleksja();
+}
+
+<table id="tabela-lista-produktow" class="table table-condensed lista-produktow">
+@if (Model.AktualneParametry.KontrolkaProduktow.LNaglowekListaProduktowPokazuj)
+{
+    <thead>
+    <tr>
+        <th scope="col" class="l" style="vertical-align: middle; width: 1px">
+            @{ iloscKolumn++; }
+        </th>
+
+        @if (!string.IsNullOrEmpty(Model.AktualneParametry.KontrolkaProduktow.Kolumna20))
+        {
+            <th scope="col" class="c NaglowekKolumna20" style="vertical-align: middle">
+                @Html.PobierzTlumaczenie("ListaProduktow-Kolumna20") @{ iloscKolumn++; }
+            </th>
+        }
+
+        <th scope="col" class="c NaglowekNazwa" style="vertical-align: middle">
+            @Html.PobierzTlumaczenie("NAZWA") @{ iloscKolumn++; }
+        </th>
+        @if (Model.AktualneParametry.KontrolkaProduktow.LCenaDetaliczna != JakieCenyPokazywac.Brak)
+        {
+            <th scope="col" class="c NaglowekCenaDetaliczna" style="vertical-align: middle">
+                @Html.PobierzTlumaczenie("CENA DETALICZNA")
+            </th>
+            iloscKolumn++;
+        }
+        @if (Model.AktualneParametry.KontrolkaProduktow.LCenaPrzedRabatem != JakieCenyPokazywac.Brak && czyKlientZalogowany && Model.KlientWidziCeneHurtowa)
+        {
+            <th scope="col" class="c NaglowekCenaHurtowa" style="vertical-align: middle">
+                @Html.PobierzTlumaczenie("CENA HURTOWA")
+            </th>
+            iloscKolumn++;
+        }
+        @if (Model.AktualneParametry.KontrolkaProduktow.LRabat && czyKlientZalogowany && Model.KlientWidziCeneHurtowa)
+        {
+            <th scope="col" class="c NaglowekRabat" style="vertical-align: middle">
+                @Html.PobierzTlumaczenie("RABAT")
+            </th>
+            iloscKolumn++;
+        }
+
+        @if ((Model.AktualneParametry.KontrolkaProduktow.LVat || Model.AktualneParametry.KontrolkaProduktow.CenaPoRabacie != JakieCenyPokazywac.Brak) && Model.KlientWidziCeneHurtowa && czyKlientZalogowany)
+        {
+            <th scope="col" class="c NaglowekTwojaCena" style="vertical-align: middle">
+                @Html.PobierzTlumaczenie("CENA PO RABACIE")
+            </th>
+            iloscKolumn++;
+        }
+
+
+
+        @if (Model.AktualneParametry.KontrolkaProduktow.ZyskKlienta)
+        {
+            <th scope="col" class="c NaglowekTwojZysk" style="vertical-align: middle">
+                @Html.PobierzTlumaczenie("TWÓJ ZYSK")
+            </th>
+            iloscKolumn++;
+        }
+        @if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.Kolumna))
+        {
+            <th scope="col" class="c fit-content" style="vertical-align: middle;">
+                @Html.PobierzTlumaczenie("ILOŚĆ")
+            </th>
+            iloscKolumn++;
+        }
+        @if (!string.IsNullOrEmpty(Model.AktualneParametry.KontrolkaProduktow.Kolumna80))
+        {
+            <th scope="col" class="c NaglowekKolumna80 fit-content" style="vertical-align: middle">
+                @Html.PobierzTlumaczenie("ListaProduktow-Kolumna80") @{ iloscKolumn++; }
+            </th>
+        }
+        @if (czyKlientZalogowany || (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && (Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem) || Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem))))
+        {
+            <th scope="col" class="kolumna-dodawanie-do-koszyka fit-content">
+                @{ iloscKolumn++; }
+            </th>
+        }
+
+        @if (czyKlientZalogowany && Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.Any() && Model.AktualneParametry.KontrolkaProduktow.BelkaDostepnosci)
+        {
+            <th scope="col" style="width: 10px;" class="belka-dostepnosci">
+
+            </th>
+            iloscKolumn++;
+        }
+
+    </tr>
+    </thead>
+}
+<tbody>
+@{
+    KategorieBLL poprzednia = null;
+    int i = 0;
+}
+@foreach (ProduktKlienta pk in Model.UstawieniaListyProduktow.Produkty)
+{
+    string info = "";
+    bool pokazujCene;
+    bool moznaDodacDoKoszyka = SolexBllCalosc.PobierzInstancje.ProduktyBazowe.MoznaDodacDoKoszyka(pk, out info, out pokazujCene);
+    string link = Url.ZbudujLink(pk, SolexHelper.AktualnyJezyk);
+
+
+    if (Model.UstawieniaListyProduktow.Kategorie != null && (poprzednia == null || Model.UstawieniaListyProduktow.Kategorie[i]?.Sciezka != poprzednia.Sciezka))
+    {
+        var aktualna = Model.UstawieniaListyProduktow.Kategorie[i];
+       
+        if (aktualna != null && !string.IsNullOrEmpty(aktualna.Sciezka))
+        {
+            <tr class="active kategoria">
+                <td colspan="@iloscKolumn">@aktualna.Sciezka</td>
+            </tr>
+        } else if (aktualna != poprzednia)
+        {
+            <tr class="active kategoria">
+                <td colspan="@iloscKolumn">@Html.PobierzTlumaczenie("Pozostałe")</td>
+            </tr>
+        }
+        poprzednia =aktualna;
+    }
+    i++;
+
+    List<IProduktKlienta> listaDzieci = null;
+    if (!string.IsNullOrEmpty(pk.Rodzina))
+    {
+        listaDzieci = pk.ProduktyWRodzinie(Model.UstawieniaListyProduktow.ProduktyId);
+    }
+
+    int iloscDzieci = listaDzieci != null ? listaDzieci.Count : 0;
+    bool produktPosiadaDzieci = iloscDzieci > 1;
+    //Gdy ustawienie DlaIluDzieciBrakRodziny = 1 albo ilosc produktów w rodzinie będzie większa niż ustawienie DlaIluDzieciBrakRodziny zostanie wygenerowany przycisk zobacz warianty
+    bool pokazywacDzieci = Model.AktualneParametry.KontrolkaProduktow.IleDzieciNiepokazujRodzin != 1 || (produktPosiadaDzieci && iloscDzieci <= Model.AktualneParametry.KontrolkaProduktow.IleDzieciNiepokazujRodzin);
+
+    if (!produktPosiadaDzieci || !pokazywacDzieci)
+    {
+        <tr>
+            <td class="fit-content c zdjecie">
+                @{
+                    Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(pk, Model.AktualneParametry.KontrolkaProduktow.LRozmiarZdjecia, true, RodzajMetki.ListaProduktow, "foto link-szczegoly", link));
+                }
+            </td>
+            @if (!string.IsNullOrEmpty(Model.AktualneParametry.KontrolkaProduktow.Kolumna20))
+            {
+                object wartosc = Refleksja.PobierzWartoscFormatowana(pk, Model.AktualneParametry.KontrolkaProduktow.Kolumna20, Model.AktualneParametry.KontrolkaProduktow.LKolumna20Format, akcesorRefleksjiProduktow);
+                string fraza = wartosc.ToString();
+
+                <td class="c Kolumna20 fit-content">
+                    <a href="@link" class="clickable produkt-kolumna20 link-szczegoly">
+                        @Html.Raw(fraza)
+                    </a>
+                </td>
+            }
+            @{
+                int iloscKolumnDoScalenia = (produktPosiadaDzieci) ? iloscKolumn - 1 : 1;
+            }
+            <td class="l nazwa" colspan="@iloscKolumnDoScalenia">
+
+                @{
+                    Html.RenderPartial("PolaProduktu/Nazwa", new ParametryPrzekazywaneDoNazwy(pk, RodzajMetki.ListaProduktow, "produkt-nazwa link-szczegoly", link, produktPosiadaDzieci, true, idUlubionych));
+                }
+                <div class="text-muted kody-pod-nazwa">
+                    @if (Model.AktualneParametry.KontrolkaProduktow.LSymbol)
+                    {
+                        <span class="kod">@(pk.Kod)</span>
+                    }
+                    @if (Model.AktualneParametry.KontrolkaProduktow.LKodKreskowy && !string.IsNullOrEmpty(pk.KodKreskowy))
+                    {
+                        <span class="kod-kreskowy">@(pk.KodKreskowy)</span>
+                    }
+                    @{
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pk.PobierzMetkiLista(MetkaPozycjaLista.PodNazwa), null));
+                    }
+                    @if (!string.IsNullOrEmpty(pk.OpisKrotki))
+                    {
+                        <div class="text-muted produkt-opis-2linia">@Html.Raw(pk.OpisKrotki)</div>
+                    }
+                    @if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.NaDole))
+                    {
+                        <br/>
+                        Html.StanyProduktowWszystkie(pk, Model.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.NaDole]);
+                    }
+                    @if (produktPosiadaDzieci && !pokazywacDzieci)
+                    {
+                        <div class="r">
+                            <a href="@link" class="clickable produkt-nazwa link-szczegoly">
+                                <div class="btn btn-success btn-xs">@Html.PobierzTlumaczenie("zobacz warianty")</div>
+                            </a>
+                            
+                        </div>
+                        continue;
+                    }
+                </div>
+            </td>
+
+            @if ( Model.AktualneParametry.KontrolkaProduktow.LCenaDetaliczna != JakieCenyPokazywac.Brak)
+            {
+                <td class="r CenaProduktu fit-content">
+                    @if (pokazujCene)
+                    {
+                        Html.RenderPartial("_Cena",
+                            new CenaDoPokazania(pk.FlatCeny.CenaDetalicznaNetto, pk.FlatCeny.CenaDetalicznaBrutto, null, null, "netto", "", "ceny-przed-rabatem lista-produktow", "",
+                                Model.AktualneParametry.KontrolkaProduktow.LCenaDetaliczna, "brutto"));
+                    }
+                </td>
+            }
+
+            @if (Model.AktualneParametry.KontrolkaProduktow.LCenaPrzedRabatem != JakieCenyPokazywac.Brak && czyKlientZalogowany && Model.KlientWidziCeneHurtowa)
+            {
+                <td class="r CenaProduktu fit-content">
+                    @if (pokazujCene)
+                    {
+                        Html.RenderPartial("_Cena", new CenaDoPokazania(pk.FlatCeny.CenaHurtowaNetto, pk.FlatCeny.CenaHurtowaBrutto, null, null, "netto", "", "ceny-przed-rabatem lista-produktow", "",
+                            Model.AktualneParametry.KontrolkaProduktow.LCenaPrzedRabatem, "brutto"));
+                    }
+                </td>
+            }
+            @if (pk.GradacjePosortowane != null && Model.AktualneParametry.KontrolkaProduktow.LGradacja != GradacjaSposobPokazywania.Brak)
+            {
+                <td class="brak-odstepu r gradacja fit-content" colspan="@Html.Raw(1 + ((Model.AktualneParametry.KontrolkaProduktow.LRabat && czyKlientZalogowany) ? 1 : 0) + (Model.AktualneParametry.KontrolkaProduktow.ZyskKlienta ? 1 : 0))">
+                    @if (pokazujCene)
+                    {
+                        Html.RenderAction("Gradacje", "Produkty", new {ProduktId = pk.Id, sposobPokazywania = Model.AktualneParametry.KontrolkaProduktow.LGradacja });
+                    }
+                </td>
+            }
+            else
+            {
+                if (Model.AktualneParametry.KontrolkaProduktow.LRabat && czyKlientZalogowany && Model.KlientWidziCeneHurtowa)
+                {
+                    <td class="c rabat fit-content">
+                        @if (pokazujCene)
+                        {
+                            <span class="produkt-rabat">@pk.FlatCeny.Rabat.DoRabatString()</span>
+                        }
+                    </td>
+                }
+
+                if ((Model.AktualneParametry.KontrolkaProduktow.LVat || Model.AktualneParametry.KontrolkaProduktow.CenaPoRabacie != JakieCenyPokazywac.Brak) && Model.KlientWidziCeneHurtowa)
+                {
+                    <td class="r CenaPoRabacie fit-content">
+                        @if (pokazujCene)
+                        {
+                            Html.RenderPartial("_Cena", new CenaDoPokazania(pk.FlatCeny, "netto", "", "ceny-po-rabacie", "", Model.AktualneParametry.KontrolkaProduktow.CenaPoRabacie, "brutto"));
+                            if (Model.AktualneParametry.KontrolkaProduktow.LVat && (pk.FlatCeny.CenaNetto != 0 || pk.FlatCeny.CenaNetto == 0 && zastepujCeneZerowaIkonkaTelefonu))
+                            {
+                                <span class="text-muted vat"><span>@Html.PobierzTlumaczenie("VAT")</span> <span>@(pk.Vat.DoLadnejCyfry())%</span></span>
+                            }
+                        }
+                    </td>
+                }
+
+                if (Model.AktualneParametry.KontrolkaProduktow.ZyskKlienta)
+                {
+                    <td scope="col" class="c ZyskiKlienta fit-content" style="vertical-align: middle">
+                        @if (pokazujCene)
+                        {
+                            <span class="text-muted produkt-zysk-klienta">@(pk.FlatCeny.ZyskKlientaNetto) </span>
+                        }
+                    </td>
+                }
+            }
+            @if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.Kolumna))
+            {
+                <td class="c kolumna-stany-produktow fit-content">
+                    @{
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pk.PobierzMetkiLista(MetkaPozycjaLista.NadStanemKolumna), string.Format("metki {0}", MetkaPozycjaLista.NadStanemKolumna)));
+                        Html.StanyProduktowWszystkie(pk, Model.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.Kolumna]);
+                        Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(pk.PobierzMetkiLista(MetkaPozycjaLista.PodStanemKolumna), string.Format("metki {0}", MetkaPozycjaLista.PodStanemKolumna)));
+                    }
+                </td>
+            }
+            @if (!string.IsNullOrEmpty(Model.AktualneParametry.KontrolkaProduktow.Kolumna80))
+            {
+                object wartosc = Refleksja.PobierzWartoscFormatowana(pk, Model.AktualneParametry.KontrolkaProduktow.Kolumna80, Model.AktualneParametry.KontrolkaProduktow.Lkolumna80format, akcesorRefleksjiProduktow);
+                string fraza = wartosc.ToString();
+
+                <td class="c NaglowekKolumna80 fit-content">
+                    <a href="@link" class="clickable link-szczegoly">
+                        @Html.Raw(fraza)
+                    </a>
+                </td>
+            }
+            @if (SesjaHelper.PobierzInstancje.CzyKlientZalogowany)
+            {
+                <td class="r kolumna-dodawanie-do-koszyka fit-content">
+                    @if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem))
+                    {
+                        Html.StanyProduktowWszystkie(pk, Model.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem]);
+                    }
+
+                    @{
+                        ParametryIlosciProduktu pi = new ParametryIlosciProduktu(pk, Model.SortowanieJednostek, TypPozycjiKoszyka.Zwykly, null, Model.PokazujJednostki);
+                        pi.MoznaDodawacDoKoszyka = moznaDodacDoKoszyka;
+                        pi.Info = info;
+                        Html.RenderPartial("EditorTemplates/DodawanieDoKoszyka", pi);                      
+                    }
+
+                    @if (Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem))
+                    {
+                        Html.StanyProduktowWszystkie(pk, Model.WszystkieSposobyPokazywaniaStanowKlienta[PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem]);
+                    }
+                </td>
+
+                if (SesjaHelper.PobierzInstancje.CzyKlientZalogowany && Model.WszystkieSposobyPokazywaniaStanowKlienta != null && Model.WszystkieSposobyPokazywaniaStanowKlienta.Any() && Model.AktualneParametry.KontrolkaProduktow.BelkaDostepnosci)
+                {
+                    <td style="vertical-align: middle" class="belka-dostepnosci @pk.PobierzTypStany.ToString()">
+                        &nbsp;
+                    </td>
+                }
+            }
+        </tr>
+    }
+    else
+    {
+        string szablon = Model.AktualneParametry.KontrolkaProduktow.SzablonRodziny;  //szablon dla rodzin
+        string adres = $"../PRodukty/WidokiRodzinowe/Lista/{szablon}";
+        Html.RenderPartial(adres,  new ParametryDoProduktowRodzinowych(pk, listaDzieci, iloscKolumn, idUlubionych, Model));
+    }
+}
+</tbody>
+</table>
+

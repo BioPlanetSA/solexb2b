@@ -1,0 +1,416 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4914FFA8-5436-4E31-85F3-DDC4884989B5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SolEx.Hurt.Sync.App.Modules_</RootNamespace>
+    <AssemblyName>SolEx.Hurt.Sync.App.Modules_</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>aed07773</NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TEST|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\TEST\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TESTLOG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper, Version=3.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.3.0.0-beta7\lib\net451\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EncodingTools">
+      <HintPath>..\Libs\encoding\EncodingTools.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.1.0\lib\net40\FastMember.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ftplib">
+      <HintPath>..\Libs\FTPLib v1.0.1.3\ftplib.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=3.9.60.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\ORMLite\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=3.9.60.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\ORMLite\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="XnaFan.ImageComparison">
+      <HintPath>..\Libs\PorownanieObrazkow\XnaFan.ImageComparison.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DAO\Subiekt.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Subiekt.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\KategorieKlientowHelper.cs" />
+    <Compile Include="Helpers\StanyHelpers.cs" />
+    <Compile Include="Helpers\Subiekt.cs" />
+    <Compile Include="Helpers\Pliki.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\CechyZSQL.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\DeaktywujCechyBezLacznikow.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\ImportAtrybutowICechZCsv.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\CechyModul.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\BudujFiltryKonfiguratora.cs" />
+    <Compile Include="NoweModuly\KategorieKlientow\KategorieKlientowZSQL.cs" />
+    <Compile Include="NoweModuly\KategorieProduktow\KopiowaniePolZCechyDoKategorii.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\DodajBrakujaceCechy.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\PrzenoszenieCechyMiedzyAtrybutami.cs" />
+    <Compile Include="NoweModuly\Klienci\DodajBrakujaceMagazyny.cs" />
+    <Compile Include="NoweModuly\Klienci\KtorePolaSynchronizowacMagazyny.cs" />
+    <Compile Include="NoweModuly\Klienci\NadpiszPoziomCenowyKlienta.cs" />
+    <Compile Include="NoweModuly\Klienci\PoziomCenowyNaPodstawieKategorii.cs" />
+    <Compile Include="NoweModuly\Klienci\PoziomCenyDetalicznejNaPodstawiePoziomuHurtowego.cs" />
+    <Compile Include="NoweModuly\Klienci\UsuwanieRabatowKlientaZPoziomemCenowym.cs" />
+    <Compile Include="NoweModuly\Pliki\KopiowanieZdjecNaDzieciWRodzinie.cs" />
+    <Compile Include="NoweModuly\BazowyParsowanieWWW.cs" />
+    <Compile Include="NoweModuly\BazowyPobieraniePlikuNaDysk.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\CechyKonfigurator.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\CechyNaKategorie.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\CechaZPolaProduktu.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\FiltrowanieCechDoWysylki.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\KtorePolaSynchronizowacAtrybuty.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\KtorePolaSynchronizowacCechy.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\TrecCechy.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\ZmianaNazwCech.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\ZmienaNazwAtrybutow.cs" />
+    <Compile Include="NoweModuly\Dokumenty\AktywacjaKlientowNaPodstawieWartosciFaktur.cs" />
+    <Compile Include="NoweModuly\Dokumenty\InformacjeONowychDokumentach.cs" />
+    <Compile Include="NoweModuly\Dokumenty\KtorePolaSynchronizowacStatusy.cs" />
+    <Compile Include="NoweModuly\Dokumenty\PrzepisanieOdbiorcyJakoKlienta.cs" />
+    <Compile Include="NoweModuly\Dokumenty\KopiowaniePolaDoPola.cs" />
+    <Compile Include="NoweModuly\Dokumenty\PodmianaPozycji.cs" />
+    <Compile Include="NoweModuly\Dokumenty\SortowaniePozycjiWgPola.cs" />
+    <Compile Include="NoweModuly\Dokumenty\CzyszczenieStatusowDokumentow.cs" />
+    <Compile Include="NoweModuly\Dokumenty\InformacjaOPrzeterminowanych.cs" />
+    <Compile Include="NoweModuly\Dokumenty\UsuwanieZamowienBezRezerwacji.cs" />
+    <Compile Include="NoweModuly\FakturyPdf\FakturyPdfErp.cs" />
+    <Compile Include="NoweModuly\KategorieKlientow\FiltrowanieKategoriKlientow.cs" />
+    <Compile Include="NoweModuly\KategorieKlientow\KategorieKlientowNaPodstawiePolaKlienta.cs" />
+    <Compile Include="NoweModuly\KategorieKlientow\Kategorieregex.cs" />
+    <Compile Include="NoweModuly\KategorieKlientow\KategorieWalutoweZPoziomuCenowego.cs" />
+    <Compile Include="NoweModuly\KategorieKlientow\StworzGrupeZKateogrii.cs" />
+    <Compile Include="NoweModuly\Klienci\DodanieKupowanychIlosci.cs" />
+    <Compile Include="NoweModuly\Klienci\JezykZCechy.cs" />
+    <Compile Include="NoweModuly\Klienci\DaneLogowaniaPoleWlasne.cs" />
+    <Compile Include="NoweModuly\Klienci\DoklejeniePolaDoPola.cs" />
+    <Compile Include="NoweModuly\Klienci\KopiowaniePolaDoPola.cs" />
+    <Compile Include="NoweModuly\Klienci\KtorePolaSynchronizowacRegiony.cs" />
+    <Compile Include="NoweModuly\Klienci\KtorePolaSynchronizowacKraje.cs" />
+    <Compile Include="NoweModuly\Klienci\PracownikWidziWszystkich.cs" />
+    <Compile Include="NoweModuly\Klienci\PrzepisanieCechDoPola.cs" />
+    <Compile Include="NoweModuly\Klienci\TworzenieSklepowNaPodstawieKlienta.cs" />
+    <Compile Include="NoweModuly\Klienci\ZerowanieRabatow.cs" />
+    <Compile Include="NoweModuly\KategorieProduktow\OpisyDoKategorii.cs" />
+    <Compile Include="NoweModuly\ListyPrzewozowe\ListyPrzewozowePocztaPolska.cs" />
+    <Compile Include="NoweModuly\ListyPrzewozowe\ListyPrzewozoweRaben.cs" />
+    <Compile Include="NoweModuly\Pliki\ImportPlikowNaPodstawieCsv.cs" />
+    <Compile Include="NoweModuly\Pliki\PlikiZSystemuKsiegowegoBaza.cs" />
+    <Compile Include="NoweModuly\Pliki\TrecZdjecia.cs" />
+    <Compile Include="NoweModuly\Pliki\TworzenieLinkowZCech.cs" />
+    <Compile Include="NoweModuly\Pliki\ZalacznikiDoProduktowLinki.cs" />
+    <Compile Include="NoweModuly\Pliki\PlikiDoProduktowZPlikow.cs" />
+    <Compile Include="NoweModuly\Pliki\ZalacznikiZProvideraKsiegowego.cs" />
+    <Compile Include="NoweModuly\Pliki\ZdjeciaDoKategoriiProduktow.cs" />
+    <Compile Include="NoweModuly\Pliki\ZdjeciaDoKlientow.cs" />
+    <Compile Include="NoweModuly\Pliki\ZdjeciaDoCech.cs" />
+    <Compile Include="NoweModuly\PoziomyCenowe\ImportCenZPliku.cs" />
+    <Compile Include="NoweModuly\PoziomyCenowe\KtorePolaSynchronizowacPoziomyCen.cs" />
+    <Compile Include="NoweModuly\CechyIAtrybuty\KopiowaniePolaDoAtrybutu.cs" />
+    <Compile Include="NoweModuly\Produkty\KopiowaniePolaDoPola.cs" />
+    <Compile Include="NoweModuly\Produkty\KtorePolaSynchronizowacWaluta.cs" />
+    <Compile Include="NoweModuly\Produkty\UsuwanieSlowNadmiarowych.cs" />
+    <Compile Include="NoweModuly\Produkty\ProduktyUkryteZErpa.cs" />
+    <Compile Include="NoweModuly\Produkty\ProduktyWirtualneNaPodstawiePlikuCsv.cs" />
+    <Compile Include="NoweModuly\Produkty\WczytajKoncesje.cs" />
+    <Compile Include="NoweModuly\Produkty\AkcesoriaZPolWlasnych.cs" />
+    <Compile Include="NoweModuly\Produkty\AutomatycznePodpinanieAkcesoriow.cs" />
+    <Compile Include="NoweModuly\Produkty\KopiowanieOpisowWRodzinie.cs" />
+    <Compile Include="NoweModuly\Produkty\ModyfikacjaWartosciPola.cs" />
+    <Compile Include="NoweModuly\Produkty\OczyszczanieWarosciPola.cs" />
+    <Compile Include="NoweModuly\Produkty\ParametryZamawianiaNaPodstawieAtrybutu.cs" />
+    <Compile Include="NoweModuly\Produkty\PobieranieZamiennikowErp.cs" />
+    <Compile Include="NoweModuly\Produkty\ProduktyZPlatformyJakoProduktyZErpa.cs" />
+    <Compile Include="NoweModuly\Produkty\PrzeliczMiaryObjetoscIMasaWgWspolczynnikow.cs" />
+    <Compile Include="NoweModuly\Produkty\PrzypisanieCechyNapodstaiwieCechyPlik.cs" />
+    <Compile Include="NoweModuly\Produkty\RodzinyZPolaProduktuBHP.cs" />
+    <Compile Include="NoweModuly\Produkty\DodawanieCechyJesliProduktMaCeche.cs" />
+    <Compile Include="NoweModuly\Produkty\FiltrujProduktyNaKatalogBezLogowania.cs" />
+    <Compile Include="NoweModuly\Produkty\KtorePolaSynchronizowacJednostki.cs" />
+    <Compile Include="NoweModuly\Produkty\RodzinyOryginalyIKopie.cs" />
+    <Compile Include="NoweModuly\Produkty\DomyslnaWartoscPola.cs" />
+    <Compile Include="NoweModuly\Produkty\KopiujOpisKategoriiDoProduktu.cs" />
+    <Compile Include="NoweModuly\Produkty\PrzypisanieCechyDlaNowychProduktow.cs" />
+    <Compile Include="NoweModuly\Produkty\PrzypisywanieMenagerowProduktow.cs" />
+    <Compile Include="NoweModuly\Produkty\RodzinyZPolaProduktu.cs" />
+    <Compile Include="NoweModuly\Produkty\UkrywanieProduktowBezZdjec.cs" />
+    <Compile Include="NoweModuly\Stany\StanyBaza.cs" />
+    <Compile Include="NoweModuly\Stany\SztucznaDostepnosc.cs" />
+    <Compile Include="NoweModuly\Produkty\UsunStareDniDostawy.cs" />
+    <Compile Include="NoweModuly\Produkty\OpisyDoProduktowZPlikow.cs" />
+    <Compile Include="NoweModuly\Rabaty\KatalogKlientaNaPostawieOfert.cs" />
+    <Compile Include="NoweModuly\Rabaty\GradacjeFiltrowanieWgKategoriiWalutowej.cs" />
+    <Compile Include="NoweModuly\Rabaty\CenyNaPodstawieOfert.cs" />
+    <Compile Include="NoweModuly\Rabaty\WidocznoscProduktowPoCesze.cs" />
+    <Compile Include="NoweModuly\Rabaty\WidocznoscProduktowPoPoczatkuCechy.cs" />
+    <Compile Include="NoweModuly\Rabaty\UkrywanieProduktowBezRabatow.cs" />
+    <Compile Include="NoweModuly\Rabaty\UsuwanieRabatow.cs" />
+    <Compile Include="NoweModuly\Rabaty\RabatyImpel.cs" />
+    <Compile Include="NoweModuly\ImportEksportXMLCSV\ImportEksportXMLCSV.cs" />
+    <Compile Include="NoweModuly\ImportEksportXMLCSV\WykonajZadaniaAdministracyjne.cs" />
+    <Compile Include="NoweModuly\KategorieKlientow\KategorieWalutowe.cs" />
+    <Compile Include="NoweModuly\KategorieProduktow\DodajBrakujaceKategorie.cs" />
+    <Compile Include="NoweModuly\KategorieProduktow\KolejnoscKategorii.cs" />
+    <Compile Include="NoweModuly\KategorieProduktow\TrecKategorie.cs" />
+    <Compile Include="NoweModuly\KategorieProduktow\ZmianaNazwKategorii.cs" />
+    <Compile Include="NoweModuly\KategorieProduktow\KtorePolaSynchronizowac.cs" />
+    <Compile Include="NoweModuly\KategorieProduktow\FiltrowanieDrzewka.cs" />
+    <Compile Include="NoweModuly\KategorieProduktow\GlobalDrzewoZNazwy.cs" />
+    <Compile Include="NoweModuly\Klienci\PrzedstawicielWgWojewodztwa.cs" />
+    <Compile Include="NoweModuly\Klienci\PoziomCenyZWaluty.cs" />
+    <Compile Include="NoweModuly\Klienci\KlienciZCecha.cs" />
+    <Compile Include="NoweModuly\Klienci\DomyslnaWartoscPola.cs" />
+    <Compile Include="NoweModuly\Klienci\KtorePolaSynchronizowac.cs" />
+    <Compile Include="NoweModuly\Klienci\PrzeliczenieIlosci.cs" />
+    <Compile Include="NoweModuly\Klienci\DodawaniePracownikow.cs" />
+    <Compile Include="NoweModuly\Klienci\OczyszczanieKlientow.cs" />
+    <Compile Include="NoweModuly\Rabaty\OfertaKlienta.cs" />
+    <Compile Include="NoweModuly\Klienci\WidocznoscTowarow.cs" />
+    <Compile Include="NoweModuly\Klienci\PrzypisaniePrzedstawicieliOpiekunowDoKlientow.cs" />
+    <Compile Include="NoweModuly\Klienci\RoleKlientow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NoweModuly\ListyPrzewozowe\ListyPrzewozoweDPDKrajowe.cs" />
+    <Compile Include="NoweModuly\ListyPrzewozowe\ListyPrzewozoweDPDZagraniczne.cs" />
+    <Compile Include="NoweModuly\ListyPrzewozowe\ListyPrzewozoweZERP.cs" />
+    <Compile Include="NoweModuly\AktualizacjaProduktow\OpisyDoProduktowZPlikow.cs" />
+    <Compile Include="NoweModuly\Pliki\ZdjeciaZProvideraKsiegowego.cs" />
+    <Compile Include="NoweModuly\Pliki\ZdjeciaDoProduktowZPlikow.cs" />
+    <Compile Include="NoweModuly\PoziomyCenowe\FiltrowaniePoziomow.cs" />
+    <Compile Include="NoweModuly\Produkty\BudowanieOpisuNaPodstawieCech.cs" />
+    <Compile Include="NoweModuly\Produkty\DodatkoweKodyKreskowe.cs" />
+    <Compile Include="NoweModuly\Produkty\SMMASH_ProduktyZPlikow.cs" />
+    <Compile Include="NoweModuly\Produkty\TrecProdukty.cs" />
+    <Compile Include="NoweModuly\Produkty\DezaktywacjaLubAktywacjaProduktuPoCesze.cs" />
+    <Compile Include="NoweModuly\Produkty\OpisWielojezyczny.cs" />
+    <Compile Include="NoweModuly\Produkty\GlobalneOZ.cs" />
+    <Compile Include="NoweModuly\Produkty\KopiowanieAtrybutuDoPola.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NoweModuly\Produkty\PoleProduktuZSQL.cs" />
+    <Compile Include="NoweModuly\Produkty\KtorePolaSynchronizowac.cs" />
+    <Compile Include="NoweModuly\Rabaty\Gradacje.cs" />
+    <Compile Include="NoweModuly\Rabaty\OfertaKlientaPoKategoriach.cs" />
+    <Compile Include="NoweModuly\Rabaty\RabatyPoziomCeny.cs" />
+    <Compile Include="NoweModuly\Stany\DeaktywacjaZeStanu.cs" />
+    <Compile Include="NoweModuly\Produkty\StanMinNaPodstawieCeny.cs" />
+    <Compile Include="NoweModuly\Produkty\PrzepisanieCechDoPola.cs" />
+    <Compile Include="NoweModuly\Produkty\OczyszczanieNazw.cs" />
+    <Compile Include="NoweModuly\Produkty\UworzNazweGedeon.cs" />
+    <Compile Include="NoweModuly\Produkty\WymaganeOZ.cs" />
+    <Compile Include="NoweModuly\Produkty\OpakowanieZbiorczeZJednostki.cs" />
+    <Compile Include="NoweModuly\Produkty\MinimumLogistyczneZJednostki.cs" />
+    <Compile Include="NoweModuly\Rabaty\RabatySaturn.cs" />
+    <Compile Include="NoweModuly\Rabaty\RabatyGedeon.cs" />
+    <Compile Include="NoweModuly\InformacjaODostepnosci\PoinformujODostepnosci.cs" />
+    <Compile Include="NoweModuly\Stany\PobieranieStanowParadyz.cs" />
+    <Compile Include="NoweModuly\Stany\StanySql.cs" />
+    <Compile Include="NoweModuly\Stany\StanyZPlikuCsv.cs" />
+    <Compile Include="NoweModuly\WyliczenieGotowychCen\PobieranieWyliczonychCenZProvideraKsiegowego.cs" />
+    <Compile Include="NoweModuly\WyliczenieGotowychCen\PrzelicznieWyliczonychCenNaWybranaWalute.cs" />
+    <Compile Include="NoweModuly\ZadaniaOgolne\MailePowiatalneWysylanie.cs" />
+    <Compile Include="NoweModuly\ZadaniaOgolne\MailNoweProdukty.cs" />
+    <Compile Include="NoweModuly\ZadaniaOgolne\MailProduktyPrzyjeteNaMagazyn.cs" />
+    <Compile Include="NoweModuly\ZadaniaOgolne\WyslijPonownieBledneMaile.cs" />
+    <Compile Include="NoweModuly\ZadaniaOgolne\WysylanieMailingow.cs" />
+    <Compile Include="NoweModuly\ZadaniaOgolne\WywolaniePolecenKonsoli.cs" />
+    <Compile Include="NoweModuly\Zamowienia\ComarchConnector.cs" />
+    <Compile Include="NoweModuly\Zamowienia\ConfigWzInnyPoziom.cs" />
+    <Compile Include="NoweModuly\Zamowienia\LaczenieZamowienBaza.cs" />
+    <Compile Include="NoweModuly\Zamowienia\LaczenieZamowienSubiekt.cs" />
+    <Compile Include="NoweModuly\Zamowienia\RozbiciaTowarowBaza.cs" />
+    <Compile Include="NoweModuly\Zamowienia\RozbijanieTowarowPoAtrybucie.cs" />
+    <Compile Include="NoweModuly\Zamowienia\WystawianieWZInnyPodmiot.cs" />
+    <Compile Include="Rozne\BazaModulyDokumentyStatus.cs" />
+    <Compile Include="Rozne\BazaOczyszczaniePola.cs" />
+    <Compile Include="Rozne\ImportZPliku.cs" />
+    <Compile Include="NoweModuly\Zamowienia\PrzeksztalcaniePozycjiNaInne.cs" />
+    <Compile Include="NoweModuly\Zamowienia\RozbiciaTowarowOdDostepnosci.cs" />
+    <Compile Include="NoweModuly\Zamowienia\RozbiciaTowarowPoCesze.cs" />
+    <Compile Include="NoweModuly\Zamowienia\SortowaniePozycjiWgPola.cs" />
+    <Compile Include="NoweModuly\Zamowienia\ZamowieniaWJednoskachPodstawowych.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Rozne\DomyslnaWartoscPola.cs" />
+    <Compile Include="Rozne\KategorieKlientow.cs" />
+    <Compile Include="Rozne\KategorieWalutoweBase.cs" />
+    <Compile Include="Rozne\KopiowaniePolHistoriaDokumentyBase.cs" />
+    <Compile Include="Rozne\KtorePolaSynchonizowacBaza.cs" />
+    <Compile Include="Rozne\OpisyDoProduktowZPlikowBaza.cs" />
+    <Compile Include="Rozne\ProduktySMMASH.cs" />
+    <Compile Include="Rozne\Stany\Csv.cs" />
+    <Compile Include="Rozne\Stany\MasitaXML.cs" />
+    <Compile Include="Rozne\TrecXMLBaza.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="DAO\Subiekt.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Subiekt.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DAO\Subiekt.dbml.layout">
+      <DependentUpon>Subiekt.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libs\ORMLite\KOD-ZRODLOWY\ServiceStack.Common\ServiceStack.Common.csproj">
+      <Project>{982416db-c143-4028-a0c3-cf41892d18d3}</Project>
+      <Name>ServiceStack.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.DBHelper\SolEx.DBHelper.csproj">
+      <Project>{965048D9-E773-4750-ADDA-1ECC122ACBDE}</Project>
+      <Name>SolEx.DBHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.ERP.Model\SolEx.ERP.Model.csproj">
+      <Project>{1DF8D295-1707-4BA1-9945-63D676B839BF}</Project>
+      <Name>SolEx.ERP.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.Hurt.Core\SolEx.Hurt.Core.csproj">
+      <Project>{febdc3b5-ee97-48e4-8df0-2abea38df790}</Project>
+      <Name>SolEx.Hurt.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.Hurt.Helpers\SolEx.Hurt.Helpers.csproj">
+      <Project>{DCD68212-4853-411B-9DA9-27C633694D8A}</Project>
+      <Name>SolEx.Hurt.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolEx.Hurt.Model\SolEx.Hurt.Model.csproj">
+      <Project>{71AC3478-449A-4873-8C68-5596C4D06E4E}</Project>
+      <Name>SolEx.Hurt.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

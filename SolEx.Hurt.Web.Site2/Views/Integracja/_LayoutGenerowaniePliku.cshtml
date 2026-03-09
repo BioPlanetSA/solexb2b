@@ -1,0 +1,5 @@
+﻿@(RenderSection("Szablon"))
+@{
+    RenderSection("Opis").WriteTo(TextWriter.Null);
+    RenderSection("Nazwa").WriteTo(TextWriter.Null);
+}

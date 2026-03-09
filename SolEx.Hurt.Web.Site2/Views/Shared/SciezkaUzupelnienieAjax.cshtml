@@ -1,0 +1,23 @@
+﻿@model List<Tuple<string,string>>
+<span class="fake-breadcrumb" style="display: none;">
+    @for(int i=Model.Count-1;i>=0;i--)
+    { 
+        <a href="@Model[i].Item1">@Model[i].Item2</a>
+    }
+</span>
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        if ($('.modal').length ===0) {
+            $('.breadcrumb .active').remove();
+            var tab = [];
+
+            $('.fake-breadcrumb a').each(function (nr, el) {
+                el = $(el);
+                tab.push({ link: el.prop('href'), nazwa: el.text() });
+            });
+            DodajOkruszkiElementy(tab);
+        }
+    });
+   
+</script>

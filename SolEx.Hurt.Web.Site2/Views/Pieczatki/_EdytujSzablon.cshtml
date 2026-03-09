@@ -1,0 +1,69 @@
+﻿@model SolEx.Hurt.Model.PieczatkiSzablony
+<div class="nowy-typ">
+    <div class="pieczatka-element-naglowek">
+        <h4>
+            <strong>Edycja szablonu: @Model.Nazwa</strong>
+            <a href="/pieczatki/szablony/@Model.TypId" class="pieczatki-kontener-naglowek-link">Wróć do listy szablonów</a>
+        </h4>
+        
+    </div>
+    <div class="pieczatka-element-kontener">
+        <div class="nowy-typ-opis">
+            <div class="forma">
+                <form></form>
+                <form method="POST" id="dodaj-typ-forma">
+                    @Html.HiddenFor(x => x.Id)
+                    @Html.HiddenFor(x => x.TypId)
+                    @Html.HiddenFor(x => x.SciezkaDoPlikuSzablonuJSON)
+                    @Html.HiddenFor(x => x.SciezkaDoPlikuSzablonuSVG)
+                    <div>
+                        Nazwa @Html.TextBoxFor(x => x.Nazwa, new { @class = "form-control" })
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Blokada edycji</label>
+                        <div class="col-sm-10">
+                            @if (Model.Zablokowany)
+                            {
+                                <label class="radio-inline"><input id="Zablokowany" type="radio" name="Zablokowany" value="true"checked>Tak</label>
+                                <label class="radio-inline"><input id="Zablokowany" type="radio" name="Zablokowany" value="false">Nie</label>
+                            }
+                            else
+                            {
+                                <label class="radio-inline"><input id="Zablokowany" type="radio" name="Zablokowany" value="true">Tak</label>
+                                <label class="radio-inline"><input id="Zablokowany" type="radio" name="Zablokowany" value="false" checked>Nie</label>
+                            }                       
+                        </div>
+                    </div>
+                    <div id="dodaj_szablon_nazwa_opis">
+                        <div>
+                            Opis @Html.TextAreaFor(x => x.Opis, new { @rows = 6, @cols = 70, @class = "form-control" })
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary btn-sm zapisz-typ" type="submit">Zapisz</button>
+                        <a href="/pieczatki/szablony/@Model.TypId" class="btn btn-danger btn-sm zapisz-typ">Anuluj</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    tinymce.init({
+        mode: "textareas",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste responsivefilemanager template"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media template",
+        image_advtab: true,
+        height: 300,
+        external_filemanager_path: "/filemanager/",
+        filemanager_title: "Responsive Filemanager",
+        external_plugins: { "filemanager": "/filemanager/plugin.min.js" },
+        templates: "/Szablony/Pobierz"
+    });
+</script>
+

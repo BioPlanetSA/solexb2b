@@ -1,0 +1,46 @@
+﻿
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model  SolEx.Hurt.Core.ModelBLL.ObiektyMaili.SzablonMailaNewslettera
+           
+<table style="border-collapse: collapse; border-spacing: 0; border: none; padding: 0;">
+
+    @foreach (IProduktKlienta p in Model.Produkty)
+    {
+        <tr>
+            <td style="padding: 0 15px 0 15px; vertical-align: middle; text-align: center;">
+                @if (p.ZdjecieGlowne != null)
+                {
+                    <a href="@Url.ZbudujLink(p, Model.Jezyk() )" target="_blank"><img src="@p.ZdjecieGlowne.LinkWWersji("ikona212160")" alt="@p.Nazwa" /></a>
+                }
+            </td>
+            <td style="background: #f7f7f7; width: 310px; padding: 10px 15px 10px 25px;">
+                <h2 style="color: #e1933b; font-size: 18px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: -5px 0 4px 0;">@p.Nazwa</h2>
+                <p style="color: #736655; font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 0;">@p.Kod</p>
+                @*<p style="color: #736655; font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 0;">@p.kod_kreskowy</p>*@
+                
+
+                <p style="color: #000;  margin: 12px 0 0 0;">
+                    <span style="font-size: 11px; font-family: Arial, Helvetica, sans-serif;">@Html.PobierzTlumaczenie(p.JezykId, "netto", MiejsceFrazy.Newsletter)</span>
+                    <span style="font-size: 18px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; text-transform: uppercase;">@p.FlatCeny.CenaNetto</span>
+                </p>
+                
+                <p style="color: #000;  margin: 12px 0 0 0;">
+                    <span style="font-size: 11px; font-family: Arial, Helvetica, sans-serif;">@Html.PobierzTlumaczenie(p.JezykId, "brutto", MiejsceFrazy.Newsletter)</span>
+                    <span style="font-size: 18px; font-family: Arial, Helvetica, sans-serif; text-transform: uppercase;">@p.FlatCeny.CenaBrutto</span>
+                </p>
+
+                <a href="@Url.ZbudujLink(p, Model.Jezyk())" style="background: #eaeaea; text-decoration: none; padding: 7px 10px; color: #000; font-size: 13px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 15px 0 0 0; display: inline-block;" target="_blank">
+                    @Html.PobierzTlumaczenie(p.JezykId, "Sprawdź szczegóły", MiejsceFrazy.Newsletter)
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="height: 25px; padding-left: 15px; padding-right: 15px;"><span style="display: block; width: 100%; height: 1px; background: #d8d8d8;">&nbsp;</span></td>
+        </tr>
+    }
+</table>

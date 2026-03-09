@@ -1,0 +1,21 @@
+﻿@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+    
+@Html.HiddenFor(x => x.NazwaPola)
+@Html.HiddenFor(x => x.TylkoDoOdczytu)
+@Html.HiddenFor(x => x.PobieraneErp)
+@*@Html.EditorFor(x => x.TypPrzechowywanejWartosci, new {value= Model.TypPrzechowywanejWartosci.AssemblyQualifiedName })*@
+
+@*<input id="PolaObiektu_0__TypPrzechowywanejWartosci" name="PolaObiektu[0].TypPrzechowywanejWartosci" type="hidden" value="@Model.TypPrzechowywanejWartosci.AssemblyQualifiedName">*@
+
+@if (Model.TypPrzechowywanejWartosci != null)
+{
+    @Html.Hidden("TypPrzechowywanejWartosci", @Model.TypPrzechowywanejWartosci.AssemblyQualifiedName)
+}
+
+@Html.HiddenFor(x => x.Tlumaczone)
+@Html.HiddenFor(x => x.Multiselect)
+@Html.HiddenFor(x => x.NazwaWyswietlana)
+@if (Model.WymuszonyTypEdytora.HasValue)
+{
+    @Html.HiddenFor(x => x.WymuszonyTypEdytora)
+}

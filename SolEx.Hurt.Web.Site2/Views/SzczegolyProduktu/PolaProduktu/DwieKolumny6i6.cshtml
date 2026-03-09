@@ -1,0 +1,52 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryPrzekazywaneDoSzczegolow
+
+@if (!string.IsNullOrEmpty(Model.Naglowek) && (Model.Pola.Count > 0 || Model.Atrybuty.Count > 0))
+{
+    @Html.Raw(Model.Naglowek)
+}
+
+@if (Model.Pola != null && Model.Pola.Count > 0)
+{
+    foreach (var pole in Model.Pola)
+    {
+        <div class="row @Model.DodatkowyCss">
+            <div class="col-xs-6 ">
+                @if (Model.PokarzNazwe && !string.IsNullOrEmpty(pole.Nazwa) )
+                {
+                    @Html.PobierzTlumaczenie(pole.Nazwa)
+                }
+            </div>
+            <div class="col-xs-6 ">@Html.Raw(pole.Wartosc)</div>
+        </div>
+    }
+}
+@if (Model.Atrybuty != null && Model.Atrybuty.Count > 0)
+{
+    foreach (var atr in Model.Atrybuty)
+    {
+        if (atr.Wartosc.GetType() == typeof(Dictionary<string, string>))
+        {
+            Dictionary<string, string> wartosc = (Dictionary<string, string>) atr.Wartosc;
+           <div class="row">
+                <div class="col-xs-6 ">
+                    @if (Model.PokarzNazwe)
+                    {
+                        @atr.Nazwa
+                    }
+                </div>
+                <div class="col-xs-6 ">
+                    @foreach (var val in wartosc)
+                    {
+                        <a @(string.IsNullOrEmpty(val.Value)?"":"href=\""+val.Value+"\"")>@Html.Raw(val.Key)</a>
+                    }
+                </div>
+            </div>
+        }
+    }
+}
+@if (!string.IsNullOrEmpty(Model.Stopka))
+{
+    @Html.Raw(Model.Stopka)
+}

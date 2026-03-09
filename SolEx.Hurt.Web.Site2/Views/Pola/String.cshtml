@@ -1,0 +1,5 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.Web.ParametryPola
+<input autocomplete="off" type="text" name="@Model.Nazwa" @Html.Raw(Model.Wymagane ? "required" : "")
+       value="@Model.Wartosc" placeholder="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,Model.WyswietlanaNazwa)" class="@Model.klasaCSS" />

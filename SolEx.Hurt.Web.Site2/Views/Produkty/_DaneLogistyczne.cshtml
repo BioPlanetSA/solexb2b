@@ -1,0 +1,54 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model Tuple<List<SolEx.Hurt.Model.JednostkaProduktu>,SolEx.Hurt.Core.ModelBLL.ProduktBazowy>
+
+<table class="table-condensed table-bordered dane-logistyczne">
+    
+    <tbody>
+        <tr>
+            <td class="pusta"></td>
+            @for(int i=0; i< Model.Item1.Count-1;++i)
+            {
+                JednostkaProduktu jp = Model.Item1[i];
+                <td class="naglowek @(jp.Podstawowa ? "podstawowa" : "") ">@jp.Nazwa</td>
+            }
+            @if (Model.Item2.Waga > 0)
+            {
+                <td class="naglowek">@Html.PobierzTlumaczenie("Waga") [kg]</td>
+            }
+        </tr>
+        @for (int i = 0; i < Model.Item1.Count; i++)
+        {
+            if (Model.Item1[i].Podstawowa)
+            {
+                continue;
+            }
+            
+            <tr>
+                <td class="naglowek r">
+                    @Model.Item1[i].Nazwa
+                </td>
+                @for (int j = 0; j < Model.Item1.Count-1; j++)
+                {
+                    <td>
+                        @if (i == j)
+                        {
+                            @Html.Raw('-')
+                        }
+                        else
+                        {
+                            @Html.Raw(decimal.Round(Model.Item1[i].Przelicznik / Model.Item1[j].Przelicznik, 2))
+                            <text></text>
+                            @Model.Item1[j].Nazwa;
+                        }
+                    </td>
+                }
+                @if (Model.Item2.Waga > 0)
+                {
+                    <td>@Html.Raw((Model.Item1[i].Przelicznik *Model.Item2.Waga).ToString("0.000" )) kg</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

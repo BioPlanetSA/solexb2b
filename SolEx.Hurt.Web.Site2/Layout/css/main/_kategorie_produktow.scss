@@ -1,0 +1,108 @@
+﻿@import "_ustawienia.scss";
+
+.kategorie-produktowe-lista-kolumn {
+    .menu-kolumnowe-nazwa-grupy {
+        &, & a {
+            color: $kolor-zaznaczenia;
+
+            &:hover {
+                color: $kolor-zaznaczenia-hover;
+            }
+        }
+    }
+}
+
+.kategorie-produtkow-kafle {
+    .kategorie-produtkow-kafel {
+        padding: 20px;
+        .kategorie-produtkow-nazwa {
+            margin: 20px auto 20px auto;
+            //align-self: center;
+        }
+    }
+}
+
+
+
+.drzewo-kategorii {
+    .tree-tab {
+        > .tree-tab-item {
+            display: inline-block;
+            height: 22px;
+            background-color: lighten($kolor-drzewko-kategorii, 40%);
+            line-height: 21px;
+            padding: 0 10px;
+            vertical-align: bottom;
+            color: $kolor-drzewko-kategorii;
+
+            &.grupa-aktywna {
+                background-color: $kolor-drzewko-kategorii;
+                height: 24px;
+                color: white;
+            }
+        }
+
+        border-bottom: 1px solid $kolor-ramki;
+    }
+
+
+    &.grupa-jako-taby{
+        //tylko grupa aktywna widoczny tab- ale tylko jesli sa Taby
+         .tree-elements:not(.grupa-aktywna) {
+            display: none;
+        }
+    }
+
+
+    .tree-elements {
+        .tree-element {
+            //wszystkie poza levelem-0 domyslnie zwiniete niewidoczne, tylko aktualnie wybrana jest widoczna
+            &:not(.level-0) {
+                display: none;
+            }
+
+            &.kategoria-wybrana {
+                display: block;
+
+                & > .tree-element{
+                     display: block;
+                }
+
+                a.kategoria-wybrana {
+                    font-weight: bold;
+                        //background-color: lighten($kolor-drzewko-kategorii, 40%);
+                    .count {
+                        font-weight: normal; //liczba produktów nie chcemy zeby byl bold
+                    }
+                }
+            }
+
+
+            a {
+                line-height: 1.8;
+                display: block;
+                /*padding: 5px 0;
+                display: block;*/
+            }
+
+            .count {
+                margin: auto 2px;
+            }
+
+            .level-1 {
+                padding-left: 25px;
+                background-color: lighten($kolor-drzewko-kategorii, 40%);
+            }
+
+            .level-2 {
+                padding-left: 45px;
+                background-color: lighten($kolor-drzewko-kategorii, 45%);
+            }
+
+            .level-3 {
+                padding-left: 65px;
+                background-color: lighten($kolor-drzewko-kategorii, 50%);
+            }
+        }
+    }
+}

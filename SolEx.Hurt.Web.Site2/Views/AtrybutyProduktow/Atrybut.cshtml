@@ -1,0 +1,16 @@
+﻿
+
+<span class="atrybut_produktu">
+    <span class="nazwa text-muted">
+        <%= !NiePokazujNazwyAtrybutu ? Atrybut.nazwa + ":" : "" %>
+    </span>
+    <span class="cechy">
+        <asp:Repeater ID="rptCechy" runat="server" ItemType="SolEx.Hurt.Core.CechyBll">
+            <itemtemplate>
+                <%# Item.Ikona != null ? string.Format("<img src='{0}' alt='{1}' data-original-title='{2}' />", Item.Ikona.LinkWWersji("metkaCechy"), Item.PobierzWyswietlanaNazwe, Item.nazwa) : "" %>
+                <%# Item.Ikona != null ? "" : ((SolEx.Hurt.Core.CechyBll)Container.DataItem).FormatujWyswietlanaNazwe(Formatuj) %>
+            </itemtemplate>
+            <separatortemplate>, </separatortemplate>
+        </asp:Repeater>
+    </span>
+</span>

@@ -1,0 +1,139 @@
+﻿@import "_ustawienia.scss";
+
+.admin-panel {
+
+    .admin-menu-glowne{
+
+    }
+
+
+    //ogone style naglowkow ADMINA
+    .tresc-wiersz-kolumna-naglowek {
+        border-bottom: 1px solid darken($kolor-niebieski-ledwowidoczny, 10%);
+        background-color: $kolor-niebieski-ledwowidoczny;
+        padding: 5px;
+        color: #303030;
+
+        &.blad{
+            border-bottom: 1px solid darken($kolor-czerwony-ledwowidoczny, 10%);
+            background-color: $kolor-czerwony-ledwowidoczny;
+        }
+
+          &.nieaktywny{
+            border-bottom: 1px solid darken($kolor-szary-ledwowidoczny, 10%);
+            background-color: $kolor-szary-ledwowidoczny;
+            
+            
+            &, a,h1, h2, h3, h4, h5, h6, .btn  {color: $kolor-text-muted;  }
+
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #303030;
+            display: inline-block;
+            margin: 0;
+        }
+
+        &.dostep-Zalogowani {
+            background-color: $kolor-czerwony-ledwowidoczny;
+        }
+
+        &.dostep-Niezalogowani {
+            background-color: $kolor-zielony-ledwowidoczny;
+        }
+    }
+
+
+    .naglowek-glowny {
+        background-color: #8dc63f;
+        padding: 15px;
+        border-bottom: 1px solid #6e9a32;
+
+        h1, h2, h3, h4, h5, h6 {
+            color: white;
+            display: inline-block;
+            margin: 0;
+        }
+        margin-bottom: 5px;
+        margin-top:20px;
+    }
+
+    .wybor-listy-kolumn{
+        display: inline-block;
+        margin-right: 20px;
+    }
+
+
+
+    .tabela-admin {
+
+        /*.form-control-sm {
+            padding: 0.275rem 0.25rem;
+            font-size: 12px;
+        }*/
+
+        .edytowanie {
+            .edycja {
+                display: none;
+            }
+        }
+
+        .nieaktywna-linia {
+            color: $kolor-text-muted;
+        }
+    }
+
+
+
+    #ustawieniaZawartosc {
+        .ustawienia-kategorie {
+            li {
+                display: block;
+                padding: .25rem .75rem;
+                font-family: $font-tekst-rodzina;
+
+                & > a {
+                    color: #99979c;
+
+                    &:hover {
+                        color: $kolor-zaznaczone-menu;
+                    }
+                }
+            }
+        }
+
+        table#ustawienia-szukanie-tabela {
+
+            td, th {
+                //width: 30px;
+                overflow: hidden;
+                word-break: break-word;
+                padding: 10px;
+            }
+
+            td.ustawienie-nazwa {
+                padding: 10px 10px 10px 50px;
+            }
+
+            h4, h6 {
+                margin: 0;
+            }
+
+            tr.ustawienia-grupa-glowna {
+            }
+
+
+            tr.ustawienia-podgrupa {
+                h6 {
+                    padding-left: 40px;
+                }
+            }
+
+
+
+            .ustawienie-nazwa {
+                width: 400px;
+            }
+        }
+    }
+}

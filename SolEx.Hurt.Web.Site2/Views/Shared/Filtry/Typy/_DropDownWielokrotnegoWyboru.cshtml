@@ -1,0 +1,51 @@
+﻿@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Filtry.DaneDoFiltrow
+@{
+    bool filtrMaWybraneCechy = Model.WybraneCechyAtrybut != null && Model.WybraneCechyAtrybut.Any();
+    var wybraneCechy = Model.WybraneCechyAtrybut?.Select(x => x.ToString());
+}
+
+<div class="fil fil-select @(filtrMaWybraneCechy ? "fil-aktywny" : "")" 
+     data-atrybut="@Model.Atrybut.Id" data-wybrane="@Json.Encode( wybraneCechy)" data-multiwybor="@Model.MultiWybor">
+    @if (Model.Atrybut.PokazujNazweAtrybutuJakoNaglowekFiltra)
+    {
+        <label class="fil-label">@Model.Atrybut.Nazwa</label>
+    }
+    <div class="btn-group" id="filtr@(Model.Atrybut.Id)" >
+        <button type="button" class="btn dropdown-toggle btn-sm btn-secondary wlacz-tooltip" data-toggle="dropdown" title="@(filtrMaWybraneCechy ? Model.Atrybut.Nazwa:"")">
+            <div class="opcje">
+                @if (filtrMaWybraneCechy)
+                {
+                    foreach (long c in Model.WybraneCechyAtrybut)
+                    {
+                        <span>@Model.Atrybut.ListaCech.FirstOrDefault(x=> x.Id == c).Nazwa</span>
+                    }
+                }
+                else
+                {
+                    <span class="fil-naglowek">
+                        @if (Model.Atrybut.PokazujNazweAtrybutuJakoNaglowekFiltra)
+                        {
+                            @Html.Raw("-")
+                        }
+                        else
+                        {
+                            @Model.Atrybut.Nazwa
+                        }
+                    </span>
+                }
+            </div>
+        </button>
+        <div class="dropdown-menu" role="menu">
+            @foreach (var cecha in Model.Atrybut.ListaCech)
+            {
+                @*filtr wybrany ma dodac klase css filtr - wybrany dla a i ptaszek  <i class="fa fa-check"></i> wewnatrz*@
+                <a class="dropdown-item" data-id="@cecha.Id" >
+                    <span class="text">@cecha.Nazwa</span>
+                </a>
+            }
+        </div>
+
+    </div>
+</div>

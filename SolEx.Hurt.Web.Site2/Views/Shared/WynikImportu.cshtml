@@ -1,0 +1,40 @@
+﻿@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Koszyk.DaneDoWynikuImportu
+@{
+    decimal calosc = Model.Komunikaty.Count;
+    int success = Model.Komunikaty.Count(x => x.Typ == KomunikatRodzaj.success);
+    int warning = Model.Komunikaty.Count(x => x.Typ == KomunikatRodzaj.warning);
+    int danger = Model.Komunikaty.Count(x => x.Typ == KomunikatRodzaj.danger);
+    decimal successProc = calosc>0? Math.Round((success / calosc) * 100) : 0;
+    decimal warningProc = calosc > 0 ? Math.Round((warning / calosc) * 100) : 0;
+    decimal dangerProc = calosc > 0 ? Math.Round((danger / calosc) * 100) : 0;
+    string czas = DateTime.Now.ToString("yyMMddHHmmss");
+}
+
+<div id="@czas">
+    <p class="l koszyk-import-z-pliku-naglowek text-muted">
+        <span class="text-muted">@Model.Zrodlo</span>
+        <span class="close-all clickable" onclick="Close(@czas)"> @Html.PobierzTlumaczenie("usuń wszystkie komunikaty importu")</span>
+        
+        <div class="progress">
+            <div class="progress-bar progress-bar-success" role="progressbar" style="width:@successProc%">
+                @success
+            </div>
+            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:@warningProc%">
+                @warning
+            </div>
+            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:@dangerProc%">
+                @danger
+            </div>
+        </div>
+    </p>
+
+    @foreach (Komunikat komunikat in Model.Komunikaty)
+    {
+        <div class='border komunikat alert alert-@komunikat.Typ'>
+            @(komunikat.Wiadomosc)
+            <span class="fa fa-remove close" data-dismiss='alert'></span>
+        </div>
+    }
+</div>

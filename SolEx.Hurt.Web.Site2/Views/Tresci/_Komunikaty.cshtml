@@ -1,0 +1,84 @@
+﻿
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Model.Komunikaty
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Model.Klucz = Tools.PobierzInstancje.GetMd5Hash(Model.Id + "||" + SolexHelper.AktualnyKlient.Id + "||" + Model.OdKiedy.Value.ToShortDateString());
+}
+
+<center>
+    @{ Html.RenderPartial("~/Views/SzablonyMaili/Naglowek.cshtml"); }
+</center>
+
+
+
+@using (Html.BeginForm("OdpowiedzKomunikat", "Komunikaty", FormMethod.Post, new { id = "komunikat" }))
+    {
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.OdKiedy)
+        @Html.HiddenFor(x => x.Klucz);
+        @Html.HiddenFor(x => x.Przycisk);
+        <center>
+            <div class="pojemnik-komunikat c" style="width: 40%">
+                <div class="nazwa-komunikat">
+                    <h2>@Html.PobierzTlumaczenie(Model.Nazwa)</h2>
+                </div>
+                <div class="tresc-komunikatu c">
+                    @Html.PobierzTlumaczenie(Model.Tresc)
+                </div>
+
+                <div class="przyciski r">
+                    @{
+                        switch (Model.Przycisk)
+                        {
+                            case PrzyciskiDlaKlienta.PrzyciskOk:
+                            {
+                                <button type="submit" name="Odpowiedz" value="@OdpowiedzKlienta.Ok" class="btn btn-success btn-sm">@Html.PobierzTlumaczenie("Ok")</button>
+                            }
+                                break;
+                            case PrzyciskiDlaKlienta.PrzyciskTakNie:
+                            {
+                                <button type="submit" name="Odpowiedz" value="@OdpowiedzKlienta.Tak" class="btn btn-success btn-sm">@Html.PobierzTlumaczenie("Tak")</button>
+                                <button type="submit" name="Odpowiedz" value="@OdpowiedzKlienta.Nie" class="btn btn-success btn-sm">@Html.PobierzTlumaczenie("Nie")</button>
+                            }
+                                break;
+                            case PrzyciskiDlaKlienta.PtaszekZgadzamSie:
+                            {
+                                <input type="checkbox" class="ptaszek" onchange="zmianaWartosci()"/>
+                                @Html.PobierzTlumaczenie("Wyrażam zgodę")
+                                    <br/>
+                                <button type="submit" name="Odpowiedz" display="none" value="@OdpowiedzKlienta.ZgadzamSie" class="btn btn-success btn-sm odpowiedz">@Html.PobierzTlumaczenie("Zgadzam się")</button>
+                            }
+                                break;
+                            case PrzyciskiDlaKlienta.PrzyciskOd1Do6:
+                            {
+                                <button type="submit" name="Odpowiedz" value="@OdpowiedzKlienta.Pierwszy" class="btn btn-sm">@Html.PobierzTlumaczenie("1")</button>
+                                <button type="submit" name="Odpowiedz" value="@OdpowiedzKlienta.Drugi" class="btn btn-sm">@Html.PobierzTlumaczenie("2")</button>
+                                <button type="submit" name="Odpowiedz" value="@OdpowiedzKlienta.Trzeci" class="btn btn-sm">@Html.PobierzTlumaczenie("3")</button>
+                                <button type="submit" name="Odpowiedz" value="@OdpowiedzKlienta.Czwarty" class="btn btn-sm">@Html.PobierzTlumaczenie("4")</button>
+                                <button type="submit" name="Odpowiedz" value="@OdpowiedzKlienta.Piaty" class="btn btn-sm">@Html.PobierzTlumaczenie("5")</button>
+                                <button type="submit" name="Odpowiedz" value="@OdpowiedzKlienta.Szosty" class="btn btn-sm">@Html.PobierzTlumaczenie("6")</button>
+                            }
+                                break;
+                        }
+                    }
+                </div>
+
+            </div>
+        </center>
+}
+
+<script type="text/javascript">
+    $(".odpowiedz").hide();
+    function zmianaWartosci()
+    {
+        if ($('.ptaszek').is(":checked"))
+            $(".odpowiedz").show();
+        else
+            $(".odpowiedz").hide();
+    }
+</script>
+
+

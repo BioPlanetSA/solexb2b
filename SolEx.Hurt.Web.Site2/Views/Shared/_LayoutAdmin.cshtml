@@ -1,0 +1,43 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Solex B2B - Panel Administacyjny</title>
+    @Styles.Render(BundleConfig.linkDoCss)
+    
+    @* Bartek komentuje bo sie zrobil balagan *@
+    @*<script src="https://www.google.com/recaptcha/api.js?onload=ZaladujCaptcha&render=explicit" async=async defer=defer></script>*@
+
+    @Scripts.Render(BundleConfig.linkScript)
+
+    <script type="text/javascript" src="/Scripts/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="/Scripts/tinymce/jquery.tinymce.min.js"></script>
+</head>
+<body class="admin-panel">
+    <script language="javascript" type="text/javascript">
+        $.ajaxPrefilter(function (options) {
+            var url = options.url;
+            options.url = PoprawUrlOJezyk(url, '@Url.SymbolJezyka(SolexHelper.AktualnyJezyk)');
+        });
+    </script>
+    <div class="container-fluid">
+        @Html.MenuAdmin(SolexHelper.AktualnyKlient)
+    </div>
+    <div class="container-fluid">
+        @*@{   Html.RenderAction("KomunikatyUrl", "Wyglad"); }*@
+        @if (!string.IsNullOrEmpty(ViewBag.Tytul))
+        {
+            <div id="naglowek-tytul">
+                <h1>@ViewBag.Tytul</h1>
+            </div>
+        }
+    </div>
+    @*container   container-fluid*@
+    <div class="container-fluid">
+        @RenderBody()
+        <span data-containter="modal"></span>
+        <span data-containter="indywidualny"></span>
+    </div>
+</body>
+
+</html>

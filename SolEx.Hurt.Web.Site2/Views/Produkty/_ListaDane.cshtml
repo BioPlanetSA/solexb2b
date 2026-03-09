@@ -1,0 +1,189 @@
+﻿@using System.Text
+@using Newtonsoft.Json
+@using ServiceStack.Common
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ListaDane
+@{
+    string fraza = Model.AktualneParametry.szukane;
+    bool szukanie = !string.IsNullOrEmpty(fraza);
+    string linkstrony = Url.LinkProdukty(Model.AktualneParametry, Request, SolexHelper.AktualnyJezyk);
+    bool wymuszonaSciezkaFiltrow = SolexBllCalosc.PobierzInstancje.Konfiguracja.TrybPokazywaniaFiltrow == TrybPokazywaniaFiltrow.WymuszajSciezke;
+    //zamiana hashset<lon> na hashset<string> ze względu na to że jabascript nie radzi sobie z odczytywaniem longów i zeruje ostatnie liczby
+    Dictionary<int, HashSet<string>> filtryWybrane = Model.AktualneParametry.filtry?.ToDictionary(x => x.Key, x => new HashSet<string>(x.Value.Select(y => y.ToString())));
+}
+
+@if (Model.KategoriaOpis != null && Model.AktualneParametry.kategoria.HasValue)
+{
+    Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement { Tresc = Model.KategoriaOpis, Klient = Model.Klient });
+}
+else
+{
+    if (!string.IsNullOrEmpty(Model.OpisProduktowZamiastOpisuKategorii))
+    {
+        @Html.Raw(Model.OpisProduktowZamiastOpisuKategorii)
+    }
+}
+
+@if (Model.TrescOpisowa != null)
+{
+    Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement { Tresc = Model.TrescOpisowa, Klient = Model.Klient });
+}
+
+<div class="lista-produktow-zawartosc @Model.AktualneParametry.KontrolkaProduktow.KlasaListaProduktow" data-urllink="@linkstrony" data-kategoria="@Model.AktualneParametry.kategoria" data-filtry="@JsonConvert.SerializeObject(filtryWybrane)" data-szukane="@Model.AktualneParametry.szukane"
+     data-szukanaWewnetrzne="@Model.AktualneParametry.szukanaWewnetrzne" data-strona="@Model.AktualneParametry.strona" data-idKontrolki="@Model.AktualneParametry.idKontrolki" data-wymuszona-sciezka="@wymuszonaSciezkaFiltrow">
+
+    @if (!szukanie)
+    {
+        //pokazywanie naglowka -tylko jesli jestesmy w jakiejs okreslonej kategorii i o ile jest wlaczone pokazywanie naglowka
+        if (!string.IsNullOrEmpty(Model.AktualneParametry.KontrolkaProduktow.NaglowekNadProduktami) && Model.AktualneParametry.KategoriaObiekt != null)
+        {
+            <div class="produkty-naglowek c">
+                @Html.Raw(Model.AktualneParametry.KontrolkaProduktow.NaglowekNadProduktami.Replace("{kategoria}", Model.AktualneParametry.KategoriaObiekt.Nazwa).Replace("{grupa}", Model.AktualneParametry.KategoriaObiekt.Grupa.Nazwa))
+            </div>
+        }
+    }
+
+    @if (Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.KalfeKategorii != PokazywanieKafliKategorii.NiePokazuj && !(Model.LiczbaProduktow == 0 && szukanie) && !szukanie)
+    {
+        //kafle kategorii
+        bool tylkoZObrazkami = Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.KalfeKategorii == PokazywanieKafliKategorii.PokazujTylkoKategorieZeZdjeciami;
+        if (Model.AktualneParametry.kategoria.HasValue || Model.AktualneParametry.filtry!=null)
+        {
+            @Html.Action("ListaKafleKategorie", "KategorieProduktowe", new RouteValueDictionary { { "kategorieProduktoweSposobRenderowania", "ListaKafle" }, { "tylkoZObrazkami", tylkoZObrazkami }, { "kategoriId", Model.AktualneParametry.kategoria }, { "rozmiarKafla", Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.RozmiarKaflaKategorii}, { "filtry", Model.AktualneParametry.filtry } })
+        }
+        else
+        {
+            @Html.Action("ListaKafleGrupa", "KategorieProduktowe", new RouteValueDictionary { { "kategorieProduktoweSposobRenderowania", "ListaKafle" }, { "tylkoZObrazkami", tylkoZObrazkami }, { "grupaId", 0 }, { "rozmiarKafla", Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.RozmiarKaflaKategorii } })
+        }
+    }
+    @* fitrypowinny być widoczne jesli są jakieś produkty lub jest wymagane wybranie jakiś atrybutów *@
+    @if (Model.LiczbaProduktow > 0 || (Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.IdAtrybutow != null && Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.IdAtrybutow.Any()))
+    {
+        @*//PRZYCISKI*@
+        <div class="belka-nad-produktami kafle kafle-na-boki ramka-wykropkowana-dol">
+            <div class="belka-nad-produktami-lewa c">
+                @Html.Action("TrybyListyProduktow", "Produkty")
+                @Html.Action("UkryjCeny", "Produkty")
+                @Html.Action("SortowanieJednostek", "Produkty")
+            </div>
+
+            @if (szukanie)
+            {
+                <div class="wyszukiwana-fraza text-uppercase">
+                    @Html.PobierzTlumaczenie("Wyszukiwanie frazy: ")
+                    @fraza
+                    <a class="czyszczenie-szukania clickable">
+                        <span class="fa fa-remove"></span>
+                    </a>
+                </div>
+            }
+
+            <div class="belka-nad-produktami-prawa c">
+                @{
+                    //czyszczenie filtrów
+                    if (Model.AktualneParametry.filtry != null && Model.AktualneParametry.filtry.Any() && !Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.FiltryWybraneNadLista)
+                    {
+                        <a data-filtry="" class="wyczysc-filtry clickable"><i class="fa fa-remove"></i>@Html.PobierzTlumaczenie("WYCZYŚĆ FILTRY")</a>
+                    }
+                }
+
+                @if (SolexHelper.AktualnyKlient.Id != 0)
+                {
+                    @Html.Partial("~/Views/Koszyk/_PokazDrukowanieKataloguZKoszyka.cshtml")
+                }
+                
+                @Html.Action("PokazUkryjFiltry", "Filtry", new {parametry = Model.AktualneParametry})
+                @Html.Action("Sortowanie", "Produkty")
+                @Html.Action("Stronicowanie", "Stronicowanie", new {parametry = Model.AktualneParametry, lacznie = Model.LiczbaProduktow, pokazacWyborStron = false})
+            </div>
+        </div>
+
+
+        if (SolexBllCalosc.PobierzInstancje.ProfilKlienta.PobierzWartosc<bool>(SolexHelper.AktualnyKlient, TypUstawieniaKlienta.WidocznoscFiltrow))
+        {
+            //wyszukiwarka wewnetrzna TYLKO jesli mamy kategorie produktow wybrana
+            <div class="filtry ramka-wykropkowana-dol @(SolexHelper.AktualnyKlient.Role.Contains(RoleType.Przedstawiciel) ? "hidden-md-down" : "")">
+                @if (Model.AktualneParametry.kategoria.HasValue)
+                {
+                    <div class="fil fil-select wyszukiwanie-wewnetrzne" data-czasPodpowiedzi="@SolexBllCalosc.PobierzInstancje.Konfiguracja.CzasPodpowiedziSzukanie" data-szukanie="@Model.AktualneParametry.szukanaWewnetrzne">
+                        <input placeholder="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "WYSZUKAJ W KATEGORII")" type="text" class="szukanie-fraza form-control-sm" autocomplete="off" value="@Model.AktualneParametry.szukanaWewnetrzne">
+                        <i class="fa fa-search"></i>
+                    </div>
+                }
+                @Html.Action("FiltrowanieDane", "Filtry", new {parametry = Model.AktualneParametry})
+            </div>
+        }
+    }
+                    
+    @if (Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.FiltryWybraneNadLista ||(Model.LiczbaProduktow==0 && string.IsNullOrEmpty(Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.TextZastepczy)))
+    {
+        //kontrolkę wyświetlamy tylko jeśli wybiueremu ustawienie  lub jesli nie ma produktów i nie ma ustawionego textu zastępczego
+        @Html.Action("PokazAktywneFiltry", "Filtry", new { naglowek = "", stopka = "", parametry = Model.AktualneParametry, brakProduktow = Model.LiczbaProduktow ==0 })
+        
+    }
+    @if (Model.LiczbaProduktow == 0)
+    {
+        
+        if (!string.IsNullOrEmpty(Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.TextZastepczy))
+        {
+            @Html.Raw(Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.TextZastepczy)
+        }
+    }
+    else
+    {
+        <div class="lista-produktow-do-przepelnienia @(Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.PrzepelnienieNaLiscie ? "przepelnienie" : "")">
+            @Html.Partial("Widoki/" + Model.SzablonListy, Model)
+
+            <div class="produkty-dol kafle">
+                @Html.Action("Stronicowanie", "Stronicowanie", new {parametry = Model.AktualneParametry, lacznie = Model.LiczbaProduktow, pokazacWyborStron = true})
+                @if (SesjaHelper.PobierzInstancje.CzyKlientZalogowany && Model.AktualneParametry.KontrolkaProduktow.PokazujKoszyk)
+                {
+                    //kto tu zapomniał przekazać parametrów do widoku i widok się wywalał, dodałem pusty model SG bo nie wiem co powinno być a lista produktów nie działa
+                    @Html.Partial("~/Views/Koszyk/_DodajZbiorczo.cshtml", new Tuple<string, string>("", ""))
+                }
+            </div>
+
+
+            @if (Model.AktualneParametry.KontrolkaProduktowJakoListaProduktow.PrzyciskiNadrzednaKategoria)
+            {
+                //przyciski nawigacji o ile sa wlaczone
+                <div class="produkty-przyciski-nawigacja-nadole c">
+                    @if (Model.AktualneParametry.KategoriaObiekt != null || (Model.AktualneParametry.filtry != null && Model.AktualneParametry.filtry.Any()))
+                    {
+                        <a href="@Url.LinkProdukty(SolexHelper.AktualnyJezyk)" class="btn btn-warning-outline btn-lg">
+                            @Html.PobierzTlumaczenie("WSZYSTKIE PRODUKTY")
+                        </a>
+                    }
+
+                    @if (Model.AktualneParametry.KategoriaObiekt != null)
+                    {
+                        var kategoriaNadrzedna = SolexBllCalosc.PobierzInstancje.KategorieDostep.KategoriaNadrzedna(Model.AktualneParametry.KategoriaObiekt);
+                        if (kategoriaNadrzedna == null)
+                        {
+                            //czyli jestesmy na samej gorze - musimy pokazac grupe
+                            // var adres = Html.Action("LingGrupaKategorii", "GeneratorLinkow", new { symbol = Model.AktualneParametry.KategorieObiekt.Grupa.SymbolTresciOpisuGrupy, id = Model.AktualneParametry.KategorieObiekt.Grupa.Id }).ToString();
+                            var adres = Url.ZbudujLink(Model.AktualneParametry.KategoriaObiekt.Grupa, SolexHelper.AktualnyJezyk);
+
+                            if (!string.IsNullOrEmpty(adres))
+                            {
+                                <a href="@adres" class="btn btn-warning-outline btn-lg">@Html.PobierzTlumaczenie("WSZYSTKIE {0}", Model.AktualneParametry.KategoriaObiekt.Grupa.Nazwa)</a>
+                            }
+                        }
+                        else
+                        {
+                            if (kategoriaNadrzedna.Id != Model.AktualneParametry.KategoriaObiekt.Id)
+                            {
+                                <a href="@Url.ZbudujLink(kategoriaNadrzedna, SolexHelper.AktualnyJezyk)" class="btn btn-warning-outline btn-lg">@Html.PobierzTlumaczenie("WSZYSTKIE {0}", kategoriaNadrzedna.Nazwa)</a>
+                            }
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
+
+</div>

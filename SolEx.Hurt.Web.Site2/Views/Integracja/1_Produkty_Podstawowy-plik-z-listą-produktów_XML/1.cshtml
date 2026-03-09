@@ -1,0 +1,173 @@
+﻿@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Web.Site2.Helper
+@model List<ProduktKlienta>
+@{
+    Layout = null;
+}
+
+@section Opis {
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Pole w pliku</th>
+            <th>Opis pola</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>kod_kreskowy</td>
+            <td>Kod kreskowy, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>produkt_id</td>
+            <td>Id produktu, typ: liczba całkowita</td>
+        </tr>
+        <tr>
+            <td>kod</td>
+            <td>Symbol, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>nazwa</td>
+            <td>Nazwa produktu, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>Producent</td>
+            <td>Nazwa producenta, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>opis</td>
+            <td>Opis, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>LinkDoProduktu</td>
+            <td>Link do produktu, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>ZdjecieGlowneLinkUrl</td>
+            <td>Adres do głównego zdjęcia , typ: tekst</td>
+        </tr>
+        <tr>
+            <td>Kategoria</td>
+            <td>Scieżki do kategorii w których jest produkt. Separatorem jest znak ;, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>CechyWidoczne</td>
+            <td>Widoczne cechy, typ: lista</td>
+        </tr>
+        <tr>
+            <td>JednostkaPodstawowa</td>
+            <td>Podstawowa jednostka miary, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>waga</td>
+            <td>Waga brutto, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>PKWiU</td>
+            <td>PKWiU, typ: tekst</td>
+        </tr>
+        <tr>
+            <td>NaStanie</td>
+            <td>Czy produkt jest aktualnie na stanie, typ: wartość logiczna</td>
+        </tr>
+        <tr>
+            <td>ilosc_w_opakowaniu</td>
+            <td>Ilość w opakowaniu zbiorczym, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>wymagane_OZ</td>
+            <td>Czy jest wymóg zakupu pełnego opakowania zbiorczego, typ: wartość logiczna</td>
+        </tr>
+        <tr>
+            <td>ilosc</td>
+            <td>Ilość ograniczona do maksymalnego pokazywanego stanu, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>CenaPrzedRabatemNetto</td>
+            <td>Cena netto przed rabatem, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>CenaPoRabacieNetto</td>
+            <td>Cena netto po rabacie, typ: liczba ułamkowa</td>
+        </tr>
+        <tr>
+            <td>vat</td>
+            <td>Stawka vat, typ: wartość liczbowa zaokrąglona</td>
+        </tr>
+        <tr>
+            <td>CenaDetalicznaBrutto</td>
+            <td>Cena brutto detaliczna, typ: liczba ułamkowa</td>
+        </tr>
+    <tr>
+        <td>Zdjecia</td>
+        <td>Zdjęcia produktu, typ: lista</td>
+    </tr>
+        <tr>
+            <td>DostepnyOd</td>
+            <td>Data od kiedy towar będzie dostępny (tylko dla towarów brakujacych)</td>
+        </tr>
+    </tbody>
+</table>
+}
+
+@section Nazwa {
+   Uniwersalny plik XML
+}
+
+@section Szablon{
+    @if (Model != null)
+    {<root>
+            @foreach (ProduktKlienta p in Model)
+            {
+                <produkty>
+                    <kod_kreskowy><![CDATA[@p.KodKreskowy]]></kod_kreskowy>
+                    <produkt_id>@p.Id</produkt_id>
+                    <kod><![CDATA[@p.KodKreskowy]]></kod>
+                    <nazwa><![CDATA[@p.Nazwa]]></nazwa>
+                    <Producent><![CDATA[@p.MarkaNazwa]]></Producent>
+                    <opis><![CDATA[@p.Opis]]></opis>
+                    <LinkDoProduktu><![CDATA[@Url.ZbudujLink(p, SolexHelper.AktualnyJezyk, true )]]></LinkDoProduktu>
+                    <ZdjecieGlowneLinkUrl><![CDATA[@(p.ZdjecieGlowne != null ? p.ZdjecieGlowne.LinkOryginal : "")]]></ZdjecieGlowneLinkUrl>
+                    <Kategoria><![CDATA[@p.Kategorie.Where(x => x.Widoczna).Select(x => x.Sciezka).Join(";")]]></Kategoria>
+                    <CechyWidoczne>
+                        @foreach (var c in p.ListaCech.Where(x => x.Widoczna ))
+                        {
+                            <Cecha>
+                                <NazwaAtrybutu><![CDATA[@c.NazwaAtrybutu]]> </NazwaAtrybutu>
+                                <cecha_id>@c.Id</cecha_id>
+                                <atrybut_id>@c.AtrybutId</atrybut_id>
+                                <NazwaCechy><![CDATA[@c.Nazwa]]></NazwaCechy>
+                            </Cecha>
+                        }
+                    </CechyWidoczne>
+                    <JednostkaPodstawowa><![CDATA[@p.JednostkaPodstawowa]]></JednostkaPodstawowa>
+                    <waga>@p.Waga</waga>
+                    <PKWiU>@p.PKWiU</PKWiU>
+                    <NaStanie>@p.NaStanie</NaStanie>
+                    <ilosc_w_opakowaniu>@p.IloscWOpakowaniu</ilosc_w_opakowaniu>
+                    <wymagane_OZ>@p.WymaganeOz</wymagane_OZ>
+                    <ilosc>@p.IloscOgraniczonaDoMax</ilosc>
+                    <CenaPrzedRabatemNetto>@p.FlatCeny.CenaHurtowaNetto.Wartosc.DoLadnejCyfry()</CenaPrzedRabatemNetto>
+                    <CenaPoRabacieNetto>@p.FlatCeny.CenaNetto.Wartosc.DoLadnejCyfry()</CenaPoRabacieNetto>
+                    <vat>@p.Vat</vat>
+                    <CenaDetalicznaBrutto>@p.FlatCeny.CenaDetalicznaBrutto.Wartosc.DoLadnejCyfry()</CenaDetalicznaBrutto>
+                    <Zdjecia>
+                        @foreach (var z in p.Zdjecia)
+                        {
+                            <Zdjecie>
+                                <LinkOryginal><![CDATA[@z.LinkOryginal]]></LinkOryginal>
+                                <Id>@z.Id</Id>
+                                <Nazwa><![CDATA[@z.Nazwa]]></Nazwa>
+                                <Rozmiar>@z.Rozmiar</Rozmiar>
+                            </Zdjecie>
+                        }
+                    </Zdjecia>
+                    
+                    <DostepnyOd>@(p.DostawaData.HasValue ? p.DostawaData.Value.ToShortDateString() : null)</DostepnyOd>
+
+                </produkty>
+            }
+        </root>
+    }
+}

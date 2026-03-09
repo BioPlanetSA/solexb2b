@@ -1,0 +1,30 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@model  List<Ustawienie>
+
+@*@{
+    Dictionary<int, Jezyk> listaJezykow = SolexBllCalosc.PobierzInstancje.Konfiguracja.JezykiWSystemie;
+}*@
+
+@if (SolexBllCalosc.PobierzInstancje.Konfiguracja.MaileTylkoSolex)
+{
+    <div class="alert alert-danger">
+        Wychodzenie maili jest wyłączone - maile będą wysyłane do pracowników, NIE bedą wysylane do klientow
+    </div>
+}
+
+@*@Html.Partial("ListaJezykow", listaJezykow.Values.ToList())*@
+
+<div id="szablonyMailiZawartosc"></div>
+<script type="text/javascript">
+    $(document).ready(WczytajUstawnia);
+    function WczytajUstawnia() {
+        $('[data-containter="modal"]').children().modal('hide');
+        WczytajAjax($('#szablonyMailiZawartosc'), '/SzablonyMaili/Lista', PoWczytaniuUstawien);
+    }
+
+    function PoWczytaniuUstawien() {
+        $('body').scrollspy({ target: '#przewijanie'});
+    }
+</script>
+

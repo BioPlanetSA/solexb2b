@@ -1,0 +1,28 @@
+﻿@import "_ustawienia.scss";
+
+
+.integracja {
+    &.integracja-lista-plikow {
+
+        &.table {
+            width: 100%;
+        }
+    }
+
+      /*.integracja-modal-opcje {
+            padding: 10px;
+            border: 1px solid $kolor-ramki;
+        }*/
+
+    .label.format-CSV {
+        background-color: orange;
+    }
+
+    .label.format-XML {
+        background-color: dodgerblue;
+    }
+
+    .label.format-EPP {
+        background-color: palevioletred;
+    }
+}

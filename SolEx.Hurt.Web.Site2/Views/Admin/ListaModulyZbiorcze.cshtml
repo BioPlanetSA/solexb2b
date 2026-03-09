@@ -1,0 +1,18 @@
+﻿@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@model IList<SolEx.Hurt.Web.Site2.Helper.DaneListaAdmin.OperacjeZbiorcze.OperacjaZbiorczaBaza>
+        <label for="operacjeZbiorcze">Zaznaczono <span id="liczbaZaznaczonych">0</span> elementów, wybierz akcję </label>
+        <select name="modul" id="operacjeZbiorcze" class="form-control">
+            <option selected disabled hidden value=''></option>
+            @foreach (var m in Model)
+            {
+                <option value="@m.GetType().PobierzOpisTypu()">
+                    @m.PokazywanaNazwa
+                </option>
+            }
+        </select>
+<script type="text/javascript">
+    $('#operacjeZbiorcze').on('change', function() {
+        WczytajAjax($('#operacjeZbiorczeUstawienia'), '/Admin/ModulZbiorczeParametry', null, 'GET', { modul: this.value });
+    });
+</script>

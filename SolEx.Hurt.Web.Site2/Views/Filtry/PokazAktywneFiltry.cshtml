@@ -1,0 +1,106 @@
+﻿@using Newtonsoft.Json
+@using ServiceStack.Common
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Filtry.ParametryDoAktywnychFiltrow
+
+@if (!string.IsNullOrEmpty(Model.Naglowek) )
+{
+    @Html.Raw(Model.Naglowek)
+}
+@if (Model.BrakProduktow)
+{
+    <p class="alert alert-danger">@Html.PobierzTlumaczenie("Brak produktów dla wybranych filtrów")</p>
+}
+<div class="list-group czcionka-tekstowa-paragraf panel-aktywne-filtry">
+    @*<li class="list-group-item list-group-item-info">
+        @Html.PobierzTlumaczenie("Aktywne filtry")
+    </li>*@
+    @if (Model.WybraneStaleFitry != null && Model.WybraneStaleFitry.Any())
+    {
+        foreach (var s in Model.WybraneStaleFitry)
+        {
+            <div class="filtr">
+                @*@if (!string.IsNullOrEmpty(s.Key.Nazwa.Trim()))
+                {
+                    <span class="atrybut-nazwa text-muted">
+                        @s.Key.Nazwa:
+                    </span>
+                }*@
+                @foreach (var x in s.Value)
+                {
+                    <span class="cecha">
+                        @x.PobierzWyswietlanaNazwe
+                        <a class="usun-staly-filtr clickable" data-cecha="@x.Id">
+                            <span class="fa fa-remove" title="@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Usuń stały filtr")" />
+                        </a>
+                    </span>
+                }
+            </div>
+        }
+    }
+
+    @if (Model.WybraneFitry != null && Model.WybraneFitry.Any())
+    {
+        foreach (KeyValuePair<Atrybut, List<Cecha>> s in Model.WybraneFitry.OrderBy(x=>x.Key.Kolejnosc))
+        {
+            <div class="filtr">
+                @s.Key.Nazwa :
+                @foreach (Cecha x in s.Value)
+                {
+                    Dictionary<int, HashSet<long>> cechycyfry = new Dictionary<int, HashSet<long>>();
+                    foreach (KeyValuePair<Atrybut, List<Cecha>> atrybut in Model.WybraneFitry)
+                    {
+                        var cechy = new HashSet<long>(atrybut.Value.Where(y => y != x).Select(v => v.Id));
+                        if (cechy != null && cechy.Any())
+                        {
+                            cechycyfry.Add(atrybut.Key.Id, cechy);
+                        }
+                    }
+                    <span class="cecha">
+                        @x.PobierzWyswietlanaNazwe
+                        <a class="usunPojedynczyFiltr" data-cecha="@x.Id" data-atrybut="@x.AtrybutId">
+                            <span class="fa fa-remove" title="@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Usuń filtr")" />
+                        </a>
+                    </span>
+                }
+            </div>
+        }
+    }
+    @if (Model.WybraneKategorie != null)
+    {
+        <div class="filtr">
+            @Html.PobierzTlumaczenie("Kategoria:")
+
+            @Model.WybraneKategorie.Nazwa
+            <a class="wyczysc-katogorie clickable" data-kategoria="@Model.WybraneKategorie.Id">
+                <span class="fa fa-remove" title="@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Usuń kategorie")" />
+            </a>
+
+        </div>
+    }
+    
+    @if (Model.SzukaneFrazy != null && Model.SzukaneFrazy.Any())
+    {
+        <div class="filtr">
+            @Html.PobierzTlumaczenie("Wyszukiwania:")
+            @foreach (var x in Model.SzukaneFrazy)
+            {
+                @x.Value
+                <a class="wyczysc-wyszukiwanie" data-szukanie="@x.Key">
+                    <span class="fa fa-remove" title="@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Usuń wyszukiwanie")" />
+                </a>
+            }
+        </div>
+    }
+     <div class="filtr">
+        <a class="wyczysc-filtry clickable">
+           @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Usuń wszystkie filtry") <span class="fa fa-remove"/>
+        </a>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Stopka))
+{
+    @Html.Raw(Model.Stopka)
+}

@@ -1,0 +1,148 @@
+﻿@using System.Text
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.TrescDoPokazaniaElement
+@{
+    IKlient klient = Model.Klient;
+    var wiersze = Model.Tresc.Wiersze;
+}
+
+<div class="@Model.Tresc.PobierzCss()">
+    @for (int i = 0; i < wiersze.Count; i++)
+    {
+        string klasy = "";
+        TrescWierszBll el = wiersze[i];
+
+        //kontrokli zawartosc
+        StringBuilder sbKontrolki = new StringBuilder();
+        bool jestJakasKontrolka = false;
+
+        foreach (var k in el.Kolumny)
+        {
+            if (k.Dostep != AccesLevel.Wszyscy && k.Dostep != klient.Dostep)
+            {
+                continue;
+            }
+
+            string kontrolka = Html.Partial("TrescPojemnink", k).ToString();
+            if (!string.IsNullOrEmpty(kontrolka))
+            {
+                jestJakasKontrolka = true;
+
+                StringBuilder csskontrolka = new StringBuilder();
+                if (!string.IsNullOrEmpty(k.Marginesy))
+                {
+                    csskontrolka.Append($"margin:{k.Marginesy};");
+                }
+                if (!string.IsNullOrEmpty(k.Paddingi))
+                {
+                    csskontrolka.Append($"padding:{k.Paddingi};");
+                }
+                if (!string.IsNullOrEmpty(k.KolorTla))
+                {
+                    csskontrolka.Append($"background-color:{k.KolorTla};");
+                }
+                if (k.Tlo != null)
+                {
+                    csskontrolka.Append($"background-repeat:no-repeat;background-image:url('{k.Tlo.LinkOryginal}');");
+                }
+
+                string klasy1 = "";
+                if (k.DodatkoweKlasyCssKolumny != null && k.DodatkoweKlasyCssKolumny.Any())
+                {
+                    foreach (var item in k.DodatkoweKlasyCssKolumny)
+                    {
+                        klasy1 += item + " ";
+                    }
+                }
+                sbKontrolki.Append($"<div class=\"col-xs-{k.Szerokosc} kontrolka-{k.Kontrolka().GetType().Name} {k.DodatkoweKlasyCssReczneKolumny} {klasy1}\" style=\"{csskontrolka}\">");
+                sbKontrolki.Append(kontrolka);
+                sbKontrolki.Append("</div>");
+            }
+        }
+
+        bool zamykamy = (i == wiersze.Count - 1 || wiersze[i + 1].Szerokosc == 12 || wiersze[i].Szerokosc == 12);
+        bool otwieramy = (i == 0 || (wiersze[i - 1].Szerokosc == 12) || el.Szerokosc == 12);
+        bool zawijanie = !string.IsNullOrEmpty(el.AcordionNazwa);
+        string zawijanieid = "zawijanie-" + el.Id;
+        if (el.Dostep != AccesLevel.Wszyscy && el.Dostep != klient.Dostep)
+        {
+            continue;
+        }
+
+        bool jestSubrow = el.Szerokosc < 12;
+
+        StringBuilder cssMarginesyPaddingi = new StringBuilder();
+        StringBuilder cssBezMarginesowPadingow = new StringBuilder();
+
+        if (!string.IsNullOrEmpty(el.Marginesy))
+        {
+            cssMarginesyPaddingi.Append($"margin:{el.Marginesy};");
+        }
+        if (!string.IsNullOrEmpty(el.Paddingi))
+        {
+            cssMarginesyPaddingi.Append($"padding:{el.Paddingi};");
+        }
+
+        if (!string.IsNullOrEmpty(el.KolorTla))
+        {
+            cssBezMarginesowPadingow.Append($"background-color:{el.KolorTla};");
+        }
+        if (el.ObrazekTla.HasValue)
+        {
+            cssBezMarginesowPadingow.Append($"background-repeat:no-repeat;background-image:url('{el.Tlo.LinkOryginal}');");
+        }
+        if (!string.IsNullOrEmpty(el.DodatkoweKlasyCssReczne))
+        {
+            cssBezMarginesowPadingow.Append(el.DodatkoweKlasyCssReczne);
+        }
+
+        //otwieranie ROWa dla kontrolek
+        if (otwieramy)
+        {
+            if (el.DodatkoweKlasyCss != null)
+            {
+                foreach (var item in el.DodatkoweKlasyCss)
+                {
+                    klasy += item + " ";
+                }
+            }
+            @:<div @Html.Raw(jestJakasKontrolka ? $"data-class='{el.DodatkoweKlasyCssReczne} {klasy}'" : "") class="@Html.Raw(el.RozciagnijCalaSzerokosc ? "container-fluid" : "container")" style="@Html.Raw(cssBezMarginesowPadingow) @Html.Raw(cssMarginesyPaddingi)">
+            @:<div class="row @el.DodatkoweKlasyCssReczne @(jestJakasKontrolka ? klasy : "")">
+            if (zawijanie)
+            {
+                <div class="col-xs-12 zawijanie">
+                    <a href="#" data-toggle="collapse" data-target="#@zawijanieid">
+                        @Html.PobierzTlumaczenie(el.AcordionNazwa)
+                    </a>
+                </div>
+                @:<div class="collapse @Html.Raw(el.AcordionZwiniety ? "" : "in")" id="@zawijanieid">
+            }
+        }
+
+        if (jestSubrow)
+        {
+            @:<div class="col-md-@el.Szerokosc @klasy @el.DodatkoweKlasyCssReczne subrow" style="@Html.Raw(cssBezMarginesowPadingow)  @Html.Raw( otwieramy ? "" : cssMarginesyPaddingi.ToString() )">    @*marginesy i paddingi NIE dla pierwszego rowa w suborowach*@
+            @:<div class="row">
+        }
+
+        //renderowanie kontrolek
+        @Html.Raw(sbKontrolki)
+
+        //zamykanie ROWa kontrolek
+        if (jestSubrow)
+        {
+            @:</div></div>
+        }
+        if (zamykamy)
+        {
+            @:</div></div>
+            if (zawijanie)
+            {
+                @:</div>
+            }
+        }
+    }
+</div>

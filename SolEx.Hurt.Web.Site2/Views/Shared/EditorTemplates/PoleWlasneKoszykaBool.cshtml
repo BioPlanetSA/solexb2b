@@ -1,0 +1,31 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+@model  SolEx.Hurt.Core.BLL.Web.DodatkowePoleKoszyka
+@{
+    IConfigBLL config=SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja;
+}
+<div class="koszyk-parametr ramka-wykropkowana-dol">
+    @Html.Partial("PoleWlasneKoszykaCzescWspolna",Model)
+    @{
+        Dictionary<string,object> parametry=new Dictionary<string, object>();
+        parametry.Add("data-modul", Model.IdModulu);
+        parametry.Add("data-symbol", Model.Symbol);
+
+        if (Model.Wymagane)
+        {
+            parametry.Add("required", "required");
+        }
+    }
+
+
+    @foreach (var w in Model.WartosciMozliwe)
+    {
+        @Html.RadioButtonFor(n => n.WybraneWartosciString, w, parametry)
+        @Html.LabelFor(x => x.WybraneWartosciString, Html.PobierzTlumaczenie(w).ToString())<span>&nbsp;</span>
+    }
+  
+
+</div>

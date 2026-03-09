@@ -1,0 +1,93 @@
+﻿@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model List<ProduktKlienta>
+@{
+    Layout = null;
+    bool sposobyPokazywaniaStanow = SolexBllCalosc.PobierzInstancje.SposobyPokazywaniaStanowBll.CzyKlientMaSposobyPokazywaniaStanow(SolexHelper.AktualnyKlient);
+
+    if (sposobyPokazywaniaStanow == false)
+    {
+        //mze byc tak ze ktos pokazuje belke dostepnosci dla klienta, co nie jest w sposobach stanow - dlatego Bartek dodaje na dodatkowy warunek
+        if (SolexBllCalosc.PobierzInstancje.Konfiguracja.MaxPokazywanyStan > 1)
+        {
+            sposobyPokazywaniaStanow = true;
+        }
+    }
+}
+
+@section Opis {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pole w pliku", MiejsceFrazy.Integracja)</th>
+                <th>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Opis pola", MiejsceFrazy.Integracja)</th>
+                <th>
+                    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Typ", MiejsceFrazy.Integracja)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ean</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Kod kreskowy", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Id produktu", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "liczba całkowita", MiejsceFrazy.Integracja)</td>
+            </tr>
+            <tr>
+                <td>sku</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Symbol", MiejsceFrazy.Integracja)</td>
+                <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "tekst", MiejsceFrazy.Integracja)</td>
+            </tr>
+            
+            @if (sposobyPokazywaniaStanow)
+            {
+                <tr>
+                    <td>inStock</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Czy produkt jest aktualnie na stanie", MiejsceFrazy.Integracja)</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "wartość logiczna", MiejsceFrazy.Integracja)</td>
+                </tr>
+                <tr>
+                    <td>qty</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ilość (ograniczona do maksymalnego pokazywanego stanu)", MiejsceFrazy.Integracja)</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "liczba ułamkowa", MiejsceFrazy.Integracja)</td>
+                </tr>
+                <tr>
+                    <td>availability</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Data od kiedy towar będzie dostępny (tylko dla towarów brakujacych)", MiejsceFrazy.Integracja)</td>
+                    <td>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "data", MiejsceFrazy.Integracja)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section Nazwa {
+    Uniwersalny plik XML
+}
+
+@section Szablon{@if (Model != null){<products elments="@Model.Count" clientid="@SolexHelper.AktualnyKlient.Id" lang="@SolexHelper.AktualnyJezyk.Symbol" datetime="@DateTime.Now.ToString("G")">
+            @foreach (ProduktKlienta p in Model)
+            {
+                <product>
+                    <ean><![CDATA[@p.KodKreskowy]]></ean>
+                    <id>@p.Id</id>
+                    <sku><![CDATA[@p.Kod]]></sku>
+                    @if (sposobyPokazywaniaStanow)
+                    {
+                        <inStock>@p.NaStanie</inStock>
+                        <qty>@p.IloscOgraniczonaDoMax</qty>
+                        <availability>@(p.DostawaData.HasValue ? p.DostawaData.Value.ToShortDateString() : null)</availability>
+                    }
+                </product>
+            }
+        </products>
+        <!--  SOLEX B2B -->
+    }
+}

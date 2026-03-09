@@ -1,0 +1,67 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.DokumentyBll
+@{
+    string link = Url.ZbudujLink(Model,SolexHelper.AktualnyJezyk);
+}
+    <a onclick="return PokazModal(this)" href="@link" class="btn btn-secondary btn-sm reczny-tooltip" data-container="body" data-placement="top" data-toggle="tooltip" type="button" data-original-title="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"pokaż dokument")">
+        <span class="fa fa-eye"></span>
+    </a>
+
+    @if (Model.Rodzaj == RodzajDokumentu.Zamowienie || Model.Rodzaj == RodzajDokumentu.Oferta)
+    {
+        <a data-container="body" onclick="DodajDoKoszykaDokument(@Model.Id)" href="javascript:void(0);" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button" data-original-title="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"zamów ponownie") ">
+            <span class="fa fa-retweet"></span>
+        </a>
+    }
+
+    @if(Model.Rodzaj != RodzajDokumentu.Oferta)
+    {
+        var listaMozliwychFormatow = SolexBllCalosc.PobierzInstancje.DokumentyDostep.PobierzDostepneFormatyDoPobrania(Model);
+        if (listaMozliwychFormatow.Count > 0)
+        {
+            <span class="btn-group">
+                <button data-toggle="dropdown" data-container="body" type="button" class="btn btn-secondary btn-sm" data-placement="top" data-original-title="@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"pobierz dokument")">
+                    <i class="fa fa-download"></i>
+                </button>
+                <ul class="dropdown-menu pull-xs-right" role="menu">
+                    @foreach (var format in listaMozliwychFormatow)
+                    {
+                        <li>
+                        <a download href="@format.WygenerujLink()" onclick="stp(event); ">
+                                <span class="fa fa-download-alt"></span>
+                                <span>@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pobierz ") @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,format.Nazwa)</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </span>
+        }
+    }
+
+    @{
+        var listy = Model.ListyPrzewozowe;
+        if (listy != null && listy.Any())
+        {
+            <span class="btn-group">
+                <button data-toggle="dropdown" data-container="body" type="button" class="btn btn-secondary btn-sm reczny-tooltip " data-placement="top"
+                        data-original-title="@Html.PobierzTlumaczenie("zlokalizuj przesyłkę")">
+                    <span class="fa fa-truck"></span>
+                </button>
+                <ul class="dropdown-menu pull-xs-right" role="menu">
+                    @foreach (HistoriaDokumentuListPrzewozowy list in listy)
+                    {
+                        <li>
+                            <a href="@list.Link" onclick="stp(event)" target="_blank">
+                                <span class="fa fa-map-marker"></span>
+                                <span>@Html.PobierzTlumaczenie("Zobacz status listu")  : <b>@list.NumerListu</b></span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </span>
+        }
+    }
+    

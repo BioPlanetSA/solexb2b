@@ -1,0 +1,18 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model long
+
+@{
+    var frazaDodawanie = Html.PobierzTlumaczenie("Poinformuj mnie, gdy towar będzie dostępny");
+    var frazaUsuwanie = Html.PobierzTlumaczenie("Nie informuj mnie, gdy produkt będzie dostępny");
+    bool juzDodane = SolexHelper.AktualnyKlient.IdInfoODostepnosci != null && SolexHelper.AktualnyKlient.IdInfoODostepnosci.Contains(Model);
+}
+
+
+
+<a data-identyfikator="dostepnosc-@Model" onclick="InfoDostepnosc(this, @Model)"
+   class="info-dostepnosc powiadom-o-dostepnosci tooltip-dwustanowy @(juzDodane ? "dodano-info dwustanowy-jest" : "" )"
+   data-dwustanowy-title-brak="@frazaDodawanie"
+   data-dwustanowy-title-jest="@frazaUsuwanie"
+   title="@(juzDodane ? @frazaUsuwanie : @frazaDodawanie)">
+        <span class="fa fa-envelope"></span>
+</a>

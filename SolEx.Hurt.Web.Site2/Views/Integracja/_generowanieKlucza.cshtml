@@ -1,0 +1,18 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+
+<div class="alert alert-warning c">
+    <p>
+    @Html.PobierzTlumaczenie("Korzystanie z integracji jest zabezpieczone przez klucz API.")
+
+    @if (SolexHelper.AktualnyKlient.DataZmianyKlucza.HasValue)
+    {
+        <br/>
+        @Html.PobierzTlumaczenie("Data ostatniej zmiany klucza : ")
+        @SolexHelper.AktualnyKlient.DataZmianyKlucza.Value.ToString("yyyy-MM-dd hh:mm")
+        <br/>
+    }
+        <a class="alert-link r" onclick="GenerowanieKluczaAPi(event, this, '#GenerowanieKluczaPojemnik');" href="@Url.LinkDoApiIntegracja(SolexHelper.AktualnyJezyk)">
+            @Html.PobierzTlumaczenie("Kliknij aby wygenerować nowy klucz.")
+        </a>
+</p>
+</div>

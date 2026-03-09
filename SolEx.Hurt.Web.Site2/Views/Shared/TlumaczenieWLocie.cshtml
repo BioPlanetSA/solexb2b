@@ -1,0 +1,72 @@
+﻿@using System.Web.Mvc.Html
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow
+@model  List<SolEx.Hurt.Web.Site2.Controllers.TlumaczenieDoEdycji>
+@{
+    List<DaneDoTabow> taby = new List<DaneDoTabow>();
+    var jezyki = SolexBllCalosc.PobierzInstancje.DostepDane.Pobierz<Jezyk>(null).ToDictionary(x => x.Id, x => x);
+    foreach (KeyValuePair<int, Jezyk> pair in jezyki)
+    {
+        taby.Add(new DaneDoTabow("#tab" + pair.Key, pair.Value.Nazwa, pair.Key == 1, pair.Value.Nazwa,false));
+
+    }
+}
+<div class="modal fade ustawienia-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (taby != null && taby.Any())
+                {
+                    @Html.Partial("_Taby", taby)
+                }
+            </div>
+            <div class="modal-body">
+                <div class="tab-content">
+                    @using (Html.BeginForm("ZapiszTlumaczenie", "Admin", FormMethod.Post, new { id = "edycjafrazy" }))
+                    {
+                        for(int i=0; i<Model.Count;i++)
+                        {
+                            <div role="tabpanel" class="tab-pane" style="@(Model[i].Jezyk != 1 ? "display:none" : "")" id="tab@(Model[i].Jezyk)">
+                                @Html.HiddenFor(m => Model[i].Hash)
+                                @Html.HiddenFor(m => Model[i].Jezyk)
+                                @Html.TextAreaFor(m => Model[i].Tlumacznie, 5, 120, null)
+                            </div>
+                        }
+                        <button type="submit" class="btn btn-secondary" >Zapisz</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+                    }
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script language="javascript" type="text/javascript">
+    $('#taby a').click(function (e) {
+        e.preventDefault();
+        $('.tab-pane').hide();
+        var tab = $(this).attr('href');
+        $(tab).show();
+    });
+    $("button:submit")
+     .on("click",
+         function () {
+             var sender = this;
+             var formName = $(this).closest('form').attr('id');
+             if (document.forms[formName].checkValidity()) {
+                 var postData = $('#' + formName).serializeArray();
+                 var formURL = $('#' + formName).attr("action");
+                 sender.disabled = true;
+                 $.ajax(
+                 {
+                     url: formURL,
+                     type: "POST",
+                     data: postData,
+                     success: function (data) {
+                         $('[data-dismiss="modal"]').click();
+                         PodmienTlumaczenie();
+                     }
+                 });
+             }
+         });
+</script>

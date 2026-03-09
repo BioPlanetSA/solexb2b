@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Efekty specjalne</title>
+</head>
+<body>
+    <h3>Metki</h3>
+
+    metka z ogonkiem:
+    metki bez ogonka:
+
+    <h3>Zmiana obrazka po najechaniu</h3>
+    <code>
+        <img src='LibraryTransparent.png' width='120' height='70' onmouseover="this.src='LibraryHoverTrans.png';" onmouseout="this.src='LibraryTransparent.png';" />
+    </code>
+
+
+    <h3>
+        Dodanie tooltipa - podpowiedzi po najechaniu kursorem
+    </h3>
+
+    Do dowolnego obiektu (np. span) trzeba nadać klase css: <code>wlacz-tooltip</code> oraz dodać element  <code>data-original-title="------ tu wpisz komunikat ---"</code>
+    <br />Całość może wyglądać tak:
+
+    <code>
+        <span class="wlacz-tooltip" data-original-title="tresc do pokazania" />
+    </code>
+
+
+    <h3>Obrazek / banner przylepiony do samej góry - nachodzący pod menu</h3>
+
+    należy na wybranym wierszu nadac klasę css <b>ustawJakoTopBanner</b>
+
+    <h3>Projektowanie strony</h3>
+
+    Zawsze zaczynamy od wersji mobilnej - dopiero kiedy mobilna działa dobrze, idziemy w kierunku pełnej wersji.
+
+
+    <h3>Zmiana obrazka po najechaniu - efekt hover</h3>
+
+    Aby dynamicznie zmienić obrazek po najechaniu myszką wykonujemy kroki:<br />
+    a. dodajmy obrazek w edytorze, wybierając obrazek który będzie obrazkiem głównym (normalnie widocznym)<br />
+    b. w kodzie HTML dodajemy do obrazka atrybuty data-src (obrazek normalny) oraz data-hover (obrazek do załadowania po najechaniu myszką)<br />
+    c. dodajemy klase css podmieniajObrazkiPoNajechaniu<br />
+
+    Przykład:<br />
+    
+    <pre><code>
+        &lt;img class="podmieniajObrazkiPoNajechaniu" alt="" src="../../zasoby/obrazki/2016-02-08_09h52_50.png" data-src="../../zasoby/obrazki/2016-02-08_09h52_50.png" data-hover="../../zasoby/obrazki/2016-02-08_09h02_03.png" &gt;
+   </code></pre>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+
+@{
+    int jezyjId = SolexHelper.AktualnyJezyk.Id;
+}
+
+<div class="btn-group ">
+    <button type="button" class="btn btn-primary-outline dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Edycja w @SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja.JezykiWSystemie[jezyjId].Nazwa  <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-right" style="min-width: 125px">
+        @foreach (Jezyk j in SolexBllCalosc.PobierzInstancje.Konfiguracja.JezykiWSystemie.Values)
+        {
+            <li>
+                <a href="@Url.ZbudujLink(j,SolexHelper.AktualnyKlient)">@string.Format("Przełącz na {0}", j.Nazwa)</a>
+            </li>
+        }
+</ul>
+</div>

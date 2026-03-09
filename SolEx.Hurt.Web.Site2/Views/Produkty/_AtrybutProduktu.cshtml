@@ -1,0 +1,21 @@
+﻿@using SolEx.Hurt.Core;
+@using SolEx.Hurt.Core.ModelBLL
+@model CechyBll
+
+<span class="atrybut-produktu">
+    <span class="atrybut-cechy">
+       @{
+           if (Model.Ikona != null)
+           {
+            <img src="@Model.Ikona.LinkWWersji("metkaCechy")" alt="@Model.PobierzWyswietlanaNazwe" id="cecha@(Model.Id)" class="wlacz-tooltip" data-original-title="@Model.PobierzNazweCechyZNazwaAtrybutu()" />
+           }
+           if (Model.Ikona == null)
+           {
+            <span class="atrybut-opis wlacz-tooltip" data-original-title="@Model.PobierzNazweCechyZNazwaAtrybutu()">
+                @Model.PobierzWyswietlanaNazwe
+            </span>
+           }
+    }
+    </span>
+</span>
+

@@ -1,0 +1,264 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model IList<Tuple<IProduktKlienta,ParametryIlosciProduktu>>
+@{
+    Dictionary<long,ParametryIlosciProduktu> slownikIlosc = new Dictionary<long, ParametryIlosciProduktu>();
+    int nr = 0;
+    Dictionary<string, List<IProduktKlienta>> slownikRodzin = new Dictionary<string, List<IProduktKlienta>>();
+    WidocznoscKolumnKoszyk widocznoscKolumn = ViewBag.GratisyKolumny;
+    foreach (var a in Model)
+    {
+        slownikIlosc.Add(a.Item1.Id, a.Item2);
+
+        string rodzina = a.Item1.Rodzina??"";
+        if (!slownikRodzin.ContainsKey(rodzina))
+        {
+            slownikRodzin.Add(rodzina, new List<IProduktKlienta>() { a.Item1 });
+        }
+        else
+        {
+            slownikRodzin[rodzina].Add(a.Item1);
+        }
+    }
+    string wartoscKatalogowa = string.Empty;
+
+    switch (widocznoscKolumn.CenaHurtowa)
+    {
+        case JakieCenyPokazywac.Brutto:
+            wartoscKatalogowa += "brutto/";
+            break;
+        case JakieCenyPokazywac.Netto:
+            wartoscKatalogowa += "netto/";
+            break;
+        case JakieCenyPokazywac.NettoBrutto:
+            wartoscKatalogowa += "netto/brutto/";
+            break;
+        case JakieCenyPokazywac.BruttoNetto:
+            wartoscKatalogowa += "brutto/netto/";
+            break;
+    }
+
+    string NaglowekCenaKatalogowa = string.Format("({0})", wartoscKatalogowa.TrimEnd('/'));
+    int miejsceNazwyRodziny = 2;
+
+
+    string wartosc = string.Empty;
+
+    switch (widocznoscKolumn.CenaJednostowa)
+    {
+        case JakieCenyPokazywac.Brutto:
+            wartosc += "brutto/";
+            break;
+        case JakieCenyPokazywac.Netto:
+            wartosc += "netto/";
+            break;
+        case JakieCenyPokazywac.NettoBrutto:
+            wartosc += "netto/brutto/";
+            break;
+        case JakieCenyPokazywac.BruttoNetto:
+            wartosc += "brutto/netto/";
+            break;
+    }
+    if (widocznoscKolumn.PokazywacVat)
+    {
+        wartosc += "VAT/";
+    }
+    string NaglowekCena = string.Format("({0})", wartosc.TrimEnd('/'));
+
+    var saStany = SolexBllCalosc.PobierzInstancje.SposobyPokazywaniaStanowBll.WszystkieSposobyKlienta(SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk.Id, SolexHelper.AktualnyPrzedstawiciel);
+}
+
+<div class="modal fade dokument" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="text-align: left;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">
+                    @Html.PobierzTlumaczenie("Wybór pozycji gratisowych")
+                </h3>
+            </div>
+            <div class="modal-body">
+                <table class="table table-condensed lista-produktow">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        @if (widocznoscKolumn.PokazywacZdjecieProduktu)
+                        {
+                            <th class="zdjecie"></th>
+                            miejsceNazwyRodziny++;
+                        }
+                        @if (widocznoscKolumn.PokazywacMetkeRodzinowa)
+                        {
+                            <th></th>
+                            miejsceNazwyRodziny++;
+                        }
+                        @if (widocznoscKolumn.PokazywacNazweProduktu || widocznoscKolumn.PokazywacSymbolProduktu || widocznoscKolumn.PokazywacKodKreskowy)
+                        {
+                            <th class="dane">@Html.PobierzTlumaczenie("Produkt")</th>
+                            miejsceNazwyRodziny++;
+                        }
+                        @if (widocznoscKolumn.CenaHurtowa != JakieCenyPokazywac.Brak)
+                        {
+                            <th class="cena-hurtowa">@Html.PobierzTlumaczenie("Cena Hurtowa")<br/>@Html.PobierzTlumaczenie(@NaglowekCenaKatalogowa)</th>
+                            miejsceNazwyRodziny++;
+                        }
+                        @if (widocznoscKolumn.CenaJednostowa != JakieCenyPokazywac.Brak || widocznoscKolumn.PokazywacVat)
+                        {
+                            <th class="NaglowekTwojaCena cena-koszyk">@Html.PobierzTlumaczenie("Cena")<br/>@Html.PobierzTlumaczenie(@NaglowekCena)</th>
+                            miejsceNazwyRodziny++;
+                        }
+                        @if (!widocznoscKolumn.UkrywacJednoskeMiaryIIlosc)
+                        {
+                            <th class="ilosc c">@Html.PobierzTlumaczenie("Jedn. Miary / Ilość")</th>
+                            miejsceNazwyRodziny++;
+                        }
+                        else
+                        {
+                            <th class="ilosc c">@Html.PobierzTlumaczenie("Ilość")</th>
+                            miejsceNazwyRodziny++;
+                        }
+
+                        @if (saStany != null && saStany.Any())
+                        {
+                            <th class="c stan">@Html.PobierzTlumaczenie("Stan")</th>
+                            miejsceNazwyRodziny++;
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var slownik in slownikRodzin)
+                    {
+                        bool jestRodzina = !string.IsNullOrEmpty(slownik.Key);
+                        bool nowaRodzina = true;
+                        foreach (var produkt in slownik.Value)
+                        {
+                            nr++;
+                            string link = Url.ZbudujLink(produkt, SolexHelper.AktualnyJezyk);
+                            <tr>
+                                <td class="SzerokoscKolumnaNumer">@(nr)</td>
+                                @{
+                                    int ilosc = 1;
+                                    int iloscKolum = 2;
+                                    if (jestRodzina)
+                                    {
+                                        ilosc = slownikRodzin[slownik.Key].Count;
+                                        iloscKolum = 1;
+                                    }
+                                }
+                                @if (widocznoscKolumn.PokazywacZdjecieProduktu && nowaRodzina)
+                                {
+
+                                    <td rowspan="@ilosc" colspan="@iloscKolum">
+                                        @{
+                                            Html.RenderPartial("_zdjecie", new ParametryPrzekazywaneDoZdjec(produkt, widocznoscKolumn.RozmiarZdjecia, true, RodzajMetki.KoszykGratis, "foto link-szczegoly", link));
+                                            nowaRodzina = false;
+                                        }
+                                    </td>
+
+                                }
+                                @if (widocznoscKolumn.PokazywacMetkeRodzinowa && jestRodzina)
+                                {
+                                    <td>
+
+                                        @{Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkiRodzina(MetkaPozycjaRodziny.Kolumna), string.Format("metki {0}", MetkaPozycjaRodziny.Kolumna))); }
+                                    </td>
+                                }
+                                @if (widocznoscKolumn.PokazywacNazweProduktu || widocznoscKolumn.PokazywacSymbolProduktu || widocznoscKolumn.PokazywacKodKreskowy)
+                                {
+                                    <td class="l Nazwa">
+
+                                        @if (widocznoscKolumn.PokazywacNazweProduktu)
+                                        {
+                                            Html.RenderPartial("PolaProduktu/Nazwa", new ParametryPrzekazywaneDoNazwy(produkt, RodzajMetki.GratisyPopUp, "produkt-nazwa link-szczegoly", link, false, true, SolexHelper.AktualnyKlient.IdUlubionych));
+                                        }
+                                        <br/>
+                                        <div class="text-muted">
+                                            @if (widocznoscKolumn.PokazywacSymbolProduktu)
+                                            {
+                                                <span class="kod">@(produkt.Kod)</span>
+                                            }
+                                            @if (widocznoscKolumn.PokazywacKodKreskowy && !string.IsNullOrEmpty(produkt.KodKreskowy))
+                                            {
+                                                <span class="kod-kreskowy">@(produkt.KodKreskowy)</span>
+                                            }
+                                        </div>
+                                        @if (saStany != null && saStany.ContainsKey(PozycjaLista.NaDole))
+                                        {
+                                            <br/>
+                                            Html.StanyProduktowWszystkie(produkt, saStany[PozycjaLista.NaDole]);
+
+                                        }
+                                        @{
+                                            Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkaPozycjaKoszykGratisyPopUp(MetkaPozycjaKoszykGratisyPopUp.PodNazwa), string.Format("metki {0}", MetkaPozycjaKoszykGratisyPopUp.PodNazwa)));
+                                        }
+                                    </td>
+                                }
+                                @if (widocznoscKolumn.CenaHurtowa != JakieCenyPokazywac.Brak)
+                                {
+                                    <td class="r cenaHurtowa">
+
+                                        @{
+                                            Html.RenderPartial("_Cena", new CenaDoPokazania(produkt.FlatCeny.CenaDetalicznaNetto, produkt.FlatCeny.CenaDetalicznaBrutto, null, null, "netto", "", "wartosc-pozycji koszyk", "", widocznoscKolumn.CenaHurtowa, "brutto", null, null));
+                                        }
+                                        @if (widocznoscKolumn.PokazywacWartoscVat && (produkt.FlatCeny.CenaDetalicznaNetto != 0 || produkt.FlatCeny.CenaDetalicznaNetto == 0 && SolexBllCalosc.PobierzInstancje.Konfiguracja.ZastepujCeneZerowaIkonkaTelefonu))
+                                        {
+                                            <span class="text-muted produkt-cena-klienta-druga">produkt.Vat)%</span>
+
+                                        }
+                                    </td>
+                                }
+                                @if (widocznoscKolumn.CenaJednostowa != JakieCenyPokazywac.Brak || widocznoscKolumn.PokazywacVat)
+                                {
+                                    <td class="r CenaPoRabacie">
+                                        @if (widocznoscKolumn.CenaJednostowa != JakieCenyPokazywac.Brak)
+                                        {
+                                            Html.RenderPartial("_Cena", new CenaDoPokazania(produkt.FlatCeny, "", "", "wartosc-pozycji koszyk", "", widocznoscKolumn.CenaJednostowa, ""));
+                                        }
+                                        @if (widocznoscKolumn.PokazywacWartoscVat && (produkt.FlatCeny.CenaDetalicznaNetto != 0 || produkt.FlatCeny.CenaDetalicznaNetto == 0 && SolexBllCalosc.PobierzInstancje.Konfiguracja.ZastepujCeneZerowaIkonkaTelefonu))
+                                        {
+                                            <br/>
+                                            <span class="text-muted produkt-cena-klienta-druga">@produkt.Vat)%</span>
+                                        }
+                                    </td>
+                                }
+                                <td class="r kolumna-dodawanie-do-koszyka">
+                                    @if (saStany != null && saStany.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem))
+                                    {
+                                        Html.StanyProduktowWszystkie(produkt, saStany[PozycjaLista.KolumnaDodajDoKoszykaNadKoszykiem]);
+                                        <br/>
+                                    }
+                                    @Html.EditorFor(p => slownikIlosc[produkt.Id], new {ukryc = widocznoscKolumn.UkrywacJednoskeMiaryIIlosc})
+                                    @if (saStany != null && saStany.ContainsKey(PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem))
+                                    {
+                                        <br/>
+                                        Html.StanyProduktowWszystkie(produkt, saStany[PozycjaLista.KolumnaDodajDoKoszykaPodKoszykiem]);
+                                    }
+                                </td>
+                                @if (saStany != null && saStany.ContainsKey(PozycjaLista.Kolumna))
+                                {
+                                    <td class="c kolumna-stany-produktow">
+                                        @{
+                                            Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkaPozycjaKoszykGratisyPopUp(MetkaPozycjaKoszykGratisyPopUp.NadStanemKolumna), string.Format("metki {0}", MetkaPozycjaKoszykGratisyPopUp.NadStanemKolumna)));
+                                            Html.StanyProduktowWszystkie(produkt, saStany[PozycjaLista.Kolumna]);
+                                            Html.RenderPartial("Produkty/_MetkiProduktu", new MetkaParametry(produkt.PobierzMetkaPozycjaKoszykGratisyPopUp(MetkaPozycjaKoszykGratisyPopUp.PodStanemKolumna), string.Format("metki {0}", MetkaPozycjaKoszykGratisyPopUp.PodStanemKolumna)));
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

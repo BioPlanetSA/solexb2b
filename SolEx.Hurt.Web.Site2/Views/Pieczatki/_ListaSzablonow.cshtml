@@ -1,0 +1,121 @@
+﻿@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@model Tuple<SolEx.Hurt.Model.PieczatkiTyp, List<SolEx.Hurt.Model.Helpers.Pieczatki.PieczatkiSzablonyViewModel>, SolEx.Hurt.Model.Interfaces.IKlient>
+
+@{
+    var typ = Model.Item1;
+    PieczatkiSymbol symbol;
+    Enum.TryParse(typ.SymbolTypu, out symbol);
+    int symbolid = (int)symbol;
+}
+
+
+<div class="pieczatka-kontener">
+    @if (Model.Item3.CzyAdministrator)
+    {
+        <a href="/pieczatki/edytor/@typ.Id/@symbolid/@typ.Wysokosc_mm/@typ.Szerokosc_mm" class="btn btn-primary link-ladujszablon" style="margin:0">Zaprojektuj nowy szablon</a>
+    }
+    
+    <div class="page-header">
+        <h2>@Model.Item1.Nazwa <small>lista szablonów </small></h2>
+    </div>
+
+    @if (Model.Item2.Any())
+    {
+        <ul class="group-main-area">
+
+
+        @foreach (var item in Model.Item2.OrderBy(x => x.Szerokosc_px))
+        {
+            var klasaCss = "svg wlacz-tooltip";
+            var dodatkoweStyle = "";
+
+            //Jezeli nie sa okrale i owalne to dodaje ramke
+            if (item.SymbolTypu != "pieczatka_okragla" && item.SymbolTypu != "pieczatka_owalna")
+            {
+                //styl ramka tworzy obramowanie wogół diva(tyczy się tylko prostokątu i kwadratu)
+                klasaCss = "svg ramka wlacz-tooltip";
+            }
+            else if (item.SymbolTypu == "pieczatka_okragla" && !string.IsNullOrEmpty(item.SciezkaDoPlikuSzablonuSVG))
+            {
+                klasaCss = "svg wlacz-tooltip";
+
+            }
+            else
+            {
+                decimal szerokosc = Math.Ceiling(item.Szerokosc_px);
+                decimal wysokosc = Math.Ceiling(item.Wysokosc_px);
+                //dodatkowe style rysujące okrąg
+                dodatkoweStyle = ";border: 1px solid #000; width: " + szerokosc + "px; height: " + wysokosc + "px; " +
+                                 "-moz-border-radius: " + szerokosc + "px/ " + wysokosc + "px;" +
+                                 "-webkit-border-radius: " + szerokosc + "px/ " + wysokosc + "px;" +
+                                 "border-radius: " + szerokosc + "px/ " + wysokosc + "px;";
+            }
+
+            //Jeżeli w bazie znajdują się tylko wymiary, a nie ma linku do szablonu to sami rysujemy wybraną figurę
+            <li style="list-style: none">
+                <div class="pieczatka-element" id="@item.SymbolTypu">
+                    <div class="pieczatka-element-naglowek">
+
+                        <h4>
+                            <strong style="color: white;">@item.NazwaSzablonu</strong>
+                            @if (Model.Item3.CzyAdministrator)
+                            {
+                                <a href="#" data-href="/pieczatki/szablony/usun/@item.TypId/@item.Id" data-typ="@item.NazwaSzablonu" data-toggle="modal" class="pieczatki-kontener-naglowek-link" data-target="#confirm-delete">Usuń</a>
+                                <a href="/pieczatki/szablony/edytuj/@item.TypId/@item.Id" class="pieczatki-kontener-naglowek-link">Edytuj</a>
+                            }
+                        </h4>
+                    </div>
+                    <div class="pieczatka-element-kontener">
+                        @if (string.IsNullOrEmpty(@item.SciezkaDoPlikuSzablonuSVG))
+                        {
+                            <a href="/pieczatki/edytor/@item.Id" class="pieczatka-element-obrazek @klasaCss" title="" data-original-title="Kliknij, aby wybrać szablon">
+                                <div class="template-border" style="width: @(item.Szerokosc_px)px; height: @(item.Wysokosc_px)px @(dodatkoweStyle)" type="image/svg+xml" data="@item.SciezkaDoPlikuSzablonuSVG"></div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="/pieczatki/edytor/@item.Id" class="pieczatka-element-obrazek @klasaCss" title="" data-original-title="Kliknij, aby wczytać wybrany szablon">
+                                <object class="template-border" style="width: @(item.Szerokosc_px)px; height: @(item.Wysokosc_px)px" type="image/svg+xml" data="@item.SciezkaDoPlikuSzablonuSVG"></object>
+                            </a>
+                        }
+                        <div class="pieczatka-szablony-tekst">
+                            @Html.Raw(item.OpisSzablonu)
+                        </div>
+                        <div class="szablon-element-przycisk">
+                            <a href="/pieczatki/edytor/@item.Id" class="btn btn-success link-ladujszablon">Wybierz</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+</ul>
+    }
+</div>
+
+
+
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="kasuj-typ" style="color:white"></div>
+            </div>
+            <div class="modal-body">
+                Na pewno chcesz usunąć wybrany szablon?
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger btn-ok" style="color:white">Usuń</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#confirm-delete').on('show.bs.modal', function (e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        $('#kasuj-typ').text($(e.relatedTarget).data('typ'));
+    });
+</script>

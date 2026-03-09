@@ -1,0 +1,1 @@
+﻿  UPDATE BlogWpis SET LinkAlternetywny = '{Url:'+LinkAlternetywny+',Tryb:ObecneOkno}' WHERE LinkAlternetywny IS NOT NULL AND LinkAlternetywny NOT LIKE '{"Url":"%'

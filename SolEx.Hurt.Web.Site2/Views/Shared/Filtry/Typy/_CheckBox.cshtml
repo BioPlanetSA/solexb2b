@@ -1,0 +1,78 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Filtry.DaneDoFiltrow
+
+@{
+    string klasaCssGlowna = null;
+    string klasaCssELement = null;
+    string stylCssElementu = null;
+
+    if (Model.Button)
+    {
+        klasaCssGlowna = "fil-button";
+        klasaCssELement = "btn btn-primary-outline";
+    }
+    else
+    {
+        klasaCssGlowna = "fil-cb";
+        klasaCssELement = "a-checkbox";
+    }
+
+    if (Model.WyswietlajZdjecie)
+    {
+        klasaCssGlowna += " fil-zdjecie";
+    }
+
+    if (!string.IsNullOrEmpty(Model.Atrybut.Szerokosc))
+    {
+        if (Model.Atrybut.Szerokosc.EndsWith("px") || Model.Atrybut.Szerokosc.EndsWith("%"))
+        {
+            stylCssElementu += "max-width: "  + Model.Atrybut.Szerokosc;
+        }
+        else
+        {
+            stylCssElementu += string.Format("max-width: {0}px", Model.Atrybut.Szerokosc);
+        }
+    }
+}
+
+<div class="fil fil-@(Model.Atrybut.Id) @klasaCssGlowna fil-multi">
+    @if (Model.Atrybut.PokazujNazweAtrybutuJakoNaglowekFiltra)
+    {
+        <label class="fil-label">@Model.Atrybut.Nazwa</label>
+    }
+    <div class="opcje" title="@Model.Atrybut.Nazwa.Trim()">
+        @foreach (var x in Model.Atrybut.ListaCech.Where(x=>x.Widoczna))
+        {
+            bool wybrany = Model.WybraneCechyAtrybut != null && Model.WybraneCechyAtrybut.Contains(x.Id);
+            string styleCssInline = null;
+
+                <a class="@Html.Raw(wybrany ? "filtr-wybrany a-checkbox-checked active" : "") @klasaCssELement @x.CssKlasy" style="@stylCssElementu" data-id="@x.Id" data-atrybut="@Model.Atrybut.Id" data-wybrany="@wybrany">
+                    @if (Model.WyswietlajZdjecie)
+                    {
+                        if (x.Ikona != null)
+                        {
+                            @Html.Image(x.Ikona, "ikona70", x.PobierzWyswietlanaNazwe, new Dictionary<string, string> { { "data-original-title", x.PobierzNazweCechyZNazwaAtrybutu() } })
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja.DomyslneZdjecieSciezka))
+                            {
+                                @Html.Image(SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja.DomyslneZdjecieSciezka, "ikona70", x.PobierzWyswietlanaNazwe, new Dictionary<string, string> { { "data-original-title", x.PobierzNazweCechyZNazwaAtrybutu() } })
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Model.Button)
+                        {
+                            <div class="a-checkbox @Html.Raw(wybrany ? "a-checkbox-checked" : "")">@x.Nazwa</div>
+                        }
+                        else
+                        {
+                            @x.Nazwa
+                        }
+                    }
+                </a>
+        }
+    </div>
+</div>

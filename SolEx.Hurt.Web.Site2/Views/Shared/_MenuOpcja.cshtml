@@ -1,0 +1,98 @@
+﻿@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.Tresci.DaneDoMenuOpcja
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+
+@{
+    string linkmenu = Url.ZbudujLink(Model.ElementMenuDoRenderowania.Item.TrescBll, SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk);
+}
+
+<li class="menu-pozycja nav-item @Model.ElementMenuDoRenderowania.Item.TrescBll.PobierzCss() dropdown @(Model.RenderowacSubmenu ? "has-subcategories" : "" )" data-menu-opcja-id="@Model.ElementMenuDoRenderowania.Item.Id">
+    <a class="clickable @(Model.RenderowacSubmenu ? "dropdown-toggle" : "") nav-link menu-klasyczne-link"
+           @Html.Raw(!string.IsNullOrEmpty(linkmenu) ? string.Format("href=\"{0}\"", linkmenu) : "") @Html.Raw(Model.RenderowacSubmenu ? " data-hover=\"dropdown\" data-delay=\"1000\" data-close-others=\"true\"" : "")>
+            @if (Model.ElementMenuDoRenderowania.Item.TrescBll.Symbol != null && Model.ElementMenuDoRenderowania.Item.TrescBll.Symbol.ToLower() == "home")
+            {
+                <span class="menu-opcja-strona-glowna">
+                    <i class='fa fa-home'></i>
+                    @*<span>@Html.PobierzTlumaczenie("Strona główna")</span>*@
+                </span>
+            }
+            else
+            {
+                @Model.ElementMenuDoRenderowania.Item.Nazwa
+            }
+        </a>
+
+    @if (Model.RenderowacSubmenu)
+    {
+        <div class="dropdown-menu cien-bez-topu @Model.ElementMenuDoRenderowania.Item.TrescBll.PobierzCss()">
+            <div class="zawartosc">
+                @if (Model.ElementMenuDoRenderowania.Children.Any())
+                {
+                    <ul class="list-unstyled">
+                        @foreach (TreeItem<ElementMenu> d in Model.ElementMenuDoRenderowania.Children)
+                        {
+                            bool jesttresc = d.Item.Reklama != null || d.Children.Any();
+                            <li class="@d.Item.TrescBll.PobierzCss()" data-menu-opcja-id="@d.Item.Id">
+                                <a class="nav-link menu-klasyczne-link dropdown-item" tabindex="-1" href="@Url.ZbudujLink(d.Item.TrescBll, SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk)" @Html.Raw(jesttresc ? string.Format("data-opis=\"{0}\"", d.Item.Id) : "")>@d.Item.Nazwa</a>
+                            </li>
+                        }
+                    </ul>
+                }
+
+                @if (Model.Submenu_RenderujTeksteWSubmenu || Model.Submenu_RenderujGrafikeWSubmenu)
+                {
+                    <div class="opisy podmenu-cale-okno">
+                        @if (Model.Submenu_RenderujGrafikeWSubmenu)
+                        {
+                            Model.ElementMenuDoRenderowania.Item.Reklama.Wiersze.ForEach(x => x.RozciagnijCalaSzerokosc = true);
+                            <div class="opis-parent" id="podmenu-parent-@Model.ElementMenuDoRenderowania.Item.Id">
+                                @{
+                                    Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement {Tresc = Model.ElementMenuDoRenderowania.Item.Reklama, Klient = SolexHelper.AktualnyKlient});
+                                }
+                            </div>
+                        }
+
+                        @if (Model.Submenu_RenderujTeksteWSubmenu)
+                        {
+                            foreach (TreeItem<ElementMenu> d in Model.ElementMenuDoRenderowania.Children)
+                            {
+                                bool jesttresc = d.Item.Reklama != null || d.Children.Any();
+                                if (!jesttresc)
+                                {
+                                    continue;
+                                }
+                                <div id="opisy-@d.Item.Id" data-opis="@d.Item.Id" style="display: none;">
+                                    @if (d.Item.Reklama != null)
+                                    {
+                                        d.Item.Reklama.Wiersze.ForEach(x => x.RozciagnijCalaSzerokosc = true);
+                                        Html.RenderPartial("StronaDane", new TrescDoPokazaniaElement {Tresc = d.Item.Reklama, Klient = SolexHelper.AktualnyKlient});
+                                    }
+                                    else
+                                    {
+                                        <ul class="sub-sub-menu list-unstyled">
+                                            @foreach (var dd in d.Children)
+                                            {
+                                                string link = Url.ZbudujLink(dd.Item.TrescBll, SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk);
+                                                <li class="sub-sub-menu-@dd.Item.Id" data-menu-opcja-id="@dd.Item.Id">
+                                                    @if (string.IsNullOrEmpty(link))
+                                                    {
+                                                        <span class="nav-link menu-klasyczne-link dropdown-item">@dd.Item.Nazwa</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="nav-link menu-klasyczne-link dropdown-item" tabindex="-1" href="@link">@dd.Item.Nazwa</a>
+                                                    }
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</li>

@@ -1,0 +1,47 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.SzczegolyProduktu.ParametryDoKategoriProduktuSzczegoly
+@{
+    var kats = Model.Kategorie;
+}
+
+<div class="produkt-atrybuty-lista">
+    <div class="atrybut-produktu ramka-wykropkowana-dol">
+        <span class="atrybut-produktu">
+            @Model.Naglowek
+            <span class="atrybut-nazwa text-muted">
+                @Html.PobierzTlumaczenie("Kategorie"):
+            </span>
+            <span class="atrybut-cechy">
+
+                @for (int j = 0; j < kats.Count; j++)
+                {
+                    <span class="atrybut-opis">
+                    @{
+                        var kate = kats[j];
+                        List<KategorieBLL>
+                            sciezka = new List<KategorieBLL>
+                                ();
+                        do
+                        {
+                            sciezka.Insert(0, kate);
+                            kate = SolexBllCalosc.PobierzInstancje.KategorieDostep.KategoriaNadrzedna(kate);
+                        } while (kate != null);
+                        for (int i = 0; i < sciezka.Count; i++)
+                        {
+                            <a href="@Url.ZbudujLink(sciezka[i],SolexHelper.AktualnyJezyk)">@sciezka[i].Nazwa</a>
+                            if (i < sciezka.Count - 1)
+                            {
+                                @Html.Raw("\\")
+                            }
+                        }
+                    }
+                </span>
+                }
+
+            </span>
+
+        </span>
+    </div>
+    </div>

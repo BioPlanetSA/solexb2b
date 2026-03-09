@@ -1,0 +1,64 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SklepyBll
+
+<div class="mapa-dymek">
+    @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.SklepyMapaNazwaPokazuj)
+    {
+        if (!string.IsNullOrEmpty(Model.Nazwa))
+        {
+            <b>@Model.Nazwa</b><br />
+        }
+    }
+    @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.SklepyMapaUlicaINrPokazuj)
+    {
+        if (!string.IsNullOrEmpty(Model.UlicaNr))
+        {
+            @Model.UlicaNr<br />
+        }
+    }
+     
+    @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.SklepyMapaKodPocztowyPokazuj)
+    {
+        if (!string.IsNullOrEmpty(Model.KodPocztowy))
+        {
+            @Model.KodPocztowy                         //np.  42-200 częstochowa
+            if (!SolexBllCalosc.PobierzInstancje.Konfiguracja.SklepyMapaMiastoPokazuj) 
+             {
+                 <br />
+             }
+        }
+    }
+    @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.SklepyMapaMiastoPokazuj)
+    {
+        if (!string.IsNullOrEmpty(Model.Miasto))
+        {
+            @Model.Miasto<br />
+        }
+    }
+    @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.SklepyMapaTelefonPokazuj)
+    {
+        if (!string.IsNullOrEmpty(Model.Telefon))
+        {
+            @Model.Telefon<br />
+        }
+    }
+    @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.SklepyMapaWWWPokazuj)
+    {
+        if (!string.IsNullOrEmpty(Model.LinkUrl.Url))
+        {
+            string blank = (Model.LinkUrl.Tryb == TrybOtwierania.NoweOkno) ? "target=\"_blank\"" : "";
+            <a @($"href={Url.ZbudujLink(Model.LinkUrl, SolexHelper.AktualnyJezyk)} {blank} ")>@Model.LinkUrl.Url</a><br />
+        }
+    }
+    @if (SolexBllCalosc.PobierzInstancje.Konfiguracja.SklepyMapaEmailPokazuj)
+    {
+        if (!string.IsNullOrEmpty(Model.Email))
+        {
+            @Model.Email
+        }
+    }
+</div>
+

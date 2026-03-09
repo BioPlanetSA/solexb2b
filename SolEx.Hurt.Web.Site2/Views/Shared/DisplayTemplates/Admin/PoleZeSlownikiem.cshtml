@@ -1,0 +1,38 @@
+﻿@using System.Collections
+@using ServiceStack.Text
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+    
+    @if (Model.Wartosc != null)
+    {
+        if (Model.Wartosc is IEnumerable && Model.Wartosc.GetType() != typeof(string))
+        {
+            HashSet<string> wartosci = new HashSet<string>();
+            bool dadajKlucz = Model.Slownik.Count > 30;
+            foreach (object w in (IEnumerable)Model.Wartosc)
+            {
+                string wartosc = Model.Slownik.FirstOrDefault(x => x.Value.ToString() == w.ToString()).Key;
+                if (dadajKlucz && wartosc.IndexOf(w.ToString(),StringComparison.CurrentCultureIgnoreCase)==-1)
+                {
+                    wartosci.Add(("[" + w + "] - " + wartosc).Replace(" ", "&nbsp"));
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(wartosc))
+                    {
+                        wartosci.Add(wartosc);
+                    }
+                }
+
+            }
+            if (wartosci.Any())
+            {
+                @Html.Raw(wartosci.ToCsv())
+            }
+        }
+        else
+        {
+            var wartosc = Model.Slownik.FirstOrDefault(x => x.Value.ToString() == Model.Wartosc.ToString()).Key;
+            @Html.Raw(wartosc??Model.Wartosc)
+        }
+    }

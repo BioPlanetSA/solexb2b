@@ -1,0 +1,32 @@
+﻿@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.Helper
+@using SolEx.Hurt.Web.Site2.Helper
+@model List<ProduktKlienta>
+@{
+    Layout = null;
+}
+
+@section Opis {
+    <br />
+    <b>Subiekt aktualizuje również nazwę produktu!</b>
+}
+
+@section Nazwa {
+  AKtualizacja ceny kartotekowej w Subiekcie GT/ Nexo
+}
+
+@section Szablon{@if (Model != null){List<EppHelper.TowarDoGeneracjiEpp> obiektyDoEpp = new List<EppHelper.TowarDoGeneracjiEpp>();
+        foreach (ProduktKlienta p in Model)
+        {
+            EppHelper.TowarDoGeneracjiEpp produkt = new EppHelper.TowarDoGeneracjiEpp();
+            produkt.Kod = p.Kod;
+            produkt.KodKreskowy = p.KodKreskowy;
+            produkt.Nazwa = p.Nazwa;
+            produkt.CenaKartotekowa = p.FlatCeny.CenaNetto;          
+            obiektyDoEpp.Add(produkt);
+        }
+
+        @Html.Raw(EppHelper.PobierzInstancje.WygenerujEpp(obiektyDoEpp))
+    }
+}

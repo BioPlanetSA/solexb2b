@@ -1,0 +1,13 @@
+﻿@model IList<SolEx.Hurt.Model.UstawieniePowiadomienia>
+
+<div class="powiadomienia-mailowe">
+    
+    @foreach (var z in Model)
+    {
+        var t = SolexHelper.AktualnyJezyk;
+        Html.RenderPartial("SzablonMaila", z);
+        <hr style="border-top: 1px solid black;"/>
+    }
+
+</div>
+

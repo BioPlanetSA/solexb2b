@@ -1,0 +1,14 @@
+﻿@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+@model IList<TrybListyProduktow>
+
+
+<div class="SzablonyListy">
+    @foreach (TrybListyProduktow t in Model)
+    {
+        <a data-szablonlisty="@t.Symbol" class="btn btn-secondary wlacz-tooltip btn-xs szablon-listy" title="@Html.PobierzTlumaczenie(t.Nazwa)">
+            <i class="fa fa-@t.Ikona"></i>
+        </a>
+    }
+</div>
+

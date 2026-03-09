@@ -1,0 +1,23 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model bool
+@if (Model)
+{
+    @Html.ActionLink(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Dodaj"), "DodajAdres", new { }, new { @class = "okno-modalne btn btn-primary pull-right" })
+}
+
+
+<div class="subkonta adresy">
+
+     <h4 class="c b">
+        @Html.PobierzTlumaczenie("Lista adresów")
+    </h4>
+
+    <div class="szablon-Adresy-pojemnik">
+    </div>
+
+    <script language="javascript" type="text/javascript">
+        InicjujListe('.szablon-Adresy-pojemnik', '.szablon-Adresy-edycja', '/Adresy/ListaDane');
+    </script>
+
+</div>

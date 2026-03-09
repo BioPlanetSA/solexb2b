@@ -1,0 +1,41 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryDoStronicowania
+@{
+    var aktulna = Model.ParametryStronicowania.strona;
+}
+
+@if (Model.PokazacWyborStron && Model.DostepneRozmiaryStron.Length > 1 && Model.LacznaIlosc > Model.DostepneRozmiaryStron.Min())
+{
+    <div class="btn-group fit-width rozmiar-strony">
+        <button type="button" class="btn dropdown-toggle btn-sm btn-secondary" data-toggle="dropdown">
+            <span>@Html.PobierzTlumaczenie("Wyświetlaj {0} elementów na stronie", Model.RozmiarStrony)</span>
+        </button>
+        <div class="dropdown-menu" role="menu">
+            @foreach (var r in Model.DostepneRozmiaryStron.OrderBy(x => x))
+            {
+                <a class="dropdown-item clickable" data-rozmiarstrony="@r">
+                    @Html.PobierzTlumaczenie("Wyświetlaj {0} elementów na stronie", r)
+                </a>
+            }
+        </div>
+    </div>
+}
+
+@if (Model.LiczbaStron > 1)
+{
+    <div class="stronicowanie">
+        @if (aktulna > 1)
+        {
+            <a data-strona="@(aktulna - 1)" class="fa fa-angle-left clickable"></a>
+        }
+            <input type="text" value="@aktulna" data-max="@Model.LiczbaStron">
+        <span>  @Html.PobierzTlumaczenie("z") </span>
+        <a data-strona="@Model.LiczbaStron" class="clickable">@Model.LiczbaStron</a>
+        @if (aktulna < Model.LiczbaStron)
+        {
+            <a data-strona="@(aktulna + 1)" class="fa fa-angle-right clickable"></a>
+        }
+    </div>
+}

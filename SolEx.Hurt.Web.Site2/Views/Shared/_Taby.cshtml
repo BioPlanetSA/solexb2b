@@ -1,0 +1,15 @@
+﻿@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow
+@using SolEx.Hurt.Web.Site2.Helper
+@model List<DaneDoTabow>
+
+@if (Model.Any())
+{
+    <ul class="nav nav-tabs faktury-taby" role="tablist" id="taby">
+        @foreach (DaneDoTabow tab in Model)
+        {
+            <li role="presentation" class="nav-item">
+                <a href="@tab.Link" @tab.DodatkoweParametry role="tab" data-toggle="tab" class="nav-link @(tab.CzyWybrany ? "active" : "")" title="@Html.Raw(tab.Opis)">@(tab.TlumaczNazwe ? Html.PobierzTlumaczenie(tab.Nazwa) : Html.Raw(tab.Nazwa))</a>
+            </li>
+        }
+    </ul>
+}

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SolEx.Hurt.Core\SolEx.Hurt.Core.csproj" />
+      <ProjectReference Include="..\SolEx.Hurt.Model\SolEx.Hurt.Model.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="log4net">
+        <Version>2.0.8</Version>
+      </PackageReference>
+      <PackageReference Include="RestSharp" Version="105.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="ServiceStack.Interfaces">
+        <HintPath>..\Libs\ORMLite\ServiceStack.Interfaces.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

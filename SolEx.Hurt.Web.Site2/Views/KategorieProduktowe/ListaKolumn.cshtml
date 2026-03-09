@@ -1,0 +1,34 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoListyKategoriiProduktow
+
+
+@{
+    var asd = Model.Kategorie.First();
+    var grupa = asd.Grupa;
+}
+
+<div class="kategorie-produktowe-lista-kolumn">
+    <h5 class="menu-kolumnowe-nazwa-grupy text-uppercase grupa@(grupa.Id)">
+        @{
+            var adres = Url.ZbudujLink(grupa, SolexHelper.AktualnyJezyk, Model.SymbolOpisGrupy);//Html.Action("LingGrupaKategorii", "GeneratorLinkow", new { symbol = Model.SymbolOpisGrupy, id = grupa.Id }).ToString();
+            if (!string.IsNullOrEmpty(adres))
+            {
+                <a href="@adres">@grupa.Nazwa</a>
+            }
+            else
+            {
+                @grupa.Nazwa
+            }
+        }
+    </h5>
+    <ul class="list-unstyled list-inline">        
+        @foreach (KategorieBLL kat in Model.Kategorie)
+        {
+            <li class="menu-kolumnowe-element-@kat.Id list-inline">
+                <a href="@Url.ZbudujLink(kat,SolexHelper.AktualnyJezyk)" class="cat@(kat.Id)">@kat.Nazwa </a>
+            </li>
+        }
+    </ul>
+</div>

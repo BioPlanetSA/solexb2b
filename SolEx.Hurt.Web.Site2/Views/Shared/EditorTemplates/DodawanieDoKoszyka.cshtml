@@ -1,0 +1,25 @@
+﻿@using System.Web.Mvc.Html
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Model.Enums
+@model ParametryIlosciProduktu
+
+@{
+    string info = string.IsNullOrEmpty(Model.Info)? "Produkt spoza Twojej oferty standardowej" : Model.Info;
+    if (Model.ProduktId == 0 || !Model.MoznaDodawacDoKoszyka)
+    {
+        Html.RenderPartial("~/Views/Koszyk/_DodawanieNiemozliwe.cshtml", info);
+        return;
+    }
+
+    //bool pokazjednostki = !SolexBllCalosc.PobierzInstancje.Konfiguracja.UkryjJednostkiMiary && !Model.Item3;
+
+    var przyciski = SolexBllCalosc.PobierzInstancje.Koszyk.PobierzParametryPrzyciskowDodawania(SolexHelper.AktualnyKoszyk, Model.ProduktId, TypPozycjiKoszyka.Zwykly, SolexHelper.AktualnyKlient, SolexHelper.AktualnyJezyk.Id, Model.DodawnieTekstowe);
+    Model.Przyciski = przyciski;
+    //ParametryIlosciProduktu pi = new ParametryIlosciProduktu(Model.Produkt, Model., TypPozycjiKoszyka.Zwykly, Model.Item3 ? null : przyciski, pokazjednostki);
+
+    Html.RenderPartial("EditorTemplates/ParametryIlosciProduktu", Model);
+
+
+}

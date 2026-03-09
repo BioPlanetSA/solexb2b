@@ -1,0 +1,20 @@
+﻿@using SolEx.Hurt.Model
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model KeyValuePair<ProduktKlienta,List<StanNaMagazynie>>
+@{
+    var produkt = Model.Key;
+    Dictionary<int, List<StanNaMagazynie>> slownikStanow = Model.Value.GroupBy(x => x.IdReguly).ToDictionary(x => x.Key, x => x.ToList());
+}
+<div class="produkt-karta-stany">
+    @{ Html.StanyDlaMagaznow(slownikStanow, produkt); }
+    @*@foreach (var i in slownikStanow)
+    {
+        string widok = string.Format("Stany/{0}", i.Key);
+        foreach (var stanNaMagazyny in i.Value)
+        {
+            Html.RenderPartial(widok, new ParametryStany(produkt, stanNaMagazyny));
+        }
+    }*@
+</div>

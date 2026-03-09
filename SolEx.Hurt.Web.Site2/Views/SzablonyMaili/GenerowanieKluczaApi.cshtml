@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+}
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.GenerowanieKluczaApi
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+}
+@section Tytul
+{
+    @Html.PobierzTlumaczenie(Model.JezykMaila(), "B2B - nowy klucz do api")
+}
+@section Naglowek
+{
+    <p class="center lead">@Html.PobierzTlumaczenie(Model.JezykMaila(), "B2B - nowy klucz do api")</p>
+}
+@section Tresc
+{
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                    <tr>
+                        <td class="text-pad">
+                            @Html.PobierzTlumaczenie( Model.JezykMaila(),"Twój nowy klucz to: {0}",MiejsceFrazy.Brak, new object[] { Model.Klient.KluczSesji})
+                            <br />
+                        </td>
+                        <td class="expander"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+}
+

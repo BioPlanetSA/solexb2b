@@ -1,0 +1,170 @@
+﻿@using System.Dynamic
+@using System.Globalization
+@using System.Text
+@using System.Web.Script.Serialization
+@using CsvHelper
+@using CsvHelper.Configuration
+@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.App_Start
+@using SolEx.Hurt.Web.Site2.Helper
+@using CsvWriter = CsvHelper.CsvWriter
+@model  SolEx.Hurt.Web.Site2.Models.ParametrDoKataloguProduktow
+@{
+    Layout = null;
+}
+@section Opis {
+}
+@section Nazwa {
+   Uniwersalny plik JSON do drukowania katalogów - produkty
+}
+@section Szablon{
+    @if (Model != null)
+    {
+        List<dynamic> produkty = new List<dynamic>();
+        foreach (IProduktKlienta p in Model.ListaProduktow)
+        {
+            //dynamic ceny = new ExpandoObject();
+            //foreach (var cena in p.CenyPoziomy)
+            //{
+            //    (ceny as IDictionary<string, Object>).Add("Netto_" /*+  cena.Key.ToString().Replace("-","_")*/, cena.Value.Netto);
+            //    (ceny as IDictionary<string, Object>).Add("Brutto_" /*+ cena.Key.ToString().Replace("-", "_")*/, Kwoty.WyliczBrutto(cena.Value.Netto, p.Vat, p.Klient));
+            //    (ceny as IDictionary<string, Object>).Add("Waluta_" /*+ cena.Key.ToString().Replace("-", "_")*/, SolexBllCalosc.PobierzInstancje.Konfiguracja.SlownikWalut[cena.Value.WalutaId.Value].WalutaB2b);
+            //    break;
+            //}
+
+            object obiekt = new
+            {
+                KodKreskowy = p.KodKreskowy,
+                ProduktId = p.Id,
+                Kod = p.Kod,
+                Nazwa = p.Nazwa,
+                Marka = p.MarkaNazwa,
+                Opis = p.Opis,
+                LinkDoProduktu = Url.ZbudujLink(p,SolexHelper.AktualnyJezyk),
+                Kategoria = p.Kategorie.Where(x => x.Widoczna).Select(x => x.Sciezka).Join(";"),
+
+                JednostkaPodstawowa = p.JednostkaPodstawowa.Nazwa,
+                Waga = p.Waga,
+
+                PKWiU = p.PKWiU,
+
+                NaStanie = p.NaStanie,
+                IloscWOpakowaniu = p.IloscWOpakowaniu,
+                MinimumLogistyczne = p.IloscMinimalna,
+                WymaganeOZ = p.WymaganeOz,
+                Ilosc = p.IloscOgraniczonaDoMax,
+                IloscLacznaDokladna = p.IloscLaczna,
+
+                CenaPrzedRabatemNetto = p.FlatCeny.CenaHurtowaNetto.Wartosc,
+                CenaPrzedRabatemBrutto = p.FlatCeny.CenaHurtowaBrutto.Wartosc,
+
+                CenaPoRabacieNetto = p.FlatCeny.CenaNetto.Wartosc,
+                CenaPoRabacieBrutto = p.FlatCeny.CenaBrutto.Wartosc,
+                Rabat = p.FlatCeny.Rabat,
+                Vat = p.Vat,
+
+                CenaDetalicznaBrutto = p.FlatCeny.CenaDetalicznaBrutto.Wartosc,
+                CenaDetalicznaNetto = p.FlatCeny.CenaDetalicznaNetto.Wartosc,
+
+                Waluta = SolexBllCalosc.PobierzInstancje.Konfiguracja.SlownikWalut[p.FlatCeny.WalutaId].WalutaB2b,
+
+                ZdjecieGlowne_LinkDuze = p.ZdjecieGlowne != null ?  Url.LinkAbsolutny(p.ZdjecieGlowne.LinkWWersji("katalogxmax")) : null,
+                ZdjecieGlowne_LinkMiniatura = p.ZdjecieGlowne != null ? Url.LinkAbsolutny( p.ZdjecieGlowne.LinkWWersji("katalog"))   : null,
+
+                Jednostkowe_Objetosc = p.Objetosc,
+                Jednostkowe_Glebokosc = p.OpJednostkoweGlebokosc,
+                Jednostkowe_Szerokosc = p.OpJednostkoweSzerokosc,
+                Jednostkowe_Wysokosc = p.OpJednostkoweWysokosc,
+
+                Paleta_Glebokosc = p.OpPaletaGlebokosc,
+                Paleta_IloscNaWarstwie = p.OpPaletaIloscNaWarstwie,
+                Paleta_IloscWOpakowaniu = p.OpPaletaIloscWOpakowaniu,
+                Paleta_Objetosc = p.OpPaletaObjetosc,
+                Paleta_Szerokosc = p.OpPaletaSzerokosc,
+                Paleta_Waga = p.OpPaletaWaga,
+                Paleta_Wysokosc = p.OpPaletaWysokosc,
+
+                OpZbiorcze_Glebokosc = p.OpZbiorczeGlebokosc,
+                OpZbiorcze_IloscWOpakowaniu = p.OpZbiorczeIloscWOpakowaniu,
+                OpZbiorcze_Objetosc = p.OpZbiorczeObjetosc,
+                OpZbiorcze_Szerokosc = p.OpZbiorczeSzerokosc,
+                OpZbiorcze_Waga = p.OpZbiorczeWaga,
+                OpZbiorcze_Wysokosc = p.OpZbiorczeWysokosc,
+
+                Rodzina = p.Rodzina,
+                Rodzina_CechaUnikalnaRodzina_Kolejnosc = p.CechaUnikalnaRodzina != null ? p.CechaUnikalnaRodzina.Kolejnosc : 1,
+
+                PoleTestowe1 = p.PoleTekst1,
+                PoleTestowe2 = p.PoleTekst2,
+                PoleTestowe3 = p.PoleTekst3,
+                PoleTestowe4 = p.PoleTekst4,
+                PoleTestowe5 = p.PoleTekst5,
+
+                KolumnaTekst1 = p.KolumnaTekst1,
+                KolumnaTekst2 = p.KolumnaTekst2,
+                KolumnaTekst3 = p.KolumnaTekst3,
+                KolumnaTekst4 = p.KolumnaTekst4,
+                KolumnaTekst5 = p.KolumnaTekst5
+            };
+
+            produkty.Add(obiekt);
+        }
+
+        object obiektSzablonu = new
+        {
+            Nazwa = Model.szablon.Nazwa,
+            Id = Model.szablon.Id,
+            SzablonObrazek0_linkDuze = Model.szablon.Obrazek0Id.HasValue ? Url.LinkAbsolutny(Model.szablon.Obrazek0.LinkOryginal) : null,
+            SzablonObrazek1_linkDuze = Model.szablon.Obrazek1Id.HasValue ? Url.LinkAbsolutny(Model.szablon.Obrazek1.LinkOryginal) : null,
+            SzablonObrazek2_linkDuze = Model.szablon.Obrazek2Id.HasValue ? Url.LinkAbsolutny(Model.szablon.Obrazek2.LinkOryginal) : null,
+            SzablonObrazek3_linkDuze = Model.szablon.Obrazek3Id.HasValue ? Url.LinkAbsolutny(Model.szablon.Obrazek3.LinkOryginal) : null,
+            SzablonObrazek4_linkDuze = Model.szablon.Obrazek4Id.HasValue ? Url.LinkAbsolutny(Model.szablon.Obrazek4.LinkOryginal) : null,
+            SzablonObrazek5_linkDuze = Model.szablon.Obrazek5Id.HasValue ? Url.LinkAbsolutny(Model.szablon.Obrazek5.LinkOryginal) : null,
+
+            ParametrTekstowy1 = Model.szablon.ParametrTekstowy1,
+            ParametrTekstowy2 = Model.szablon.ParametrTekstowy2,
+            ParametrTekstowy3 = Model.szablon.ParametrTekstowy3,
+            ParametrTekstowy4 = Model.szablon.ParametrTekstowy4,
+            ParametrTekstowy5 = Model.szablon.ParametrTekstowy5,
+            ParametrTekstowy6 = Model.szablon.ParametrTekstowy6,
+            ParametrTekstowy7 = Model.szablon.ParametrTekstowy7,
+
+            OpisKlienta = Model.OpisWpisanyPrzezKlienta
+        };
+
+        object obiektKlienta = new
+        {
+            Nazwa = SolexHelper.AktualnyKlient.Nazwa,
+            Id = SolexHelper.AktualnyKlient.Id,
+            Symbol = SolexHelper.AktualnyKlient.Symbol,
+            Email = SolexHelper.AktualnyKlient.Email,
+            Nip = SolexHelper.AktualnyKlient.Nip,
+            Rabat_Karta_Produktu = SolexHelper.AktualnyKlient.Rabat,
+            Poziom_Cenowy_Id = SolexHelper.AktualnyKlient.PoziomCenowyId
+        };
+
+
+        var zalogowanyPrzedstawiciel = new {
+            Nazwa = SolexHelper.AktualnyPrzedstawiciel != null ? SolexHelper.AktualnyPrzedstawiciel.Nazwa : null,
+            Id = SolexHelper.AktualnyPrzedstawiciel != null ? SolexHelper.AktualnyPrzedstawiciel.Id : 0,
+            Symbol = SolexHelper.AktualnyPrzedstawiciel != null ? SolexHelper.AktualnyPrzedstawiciel.Symbol : null,
+            Email = SolexHelper.AktualnyPrzedstawiciel != null ? SolexHelper.AktualnyPrzedstawiciel.Email : null,
+            Zdjecie = (SolexHelper.AktualnyPrzedstawiciel != null && SolexHelper.AktualnyPrzedstawiciel.ZdjecieId.HasValue) ? Url.LinkAbsolutny(SolexHelper.AktualnyPrzedstawiciel.Obrazek.LinkWWersji("katalog")) : null
+        };
+
+
+        object listaDoJson = new {Produkty = produkty, Szablon = obiektSzablonu, Klient = obiektKlienta, ZalogowanyPracownik = zalogowanyPrzedstawiciel };
+
+        JavaScriptSerializer serializer = new JavaScriptSerializer();
+        serializer.MaxJsonLength = Int32.MaxValue;
+        serializer.RegisterConverters(new JavaScriptConverter[] {new ExpandoJSONConverter()});
+    @Html.Raw(serializer.Serialize(listaDoJson))
+    }
+}

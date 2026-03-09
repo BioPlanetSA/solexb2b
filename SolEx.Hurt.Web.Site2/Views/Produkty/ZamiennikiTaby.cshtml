@@ -1,0 +1,74 @@
+﻿@using ServiceStack.Common
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow
+@using SolEx.Hurt.Web.Site2.Models.KontrolkiTresci.Bazowe
+@model ListaDane
+@{
+    HashSet<long> grupyProducenckie = new HashSet<long>(SolexBllCalosc.PobierzInstancje.DostepDane.Pobierz<GrupaBLL>(null, x => x.Producencka).Select(x => x.Id));
+    Dictionary<string, List<IProduktKlienta>> slownikZamiennikow = new Dictionary<string, List<IProduktKlienta>>();
+    foreach (var produktKlienta in Model.UstawieniaListyProduktow.Produkty)
+    {
+        var a = produktKlienta.Kategorie.FirstOrDefault(x => !grupyProducenckie.Contains(x.GrupaId));
+        if (a == null)
+        {
+            if (slownikZamiennikow.ContainsKey(""))
+            {
+                slownikZamiennikow[""].Add(produktKlienta);
+            }
+            else
+            {
+                slownikZamiennikow.Add("", new List<IProduktKlienta> { produktKlienta });
+            }
+        }
+        else
+        {
+            if (slownikZamiennikow.ContainsKey(a.Nazwa))
+            {
+                slownikZamiennikow[a.Nazwa].Add(produktKlienta);
+            }
+            else
+            {
+                slownikZamiennikow.Add(a.Nazwa, new List<IProduktKlienta> { produktKlienta });
+            }
+        }
+    }
+    //UstawieniaZamiennik ustawienia = new UstawieniaZamiennik(Model);
+    string pierwszyNaglowek = slownikZamiennikow.First().Key;
+    List<DaneDoTabow> taby = new List<DaneDoTabow>();
+    if (slownikZamiennikow.Count > 1)
+    {
+        foreach (var naglowek in slownikZamiennikow)
+        {
+            taby.Add(naglowek.Key == pierwszyNaglowek ? new DaneDoTabow("#" + pierwszyNaglowek, pierwszyNaglowek, true, null,true, "aria-controls=\"home\"") :
+                new DaneDoTabow("#" + naglowek.Key.Replace(" ", ""), naglowek.Key, false, null, true, "aria-controls=\"home\""));
+        }
+    }
+}
+@if (taby.Any())
+{
+    @Html.Partial("_Taby", taby)
+}
+<div class="tab-content">
+    @foreach (var a in slownikZamiennikow)
+    {
+        string klasa = a.Key == pierwszyNaglowek ? "tab-pane active" : "tab-pane";
+        <div role="tabpanel" class="@klasa" id="@a.Key.Replace(" ", "")">
+            <table class="table table-striped lista-produktow">
+                <tbody>
+                    @foreach (var produkt in a.Value)
+                    {
+                       Html.RenderPartial("ZamiennikiProdukt", new Tuple<ListaDane, IProduktKlienta>(Model, produkt));
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+    }
+</div>

@@ -1,0 +1,28 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryDoGaleriiZdjecBlog
+@if (!string.IsNullOrEmpty(Model.Naglowek))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Naglowek)
+}
+
+<div class="miniaturki galeria-zdjec list-inline" data-rozmiar-duzy="@Model.RozmiarZdjecia" id="galeria@(new Random().Next())">
+    @{
+        int i = 0;
+        foreach (var z in Model.Zdjecia)
+        {
+            <img src="@z.LinkWWersji(z.DomyslnyPreset)" data-image="@z.LinkWWersji(Model.RozmiarZdjecia)" alt="@z.Nazwa" />
+            i++;
+        }
+    }
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Stopka))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Stopka)
+}

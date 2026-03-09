@@ -1,0 +1,27 @@
+﻿@using SolEx.Hurt.Core.BLL
+@model SolEx.Hurt.Model.Web.DodawanieProduktuPrzyciski
+
+@if (Model.DodawanieTekstowe)
+{
+    //pod span:bsk podpięta jest akcja dodawania do koszyka jesli wszędzie będziemy ją dodawać do wtedy będzie się po kilkanaście razy towar dodawał 
+    <span class="btn btn-success btn-sm bsk tekstowe @Html.Raw(Model.JuzDodany ? "dodano-do-koszyka" : "")">
+        <span class="btn btn-link btn-sm  bsk_icon @Html.Raw(Model.JuzDodany ? "dodano-do-koszyka" : "")">
+            @if (Model.JuzDodany)
+            {
+                <span class="ilosc">@Model.IleJuzJestWKoszyku.DoLadnejCyfry()</span>
+            }
+        </span>
+        <span>
+           @SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Dodaj do koszyka")
+        </span>
+    </span>
+}
+else
+{
+    <span class="btn btn-link btn-sm bsk bsk_icon @Html.Raw(Model.JuzDodany ? "dodano-do-koszyka" : "")">
+        @if (Model.JuzDodany)
+        {
+            <span class="ilosc">@Model.IleJuzJestWKoszyku.DoLadnejCyfry()</span>
+        }
+    </span>
+}

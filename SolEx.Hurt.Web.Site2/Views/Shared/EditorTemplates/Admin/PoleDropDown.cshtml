@@ -1,0 +1,39 @@
+﻿@using SolEx.Hurt.Helpers
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+
+@Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+@if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+{
+    <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+}
+@{
+    Dictionary<string, object> parametry = new Dictionary<string, object>();
+    parametry.Add("data-indywidualizacja-typ", "input");
+    parametry.Add("class", "form-control form-control-sm");
+    if (Model.Wymagane)
+    {
+        parametry.Add("required", "required");
+    }
+    if (Model.Multiselect)
+    {
+        parametry.Add("multiple", true);
+    }
+    if (Model.PobieraneErp || Model.TylkoDoOdczytu)
+    {
+        parametry.Add("readonly", "readonly");
+        parametry.Add("disabled", "");
+
+        //jesli jest disabled to trzeba hidden pole zeby wyslaly sie parametry na serwer MVC
+        @Html.HiddenFor(x => x.Wartosc)
+    }
+}
+@if (Model.Multiselect)
+{
+    @Html.ListBoxFor(x => x.Wartosc, Model.Slownik.Select(x => new SelectListItem() { Text = x.Key, Value = x.Value.ToString() }),parametry)
+}
+else
+{
+  @Html.DropDownListFor(x => x.Wartosc, Model.Slownik.Select(x => new SelectListItem() { Text = x.Key, Value = x.Value.ToString() }), " - ", parametry)
+}
+

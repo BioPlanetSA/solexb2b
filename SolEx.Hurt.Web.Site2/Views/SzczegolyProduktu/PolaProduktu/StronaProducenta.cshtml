@@ -1,0 +1,69 @@
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryPrzekazywaneDoSzczegolow
+
+@if (!string.IsNullOrEmpty(Model.Naglowek) && (Model.Pola.Count > 0 || Model.Atrybuty.Count > 0))
+{
+    @Html.Raw(Model.Naglowek)
+}
+
+@if (Model.Pola != null && Model.Pola.Count > 0)
+{
+    foreach (var pole in Model.Pola)
+    {
+        var marka = Model.Produkt.Kategorie.Where(kt => kt.GrupaId == 2).ToList();
+        foreach (var link in marka)
+        {
+            if (!string.IsNullOrEmpty(link.Tekst5))
+            {
+                <span class="wartosc">
+                    <a href="@link.Tekst5">
+                        <img class="karta-produktu-producent" src="@link.Obrazek.LinkWWersji("producent")">
+                    </a>
+                </span>
+            }
+            else if (link.Obrazek != null)
+            {
+                <span class="wartosc">
+                    <img class="karta-produktu-producent" src="@link.Obrazek.LinkWWersji("producent")">
+                </span>
+            }
+
+            <div class="c" style="padding-top: 20px;">
+                <a class="btn btn-lg btn-success" href="@Url.ZbudujLink(link,SolexHelper.AktualnyJezyk)">ZOBACZ WSZYSTKIE<br>PRODUKTY PRODUCENTA</a>
+            </div>
+        }
+    }
+}
+
+@if (Model.Atrybuty != null && Model.Atrybuty.Count > 0)
+{
+    foreach (var atr in Model.Atrybuty)
+    {
+        if (atr.Wartosc.GetType() == typeof (Dictionary<string, string>))
+        {
+            Dictionary<string, string> wartosc = (Dictionary<string, string>) atr.Wartosc;
+            <div class="@Model.DodatkowyCss pole-opis-wartosc atrybut-@atr.Nazwa">
+                @if (Model.PokarzNazwe && !string.IsNullOrEmpty(atr.Nazwa))
+                {
+                    <span class="opis">@atr.Nazwa</span>
+                }
+                <span class="wartosc">
+                    @foreach (var val in wartosc)
+                    {
+                        <span class="pole-opis-wartosc-element">
+                            <a @(string.IsNullOrEmpty(val.Value) ? "" : "href=" + val.Value)>
+                                @Html.Raw(val.Key)
+                            </a>
+                        </span>
+                    }
+                </span>
+            </div>
+        }
+    }
+}
+
+@if (!string.IsNullOrEmpty(Model.Stopka))
+{
+    @Html.Raw(Model.Stopka)
+}

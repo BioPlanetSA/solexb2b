@@ -1,0 +1,75 @@
+﻿@using System.Web.Script.Serialization
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+@{
+    AdresUrl dane = (AdresUrl)Model.Wartosc;
+    if (dane == null)
+    {
+        dane = new AdresUrl();
+    }
+    JavaScriptSerializer ser = new JavaScriptSerializer();
+}
+<div class="adres-url">
+    @Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+    @if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+    {
+        <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+    }
+
+    @{
+        string id = Model.IdentyfikatorObiektu + "-" + Model.NazwaPola;
+        Dictionary<string, object> pars = new Dictionary<string, object> {{"class", "form-control form-control-sm"}, {"id", "AdresUrl" } };
+        if (Model.Wymagane)
+        {
+            pars.Add("required", "required");
+        }
+        if (Model.PobieraneErp)
+        {
+            pars["class"] += " edytowaneErpNieWolnoEdytowac";
+        }
+        if (Model.PobieraneErp || Model.TylkoDoOdczytu)
+        {
+            pars.Add("readonly", "readonly");
+        }
+    }
+    <div>
+        @Html.Label("AdresUrl", "Adres url")
+        @Html.TextBoxFor(x => ((AdresUrl) x.Wartosc).Url, pars)
+    </div>
+    <div>
+        @{
+            pars["id"] = "Tryb";
+        }
+        @Html.Label("Tryb", "Tryb otwierania")
+        @Html.EnumDropDownListFor(x => ((AdresUrl) x.Wartosc).Tryb, pars)
+    </div>
+    @Html.Hidden("Wartosc", ser.Serialize(dane))
+</div>
+
+<script language="javascript" type="text/javascript">
+
+    $('#@(id)').on('keyup', WalidujPole);
+    $('#AdresUrl').on('change', function () {
+        var url = $('#AdresUrl');
+        var tryb = $('#Tryb');
+        UzupelnijAdresUrl($(this), url.val(), tryb.val());
+    });
+    $('#Tryb').onFirst('change', function () {
+        var url = $('#AdresUrl');
+        var tryb = $('#Tryb');
+        UzupelnijAdresUrl($(this), url.val(), tryb.val());
+    });
+    function UzupelnijAdresUrl(sender, url, tryb) {
+        var wartoscPole = $('.adres-url').children('[name$="Wartosc"]');
+        var obj = jQuery.parseJSON(wartoscPole.val());
+        if (url != undefined) {
+            obj.Url = url;
+        }
+        if (tryb != undefined) {
+            obj.Tryb = tryb;
+        }
+        wartoscPole.val(JSON.stringify(obj));
+        // console.log(obj);
+    }
+</script>

@@ -1,0 +1,308 @@
+﻿@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Core.BLL.Web
+@using SolEx.Hurt.Model.Core
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryKoszyka
+@{
+    IConfigBLL config = SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja;
+
+    WartoscLiczbowa wartsocVatDostawy = Model.KoszykObiekt.CenaDostawyBrutto() - Model.KoszykObiekt.CenaDostawyNetto();
+    WartoscLiczbowa calkowityVat = wartsocVatDostawy + Model.KoszykObiekt.WartoscVat();
+    bool pokazywacWartoscKatalogowaKoszyk = Model.KontrolkaKoszyka.PokazywacWartoscKatalogowaKoszyk && Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaBrutto().Waluta == Model.KoszykObiekt.CalkowitaWartoscHurtowaBrutto().Waluta;
+    //bool pokazywacZyskKlientaKoszyk = config.PokazywacZyskKlientaKoszyk;
+    bool pokazywacWartoscPrzedRabatemKoszyk = Model.KontrolkaKoszyka.PokazywacWartoscPrzedRabatemKoszyk;
+    bool pokazywacRabatKoszyk = Model.KontrolkaKoszyka.PokazywacRabatKoszyk;
+    bool czyPokazywacCeneNettoWPodsumowaiu = Model.KontrolkaKoszyka.CzyPokazywacCeneNettoWPodsumowaiu;
+    bool czyPokazywacCeneBruttoWPodsumowaiu = Model.KontrolkaKoszyka.CzyPokazywacCeneBruttoWPodsumowaiu;
+    bool czyPokazywacVatWPodsumowaiu = Model.KontrolkaKoszyka.CzyPokazywacVatWPodsumowaiu;
+    bool czyPokazywacProcentWPodsumowaiu = Model.KontrolkaKoszyka.CzyPokazywacProcentWPodsumowaiu;
+    bool pokazywacPrzesylke = Model.KontrolkaKoszyka.PokazywacPrzesylkePodsumowanie;
+    bool pokazywacWage = Model.KontrolkaKoszyka.PokazywacWagePodsumowanie && Model.KoszykObiekt.WagaCalokowita() > 0;
+    bool pokazywacObjetosc = Model.KontrolkaKoszyka.PokazywacObjetoscPodsumowanie && Model.KoszykObiekt.CalkowitaObjetoscKoszyka() > 0;
+    bool pokazywacPodsumowanieWPodsumowaniu = Model.KontrolkaKoszyka.PokazywacPodsumowanieWPodsumowaniu;
+
+    bool pokazywacWartoscPoRabacieKoszyk = Model.KontrolkaKoszyka.PokazywacWartoscPoRabacieKoszyk;// && (Model.KoszykObiekt.LacznaWartoscNetto.Wartosc != Model.KoszykObiekt.CalkowitaWartoscHurtowaNettoPoRabacie.Wartosc);
+
+    bool pokazywacZyskKlientaKoszyk = Model.KontrolkaKoszyka.PokazywacZyskKlientaKoszyk && (Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaNetto().Waluta == Model.KoszykObiekt.CalkowitaWartoscHurtowaNettoPoRabacie().Waluta) && Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaNettoZysk() > 0;
+
+    decimal kwotaKatalogowaNetto = Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaNetto().Wartosc;
+
+    decimal ZyskKlientaProcent = 0;
+    if (kwotaKatalogowaNetto != 0)
+    {
+        ZyskKlientaProcent = Math.Round(((kwotaKatalogowaNetto - Model.KoszykObiekt.CalkowitaWartoscHurtowaNettoPoRabacie().Wartosc) / kwotaKatalogowaNetto) * 100, 2);
+    }
+
+
+    bool czyJestJakasLiniaPosdumowania = pokazywacWartoscPrzedRabatemKoszyk || pokazywacRabatKoszyk || pokazywacWartoscPoRabacieKoszyk || pokazywacWartoscKatalogowaKoszyk || pokazywacZyskKlientaKoszyk
+                            || (pokazywacPrzesylke && Model.KoszykObiekt.KosztDostawyId != null) || pokazywacPodsumowanieWPodsumowaniu;
+
+    bool czyJestJakasKolumnaPosdumowania = czyPokazywacCeneNettoWPodsumowaiu || czyPokazywacCeneBruttoWPodsumowaiu || czyPokazywacVatWPodsumowaiu || czyPokazywacProcentWPodsumowaiu;
+}
+<div class="row koszyk-belka-podsumowanie">
+<div class="col-lg-9 col-xs-12 koszyk-podsumowanie col-bez-odstepow-md-down">
+@if (czyJestJakasLiniaPosdumowania && czyJestJakasKolumnaPosdumowania)
+{
+    <table class="table table-condensed">
+    <thead class="brak-odstepu">
+    <tr class="brak-odstepu">
+        <th></th>
+        @if (czyPokazywacCeneNettoWPodsumowaiu)
+        {
+            <th>@Html.PobierzTlumaczenie("Netto")</th>
+        }
+        @if (czyPokazywacCeneBruttoWPodsumowaiu)
+        {
+            <th>@Html.PobierzTlumaczenie("Brutto")</th>
+        }
+        @if (czyPokazywacVatWPodsumowaiu)
+        {
+            <th>@Html.PobierzTlumaczenie("VAT")</th>
+        }
+        @if (czyPokazywacProcentWPodsumowaiu)
+        {
+            <th>@Html.PobierzTlumaczenie("%")</th>
+        }
+    </tr>
+    </thead>
+        <tbody>
+            @*@if (iloscWierszyProdukty > 0 && pokazywacPodsumowanieWPodsumowaniu)
+            {
+                <tr>
+                    <td rowspan="@iloscWierszyProdukty">@config.PobierzTlumaczenie("Produkty")</td>
+                </tr>
+            }*@
+
+            @if (pokazywacWartoscPrzedRabatemKoszyk)
+            {
+                <tr class="prosty">
+                    @*if (!pokazywacWartoscKatalogowaKoszyk || !pokazywacZyskKlientaKoszyk)
+                    {
+                        <td rowspan="@(@iloscWierszyProdukty-1)"></td>
+                    }*@
+                    <td><b>@Html.PobierzTlumaczenie("Wartość przed rabatem")</b></td>
+
+                    @if (czyPokazywacCeneNettoWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.CalkowitaWartoscHurtowaNetto()</td>
+                    }
+                    @if (czyPokazywacCeneBruttoWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.CalkowitaWartoscHurtowaBrutto()</td>
+                    }
+                    @if (czyPokazywacVatWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.WartoscVatCenaHurtowa()</td>
+                    }
+                    @if (czyPokazywacProcentWPodsumowaiu)
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+
+            @if (pokazywacRabatKoszyk)
+            {
+                <tr class="prosty">
+                    @*if (!pokazywacWartoscKatalogowaKoszyk || !pokazywacZyskKlientaKoszyk || !pokazywacWartoscPrzedRabatemKoszyk)
+                    {
+                        <td rowspan="@(@iloscWierszyProdukty-1)"></td>
+                    }*@
+                    <td><b>@Html.PobierzTlumaczenie("Rabat")</b></td>
+                    @if (czyPokazywacCeneNettoWPodsumowaiu)
+                    {
+                        @*<td>@(@Model.KoszykObiekt.CalkowitaWartoscHurtowaNetto - @Model.KoszykObiekt.CalkowitaWartoscHurtowaNettoPoRabacie)</td>*@
+                        <td class="r">
+                            @(Model.KoszykObiekt.CalkowityRabatNetto() > 0 ? Model.KoszykObiekt.CalkowityRabatNetto() : new WartoscLiczbowa(0, Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaNettoZysk().Waluta))
+                        </td>
+                    }
+                    @if (czyPokazywacCeneBruttoWPodsumowaiu)
+                    {
+                        @*<td>@(@Model.KoszykObiekt.CalkowitaWartoscHurtowaBrutto - @Model.KoszykObiekt.CalkowitaWartoscHurtowaBruttoPoRabacie)</td>*@
+                        <td class="r">
+                            @(Model.KoszykObiekt.CalkowityRabatBrutto() > 0 ? Model.KoszykObiekt.CalkowityRabatBrutto() : new WartoscLiczbowa(0, Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaNettoZysk().Waluta))
+                        </td>
+                    }
+                    @if (czyPokazywacVatWPodsumowaiu)
+                    {
+                        @*<td>@vatRabat</td>*@
+                        <td class="r">
+                            @(Model.KoszykObiekt.CalkowityRabatVat() > 0 ? Model.KoszykObiekt.CalkowityRabatVat() : new WartoscLiczbowa(0, Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaNettoZysk().Waluta))
+                        </td>
+                    }
+                    @if (czyPokazywacProcentWPodsumowaiu)
+                    {
+                        <td class="r">
+                            @(Model.KoszykObiekt.CalkowityRabatProcent() > 0 ? Model.KoszykObiekt.CalkowityRabatProcent() : 0)%
+                        </td>
+                    }
+                </tr>
+            }
+
+            @if (pokazywacWartoscPoRabacieKoszyk)
+            {
+                <tr class="prosty">
+                    @*if (!pokazywacWartoscKatalogowaKoszyk || !pokazywacZyskKlientaKoszyk || !pokazywacWartoscPrzedRabatemKoszyk || !pokazywacRabatKoszyk)
+                    {
+                        <td rowspan="@(@iloscWierszyProdukty-1)"></td>
+                    }*@
+                    <td><b>@Html.PobierzTlumaczenie("Wartość po rabacie")</b></td>
+                    @if (czyPokazywacCeneNettoWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.CalkowitaWartoscHurtowaNettoPoRabacie()</td>
+                    }
+                    @if (czyPokazywacCeneBruttoWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.CalkowitaWartoscHurtowaBruttoPoRabacie()</td>
+                    }
+                    @if (czyPokazywacVatWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.VatRabat()</td>
+                    }
+                    @if (czyPokazywacProcentWPodsumowaiu)
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+
+            @if (pokazywacWartoscKatalogowaKoszyk)
+            {
+                <tr class="prosty text-muted">
+                    <td>@Html.PobierzTlumaczenie("Wartość detaliczna")</td>
+                    @if (czyPokazywacCeneNettoWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaNetto()</td>
+                    }
+                    @if (czyPokazywacCeneBruttoWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaBrutto()</td>
+                    }
+                    @if (czyPokazywacVatWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.WartoscVatCenaKatalogowa()</td>
+                    }
+                    @if (czyPokazywacProcentWPodsumowaiu)
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+
+            @if (pokazywacZyskKlientaKoszyk)
+            {
+                <tr class="prosty text-muted">
+
+                    <td>@Html.PobierzTlumaczenie("Potencjalny zysk (wartość detaliczna minus wartość po rabacie)")</td>
+                    @if (czyPokazywacCeneNettoWPodsumowaiu)
+                    {
+                        <td class="r">
+                            @Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaNettoZysk()
+                        </td>
+                    }
+                    @if (czyPokazywacCeneBruttoWPodsumowaiu)
+                    {
+                        <td class="r">
+                            @(Model.KoszykObiekt.CalkowitaWartoscCenaKatalogowaBruttoZysk())
+                        </td>
+                    }
+                    @if (czyPokazywacVatWPodsumowaiu)
+                    {
+                        <td class="r">
+                            @(Model.KoszykObiekt.VatZyskKlienta())
+                        </td>
+                    }
+                    @if (czyPokazywacProcentWPodsumowaiu)
+                    {
+                        <td class="r">
+                            @(ZyskKlientaProcent > 0 ? ZyskKlientaProcent : 0)%
+                        </td>
+                    }
+                </tr>
+            }
+            @*<tr class="odstepy-rowne">
+                <th>@config.PobierzTlumaczenie("Koszty")</th>
+                <td colspan="@iloscKolumn"></td>
+            </tr>*@@if (pokazywacPrzesylke && Model.KoszykObiekt.KosztDostawyId != null)
+            {
+                <tr class="prosty">
+
+                    <td>
+                        @if (!string.IsNullOrEmpty(Model.KoszykObiekt.KosztDostawy().OpisDostawy))
+                        {
+                            @Html.PobierzTlumaczenie(@Model.KoszykObiekt.KosztDostawy().OpisDostawy)
+                        }
+                    </td>
+                    @if (czyPokazywacCeneNettoWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.CenaDostawyNetto()</td>
+                    }
+
+                    @if (czyPokazywacCeneBruttoWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.CenaDostawyBrutto()</td>
+                    }
+                    @if (czyPokazywacVatWPodsumowaiu)
+                    {
+                        <td class="r">@wartsocVatDostawy</td>
+                    }
+                    @if (czyPokazywacProcentWPodsumowaiu)
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+            @*<tr class="odstepy-rowne">
+                <th</th>
+                <td colspan="@iloscKolumn"></td>
+            </tr>*@@if (pokazywacPodsumowanieWPodsumowaniu)
+            {
+                    
+                <tr class="prosty warning">
+
+                    <td><b>@Html.PobierzTlumaczenie("Pełna wartość zamówienia")</b></td>
+                    @if (czyPokazywacCeneNettoWPodsumowaiu)
+                    {
+                        <td class="r"> @Model.KoszykObiekt.LacznaWartoscNetto()</td>
+                    }
+                    @if (czyPokazywacCeneBruttoWPodsumowaiu)
+                    {
+                        <td class="r">@Model.KoszykObiekt.LacznaWartoscBrutto()</td>
+                    }
+                    @if (czyPokazywacVatWPodsumowaiu)
+                    {
+                        <td class="r">@calkowityVat @Model.KoszykObiekt.WartoscVat().Waluta</td>
+                    }
+                    @if (czyPokazywacProcentWPodsumowaiu)
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (pokazywacWage)
+{
+    <br/>
+    <p style="padding-left: 5px"><b>@Html.PobierzTlumaczenie("Całkowita waga"):</b>  @Model.KoszykObiekt.WagaCalokowita() @Html.PobierzTlumaczenie("kg") </p>
+  
+}
+@if (pokazywacObjetosc)
+{
+    <br/>
+    <p style="padding-left: 5px"><b>@Html.PobierzTlumaczenie("Całkowita objetosc"): </b> @Model.KoszykObiekt.CalkowitaObjetoscKoszyka().ToString("0.00") @Html.PobierzTlumaczenie("m3")</p>
+ 
+}
+
+</div>
+<div class="col-lg-3 col-xs-12 c col-bez-odstepow-md-down koszyk-finalizacja">
+    <h6>
+        <b>@Html.PobierzTlumaczenie("Do zapłaty brutto")</b>
+        <br/>
+        @Model.KoszykObiekt.LacznaWartoscBrutto()
+    </h6>
+    <br/>
+    @Html.Partial("_CzescDynamicznaFinalizacjaPrzycisk", Model)
+</div>
+</div>

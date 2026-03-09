@@ -1,0 +1,41 @@
+﻿@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryGaleriiZdjecProduktu
+@{
+    string iddiva = "miniaturki-galeria-" + ((Model.Produkt.Zdjecia.Any()) ? Model.Produkt.Zdjecia[0].Id : 0);
+    string iddivaGlowneZdjecie = "glowne-galeria-" + ((Model.Produkt.Zdjecia.Any()) ? Model.Produkt.Zdjecia[0].Id : 0);
+}
+
+@if (!string.IsNullOrEmpty(Model.Naglowek))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Naglowek)
+}
+
+@if (Model.Produkt.Zdjecia.Count > 1)
+{
+    <div id="@iddiva" class="galeria-produktu-miniaturki @(Model.DuzyPodglad ? "galeria-podglad-po-kliknieciu" : "wylacz-hrefy")" data-rozmiar-duzy="@Model.RozmiarZdjecia" data-zdjecie-glowne="@iddivaGlowneZdjecie">
+        <div class="miniaturki" style="@Html.Raw((Model.Produkt.Zdjecia.Count == 1) ? "display:none" : "")">
+            @{ int i = 0; }
+            @foreach (var z in Model.Produkt.Zdjecia)
+            {
+                <a class="obrazki" href="@z.LinkOryginal" numer="@i">
+                    @Html.Image(z, Model.RozmiarMiniatury, Model.Produkt.Nazwa, null)
+                </a>
+                i++;
+            }
+        </div>
+
+    </div>
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(Model.TextZastepczy))
+                    {
+                        <div>@Html.Raw(Model.TextZastepczy)</div>
+                    }
+                }
+
+@if (!string.IsNullOrEmpty(Model.Stopka))
+{
+    @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.Stopka)
+}

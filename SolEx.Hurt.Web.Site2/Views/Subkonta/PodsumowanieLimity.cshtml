@@ -1,0 +1,12 @@
+﻿@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoPodsumowaniaLimitow
+<div class="alert alert-info alert-mikro">
+    @{
+        var wartosc = Html.PobierzTlumaczenie("Aktualny limit to: {0}, do dnia: {1} z czego wykorzystano już: {2}");
+        decimal? limit = Model.Rodzaj == RodzajLimitu.LimitIlosciZamowien ? Model.Szablon.IloscZamowien : Model.Szablon.WartoscZamowien;
+        string doKiedy = Model.DoKiedy.ToShortDateString();
+        dynamic wykorzystano = Model.WykorzystanyLimit;
+    }
+    @Html.Raw(string.Format(wartosc.ToString(),limit,doKiedy,wykorzystano));
+</div>

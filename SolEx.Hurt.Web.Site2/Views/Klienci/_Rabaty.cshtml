@@ -1,0 +1,87 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@model Tuple<HashSet<RabatBLL>, HashSet<RabatBLL>,bool>
+
+@{
+    HashSet<RabatBLL> rabatyProduktow = Model.Item1;
+    HashSet<RabatBLL> rabatyKategorii = Model.Item2;
+    bool czyRabatOgolny = Model.Item3;
+}
+
+
+@if (SolexHelper.AktualnyKlient.Rabat > 0 && czyRabatOgolny)
+{
+    <p><b>@(string.Format(Html.PobierzTlumaczenie("Twój stały rabat na cała ofertę:")+" {0}%", SolexHelper.AktualnyKlient.Rabat))</b></p>
+}
+
+<b>
+    @if (rabatyKategorii != null && !rabatyKategorii.Any() && SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.Konfiguracja.PokazujRabatyTylkoZWidocznychGrup)
+    {
+        Html.PobierzTlumaczenie("Bieżące ustawienia widoczności grup mogą wpłynąć na brak widocznych kategorii rabatowych - sprawdź ustawienie PokazujRabatyTylkoZWidocznychGrup");
+    }
+</b>
+
+@*public string SposobPrzyjaznie(IKlient klient)
+    {
+        switch (TypWartosci)
+        {
+            case RabatSposob.Procentowy:
+                return "%";
+            case RabatSposob.StalaCena:
+                if (WalutaId != null)
+                {
+                    return  SolexBllCalosc.PobierzInstancje.Konfiguracja.SlownikWalut[WalutaId.Value].WalutaB2b;
+                }
+                return SolexBllCalosc.PobierzInstancje.Klienci.WalutaNaPodstawiePoziomuCenowegoKlienta(klient);
+
+            default:
+                return "";
+        }
+    }*@
+
+@* rabaty dla kategorii *@
+@*@if (rabatyKategorii != null && rabatyKategorii.Any())
+{
+    <h4 style="margin-top: 0; font-weight: bold">@Html.PobierzTlumaczenie("Rabaty na kategorie produktów")</h4>
+    <div class="tabela_rabatow row">
+        @foreach (RabatBLL rabat in rabatyKategorii)
+        {
+            <div class="col-md-3">
+                <span class="r"> @rabat.NaCoBezNazw </span>
+                <span class="l">
+                    @rabat.Wartosc1.GetValueOrDefault().ToString("0.##")  @rabat.SposobPrzyjaznie(SolexHelper.AktualnyKlient)                
+                </span>
+            </div>
+            <div class="col-md-1">
+
+            </div>
+        }
+    </div>
+}*@
+
+@* rabaty dla produtków *@
+@*@if (rabatyProduktow != null && rabatyProduktow.Any())
+{
+    <h4 style="font-weight: bold">@Html.PobierzTlumaczenie("Stałe ceny na określone produkty:")</h4>
+    <div class="tabela_rabatow row">
+
+        @foreach (RabatBLL rabat in rabatyProduktow)
+        {
+            <div class="col-md-3">@rabat.NaCoBezNazw </div>
+            <div class="col-md-1">@rabat.Wartosc1.GetValueOrDefault().ToString("0.##") @rabat.SposobPrzyjaznie(SolexHelper.AktualnyKlient)   </div>
+        }
+    </div>
+}
+
+@if ( (rabatyKategorii != null && rabatyKategorii.Any()) || (rabatyProduktow != null &&  rabatyProduktow.Any()) )
+{
+    <p>
+        @Html.PobierzTlumaczenie("Jeżeli mają Państwo wątpliwość co do poprawności rabatów prosimy o kontakt z Biurem Obsługi Klienta. Powyższe wyliczenia rabatów mają charakter informacyjny i nie stanowią oferty handlowej w rozumieniu art. 66 §1 kodeksu cywilnego oraz innych właściwych przepisów prawnych.")
+    </p>
+}*@
+
+

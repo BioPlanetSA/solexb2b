@@ -1,0 +1,17 @@
+﻿
+@using System.Collections
+@using ServiceStack.Text
+@using SolEx.Hurt.Core.DostepDane
+@using SolEx.Hurt.Helpers
+@model SolEx.Hurt.Core.ModelBLL.ZadanieBll
+<td>@Html.Raw(Model.Id)</td>
+<td>@Html.Raw(Model.Modul().Nazwa)</td>
+<td>
+    @{
+        OpisPolaObiektu obiekt = new OpisPolaObiektu() {NazwaPola = "Parametry", Wartosc = Model.ListaParametrów};
+    }
+
+    @Html.Partial("DisplayTemplates/Admin/IEnumerable", obiekt)
+</td>
+
+<td>@Html.CheckBoxFor(x => x.Aktywne, new { disabled = "disabled" })</td>

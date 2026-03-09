@@ -1,0 +1,137 @@
+﻿@using System.Globalization
+@using ServiceStack.Text
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.WalidatoryDanych.Klienci
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models.DaneDoWidokow
+@model SolEx.Hurt.Core.Klient
+@{
+    IList<IAdres> listaAdresy = ViewBag.Adresy;
+    IList<SzablonLimitow> szablonyLimitow = ViewBag.SzablonyLimitow;
+    IList<SzablonAkceptacjiBll> szablonyAkceptacji = ViewBag.SzablonyAkceptacji;
+    IList<SubkontoGrupa> grupySubkont = ViewBag.GrupySubkont;
+    IList<MiejsceKosztow> miejscaKosztow = ViewBag.MiejsceKosztow;
+    long? adres = ViewBag.DomyslnyAdresId;
+
+    List<DaneDoTabow> taby = new List<DaneDoTabow> { new DaneDoTabow("#tabOglone", "Ogólne", true, null), new DaneDoTabow("#tabLimity", "Limity", false, null) };
+
+
+}
+
+<div class="modal fade szablon-subkonta-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            @using (Html.BeginForm("Edycja", "Subkonta", FormMethod.Post, new { id = "edycjaSubkont" }))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">@(Model.Id == 0 ? "Nowe subkonto" : "Edycja subkonta " + Model.Nazwa)</h4>
+
+                </div>
+                <div class="modal-body">
+                    @Html.Partial("_Taby", taby)
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="tabOglone">
+                            @Html.HiddenFor(x => x.Symbol)
+                            @Html.HiddenFor(x => x.Id)
+                            @Html.HiddenFor(x => x.KlientNadrzednyId)
+                            @Html.HiddenFor(x => x.HasloKlienta)
+                            @Html.LabelFor(x => x.Nazwa, Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nazwa").ToString())
+                            @Html.TextBoxFor(x => x.Nazwa, new { @class = "form-control", required = "required" })
+                            @Html.LabelFor(x => x.Email, Html.PobierzTlumaczenie("Adres email").ToString())
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control", type = "email" })
+                            @Html.LabelFor(x => x.Aktywny, Html.PobierzTlumaczenie("Aktywny".ToString()))
+                            @Html.CheckBoxFor(x => x.Aktywny, new { @class = "form-control" })
+                            @Html.LabelFor(x => x.AdministratorSubkont, Html.PobierzTlumaczenie("Administrator kont").ToString())
+                            @Html.CheckBoxFor(x => x.AdministratorSubkont, new { @class = "form-control" })
+                            @Html.LabelFor(x => x.HasloOdkryte, Html.PobierzTlumaczenie("Hasło klienta").ToString())
+                            @Html.TextBoxFor(x => x.HasloOdkryte, new { @class = "form-control", autocomplete = "new-password" })
+                            @Html.Label("domyslnyAdres", Html.PobierzTlumaczenie("Domyślny adres").ToString())
+                            <select name="domyslnyAdresId" class="form-control">
+                                <option value=""></option>
+                                @foreach (var a in listaAdresy)
+                                {
+                                    <option value="@a.Id" @Html.Raw(a.Id == adres ? "selected" : "")>@a.Nazwa @a.ToString()</option>
+                                }
+                            </select>
+                            @Html.LabelFor(x => x.AdresWysylkiBlokada, Html.PobierzTlumaczenie("Blokada zmiany adresu"))
+                            @Html.CheckBoxFor(x => x.AdresWysylkiBlokada, new { @class = "form-control" })
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tabLimity">
+                            <div class="zarzadzanie">
+                                <div class="alert alert-info" role="alert">Poniższe ustawienia nadpisuja ustawienia wybranej grupy</div>
+                                @Html.LabelFor(x => x.SubkontoGrupaId, Html.PobierzTlumaczenie("Grupa do której należy konto").ToString())
+                                @Html.DropDownListFor(x => x.SubkontoGrupaId, grupySubkont.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.SubkontoGrupaId }), "", new { @class = "form-control" })
+                                @Html.LabelFor(x => x.SzablonLimitowId, Html.PobierzTlumaczenie("SzablonListyProduktow limitów").ToString())
+                                @Html.DropDownListFor(x => x.SzablonLimitowId, szablonyLimitow.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.SzablonLimitowId }), "", new { @class = "form-control" })
+                                @Html.LabelFor(x => x.SzablonAkceptacjiId, Html.PobierzTlumaczenie("SzablonListyProduktow akceptacji").ToString())
+                                @Html.DropDownListFor(x => x.SzablonAkceptacjiId, szablonyAkceptacji.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.SzablonAkceptacjiId }), "", new { @class = "form-control" })
+                                @Html.LabelFor(x => x.SzablonAkceptacjiPrzekrocznyLimitId, Html.PobierzTlumaczenie("SzablonListyProduktow akceptacji gdy przekroczone limity").ToString())
+                                @Html.DropDownListFor(x => x.SzablonAkceptacjiPrzekrocznyLimitId, szablonyAkceptacji.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.SzablonAkceptacjiPrzekrocznyLimitId }), "", new { @class = "form-control" })
+                                @Html.LabelFor(x => x.MiejsceKosztowId, Html.PobierzTlumaczenie("Miejsce powstawania kosztów").ToString())
+                                @Html.DropDownListFor(x => x.MiejsceKosztowId, miejscaKosztow.Select(x => new SelectListItem { Text = x.Nazwa, Value = x.Id.ToString(CultureInfo.InvariantCulture), Selected = x.Id == Model.MiejsceKosztowId }), "", new { @class = "form-control" })
+                                @Html.LabelFor(x => x.DozwoloneAdresyIp, Html.PobierzTlumaczenie("Dozwolone adresy Ip").ToString())
+                                @Html.TextBoxFor(x => x.DozwoloneAdresyIp, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Anuluj</button>
+                </div>
+            }
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script language="javascript" type="text/javascript">
+
+    //Potrzebne jest to ze względu na fakt iż przegladarki same sobie uzupelniaja pole hasło oraz poprzedzajace je pole o adres email (atrybut autocomplite="off" nie dziala)
+    $(document).ready(function () {
+        $(function () {
+            setTimeout(function () {
+                $("input#HasloOdkryte").attr("type", "password");
+            }, 1000);
+        });
+
+
+
+        $('input').attr('autocomplete', 'off');
+    });
+
+
+    //# sourceURL=klientedycja.js
+    $('[name="WiadomoscEmail"]').on('keyup', function () {
+        var elem = $(this);
+        var submit = elem.closest('form').find('[type="submit"]');
+        var klucz = elem.closest('form').find('[name="Id"]').val();
+        var walidator = '@typeof(WalidatorMaila).PobierzOpisTypu()';
+        submit.prop('disabled', true);
+        var testowane = elem.val();
+        $.ajax(
+        {
+            url: '/Walidacja/Waliduj',
+            type: 'POST',
+            dataType: 'json',
+            async: false,
+            data: { walidator: walidator, klucz: klucz, testowane: testowane },
+            success: function (data) {
+
+                if (!data.Wynik) {
+                    var tabs = data.KomunikatBledu;
+                    var fraza = tabs[data.KomunikatBledu];
+                    elem[0].setCustomValidity(fraza);
+                } else {
+                    elem[0].setCustomValidity('');
+                }
+                submit.prop('disabled', false);
+            }
+
+        });
+    });
+</script>

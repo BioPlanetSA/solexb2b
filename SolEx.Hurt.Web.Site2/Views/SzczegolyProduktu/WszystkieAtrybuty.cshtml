@@ -1,0 +1,37 @@
+﻿
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Core.ModelBLL
+@model Dictionary<string, List<KeyValuePair<CechyBll, bool>>>
+
+<div class="produkt-atrybuty-lista">
+    @foreach (var i in Model)
+    {
+        <div class="atrybut-produktu ramka-wykropkowana-dol">
+            
+                @if (!string.IsNullOrEmpty(i.Key.Trim()))
+                {
+                    <span class="atrybut-nazwa text-muted">
+                      @i.Key:
+                    </span>
+                }
+            <span class="atrybut-cechy">
+                @foreach (var c in i.Value)
+                {
+                    string adres = c.Value && c.Key.PobierzAtrybut().PokazujNaLiscieProduktow ? string.Format("href={0}", Url.ZbudujLink(c.Key, SolexHelper.AktualnyJezyk)) : "";
+                    <span class="atrybut-opis" @*data-original-title="@c.Key.PobierzNazweCechyZNazwaAtrybutu()"*@>
+                        <a @adres>
+                            @if (c.Key.ObrazekId.HasValue)
+                            {
+                                @Html.Image(c.Key.Ikona, "ico80x80wp", c.Key.Nazwa)
+                            }
+                            else
+                            {
+                                @c.Key.Nazwa
+                            }
+                        </a>
+                    </span>
+                }
+            </span>
+        </div>
+    }
+</div>

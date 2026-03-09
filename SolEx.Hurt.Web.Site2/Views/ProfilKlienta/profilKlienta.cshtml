@@ -1,0 +1,23 @@
+﻿@using SolEx.Hurt.Core.ModelBLL
+
+
+<table id="tabela-profilklienta" class="table table-condensed lista-ustawien">
+    <thead>
+        <tr>
+            <th>Typ Ustawienia</th>
+            <th>Szczegóły ustawienia</th>
+            <th>Wartość</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ProfilKlienta pk in Model.Item1)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => pk.TypUstawienia)</td>
+                <td>@pk.Dodatkowe</td>
+                <td>@pk.WartoscLadna</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

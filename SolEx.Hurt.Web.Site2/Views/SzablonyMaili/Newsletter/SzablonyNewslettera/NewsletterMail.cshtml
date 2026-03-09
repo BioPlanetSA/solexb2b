@@ -1,0 +1,25 @@
+﻿@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.SzablonMailaNewslettera
+
+@{
+    Layout = "../_LayoutNewsletter.cshtml";
+}
+
+
+@section Odbiorca
+{
+    @Model.Klient.Email
+}
+@section Tytul
+{
+    @Model.NewsletterKampania.Temat
+}
+
+@section Tresc
+{
+    @Html.Raw(Model.NewsletterKampania.Tresc)
+}
+
+@*@section Produkty
+{
+   @Html.Partial( Model.SzablonListyProduktow, Model.Produkty)
+}*@

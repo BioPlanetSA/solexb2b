@@ -1,0 +1,1 @@
+﻿  Update ProfilKlienta set Dodatkowe=null where Dodatkowe like ''

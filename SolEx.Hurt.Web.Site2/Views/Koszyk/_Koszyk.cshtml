@@ -1,0 +1,33 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.KontrolkiTresci.Koszyk.KoszykPodglad
+
+@{
+    bool koszykJestPusty = !SolexHelper.AktualnyKoszyk.PobierzPozycje.Any();
+}
+
+<div class="koszyk-podglad">
+    <a href="@Url.ZbudujLinkKoszyka(SolexHelper.AktualnyJezyk)" id="koszyk_podglad" onmouseenter="PokazKoszykPodglad(this, @Model.IloscPozycji)" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="true"
+       class='dropdown-toggle disabled text  @(koszykJestPusty ? "koszyk-podglad-pusty" : "" )' onclick="window.location.href = '@Url.ZbudujLinkKoszyka(SolexHelper.AktualnyJezyk)'" >
+        @*<span class="tekst-pusty text-muted">@Html.PobierzTlumaczenie("koszyk jest pusty")</span>*@
+        @if (!SolexBllCalosc.PobierzInstancje.ProfilKlienta.PobierzWartosc<bool>(SolexHelper.AktualnyKlient, TypUstawieniaKlienta.UkryjCenyHurtowe))
+        {
+            if (Model.CenaPoRabacie == JakieCenyPokazywac.Netto || Model.CenaPoRabacie == JakieCenyPokazywac.NettoBrutto)
+            {
+                <span id="cena_netto" class="cena-wartosc">@Html.Raw(SolexHelper.AktualnyKoszyk.CalkowitaWartoscHurtowaNettoPoRabacie().Wartosc == 0 ? "" : SolexHelper.AktualnyKoszyk.CalkowitaWartoscHurtowaNettoPoRabacie().ToString())</span>
+            }
+            if (Model.CenaPoRabacie == JakieCenyPokazywac.Brutto || Model.CenaPoRabacie == JakieCenyPokazywac.BruttoNetto)
+            {
+                <span id="cena_brutto" class="cena-wartosc">@Html.Raw(SolexHelper.AktualnyKoszyk.CalkowitaWartoscHurtowaBruttoPoRabacie().Wartosc == 0 ? "" : SolexHelper.AktualnyKoszyk.CalkowitaWartoscHurtowaBruttoPoRabacie().ToString())</span>
+            }
+        }
+
+        <span tabindex="-1" class="btn btn-link empty btn-sm bsk bsk_icon">
+            <div id="ilosc_pozycji">@SolexHelper.AktualnyKoszyk.PobierzPozycje.Count</div>
+        </span>
+
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-right koszyk-podglad-wysuwany" id="koszyk-podglad-wysuwany" style="display:none"></div>
+</div>

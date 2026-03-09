@@ -1,0 +1,80 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@using SolEx.Hurt.Web.Site2.Models
+@model ParametryDoPracownika
+
+<table class="pracownik-szczegoly">
+    <tr>
+        <td>
+            @if (Model.Klient.ZdjecieId != null)
+            {
+                <img class="pracownik-zdjecie img-circle pull-xs-left" src="@Html.Raw(SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(Model.Klient.ZdjecieId.Value) != null ? SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(Model.Klient.ZdjecieId.Value).LinkWWersji(string.IsNullOrEmpty(Model.Preset)?"ico70x70wp":Model.Preset) : "")" />
+            }
+        </td>
+
+        <td class="text-xs-left">
+            @if (!string.IsNullOrEmpty(Model.TekstNadZdjeciem))
+            {
+                <h6>@Html.PobierzTlumaczenie(Model.TekstNadZdjeciem)</h6>
+            }
+
+            <h5>
+                <b> @(Model.Klient.Nazwa)</b>
+            </h5>
+            @if (!string.IsNullOrEmpty(Model.Klient.Telefon))
+            {
+                if (string.IsNullOrEmpty(Model.DodatkowyTelefon))
+                {
+                    @*<i class="fa fa-phone"></i>*@
+                    <span> @(Model.Klient.Telefon)</span>
+                }
+                else
+                {
+                    @*<i class="fa fa-phone"></i>*@
+                    <span> @(Model.Klient.Telefon), @Model.DodatkowyTelefon</span>
+                }
+            }
+
+            <br />
+            @if (!string.IsNullOrEmpty(Model.Klient.Email))
+            {
+                @*<i class="fa fa-envelope"></i>*@
+                <span><a href="mailto:@(Model.Klient.Email)"> @(Model.Klient.Email) </a></span>
+            }
+            @if (!string.IsNullOrEmpty(Model.Klient.Skype))
+            {
+                <br />
+                <text>
+                   @Html.PobierzTlumaczenie("Skype: ") <a href="skype:@(Model.Klient.Skype)?call" target="_top"><img alt="@(Model.Klient.Skype)" oncontextmenu="return false" title="Skype: @(Model.Klient.Skype)" /></a>
+                </text>
+                <br />
+            }
+            @if (!string.IsNullOrEmpty(Model.Klient.GaduGadu))
+            {
+                <br />
+                <text>
+                    <a href="gg:@(Model.Klient.GaduGadu)"><img src="http://status.gadu-gadu.pl/users/status.asp?id=@(Model.Klient.GaduGadu)&amp;styl=1" style="border: 0" />@(Model.Klient.GaduGadu)</a>
+                </text>
+                <br />
+            }
+            @if (Model.DodatkowePola != null)
+            {
+                foreach (var pole in Model.DodatkowePola)
+                {
+                    var poleKlienta = Model.Klient.GetType().GetProperty(pole);
+                    var wartosc = poleKlienta.GetValue(Model.Klient);
+                    if (wartosc != null)
+                    {
+                        <div class="@pole">
+                            @Html.Raw(wartosc)
+                        </div>
+                    }
+                }
+            }
+            
+        </td>
+    </tr>
+</table>
+
+
+

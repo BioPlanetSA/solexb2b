@@ -1,0 +1,26 @@
+﻿
+.cena {
+    &:not(.lista-produktow-warianty) > div {
+        display: inline;
+    }
+
+    div.cena-separator {
+        display: block;
+        height: 0;
+    }
+
+    &.row {
+        .cena-separator {
+            height: 5px;
+        }
+    }
+    div.cena-separator-przekreslenie{
+        display:block;
+        height:0;
+    }
+
+    .przekreslenie {
+        text-decoration: line-through;
+        color: darkgray;
+    }
+}

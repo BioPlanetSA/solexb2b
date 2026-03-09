@@ -1,0 +1,40 @@
+/*
+Document   : jquery.pnotify.icons.css
+Created on : Nov 24, 2009, 2:58:21 PM
+Author     : Hunter Perrin
+Version    : 1.2.2
+Link       : http://pinesframework.org/pnotify/
+Description:
+	Pines Icon styling for Pines Notify.
+*/
+
+.ui-pnotify .picon {
+background-color: transparent;
+background-repeat: no-repeat;
+background-position: center center;
+width: 17px;
+height: 17px;
+}
+.ui-pnotify-title {
+line-height: 17px;
+}
+[class^="icon-"], [class*=" icon-"] {
+    background-image: url("/layout/images/glyphicons-halflings.png");
+    background-position: 14px 14px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    line-height: 14px;
+    vertical-align: text-top;
+            width:14px;
+    height:14px;
+}
+h4 {
+    font-size: 14px;
+}
+.icon-remove {
+    background-position: -312px 0;
+}
+.icon-pause {
+    background-position: -288px -72px;
+
+}

@@ -1,0 +1,103 @@
+﻿@using ServiceStack.Text
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Model
+@model  SolEx.Hurt.Core.BLL.Web.DodatkowePoleKoszyka
+@{
+    IConfigBLL config = SolexBllCalosc.PobierzInstancje.Konfiguracja;
+    var idsplikow = !string.IsNullOrEmpty(Model.WybraneWartosciString) ? Model.WybraneWartosciString.FromJson<int[]>() : null;
+    IList<Plik> pliki = null;
+    if (idsplikow != null)
+    {
+        pliki = SolexBllCalosc.PobierzInstancje.DostepDane.Pobierz<Plik>(null, x => idsplikow.Contains(x.Id));
+    }
+}
+<div class="koszyk-parametr ramka-wykropkowana-dol koszyk-upload-plikow" id="koszyk-uplod-@Model.IdModulu">
+    @Html.HiddenFor(x => x.IdModulu)
+    @Html.HiddenFor(x => x.Symbol)
+
+    @* nie rednerujemy czesci wspolnej bo nazwa parametry pokazujemy w drop zonie
+        @Html.Partial("PoleWlasneKoszykaCzescWspolna", Model) *@
+    @Html.HiddenFor(x => x.WybraneWartosciString)
+    <div class="dragandrophandler dropzone" title="@Model.Komunikat">
+       @Model.Opis @*Przeciągnij i upuść tutaj pliki które chcesz wysłać razem z zamówieniem (np. list przewozowy)*@
+    </div>
+    <div class="pliki-lista"></div>
+</div>
+
+<script language="javascript" type="text/javascript">
+    //# sourceURL=polewlasnekoszykapliki.js
+    var obj = $("#koszyk-uplod-@Model.IdModulu .dragandrophandler");
+    obj.on('dragenter', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $(this).addClass('dragenter');
+    }).on('dragover', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }).on('drop', function (e) {
+        $(this).removeClass('dragenter');
+        $(this).addClass('dropped');
+        e.preventDefault();
+        var files = e.originalEvent.dataTransfer.files;
+        handleFileUpload(files, obj, 'Koszyk', PoUpload, UsunZawartosc);
+    });
+    $(document).on('dragenter', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    });
+    $(document).on('dragover', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        obj.removeClass('dragenter');
+    });
+    $(document).on('drop', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    });
+
+    function PoUpload(element, data) {
+        var ukryte = element.siblings('input[type="hidden"][name$="WybraneWartosciString"]');
+        //console.log(ukryte);
+        //console.log(element);
+        //console.log(data);
+        var wartosc = [];
+        if (ukryte.val()!='')
+        {
+            wartosc = jQuery.parseJSON(ukryte.val());
+            if (wartosc == undefined ) {
+                wartosc = [];
+            }
+        }
+        wartosc.push(data);
+        ukryte.val(JSON.stringify(wartosc));
+    }
+    function UsunZawartosc(element, data) {
+        var ukryte = element.siblings('input[type="hidden"][name$="WybraneWartosciString"]');
+        //console.log(ukryte);
+        //console.log(element);
+        //console.log(data);
+        var wartosc = [];
+        if (ukryte.val() != '') {
+            wartosc = jQuery.parseJSON(ukryte.val());
+            if (wartosc == undefined) {
+                wartosc = [];
+            }
+        }
+        var index = wartosc.indexOf(data);
+        if (index > -1) {
+            wartosc.splice(index, 1);
+        }
+        ukryte.val(JSON.stringify(wartosc));
+    }
+</script>
+@if (pliki != null)
+{
+    foreach (var p in pliki)
+    {
+        <script language="javascript" type="text/javascript">
+            var sbar = new CreateStatusbar(obj, false, UsunZawartosc, @p.Id);
+            sbar.setProgress(100,'@p.Nazwa', wyliczRozmiarLadny(@p.Rozmiar), true );
+        </script>
+    }
+}

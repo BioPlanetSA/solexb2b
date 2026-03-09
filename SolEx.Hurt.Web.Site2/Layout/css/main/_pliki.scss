@@ -1,0 +1,46 @@
+﻿@import "_ustawienia.scss";
+
+.lista-plikow{
+
+    img{
+        max-height: 55px;
+        padding-right: 10px;
+        vertical-align:middle;
+    }
+
+    font-size: 19px;
+
+    @media only screen and (max-width: $sm) {
+        font-size: 14px;
+          img{
+               max-height: 30px;
+              }
+    }
+
+
+
+    .nazwa{
+       vertical-align:middle;
+       color: black;
+      // white-space: nowrap; - nie moze byc z powodu mobilnej wersji
+
+       .ext{
+            margin-left: -4px;
+            color: gray;
+       }
+    }
+
+    h5{
+        display: inline-block;
+        padding-right: 10px;
+        margin-bottom: 0;
+    }
+
+    table{
+        td{
+            border-right-width: 0;
+            border-right: none;
+        }
+    }
+
+}

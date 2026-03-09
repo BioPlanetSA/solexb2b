@@ -1,0 +1,21 @@
+﻿@import "_ustawienia.scss";
+
+.pracownik-szczegoly {
+    display: inline-block;
+    font-size: 15px;
+    line-height: 21px;
+
+    .pracownik-zdjecie {
+        margin-right: 15px;
+    }
+
+    a {
+        color: $font-kolor;
+        text-decoration: none;
+    }
+
+    h5 {
+        font-size: 15px;
+        text-transform: uppercase;
+    }
+}

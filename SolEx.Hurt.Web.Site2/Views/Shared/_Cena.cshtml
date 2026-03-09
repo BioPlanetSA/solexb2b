@@ -1,0 +1,170 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.CenaDoPokazania
+
+@{
+    if (Model.CenaBruttoPrzekreslona != null)
+    {
+        Model.CssWartosc += " promo";
+    }
+}
+@if (Model.CenaNetto == 0 && SolexBllCalosc.PobierzInstancje.Konfiguracja.ZastepujCeneZerowaIkonkaTelefonu)
+{
+    <center><i class="fa fa-phone" aria-hidden="true" title="@Html.Raw("info na tel") "></i></center>
+    return;
+}
+
+<div class="cena @Model.CssCalosc">
+
+    @{
+        if (!string.IsNullOrEmpty(Model.OpisCalosci))
+        {
+            string opis = Html.PobierzTlumaczenie(Model.OpisCalosci).ToString();
+            if (!string.IsNullOrEmpty(opis))
+            {
+                <div class="cena-naglowek">
+                    @Html.Raw(opis)
+                </div>
+            }
+        }
+    }
+
+    @switch (Model.CoPokazywac)
+    {
+        case JakieCenyPokazywac.Brutto:
+            if (!string.IsNullOrEmpty(Model.OpisBrutto))
+            {
+                <div class="b @Model.CssOpis opis-cena-brutto">
+                    @Html.Raw(Html.PobierzTlumaczenie(Model.OpisBrutto))
+                </div>
+            }
+            <div class="b brutto @Model.CssWartosc">
+                @Model.CenaBrutto
+                @if (Model.CenaBruttoPrzekreslona != null)
+                {
+                    //ten separator musi tu byc do rodzielania linii
+                    <div class="cena-separator-przekreslenie">&nbsp;</div>
+                    <span class="przekreslenie">@Model.CenaBruttoPrzekreslona</span>
+                }
+                @if (!string.IsNullOrEmpty(Model.JednostkaMiaryOpcjonalna))
+                {
+                    <small>/@Model.JednostkaMiaryOpcjonalna</small>
+                }
+            </div>
+
+                break;
+        case JakieCenyPokazywac.Netto:
+                if (!string.IsNullOrEmpty(Model.OpisNetto))
+                {
+                    <div class="b @Model.CssOpis opis-cena-netto">
+                        @Html.Raw(Html.PobierzTlumaczenie(Model.OpisNetto))
+                    </div>
+                }
+                <div class="b netto @Model.CssWartosc">
+                    @Model.CenaNetto
+
+                    @if (Model.CenaNettoPrzekreslona != null)
+                    {
+                        //ten separator musi tu byc do rodzielania linii
+                        <div class="cena-separator-przekreslenie">&nbsp;</div>
+                        <span class="przekreslenie">@Model.CenaNettoPrzekreslona</span>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.JednostkaMiaryOpcjonalna))
+                    {
+                        <small>/@Model.JednostkaMiaryOpcjonalna</small>
+                    }
+                </div>
+                    break;
+
+        case JakieCenyPokazywac.BruttoNetto:
+                    if (!string.IsNullOrEmpty(Model.OpisBrutto))
+                    {
+                        <div class="b @Model.CssOpis opis-cena-brutto">
+                            @Html.Raw(Html.PobierzTlumaczenie(Model.OpisBrutto))
+                        </div>
+                    }
+
+                    <div class="b brutto @Model.CssWartosc">
+                        @Model.CenaBrutto
+                        @if (Model.CenaBruttoPrzekreslona != null)
+                        {
+                            //ten separator musi tu byc do rodzielania linii
+                            <div class="cena-separator-przekreslenie">&nbsp;</div>
+                            <span class="przekreslenie">@Model.CenaBruttoPrzekreslona</span>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.JednostkaMiaryOpcjonalna))
+                        {
+                            <small>/@Model.JednostkaMiaryOpcjonalna</small>
+                        }
+                    </div>
+
+                        //ten separator musi tu byc do rodzielania linii
+                        <div class="cena-separator @Model.CssSeparatorPoziomow">&nbsp;</div>
+                        if (!string.IsNullOrEmpty(Model.OpisNetto))
+                        {
+                            <div class="@Model.CssOpis opis-cena-netto">
+                                @Html.Raw(Html.PobierzTlumaczenie(Model.OpisNetto))
+                            </div>
+                        }
+                        <div class="netto @Model.CssWartosc">
+                            @Model.CenaNetto
+                            @if (Model.CenaNettoPrzekreslona != null)
+                            {
+                                //ten separator musi tu byc do rodzielania linii
+                                <div class="cena-separator-przekreslenie">&nbsp;</div>
+                                <span class="przekreslenie">@Model.CenaNettoPrzekreslona</span>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.JednostkaMiaryOpcjonalna))
+                            {
+                                <small>/@Model.JednostkaMiaryOpcjonalna</small>
+                            }
+                        </div>
+                            break;
+        case JakieCenyPokazywac.NettoBrutto:
+                            if (!string.IsNullOrEmpty(Model.OpisNetto))
+                            {
+                                <div class="b opis-cena-netto @Model.CssOpis">
+                                    @Html.Raw(Html.PobierzTlumaczenie(Model.OpisNetto))
+                                </div>
+                            }
+                            <div class="b netto @Model.CssWartosc">
+                                @Model.CenaNetto
+                                @if (Model.CenaNettoPrzekreslona != null)
+                                {
+                                    //ten separator musi tu byc do rodzielania linii
+                                    <div class="cena-separator-przekreslenie">&nbsp;</div>
+                                    <span class="przekreslenie">@Model.CenaNettoPrzekreslona</span>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.JednostkaMiaryOpcjonalna))
+                                {
+                                    <small>/@Model.JednostkaMiaryOpcjonalna</small>
+                                }
+                            </div>
+
+                                //ten separator musi tu byc do rodzielania linii
+                                <div class="cena-separator @Model.CssSeparatorPoziomow">&nbsp;</div>
+                                if (!string.IsNullOrEmpty(Model.OpisBrutto))
+                                {
+                                    <div class="opis-cena-brutto @Model.CssOpis">
+                                        @Html.Raw(Html.Raw(@Html.PobierzTlumaczenie(Model.OpisBrutto)))
+                                    </div>
+                                }
+
+                                <div class="@Model.CssWartosc brutto">
+                                    @Model.CenaBrutto
+                                    @if (Model.CenaBruttoPrzekreslona != null)
+                                    {
+                                        //ten separator musi tu byc do rodzielania linii
+                                        <div class="cena-separator-przekreslenie">&nbsp;</div>
+                                        <span class="przekreslenie">@Model.CenaBruttoPrzekreslona</span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Model.JednostkaMiaryOpcjonalna))
+                                    {
+                                        <small>/@Model.JednostkaMiaryOpcjonalna</small>
+                                    }
+                                </div>
+
+                                    break;
+    }
+</div>

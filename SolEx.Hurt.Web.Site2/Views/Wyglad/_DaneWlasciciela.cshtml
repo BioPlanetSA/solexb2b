@@ -1,0 +1,43 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.DaneDoWidokow.ParametryDoWlasciciela
+
+
+<div itemscope=itemscope itemtype="http://schema.org/LocalBusiness">
+    @{
+        if (Model.Wlasciciel.Address == null)
+        {
+            Model.Wlasciciel.Address = new Adres();
+        }
+    }
+
+    @if (!string.IsNullOrEmpty(Model.Prefix))
+    {
+        @Html.Raw(Model.Prefix)
+    }
+    <h4><span itemprop="name">@Model.Wlasciciel.Name</span></h4>
+    <div itemprop="address" itemscope=itemscope itemtype="http://schema.org/PostalAddress">
+        <div itemprop="streetAddress">@Model.Wlasciciel.Address.UlicaNr</div>
+        <span itemprop="postalCode">@Model.Wlasciciel.Address.KodPocztowy</span>
+        <span itemprop="addressLocality">@Model.Wlasciciel.Address.Miasto</span>
+        <div itemprop="addressRegion">@Html.Raw(string.Format(Model.FormatRegionu,Model.Wlasciciel.Address.Region))</div>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.Wlasciciel.Address.Email))
+    {
+        <div>E-mail: <span itemprop="email">@Model.Wlasciciel.Address.Email</span></div>
+    }
+    @if (!string.IsNullOrEmpty(Model.Wlasciciel.Address.Telefon))
+    {
+        <div>Telefon: <span itemprop="email">@Model.Wlasciciel.Address.Telefon</span></div>
+    }
+    @if (!string.IsNullOrEmpty(Model.Wlasciciel.NIP))
+    {
+        <div>NIP: <span itemprop="email">@Model.Wlasciciel.NIP</span></div>
+    }
+    @if (!string.IsNullOrEmpty(Model.Sofix))
+    {
+        @Html.Raw(Model.Sofix)
+    }
+</div>

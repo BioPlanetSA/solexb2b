@@ -1,0 +1,9 @@
+﻿@using SolEx.Hurt.Core.BLL
+@{
+    var szukane = ViewData["szukana"];
+     }
+
+
+   @*// @Html.Label(Model.NazwaRzeczywista,Model.NazwaPokazywana)*@
+     @Html.TextBox("", szukane, new { @class = "form-control form-control-sm", form = "lista" })
+

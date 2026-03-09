@@ -1,0 +1,25 @@
+﻿@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Model.Web
+@using SolEx.Hurt.Web.Site2.Helper
+@model Type
+
+<div class="modal fade ustawienia-edycja">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Import danych z pliku CSV</h4>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.ZbudujLinkDoImportuAdmin(Model, SolexHelper.AktualnyJezyk)" enctype="multipart/form-data" method="post" id="importForm">
+                    <input type="hidden" id="Typ" name="typ" value="@Model.PobierzOpisTypu()" />
+                    <input type="file" id="FileUpload" name="Zalacznik1" data-text="@Html.PobierzTlumaczenie("Wybierz plik CSV do importu")">
+                    <button type="submit" class="btn btn-secondary sendcsv" onclick="importujNaSerwerPlik(event)">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wyślij")</button>
+                </form>
+                <div id="manager-importow-rezultat-upload">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

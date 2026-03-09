@@ -1,0 +1,8 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+
+
+<a href="@Url.ZbudujLinkDoListyKontrahentow(SolexHelper.AktualnyJezyk, SolexHelper.AktualnyKlient.CzyAdministrator)">
+    @Html.Raw(SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Lista klientów"))
+</a>
+

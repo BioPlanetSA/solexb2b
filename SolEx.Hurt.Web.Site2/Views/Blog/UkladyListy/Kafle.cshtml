@@ -1,0 +1,60 @@
+﻿@using System
+@using ServiceStack.Text
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.BlogModel
+
+
+@if (!string.IsNullOrEmpty(Model.NaglowekWpisow))
+{
+    <div class="col-xs-12 blogi-naglowek-wpisow text-center">
+        @Html.Raw(Model.NaglowekWpisow)
+    </div>
+}
+
+
+@foreach (BlogWpisBll item in Model.BlogWpisList)
+{
+    var adres = Url.ZbudujLink(item, Model.SymbolStronyWpisPojedynczy, SolexHelper.AktualnyJezyk);
+    bool blank = item.LinkAlternetywny != null && item.LinkAlternetywny.Tryb == TrybOtwierania.NoweOkno;
+    string url = string.IsNullOrEmpty(adres) ? "" : string.Format("href=\"{0}\"", adres);
+
+    <div class="@Model.BlogKafleUklad c blog-lista-kafle">
+        <div class="blog-lista-kafel  @(Model.CssDlaPojedynczegoWpisu != null ? Model.CssDlaPojedynczegoWpisu.Join(" ") : "")  ">
+            @if (Model.BlogPokazujZdjecia && item.ZdjecieId.HasValue)
+            {
+                <a @Html.Raw(url)  @(blank?"target=\"_blank\"":"") class="blog-zdjecie">
+                    <img src="@Html.Raw(SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(item.ZdjecieId.Value).LinkWWersji(Model.BlogPresetDoZdjec))" class="@Model.BlogPresetDoZdjec img-fluid center-block" />
+                    @if (Model.PokazujDate == BlogiSposobPokazaniaDaty.JakoZnaczekNaZdjeciu)
+                    {
+                        @Html.Partial("_blogiDataDodania", item.DataDodania)
+                    }
+                </a>
+            }
+
+            @if (Model.BlogPokazujTytul)
+            {
+                <h6 class="blog-lista-kafel-tytul">
+                    <a @Html.Raw(url) @(blank?"target=\"_blank\"":"")> @item.Tytul </a>
+                </h6>
+            }
+
+            @if (Model.PokazujDate == BlogiSposobPokazaniaDaty.PodTytulem)
+            {
+                <span class="blog-data-dodania">@item.SkroconaDataDodania</span>
+            }
+
+            <div class="blog-lista-kafel-tresc">
+                <a @Html.Raw(url) @(blank?"target=\"_blank\"":"")>
+                    <p>@Html.Raw(item.Tresc.PobierzSkrot(Model.BlogIloscPierwszychZnakow, "..."))</p>
+
+                    @if (!string.IsNullOrEmpty(url) && !string.IsNullOrEmpty(Model.CzytajDalejTresc))
+                    {
+                        <span class="btn btn-success" style="border-radius: 25px; margin-top: 10px"> @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, Model.CzytajDalejTresc) </span>
+                    }
+                </a>
+            </div>
+        </div>
+    </div>
+}

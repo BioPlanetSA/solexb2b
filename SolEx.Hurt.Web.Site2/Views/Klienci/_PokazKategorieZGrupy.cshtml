@@ -1,0 +1,14 @@
+﻿@using SolEx.Hurt.Model
+@model Tuple<List<KategoriaKlienta>, string>
+
+<span class="kategoria-klientow">
+    <span class="atrybut">@Html.Raw(Model.Item2)</span>
+    @for (int i = 0; i < Model.Item1.Count; i++)
+    {
+        <span>@Model.Item1[i].Nazwa</span>
+        if (i < Model.Item1.Count - 1)
+        {
+            @Html.Raw(", ")
+        }
+    }
+</span>

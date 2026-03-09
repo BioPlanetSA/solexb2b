@@ -1,0 +1,256 @@
+﻿@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Model.Interfaces
+@using SolEx.Hurt.Web.Site2.Helper
+@model dynamic
+@{
+    IKlient klient = Model.Klient;
+    IConfigBLL konfiguracja = Model.Konfiguracja;
+    int jezyk = Model.JezykMaila();
+}
+
+<odbiorca>@RenderSection("Odbiorca")</odbiorca>
+<tytul> @RenderSection("Tytul")</tytul>
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width" />      
+    </head>
+
+<body class="bodyTlo">
+    <table class="body">
+        <tr>
+            <td>
+                <center>
+                    @*-------------- logo start -----------------*@
+                    <table class="row header">
+                        <tr>
+                            <td class="center" align="center">
+                                <center>
+                                    <table class="container logoTlo">
+                                        <tr>
+                                            <td class="wrapper last">
+                                                <table class="twelve columns">
+                                                    <tr>
+                                                        <td align="center">
+                                                            <center>
+                                                                @{ Html.RenderPartial("Naglowek"); }
+                                                            </center>
+                                                        </td>
+                                                        <td class="expander"></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </center>
+                            </td>
+                        </tr>
+                    </table>
+                    @*-------------- logo KONIEC -----------------*@
+
+                    @*-------------- tekst naglowkowy start -----------------*@
+
+                    @if (IsSectionDefined("Naglowek"))
+                    {
+                        <table class="row headerTlo">
+                            <tr>
+                                <td>
+                                    <table class="container">
+                                        <tr>
+                                            <td class="wrapper last">
+                                                <table class="twelve columns">
+                                                    <tr>
+                                                        <td class="center" align="center">
+                                                            <center>
+                                                                <br />
+                                                                @RenderSection("Naglowek")
+                                                            </center>
+                                                        </td>
+                                                        <td class="expander"></td>
+                                                    </tr>
+                                                </table>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                    @*-------------- naglowek KONIEC -----------------*@
+
+
+                        @*-------------- kontent START -----------------*@
+                        <table class="container contentTlo">
+                            <tr>
+                                <td>
+                                    <br />
+                                    @RenderSection("Tresc")
+                                </td>
+                            </tr>
+                        </table>
+                        @*-------------- kontent KONIEC -----------------*@
+
+                        @{
+                            var przedstawiciel = klient.Przedstawiciel;
+                            var opiekun = klient.Opiekun;
+                            var drugiOpiekun = klient.DrugiOpiekun;
+                        }
+
+                        @*-------------- pracownicy START -----------------*@
+                        @if (przedstawiciel!=null || opiekun!=null || drugiOpiekun!=null)
+                        {
+                            int ileKolumn = (opiekun != null ? 1 : 0) + (przedstawiciel != null ? 1 : 0) + (drugiOpiekun != null ? 1 : 0);
+                            string kolumnySlownie = "";
+                            switch (ileKolumn)
+                            {
+                                case 2:
+                                    kolumnySlownie = "six columns";
+                                    break;
+                                case 3: kolumnySlownie = "four columns";
+                                    break;
+                            }
+
+                            <table class="container pracownicyTlo">
+                                <tr>
+                                    <td>
+                                        <table class="row">
+                                            <tr class="wrapper last">
+                                                <td>
+                                                    <table class="twelve columns">
+                                                        <tr>
+                                                            <td class="text-pad">
+                                                                <br />
+                                                                @Html.PobierzTlumaczenie(jezyk, "Potrzebujesz pomocy? Codziennie do Twojej dyspozycji są osoby:", MiejsceFrazy.Newsletter)
+                                                            </td>
+                                                            <td class="expander"></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table class="container pracownicyTlo">
+                                <tr>
+                                    <td>
+                                        <table class="row">
+                                            <tr>
+                                                <td class="wrapper">
+                                                    @if (opiekun!=null)
+                                                    {
+                                                        <table class="@kolumnySlownie">
+                                                            <tr>
+                                                                <td class="left-text-pad">
+                                                                    <h6>@Html.PobierzTlumaczenie(jezyk, "Opiekun")</h6><br />
+                                                                    @if (opiekun.Obrazek != null)
+                                                                    {
+                                                                        <img class="center" src='@Url.ZbudujLinkZewnetrzny(opiekun.Obrazek.LinkWWersji("ikona60"))' />
+                                                                    }
+                                                                    <b>@opiekun.Nazwa</b><br />
+                                                                    @Html.PobierzTlumaczenie(jezyk, "Tel: {0}", MiejsceFrazy.Newsletter, new object[] { opiekun.Telefon})<br />
+                                                                    @Html.PobierzTlumaczenie(jezyk, "E-mail: ", MiejsceFrazy.Newsletter) <a href="mailto:@(opiekun.Email)">@(opiekun.Email)</a>
+
+                                                                </td>
+                                                                <td class="expander"></td>
+                                                            </tr>
+                                                        </table>
+                                                    }
+
+                                                </td>
+                                                <td class="wrapper">
+                                                    @if (przedstawiciel!=null)
+                                                    {
+                                                        <table class="@kolumnySlownie">
+                                                            <tr>
+                                                                <td class="left-text-pad">
+                                                                    <h6>@Html.PobierzTlumaczenie(jezyk, "Przedstawiciel")</h6><br />
+
+                                                                    @if (przedstawiciel.Obrazek != null)
+                                                                    {
+                                                                        <img class="center" src='@Url.ZbudujLinkZewnetrzny(przedstawiciel.Obrazek.LinkWWersji("ikona60"))' />
+                                                                    }
+                                                                    <b>@przedstawiciel.Nazwa</b><br />
+                                                                    @Html.PobierzTlumaczenie(jezyk, "Tel: {0}", MiejsceFrazy.Newsletter, new object[] { przedstawiciel.Telefon})<br />
+                                                                    @Html.PobierzTlumaczenie(jezyk, "E-mail: ", MiejsceFrazy.Newsletter) <a href="mailto:@(przedstawiciel.Email)">@(przedstawiciel.Email)</a>
+                                                                </td>
+                                                            </tr>
+
+                                                        </table>
+                                                    }
+                                                </td>
+
+                                                <td class="wrapper last">
+                                                    @if (drugiOpiekun!=null)
+                                                    {
+                                                        <table class="@kolumnySlownie">
+                                                            <tr>
+                                                                <td class="left-text-pad">
+                                                                    <h6>
+                                                                        @Html.PobierzTlumaczenie(jezyk, "Rozliczenia")
+                                                                    </h6><br />
+
+                                                                    @if (drugiOpiekun.Obrazek != null)
+                                                                    {
+                                                                        <img class="center" src='@Url.ZbudujLinkZewnetrzny(drugiOpiekun.Obrazek.LinkWWersji("ikona60"))' />
+                                                                    }
+                                                                    <b>@drugiOpiekun.Nazwa</b><br />
+                                                                    @Html.PobierzTlumaczenie(jezyk, "Tel: {0}", MiejsceFrazy.Newsletter, new object[] { drugiOpiekun.Telefon })<br />
+                                                                    @Html.PobierzTlumaczenie(jezyk, "E-mail: ") <a href="mailto:@(drugiOpiekun.Email)">@(drugiOpiekun.Email)</a>
+                                                                   
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+
+
+                        @*-------------- pracownicy KONIEC -----------------*@
+
+
+
+
+
+                            @*-------------- stopka START -----------------*@
+                            <table class="row">
+                                <tr>
+                                    <td class="wrapper last">
+                                        <table class="twelve columns">
+                                            <tr>
+                                                <td align="center text-pad">
+                                                    <center>
+                                                        <br />
+                                                        <p style="text-align:center;">
+                                                            @{ Html.RenderPartial("Stopka"); }
+                                                        </p>
+                                                    </center>
+                                                </td>
+                                                <td class="expander"></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            @*-------------- stopka KONIEC -----------------*@
+
+                        </center>
+                    </td>
+
+            </tr>
+        </table>
+    </body>
+
+</html>

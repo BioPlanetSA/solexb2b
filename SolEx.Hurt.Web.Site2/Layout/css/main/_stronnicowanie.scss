@@ -1,0 +1,58 @@
+﻿@import "_ustawienia.scss";
+
+.stronicowanie{
+        font-size: 110%;
+        display: inline-block;
+        margin-left: 15px;
+
+    input{
+        display: inline-block;
+        color: $kolor-zaznaczone-menu;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid white;
+        border-bottom: 1px solid #bfbfbf;
+        text-align: center;
+        outline: none !important;
+        width: 20px;
+        padding: 0;
+        padding-bottom: 2px;
+    }
+
+    a{
+        color: $font-kolor;
+        text-decoration: none;
+
+        &:hover{
+            color: $kolor-zaznaczone-menu;
+        }
+    }
+
+    .fa{
+        padding: 5px;
+    }
+
+      //zmiana do gory na dol na przyciski z boku
+    @media only screen and (max-width: $lg) {
+        font-size: 150% !important;
+        .fa-angle-left, .fa-angle-right{
+            border: 1px solid $kolor-ramki-mocny;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            vertical-align: middle;
+            margin: auto 10px;
+        }
+    }
+
+}
+
+
+.produkty-dol > .stronicowanie{
+      font-size: 130%;
+
+        input{
+            min-width: 50px;
+        }
+}
+

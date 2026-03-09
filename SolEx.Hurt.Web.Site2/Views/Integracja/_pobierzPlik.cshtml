@@ -1,0 +1,114 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Controllers
+@using SolEx.Hurt.Web.Site2.Helper
+@model PlikIntegracjiSzablon
+@{
+    int wersja = ViewBag.Wersja;
+    string[] dozwoloneKodowanie = Enum.GetNames(typeof(SolEx.Hurt.Web.Site2.Controllers.IntegracjaController.KodowaniePlikowIntegracji));
+    if (Model.Format == "EPP")
+    {
+        dozwoloneKodowanie = new string[] { IntegracjaController.KodowaniePlikowIntegracji.Windows1250.ToString() };
+    }
+}
+
+<div class="integracja">
+
+    <div class="alert alert-danger c">
+        <p>
+            @Html.PobierzTlumaczenie("Wszystkie pliki są aktualizowane kilka razy dziennie. Bardzo prosimy nie ściągać plików częściej niż raz na godzine - każdy użytkownik," +
+                                 " który będzie pobierał pliki zbyt często dostanie automatycznie kilkuminutową blokadę.")
+        </p>
+    </div>
+    <br />
+
+    @if (dozwoloneKodowanie.Length > 1 && SolexHelper.AktualnyJezyk.Symbol == "pl")
+    {
+        <p>Jeśli po otwarciu pliku nie widzisz polskich znaków, wybierz inne kodowanie. Jeśli nie wiesz jakie kodowanie wybrać, wybierz UTF-8. W przypadku chęci otwierania plików w programach typu Excel, wybierz kodowanie Windows-1250.</p>
+        <br />
+    }
+
+    <table class="table">
+        <thead>
+        <th>kodowanie</th>
+        <th>linki</th>
+        </thead>
+        @foreach (string kod in dozwoloneKodowanie)
+        {
+            <tr>
+                <td>
+                    <h6>
+                        <span class="label label-default">@kod</span>
+                    </h6>
+                </td>
+                <td>
+                    @foreach (var jezyk in SolexBllCalosc.PobierzInstancje.Konfiguracja.JezykiWSystemie.Values)
+                    {
+                        string link = Url.ZbudujLinkDoSzablonuIntegracji(jezyk, kod, Model, SolexHelper.AktualnyKlient, wersja);
+
+                        if (SolexBllCalosc.PobierzInstancje.Konfiguracja.WieleJezykowWSystemie)
+                        {
+                            <span class="label label-primary">@jezyk.Symbol</span>
+                        }
+
+                        <a href="@link" class="czcionka-tekstowa-paragraf" style="font-size: 12px">@link</a>
+                        <br/>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+
+    <p class="lead">Opcje zaawansowane - pomocne dla programistów</p>
+
+    <div class="integracja-modal-opcje czcionka-tekstowa-paragraf">
+            <p>Linki do integracji mogą być rozbudowane o różne parametry. Parametry należy dodawać na końcu adresu integracji. Parametry można dowolnie łączyć.</p>
+            <table class="table">
+                <thead>
+                <th>parametr</th>
+                <th>opis</th>
+                </thead>
+
+                <tr>
+                    <td>
+                        exfilters
+                    </td>
+                    <td>wyklucza produkty o wybranych id cech</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        filters
+                    </td>
+                    <td>wyklucza produkty które nie posiadają wybranych id cech (parametr ma wyższy priorytet od <em>exfilters</em>)</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        stream=true
+                    </td>
+                    <td>określa że zawartość pliku ma być zwrócona bezpośrednio w strumieniu odpowiedzi z serwera. Domyślnie zwartość jest zwracana jako plik, załącznik do odpowiedzi z serwera</td>
+                </tr>
+            </table>
+
+            <p>Id cech możesz podejżeć w linkach kategorii produktów na B2B lub poprosić swojego opiekuna o pomoc.</p>
+            <p>Przykładowe wywołanie z parametrami:</p>
+
+            <ul>
+                <li>
+                    <em>..../obecny-link-do-integracji</em>?<span class="text-primary">exfilters=53,637,8843</span>&<span class="text-success">filters=22,77225</span>&<span class="text-warning">stream=true</span>
+                </li>
+                <li>
+                    <em>..../obecny-link-do-integracji</em>?<span class="text-warning">stream=true</span>
+                </li>
+                <li>
+                    <em>..../obecny-link-do-integracji</em>?<span class="text-success">filters=22,77225</span>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+@*</div>*@
+
+@*<br />*@ 

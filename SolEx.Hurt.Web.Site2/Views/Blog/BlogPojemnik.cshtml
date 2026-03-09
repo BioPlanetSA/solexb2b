@@ -1,0 +1,25 @@
+﻿@using ServiceStack.Text
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.BlogModel
+<div class="blog-lista">
+    <div class="row @Model.UkladPuzli blog-@Model.BlogUklad">
+        @{
+            Html.RenderPartial("UkladyListy/" + Model.BlogUklad, Model);
+            Model.BlogWpisList = null;
+        }
+    </div>
+
+    @if (Model.PokazWiecej)
+    {
+        Model.NaglowekWpisow = null;
+        Model.BlogWpisList = null;
+        <div class="blog-lista-wiecejaktualnosci c">
+            <button class="btn btn-secondary blog-lista-ladujaktuanosci-przycisk" data-parametry="@Model.ToJson()">
+                @Html.PobierzTlumaczenie("WIĘCEJ AKTUALNOŚCI")
+            </button>
+        </div>
+    }
+
+</div>
+

@@ -1,0 +1,84 @@
+﻿@using System.Dynamic
+@using System.Globalization
+@using System.Text
+@using System.Web.Script.Serialization
+@using CsvHelper
+@using CsvHelper.Configuration
+@using ServiceStack.Text
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Core.ModelBLL.Interfejsy
+@using SolEx.Hurt.Helpers
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Helpers
+@using SolEx.Hurt.Web.Site2.App_Start
+@using SolEx.Hurt.Web.Site2.Helper
+@using CsvWriter = CsvHelper.CsvWriter
+@model  SolEx.Hurt.Web.Site2.Models.ParametrDoKataloguProduktow
+@{
+    Layout = null;
+}
+@section Opis {
+}
+@section Nazwa {
+   Uniwersalny plik JSON do drukowania katalogów
+}
+@section Szablon{
+    @if (Model != null)
+    {
+        List<dynamic> produkty = new List<dynamic>();
+        foreach (IProduktKlienta p in Model.ListaProduktow)
+        {
+            dynamic kategorie = new ExpandoObject();
+
+            var slownik = (kategorie as IDictionary<string, Object>);
+            slownik.Add("ProduktId", p.Id);
+            foreach (KategorieBLL kategorieBll in p.Kategorie)
+            {
+
+                string klucz = $"{kategorieBll.Grupa.Id}_kategoria_{kategorieBll.Id}";
+
+                if (!slownik.ContainsKey($"{klucz}_nazwa")) { slownik.Add($"{klucz}_nazwa", kategorieBll.Nazwa);}
+
+                if (!slownik.ContainsKey($"{klucz}_zdjecie1_LinkDuze")) { slownik.Add($"{klucz}_zdjecie1_LinkDuze", Url.LinkAbsolutny(kategorieBll.Zdjecie1?.LinkOryginal)); }
+                if (!slownik.ContainsKey($"{klucz}_zdjecie1_LinkMiniatura")) { slownik.Add($"{klucz}_zdjecie1_LinkMiniatura", Url.LinkAbsolutny(kategorieBll.Zdjecie1?.LinkWWersji("katalogxmax"))); }
+
+                if (!slownik.ContainsKey($"{klucz}_zdjecie2_LinkDuze")) { slownik.Add($"{klucz}_zdjecie2_LinkDuze", Url.LinkAbsolutny(kategorieBll.Zdjecie2?.LinkOryginal)); }
+                if (!slownik.ContainsKey($"{klucz}_zdjecie2_LinkMiniatura")) { slownik.Add($"{klucz}_zdjecie2_LinkMiniatura", Url.LinkAbsolutny(kategorieBll.Zdjecie2?.LinkWWersji("katalogxmax"))); }
+
+                if (!slownik.ContainsKey($"{klucz}_zdjecie3_LinkDuze")) { slownik.Add($"{klucz}_zdjecie3_LinkDuze", Url.LinkAbsolutny(kategorieBll.Zdjecie3?.LinkOryginal)); }
+                if (!slownik.ContainsKey($"{klucz}_zdjecie3_LinkMiniatura")) { slownik.Add($"{klucz}_zdjecie3_LinkMiniatura", Url.LinkAbsolutny(kategorieBll.Zdjecie3?.LinkWWersji("katalogxmax"))); }
+
+                if (!slownik.ContainsKey($"{klucz}_zdjecie4_LinkDuze")) { slownik.Add($"{klucz}_zdjecie4_LinkDuze", Url.LinkAbsolutny(kategorieBll.Zdjecie4?.LinkOryginal)); }
+                if (!slownik.ContainsKey($"{klucz}_zdjecie4_LinkMiniatura")) { slownik.Add($"{klucz}_zdjecie4_LinkMiniatura", Url.LinkAbsolutny(kategorieBll.Zdjecie4?.LinkWWersji("katalogxmax"))); }
+
+                if (!slownik.ContainsKey($"{klucz}_zdjecie5_LinkDuze")) { slownik.Add($"{klucz}_zdjecie5_LinkDuze", Url.LinkAbsolutny(kategorieBll.Zdjecie5?.LinkOryginal)); }
+                if (!slownik.ContainsKey($"{klucz}_zdjecie5_LinkMiniatura")) { slownik.Add($"{klucz}_zdjecie5_LinkMiniatura", Url.LinkAbsolutny(kategorieBll.Zdjecie5?.LinkWWersji("katalogxmax"))); }
+
+                if (!slownik.ContainsKey($"{klucz}_obrazek_LinkDuze")) { slownik.Add($"{klucz}_obrazek_LinkDuze", Url.LinkAbsolutny(kategorieBll.Obrazek?.LinkOryginal)); }
+                if (!slownik.ContainsKey($"{klucz}_obrazek_LinkMiniatura")) { slownik.Add($"{klucz}_obrazek_LinkMiniatura", Url.LinkAbsolutny(kategorieBll.Obrazek?.LinkWWersji("katalogxmax"))); }
+
+                if (!slownik.ContainsKey($"{klucz}_opis")) { slownik.Add($"{klucz}_opis", kategorieBll.Opis); }
+
+                if (!slownik.ContainsKey($"{klucz}_Text1")) { slownik.Add($"{klucz}_Text1", kategorieBll.Tekst1); }
+                if (!slownik.ContainsKey($"{klucz}_Text2")) { slownik.Add($"{klucz}_Text2", kategorieBll.Tekst2); }
+                if (!slownik.ContainsKey($"{klucz}_Text3")) { slownik.Add($"{klucz}_Text3", kategorieBll.Tekst3); }
+                if (!slownik.ContainsKey($"{klucz}_Text4")) { slownik.Add($"{klucz}_Text4", kategorieBll.Tekst4); }
+                if (!slownik.ContainsKey($"{klucz}_Text5")) { slownik.Add($"{klucz}_Text5", kategorieBll.Tekst5); }
+            }
+
+            produkty.Add(kategorie);
+        }
+
+        object listaDoJson = new {Kategorie = produkty};
+
+        JavaScriptSerializer serializer = new JavaScriptSerializer();
+        serializer.MaxJsonLength = Int32.MaxValue;
+        serializer.RegisterConverters(new JavaScriptConverter[] { new ExpandoJSONConverter() });
+
+        ViewBag.ObiektModelu = listaDoJson;
+
+            @Html.Raw(serializer.Serialize(listaDoJson));
+        }
+    }

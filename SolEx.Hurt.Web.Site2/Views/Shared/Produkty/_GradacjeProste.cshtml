@@ -1,0 +1,76 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.ModelBLL
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoGradacji
+@{
+    ProduktKlienta produkt = Model.Produkt;
+}
+
+@if (!string.IsNullOrEmpty(Model.KontrolkaGradacji.Naglowek))
+{
+    @Html.PobierzTlumaczenie(Model.KontrolkaGradacji.Naglowek)
+}
+<table class="konfekcja konfekcja-mala table table-auto table-bez-ramki r">
+    @if (Model.KontrolkaGradacji.PokazywacIleJuzKupione)
+    {
+        if (Model.WyliczonaIloscProduktu == 0)
+        {
+            <tr class="wiersz prosty">
+                <td colspan="2" class="c">
+                    @Html.PobierzTlumaczenie("Nie kupowałeś dotychczas tego produktu")
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr class="wiersz prosty">
+                <td colspan="2" class="c">
+                    @Html.PobierzTlumaczenie("Zakupiłeś już")
+                    <b>@Model.WyliczonaIloscProduktu.DoLadnejCyfry() @Model.Produkt.JednostkaPodstawowa.Nazwa</b>
+                    @Html.PobierzTlumaczenie("tego produktu")
+                </td>
+            </tr>
+        }
+    }
+
+    @foreach (var c in Model.Widoki.Where(x => !x.Spelniny))
+    {
+        //decimal ilosc = c.PrzedzialOdRzeczywisty - Model.WyliczonaIloscProduktu;
+        <tr class="wiersz prosty">
+            @if (!c.AktualnaCena)
+            {
+                <td class="ilosc brak-odstepu r">
+                    @Html.PobierzTlumaczenie("ilość")
+                    @Html.Raw(c.PrzedzialOdRzeczywisty > 1 ? c.PrzedzialOdRzeczywisty.ToString("0.##") : "1")
+                    @Html.Raw(c.PrzedzialDoRzeczywisty == decimal.MaxValue ? "+" : (c.PrzedzialDoRzeczywisty - 1).ToString(" - 0.##"))
+                    @*@Html.PobierzTlumaczenie("ilość {0}:", c.PrzedzialOdRzeczywisty > 1 ? c.PrzedzialOdRzeczywisty.ToString("0.##") : "1")*@
+                </td>
+                <td class="cena-gradacji brak-odstepu r">
+                    @Html.Action("Cena", "Produkty", new
+                    {
+                        cena = new CenaDoPokazania(c.CenaNetto, c.CenaBrutto, null, null, "netto", "", " gradacje-proste poziom-cena karta", "", Model.KontrolkaGradacji.TypCenyPoRabacie, "brutto")
+                    })
+                </td>
+            }
+            else
+            {
+                <td>
+                    <b>@Html.PobierzTlumaczenie("Twoja cena"):</b>
+                </td>
+                <td>
+                    @Html.Action("Cena", "Produkty", new
+                    {
+                        cena = new CenaDoPokazania(produkt.FlatCeny, "netto", "", "ceny-po-rabacie gradacje-proste aktualna-cena karta", "", Model.KontrolkaGradacji.TypCenyPoRabacie, "brutto")
+                    })
+                </td>
+            }
+        </tr>
+    }
+</table>
+
+@if (!string.IsNullOrEmpty(Model.KontrolkaGradacji.Stopka))
+{
+    @Html.PobierzTlumaczenie(Model.KontrolkaGradacji.Stopka)
+}

@@ -1,0 +1,33 @@
+﻿@using ServiceStack
+@model  SolEx.Hurt.Web.Site2.Models.ParametryDoPracownika
+
+<div class="pracownik-werjsa-skrocona czcionka-tekstowa-paragraf">
+    @if (!string.IsNullOrEmpty(Model.Klient.Nazwa))
+    {
+        <b>@(Model.Klient.Nazwa). </b>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.Klient.Email))
+    {
+        <a href="mailto:@Model.Klient.Email" style="display: inline">
+            <span class="fa fa-envelope"></span>
+            @Model.Klient.Email
+        </a>
+    }
+    @if (!string.IsNullOrEmpty(Model.Klient.Telefon))
+    {
+        if (string.IsNullOrEmpty(Model.DodatkowyTelefon))
+        {
+            <span class="fa fa-phone"></span> @Model.Klient.Telefon
+        }
+        else
+        {
+            <span class="fa fa-phone"></span> <span>@(Model.Klient.Telefon), @Model.DodatkowyTelefon</span>
+        }
+
+    }
+
+</div>
+
+
+

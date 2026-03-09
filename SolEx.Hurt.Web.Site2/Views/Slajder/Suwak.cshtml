@@ -1,0 +1,33 @@
+﻿@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.SlajderDane
+
+<div class="slider-suwak">
+    <div class="slide-slick list-unstyled list-inline" data-slick="@(Model.UstawieniaSlajder.Konfiguracja)">
+        @foreach (Slajd sl in Model.ListaSlajdow)
+        {
+            string url = Url.ZbudujLink(sl.LinkUrl, SolexHelper.AktualnyJezyk);
+
+            <div class="@Model.DodatkoweKlasyCssElementyKontrolki">
+                @*<a @Html.Raw((string.IsNullOrEmpty(url)) ? "" : " href=\"" + url + "\" ")>*@
+                <a @(!string.IsNullOrEmpty(url) ? string.Format(" href={0} {1}", url, sl.LinkUrl.Tryb == TrybOtwierania.NoweOkno ? "target=\"_blank\"" : "") : "")>
+                    @if (sl.PlikTlaId != null)
+                    {
+                        var obrazek = SolEx.Hurt.Core.BLL.SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<Plik>(sl.PlikTlaId);
+                        <img src="@obrazek.SciezkaWzgledna@Model.RozmiarZdjecia">
+                    }
+                    @if (sl.CzyPokazywacTytul)
+                    {
+                        <h6>@sl.Nazwa</h6>
+                    }
+                    @if (!string.IsNullOrEmpty(sl.Opis))
+                    {
+                        @Html.Raw(sl.Opis)
+                    }
+                </a>
+            </div>
+        }
+    </div>
+
+</div>

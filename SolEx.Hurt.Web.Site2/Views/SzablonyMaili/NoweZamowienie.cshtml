@@ -1,0 +1,512 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+    IConfigBLL konfiguracja = Model.Konfiguracja;
+    HashSet<PolaListaProduktowNoweZamowienie> pola = konfiguracja.KtorePolaProduktuPowiadomienieNoweZamowienie;
+    string preset =Model.Konfiguracja.ZdjecieRozmiarWPowiadomieniach;
+}
+
+@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Core.BLL.Interfejsy
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Core
+@using SolEx.Hurt.Model.Enums
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Core.ModelBLL.ObiektyMaili.PowiadomienieZZamowieniem
+
+@section Odbiorca
+{
+    @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+    {
+        @Model.Klient.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Opiekun && Model.Klient.Opiekun != null && Model.Klient.Opiekun.Id != 0)
+    {
+        @Model.Klient.Opiekun.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.Przedstawiciel && Model.Klient.Przedstawiciel != null && Model.Klient.Przedstawiciel.Id != 0)
+    {
+        @Model.Klient.Przedstawiciel.Email
+    }
+    else if (Model.DoKogoWysylany == TypyPowiadomienia.DrugiOpiekun && Model.Klient.DrugiOpiekun != null && Model.Klient.DrugiOpiekun.Id != 0)
+    {
+        @Model.Klient.DrugiOpiekun.Email
+    }
+}
+@section Tytul
+{
+    @{
+        string tytul = "";
+
+        if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+            @Html.PobierzTlumaczenie(Model.JezykMaila(), "Potwierdzenie złożenia zamówienia {0}", MiejsceFrazy.Newsletter,  Model.Zamowienie.DokumentNazwa)
+        }
+        else
+        {
+            if (Model.NazwaFormatu() == "Błąd importu zamówienia")
+            {
+                @Html.PobierzTlumaczenie(  Model.JezykMaila(), "Błąd importu zamówienia: {0} - {1}", MiejsceFrazy.Newsletter, Model.Zamowienie.DokumentNazwa, Model.Klient.Nazwa )
+            }
+            else
+            {
+                @Html.PobierzTlumaczenie( Model.JezykMaila(), "Potwierdzenie złożenia zamówienia: {0} - {1}", MiejsceFrazy.Newsletter,  Model.Zamowienie.DokumentNazwa, Model.Klient.Nazwa )
+            }
+        }
+    }
+    @tytul
+}
+
+@section Naglowek
+{
+    @{
+        string tytul = "";
+
+        if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+        {
+            <p class="center lead">@Html.PobierzTlumaczenie(  Model.JezykMaila(), "Potwierdzenie złożenia zamówienia: {0}", MiejsceFrazy.Newsletter, Model.Zamowienie.DokumentNazwa)</p>
+        }
+        else
+        {
+            if (Model.NazwaFormatu() == "Błąd importu zamówienia")
+            {
+                <p class="center lead">@Html.PobierzTlumaczenie( Model.JezykMaila(), "Błąd importu zamówienia: {0}", MiejsceFrazy.Newsletter, Model.Zamowienie.DokumentNazwa)</p>
+            }
+
+            else
+            {
+                <p class="center lead">@Html.PobierzTlumaczenie( Model.JezykMaila(), "Potwierdzenie złożenia zamówienia: {0} - {1}", MiejsceFrazy.Newsletter,  Model.Zamowienie.DokumentNazwa, Model.Klient.Nazwa )</p>
+            }
+        }
+    }
+}
+
+@section Tresc
+{
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                    <tr>
+                        <td class="text-pad">
+                            @if (Model.DoKogoWysylany == TypyPowiadomienia.Klient)
+                            {
+                                @Html.PobierzTlumaczenie(Model.JezykMaila(), "Dziękujemy za złożenie zamówienia na Platformie B2B", MiejsceFrazy.Newsletter)
+                            }
+                            else
+                            {
+                                if (Model.NazwaFormatu() == "Błąd importu zamówienia")
+                                {
+                                    @Html.PobierzTlumaczenie( Model.JezykMaila(), "Błąd importu zamówienia {1} dla klienta {0} ({3})<br />Błąd: <span class='blad'>{2}</span>.", MiejsceFrazy.Newsletter,  Model.Klient.Nazwa, Model.Zamowienie.DokumentNazwa, Model.Zamowienie.BladKomunikat, Model.Klient.Email)
+                                }
+                                else
+                                {
+                                    @Html.PobierzTlumaczenie( Model.JezykMaila(), "Klient {0} (email: {2}) złożył nowe zamówienie o numerze: {1}", MiejsceFrazy.Newsletter,  Model.Klient.Nazwa, Model.Zamowienie.DokumentNazwa, Model.Klient.Email )
+                                }
+                            }
+                            <br />
+                        </td>
+                        <td class="expander"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <br />
+
+    <table class="row">
+        <tr>
+            <td class="wrapper">
+                <table class="six columns">
+                    <tr>
+                        <td class="text-pad">
+                            <h6>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Identyfikacja", MiejsceFrazy.Newsletter)</h6>
+                            <br />
+
+                            <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Numer zamówienia", MiejsceFrazy.Newsletter): </b>
+                            @Model.Zamowienie.DokumentNazwa
+                            <br />
+                            @if (!string.IsNullOrEmpty(Model.Zamowienie.NumerWlasnyZamowieniaKlienta))
+                            {
+                                <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Numer własny zamówienia", MiejsceFrazy.Newsletter): </b>
+                                @(Model.Zamowienie.NumerWlasnyZamowieniaKlienta)
+                                <br />
+                            }
+                            <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Data zamówienia", MiejsceFrazy.Newsletter): </b>
+                            @(Model.Zamowienie.DataUtworzenia)
+                        </td>
+                        <td class="expander"></td>
+                    </tr>
+                </table>
+            </td>
+            <td class="wrapper last">
+                <table class="six columns">
+                    <tr>
+                        <td class="text-pad">
+                            <h6>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zamawiający", MiejsceFrazy.Newsletter)</h6>
+                            <br />
+                            @if (Model.Klient.KlientNadrzedny!=null && !string.IsNullOrEmpty(Model.Klient.KlientNadrzedny.Nazwa))
+                            {
+                                <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zamawiajacy", MiejsceFrazy.Newsletter): </b>
+                                @Model.Klient.KlientNadrzedny.Nazwa
+                                <br />
+                            }
+                            <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Osoba zamawiająca", MiejsceFrazy.Newsletter): </b>
+                            @Model.Klient.Nazwa
+                            <br />
+
+                            @if (Model.Klient.SubkontoGrupaId.HasValue && Model.Klient.SubkontoGrupaId.Value!=0)
+                            {
+                                <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "MPK", MiejsceFrazy.Newsletter): </b>
+                                var grupa = SolexBllCalosc.PobierzInstancje.DostepDane.PobierzPojedynczy<SubkontoGrupa>(Model.Klient.SubkontoGrupaId, null);
+                                @(grupa.Nazwa)
+                                <br />
+                            }
+
+                        </td>
+                        <td class="expander"></td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+    <br />
+
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+                    <tr>
+                        <td class="text-pad wstawkiTlo">
+                            <br />
+                            @*@Model.Konfiguracja.PobierzTlumaczenie(Model.JezykMaila(), "Szczegóły zamówienia")*@
+
+                            @{
+                                int ileKolumn = 0;
+                            }
+                            <table style="width: 100%" class="tabela">
+                                <tr class="naglowek">
+                                    @if (pola.Contains(PolaListaProduktowNoweZamowienie.Zdjecie))
+                                    {
+                                        <td align="center" class="center @preset">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Zdjęcie", MiejsceFrazy.Newsletter)</td>
+                                        ileKolumn++;
+                                    }
+                                    <td>
+                                        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Nazwa", MiejsceFrazy.Newsletter)
+                                    </td>
+                                    @{ ileKolumn++; }
+                                    <td align="center" class="center" style="min-width: 60px">
+                                        @Html.PobierzTlumaczenie(Model.JezykMaila(), "Ilość", MiejsceFrazy.Newsletter)
+                                    </td>
+                                    @{ ileKolumn++; }
+
+                                    <td align="right" class="r" style="min-width: 115px; padding-left: 10px;">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Cena", MiejsceFrazy.Newsletter)</td>
+                                    @{ ileKolumn++; }
+
+                                    <td align="right" class="r last" style="min-width: 115px; padding-left: 10px;">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Wartość", MiejsceFrazy.Newsletter)</td>
+                                    @{ ileKolumn++; }
+                                    @if (pola.Contains(PolaListaProduktowNoweZamowienie.Indywidualizacja))
+                                    {
+                                        <td align="right" class="r last" style="min-width: 115px">@Html.PobierzTlumaczenie(Model.JezykMaila(), "Indywidualizacja", MiejsceFrazy.Newsletter)</td>
+                                        ileKolumn++;
+                                    }
+                                </tr>
+
+                                @{
+
+                                    <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="@ileKolumn">&nbsp;</td></tr>
+
+                                    List<ZamowieniaProduktyBLL> listaPozycji = Model.Zamowienie.PobierzPozycjeDokumentu().OrderBy(x => x.TypPozycji).ToList();
+                                    for (int i = 0; i < listaPozycji.Count; ++i)
+                                    {
+                                        ZamowieniaProduktyBLL p = listaPozycji[i];
+                                        var produkty = p.ProduktBazowy;
+                                        <tr>
+
+                                            @if (pola.Contains(PolaListaProduktowNoweZamowienie.Zdjecie))
+                                            {
+                                                <td class="vcenter">
+
+                                                    @if (produkty.ZdjecieGlowne == null)
+                                                    {
+                                                        if (!string.IsNullOrEmpty(SolexBllCalosc.PobierzInstancje.Konfiguracja.DomyslneZdjecieSciezka))
+                                                        {
+                                                            <img src="@Model.BrakZdjecia" alt="" />
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@produkty.ZdjecieGlowne.LinkWWersji(preset)" alt="@produkty.Nazwa.Replace('"', ' ')" />
+                                                    }
+                                                </td>
+                                            }
+
+                                            <td class="vcenter">
+                                                <b>@produkty.Nazwa</b>
+                                                @if (pola.Contains(PolaListaProduktowNoweZamowienie.Symbol))
+                                                {
+                                                    <br />@produkty.Kod
+                                                }
+                                                @if (pola.Contains(PolaListaProduktowNoweZamowienie.Ean))
+                                                {<br />@produkty.KodKreskowy
+                                                }
+                                            </td>
+
+                                            <td class="center vcenter" align="center">
+                                                @p.PozycjaDokumentuIlosc <br />
+                                                @{
+
+                                        if (p.JednostkaPrzelicznik != 1)
+                                        {
+                                            WartoscLiczbowaZaokraglana pods = new WartoscLiczbowaZaokraglana(p.PozycjaDokumentuIlosc.Wartosc * p.JednostkaPrzelicznik, produkty.JednostkaPodstawowa.Nazwa);
+                                            @pods
+                                        }
+                                                }
+
+                                            </td>
+                                            <td class="r vcenter" align="right">
+                                                <p style="white-space: nowrap;">
+                                                    <small>@Html.PobierzTlumaczenie(Model.JezykMaila(), "netto", MiejsceFrazy.Newsletter)</small>&nbsp;@p.PozycjaDokumentuCenaNetto<br/>
+                                                </p>
+                                                <p style="white-space: nowrap;">
+                                                    <b><small>@Html.PobierzTlumaczenie(Model.JezykMaila(), "brutto", MiejsceFrazy.Newsletter)</small>&nbsp;@p.PozycjaDokumentuCenaBrutto</b>
+                                                </p>
+                                                    
+
+                                                @if (pola.Contains(PolaListaProduktowNoweZamowienie.Vat))
+                                                {
+                                                    <br />
+                                                    @Html.PobierzTlumaczenie(Model.JezykMaila(), "VAT", MiejsceFrazy.Newsletter)
+                                                    @p.ProduktBazowy.Vat<text>%</text>
+                                                }
+</td>
+                                            <td class="r vcenter" align="right">
+                                                <p style="white-space: nowrap;"><small>@Html.PobierzTlumaczenie(Model.JezykMaila(), "netto", MiejsceFrazy.Newsletter)</small>&nbsp;@p.PozycjaDokumentuWartoscNetto<br /></p>
+
+                                                <p style="white-space: nowrap;"><b><small>@Html.PobierzTlumaczenie(Model.JezykMaila(), "brutto", MiejsceFrazy.Newsletter)</small>&nbsp;@p.PozycjaDokumentuWartoscBrutto</b></p></td>
+
+                                            <td class="r vcenter" align="right">
+                                                <b>@p.Opis</b>
+
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td height="1" style="font-size: 1px; line-height: 1px;" class="hr belka" colspan="@ileKolumn">&nbsp;</td>
+                                        </tr>
+                                        <tr><td height="10" style="font-size: 10px; line-height: 10px;" class="hr" colspan="@ileKolumn">&nbsp;</td></tr>
+                                    }
+                                }
+                            </table>
+
+                            @*podsumowanie w 2 ostatnich kolumnach*@
+                            <p class="wyszarz r">
+                                @Html.PobierzTlumaczenie(Model.JezykMaila(), "Wartość netto", MiejsceFrazy.Newsletter)
+                                :
+                                @Model.Zamowienie.DokumentWartoscNetto
+                            </p>
+
+                            <p class="wyszarz r">
+                                @Html.PobierzTlumaczenie(Model.JezykMaila(), "Wartość VAT", MiejsceFrazy.Newsletter)
+                                :
+                                @(Model.Zamowienie.WartoscBrutto - Model.Zamowienie.WartoscNetto) @Model.Zamowienie.walutaB2b
+                            </p>
+
+                            <p class="bold r">
+                                @Html.PobierzTlumaczenie(Model.JezykMaila(), "Wartość brutto", MiejsceFrazy.Newsletter)
+                                :
+                                @Model.Zamowienie.DokumentWartoscBrutto
+                            </p>
+
+                            <br />
+                        </td>
+                        <td class="expander"></td>
+                    </tr>
+                </table>
+
+            </td>
+
+        </tr>
+    </table>
+
+    <br />
+
+    @{
+        int ileModulowDoPokazania = 0;
+        bool pokazujPlatnosci = !string.IsNullOrEmpty(Model.Zamowienie.NazwaPlatnosci);
+        bool pokazujLogistyka = true;
+
+        if (pokazujPlatnosci)
+        {
+            ileModulowDoPokazania++;
+        }
+        if (pokazujLogistyka)
+        {
+            ileModulowDoPokazania++;
+        }
+
+        string nazwaModuluDoPokazania = "twelve";
+        if (ileModulowDoPokazania == 2)
+        {
+            nazwaModuluDoPokazania = "six";
+        }
+    }
+
+
+    @* - -----------------------     platnosci i logistyka   -------------------------*@
+
+    <table class="row">
+        <tr>
+            <td class="wrapper">
+                @if (pokazujPlatnosci)
+                {
+                    <table class="@nazwaModuluDoPokazania columns">
+                        <tr>
+                            <td class="text-pad">
+                                <h6>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Płatność", MiejsceFrazy.Newsletter)</h6>
+                                <br />
+
+                                <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Do zapłaty", MiejsceFrazy.Newsletter): </b>
+                                @Model.Zamowienie.DokumentWartoscBrutto
+                                <br />
+
+                                <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Forma płatności", MiejsceFrazy.Newsletter): </b>
+                                @Model.Zamowienie.NazwaPlatnosci
+                                <br />
+                            </td>
+                            <td class="expander"></td>
+                        </tr>
+                    </table>
+                }
+            </td>
+            <td class="wrapper last">
+                @if (pokazujLogistyka)
+                {
+                    <table class="@nazwaModuluDoPokazania columns">
+                        <tr>
+                            <td class="text-pad">
+                                <h6>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Logistyka", MiejsceFrazy.Newsletter)</h6>
+                                <br />
+                                @if (Model.Zamowienie.Adres != null && !string.IsNullOrEmpty(Model.Zamowienie.Adres.ToString()))
+                                {
+                                    <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Miejsce dostawy", MiejsceFrazy.Newsletter): </b>
+                                    @Model.PelnyAdres();
+                                    <br />
+                                }
+
+                                @*//todo: przeszukanie kolekcji pozycji i szukanie wg. typupozycji == dostawa
+                                @if (!string.IsNullOrEmpty(@Model.Zamowienie.SposobDostawy(Model.JezykMaila())))L
+                                {
+                                    <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Sposób dostawy"):</b>
+                                    @Model.Zamowienie.SposobDostawy(Model.JezykMaila())
+                                    <br />
+                                }*@
+
+                                @*todo: metoda w dokoumnyDostep- >przelicznei wagi i objetosci na podstawie kolekcji dict produktow*@
+
+                                @if (Model.Zamowienie.WagaZamowienia() > 0)
+                                {
+                                    <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Waga", MiejsceFrazy.Newsletter): </b>
+                                    @Model.Zamowienie.WagaZamowienia().ToString("0.00")
+                                    @Html.PobierzTlumaczenie(Model.JezykMaila(), " kg", MiejsceFrazy.Newsletter)
+                                    <br />
+                                }
+
+                                @if (Model.Zamowienie.ObjetoscZamowienia() > 0)
+                                {
+                                    <b>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Objętość", MiejsceFrazy.Newsletter): </b>
+                                    @Model.Zamowienie.ObjetoscZamowienia().ToString("0.00")
+                                    @Html.PobierzTlumaczenie(Model.JezykMaila(), " m3", MiejsceFrazy.Newsletter)
+                                }
+                            </td>
+                            <td class="expander"></td>
+                        </tr>
+                    </table>
+                }
+            </td>
+
+        </tr>
+    </table>
+
+    @*------------------------------  uwagi ------------------------*@
+
+    @if (!string.IsNullOrEmpty(Model.Zamowienie.GetUwagiHTML()))
+    {
+        <table class="row">
+            <tr>
+                <td class="wrapper last">
+                    <table class="twelve columns">
+                        <tr>
+                            <td class="text-pad">
+                                <h6>@Html.PobierzTlumaczenie(Model.JezykMaila(), "Uwagi ", MiejsceFrazy.Newsletter)</h6>
+                                @Model.Zamowienie.GetUwagiHTML()
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    }
+    <table class="row">
+        <tr>
+            <td class="wrapper last">
+                <table class="twelve columns">
+
+                    <tr>
+                        <td class="text-pad">
+                            <h6></h6>
+
+                            <table>
+                                <tr>
+                                    <td></td>
+                                    <td align="center" class="center naglowek"></td>
+                                    <td align="center" class="center naglowek"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="center" class="center"></td>
+                                    <td align="center" class="center"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="center" class="center"></td>
+                                    <td align="center" class="center"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="center" class="center"></td>
+                                    <td align="center" class="center"></td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td align="center" class="center"></td>
+                                    <td align="center" class="center"></td>
+                                    <td></td>
+                                    <td align="center" class="center"></td>
+                                </tr>
+
+                            </table>
+
+
+
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <br /><br />
+
+}
+
+
+
+
+

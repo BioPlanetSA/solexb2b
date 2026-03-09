@@ -1,0 +1,50 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoGradacji
+
+<table class="gradacje table table-condensed">
+    <tr>
+        <td colspan="4" class="c">
+            @Html.PobierzTlumaczenie("Zakupiłeś już")
+            <b>@Model.WyliczonaIloscProduktu.DoLadnejCyfry() @Model.Produkt.JednostkaPodstawowa.Nazwa</b>
+            @Html.PobierzTlumaczenie("tego produktu")
+        </td>
+    </tr>
+    <tr class="c">
+        <td rowspan="2" class="progi">@Html.PobierzTlumaczenie("Progi cenowe")</td>
+        <td rowspan="2" class="zamow-jeszcze">@Html.PobierzTlumaczenie("Zamów jeszcze")</td>
+        <td colspan="2">@Html.PobierzTlumaczenie("Twoja cena wyniesie")</td>
+    </tr>
+    <tr class="c">
+        <td>@Html.PobierzTlumaczenie("Netto")</td>
+        <td>@Html.PobierzTlumaczenie("Brutto")  (Vat @Model.Produkt.Vat.ToString("0.##") %)</td>
+    </tr>
+    @foreach (var c in Model.Widoki)
+    {
+        //bool aktualna = !(c.PrzedzialOdRzeczywisty - Model.WyliczonaIloscProduktu > 0.5M) && !c.Spelniny;
+
+        <tr class="@Html.Raw(c.Spelniny?"spelniony text-muted ":"niespalniony ")@Html.Raw(c.AktualnaCena ? "aktualna-cena":"") ">
+            <td class="c">
+                @Html.Raw(c.PrzedzialOdRzeczywisty > 1 ? c.PrzedzialOdRzeczywisty.ToString("0.##") : "1")
+                @Html.Raw(c.PrzedzialDoRzeczywisty == decimal.MaxValue ? "+" : (c.PrzedzialDoRzeczywisty - 1).ToString(" - 0.##"))
+            </td>
+            <td class="c brakujace">
+                @if (c.Spelniny)
+                {
+                    <span class="fa fa-check"></span>
+                }
+                else if (c.AktualnaCena)
+                {
+                    @Html.PobierzTlumaczenie("Twoja cena")
+                }
+                else
+                {
+                    @Html.Raw(c.IleBrakujeDoSpelnieniaPoziomu.DoLadnejCyfry() )
+                }
+            </td>
+            <td class="r">@c.CenaNetto </td>
+            <td class="r">@c.CenaBrutto</td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,118 @@
+﻿@using SolEx.Hurt.Core
+@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Web.Site2.Helper
+<div data-metoda-url="ZbudujUrl" id="punkty" data-type="lista"  data-szukanie-placeholder="@Html.PobierzTlumaczenie("Znajdż")"
+     data-dokiedy="@DateTime.Now.ToString("dd-MM-yyyy")" data-odkiedy="@DateTime.Now.AddDays(-SolexBllCalosc.PobierzInstancje.Konfiguracja.ZIleDniDomyslniePokazywacDokumenty).ToString("dd-MM-yyyy")" data-sort="Data" data-sort-kierunek="desc"
+     data-klient="@SolexHelper.AktualnyKlient.Id" data-sort-icon-asc="fa fa-sort-by-attributes" data-sort-icon-desc="fa fa-sort-by-attributes-alt"
+     data-szukanie-fraza="" data-podmieniaj-backslash="1">
+
+    <div class="form-inline dokumenty-filtry" role="form">
+        <div class="pull-left">
+            <input id="hidODd" type="hidden" />
+            <input id="hidDo" type="hidden" />
+            <button type="button" class="btn btn-secondary dokumenty-wybor-lat btn-sm btn-success" data-toggle="dropdown" id="lista-lat">
+                <span class="wybrane"> </span>
+                <span class="caret"></span>
+            </button>
+        
+        </div>
+    </div>
+
+    <div id="data"></div>
+</div>
+        <script type="text/javascript">
+
+            function ZbudujUrl(parent, sort, sortkierunek, szukanie) {
+                var odkiedy = moment($('#hidODd', parent).val()).format('YYYY-MM-DD');
+                var dokiedy = moment($('#hidDo', parent).val()).format('YYYY-MM-DD');
+                var klient = $(parent).attr('data-klient');
+                var url = '/@SolexHelper.AktualnyJezyk.Symbol/punkty/PobierzListe?klient=' + klient + '&odkiedy=' + odkiedy + '&dokiedy=' +
+                    dokiedy + '&sortowanie=' + sort + '&kierunek=' + sortkierunek + '&szukanieFraza=' + szukanie;
+                return url;
+            }
+            function ZaladujWyborDat(parent) {
+                var frazy = "Ostatnie 7 dni;Ostatnie 30 dni;Ostatnie 90 dni;Ostatnie 180 dni;Bieżący rok;Zastosuj;Anuluj";
+                var lok = PobierzTlumaczenia('@SolexHelper.AktualnyJezyk.Nazwa', frazy);
+                var przedzialy = {};
+                przedzialy['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ostatnie 7 dni")'] = [moment().subtract('days', 6), moment()];
+                przedzialy['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ostatnie 30 dni")'] = [moment().subtract('days', 29), moment()];
+                przedzialy['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ostatnie 90 dni")'] = [moment().subtract('days', 89), moment()];
+                przedzialy['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Ostatnie 180 dni")'] = [moment().subtract('days', 179), moment()];
+                przedzialy['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Bieżący rok")'] = [moment().startOf('year'), moment().endOf('year')];
+                var pocz = moment($(parent).attr('data-odkiedy'), 'DD.MM.YYYY');
+                var koniec = moment($(parent).attr('data-dokiedy'), 'DD.MM.YYYY');
+                var kontrolka = $('#lista-lat', parent);
+                $('#hidODd', parent).val(pocz);
+                $('#hidDo', parent).val(koniec);
+                $(kontrolka).daterangepicker(
+                    {
+                        ranges: przedzialy,
+                        startDate: pocz,
+                        endDate: koniec,
+                        maxDate: koniec,
+                        format: 'DD.MM.YYYY',
+                        locale: {
+                            format: 'DD.MM.YYYY',
+                            applyLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zastosuj")',
+                            cancelLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Anuluj")',
+                            fromLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Od")',
+                            toLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Do")',
+                            customRangeLabel: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Własny przedział")',
+                            monthNames: ['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Styczeń")',
+                                         '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Luty")',
+                                         '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Marzec")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Kwiecień")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Maj")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Czerwiec")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Lipiec")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Sierpień")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wrzesień")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Październik")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Listopad")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Grudzień")'],
+                            weekHeader: '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Tydz")',
+                            monthNamesShort: ['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Sty")',
+                                         '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Lu")',
+                                         '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Mar")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Kw","Kwiecień skrót")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Maj","Maj skrót")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Cze")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Li")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Sie")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wrz")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pa")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Lis")',
+                             '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Gru")%>'],
+                            dayNamesShort: ['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nie")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pn")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wt")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Śr")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Czw")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pt")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "So")%>'],
+                            daysOfWeek: ['@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Nie")',
+                               '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pn")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wt")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Śr")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Czw")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Pt")',
+                                '@SolexBllCalosc.PobierzInstancje.Konfiguracja.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "So")'],
+                        }
+                    },
+                    function (start, end) {
+                        var od = start.format('DD.MM.YYYY');
+                        var dok = end.format('DD.MM.YYYY');
+                        $('#lista-lat .wybrane').html(od + ' - ' + dok);
+                        $('#hidODd', parent).val(start);
+                        $('#hidDo', parent).val(end);
+                        ZaladujListe(parent);
+                    }
+                );
+                $('.wybrane', kontrolka).html(pocz.format('DD.MM.YYYY') + ' - ' + koniec.format('DD.MM.YYYY'));
+            }
+            $(document).ready(function () {
+                var parent = $('#punkty');
+                ZaladujWyborDat(parent);
+                ZaladujListe(parent);
+            });
+        </script>

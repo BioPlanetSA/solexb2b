@@ -1,0 +1,147 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model
+@using SolEx.Hurt.Model.Core
+@using SolEx.Hurt.Web.Site2.Helper
+@model SolEx.Hurt.Web.Site2.Models.ParametryDoSzczegolowejListyDokumentow
+@{
+    bool pokazywacZaznaczanie = Model.PlatnosciOnline && Model.Dokumenty.Any(x => SolexBllCalosc.PobierzInstancje.DokumentyDostep.GetMozliwaPlatnosc(x));
+    var dokumentyDoPodsumowania = Model.Dokumenty;
+    WartoscLiczbowa razemnetto = new WartoscLiczbowa(dokumentyDoPodsumowania.Sum(x => x.DokumentWartoscNetto), Model.Dokumenty[0].walutaB2b);
+    WartoscLiczbowa razembrutto = new WartoscLiczbowa(dokumentyDoPodsumowania.Sum(x => x.DokumentWartoscBrutto), Model.Dokumenty[0].walutaB2b);
+    WartoscLiczbowa razemnalezna = new WartoscLiczbowa(dokumentyDoPodsumowania.Where(x=>x.DokumentWartoscNalezna!=null).Sum(x => x.DokumentWartoscNalezna), Model.Dokumenty[0].walutaB2b);
+    Dictionary<int, StatusZamowienia> statusy = SolexBllCalosc.PobierzInstancje.DostepDane.Pobierz<StatusZamowienia>(SolexHelper.AktualnyJezyk.Id, SolexHelper.AktualnyKlient).ToDictionary(x=>x.Id,x=>x);
+}
+<table class="dokumenty table table-condensed ">
+    <thead>
+        <tr>          
+            <th style="width:146px;" data-pole-sort="DataUtworzenia" class="">
+                @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Data wystawienia")
+
+            </th>
+            <th data-pole-sort="NazwaDokumentu" >
+                @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Numer dokumentu")
+
+            </th>
+            <th data-pole-sort="DokumentWartoscNetto" class="">
+                @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wartość netto")
+            </th>
+            <th data-pole-sort="DokumentWartoscBrutto" class="">
+                @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Wartość brutto")
+            </th>
+            <th data-pole-sort="DokumentWartoscNalezna" class="">
+                @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Do zapłaty")
+            </th>          
+
+            <th data-pole-sort="DokumentDniSpoznienia" class="">
+                @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Dni spóźnienia")
+            </th>
+            <th data-pole-sort="TerminPlatnosci" class="">
+                @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Termin płatności")
+            </th>
+            <th data-pole-sort="Zaplacono" class="">
+                @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zapłacono")
+            </th>
+            
+            @if (pokazywacZaznaczanie)
+            {
+                <th class="c " style="max-width: 80px;font-size: 8px;">
+                   @Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Zaznacz do zapłaty")
+                    <input type="checkbox" onchange="ZaznaczWszystkieZaplaty(this)" />
+                </th>
+            }
+
+            @if (Model.PokazujStatus)
+            {
+                <th class="">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "Status dokumentu")</th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var d in Model.Dokumenty)
+    {
+        StatusZamowienia status;
+        if (!d.StatusId.HasValue || !statusy.TryGetValue(d.StatusId.Value, out status))
+        {
+            status = null;
+        }
+        <tr class=" @(d.DokumentDniSpoznienia.HasValue && d.DokumentDniSpoznienia > 0 ? "danger" : "")">
+            
+            <td class="c">@d.DataUtworzenia.ToShortDateString()</td>
+            <td class="c">
+
+                <b>@d.NazwaDokumentu</b>
+                @if (d.StatusId != null && status.TraktujJakoFaktoring)
+                {
+                    <div class="r"><span class="label label-danger">Faktoring</span></div>
+                }
+            </td>
+            <td class="r">@d.DokumentWartoscNetto</td>
+            <td class="r">@d.DokumentWartoscBrutto</td>
+            <td class="r">@d.DokumentWartoscNalezna
+            @if (d.StatusId!=null && status.TraktujJakoFaktoring)
+            {
+                <div class="r "><span class="label label-danger">Faktoring</span></div>
+            }
+            </td>
+            <td class="c">@(d.DokumentDniSpoznienia.HasValue && d.DokumentDniSpoznienia > 0 ? d.DokumentDniSpoznienia : null)</td>
+            <td class="c">@(d.TerminPlatnosci.HasValue ? d.TerminPlatnosci.Value.ToShortDateString() : "")</td>
+
+            <td class="c ">
+
+                @if (d.Zaplacono)
+                {
+                    <span class="dokumenty-zaplacony-tak text-success">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "TAK")</span>
+                }
+                else
+                {
+                    <span class="dokumenty-zaplacony-nie text-danger">@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id, "NIE")</span>
+                }
+            </td>
+            
+            @if (pokazywacZaznaczanie)
+            {
+                <td class="c dokument-zaplata " style="max-width: 80px">
+                    @if (SolexBllCalosc.PobierzInstancje.DokumentyDostep.GetMozliwaPlatnosc(d))
+                    {
+                        <input type="checkbox" value="@d.Id" onchange="ZaplacacDokument(this)" />
+                        <input data-dokument="@d.Id" type="text" value="@d.DokumentWartoscNalezna.Wartosc" style="display: none;"
+                               data-niepoprawna="@Html.PobierzTlumaczenie(SolexHelper.AktualnyJezyk.Id,"Kwota musi być większa od 0")"
+                               class="form-control-sm dokumenty-input-platnosci"/>
+                    }
+                </td>
+            }
+
+            @if (Model.PokazujStatus)
+            {
+                if (status != null && status.Widoczny)
+                {
+                    string stylKomorki = "";
+                    if (!string.IsNullOrEmpty(status.Kolor) || !string.IsNullOrEmpty(status.KolorCzcionki))
+                    {
+                        stylKomorki = string.Format("background-color: {0}; color: {1}", status.Kolor, status.KolorCzcionki);
+                    }
+
+                    <td style="@stylKomorki" class="c ">
+                        <span class="dokumenty-status"><b>@status.Nazwa</b></span>
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            }
+            <td class="c">
+                @Html.Partial("_Pobieranie", d)
+            </td>
+        </tr>
+    }
+    <tfoot>
+        <tr>
+            <td class="r b" colspan="2">@Html.PobierzTlumaczenie("Razem")</td>
+            <td class="r b">@(razemnetto < 0? 0: razemnetto)</td>
+            <td class="r b">@(razembrutto< 0? 0: razembrutto)</td>
+            <td class="r b">@(razemnalezna< 0? 0: razemnalezna)</td>
+        </tr>
+    </tfoot>
+</table>
+@Html.Partial("_PodsumowanieLista", new Tuple<int, int, DocumentSummary, int>(400, 200, Model.DaneDoWykresu, Model.Dokumenty.Count))

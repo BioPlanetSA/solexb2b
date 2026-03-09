@@ -1,0 +1,96 @@
+﻿@import "_ustawienia.scss";
+
+.lista-produktow-kafle {
+    margin-bottom: -50px; //zniwelowanie ostatniej lini zbednego marginesu
+    -ms-flex-flow: row;
+    -webkit-flex-flow: row;
+    flex-flow: row;
+    justify-content: space-between;
+    //justify-content: flex-start;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    display: flex;
+
+    /*//sztuczna klasa zeby ostatnie kafle do lewej byly - a nie na srodku 
+    &:after{
+         content: "";
+        flex: auto;
+    }*/
+
+    .active.kategoria{
+        width: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: $kolor-tlo;
+        padding-left: 10px;
+
+        margin-bottom: 10px;
+        margin-bottom: 30px;
+
+        &:not(:first-child){
+            margin-top: -20px;
+        }
+
+        color: $font-menu-kolor-jasniejszy-czarny;
+    }
+
+    .kafel-content {
+        max-height: none !important;
+        display: flex;
+        -ms-flex-flow: column;
+        -webkit-flex-flow: column;
+        flex-flow: column;
+        text-align: center;
+        margin: 0 15px 50px 15px;
+
+        .kafle-linia {
+            //  max-width: 240px;   //przeniesione ponizej do produkt-nazwa-naglowek 
+            width: 100%; //ale musi byc zabezpiecznie zeby nazwa nie rozepchala pola
+            .produkt-nazwa-naglowek {
+                min-height: 36px;
+                display: block;
+                 max-width: 240px;
+            }
+        }
+
+        a {
+            color: $font-kolor;
+            text-decoration: none;
+        }
+
+
+
+        .kafel-photo {
+            margin: auto; //po to zeby pokazywalo dobrze na srodku, nawet jak nie ma obslugi flexa albo slider wymusza block
+            position: relative;
+            //  max-height: 100%; //to bardzo wazne z powodu zdjecia - domyslnie rozmiar diva jest brany z presetu zdjecia
+            margin-bottom: 10px;
+            align-self: center;
+            flex-grow: 1;
+            /*.metka-nad-zdjeciem {
+                position: absolute;
+                top: 0;
+                left: 5px;
+            }
+
+            .metka-pod-zdjeciem {
+                position: absolute;
+                left: 5px;
+                bottom: 0;
+            }*/
+            // metki-produktu metki NaZdjeciuGora
+            //styl z powodu slajdera - slajder domyślnie daje img jako block
+            .zdjecie-produktu {
+                display: inline-block;
+            }
+        }
+    }
+
+
+
+
+}
+
+
+

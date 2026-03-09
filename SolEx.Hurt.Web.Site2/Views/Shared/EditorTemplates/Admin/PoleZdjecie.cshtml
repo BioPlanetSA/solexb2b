@@ -1,0 +1,80 @@
+﻿@using SolEx.Hurt.Core.BLL
+@using SolEx.Hurt.Model.Interfaces
+@model SolEx.Hurt.Core.DostepDane.OpisPolaObiektu
+@{
+    string id = Model.IdentyfikatorObiektu + "-" + Model.NazwaPola;
+}
+<span class="wybor-zdjecia" id="@id">
+    <div class="tresc">
+        @if (Model.Wartosc == null )
+        {
+            <span>Brak zdjęcia</span>
+        }
+        else
+        {
+            IObrazek plik = SolexBllCalosc.PobierzInstancje.Pliki.PobierzObrazek(Convert.ToInt32(Model.Wartosc));
+            if (plik != null)
+            {
+                <img src="@(plik.LinkWWersji("ikona135"))" class="img-fluid" />
+            }
+            else
+            {
+                <span>Brak zdjecia o id @Model.Wartosc</span>
+            }
+        }
+    </div>
+
+    @Html.Partial("EditorTemplates/Admin/_naglowekEdytora", Model)
+
+
+    @if (!string.IsNullOrEmpty(Model.LinkDoDokumentacji))
+    {
+        <a href="@Model.LinkDoDokumentacji"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+    }
+
+    @Html.HiddenFor(x=>x.Wartosc,new {@class="wartosc"})
+    <input type="hidden" id="plik-@id"/>
+    @if (!Model.PobieraneErp && !Model.TylkoDoOdczytu)
+    {
+        @Html.ActionLink("Wybierz zdjęcie", "ZdjeciaLista", "Pliki", new RouteValueDictionary { {"id" , "plik-" + id}}, new Dictionary<string, object> { {"class", "btn btn-secondary"}, {"onClick" , "return PokazModal(this,null,'[data-containter=\"indywidualny\"]');"  } } );
+
+        if (Model.Wartosc != null)
+        {
+            <input type="button" class="btn btn-secondary" id="kasujZdjecie-@id" value="X" />
+        }
+    }
+   
+</span>
+
+<script language="javascript" type="text/javascript">
+
+    $('#kasujZdjecie-@id').click(function () {
+        $('#@id').children('input').each(function () {
+            if (this.name.indexOf('.Wartosc') != -1) {
+                this.value = null;
+
+                $('#@id').children('.tresc').html('<span>Brak zdjęcia</span>');
+            }
+        });
+    });
+
+    $('#plik-@id').observe_field(1000, function () {
+        var plik = this.value;
+        var parent = $('#@id .tresc');
+        $.ajax(
+        {
+            url: '/Pliki/PobierzId',
+            data: { plik: plik },
+            success: function (data) {
+                var img = $('<img class="ikona135 img-fluid"/>').prop('src', plik);
+
+
+                parent.html(img);
+                $('#@id .wartosc').val(data);
+            },
+            error: function (data) {
+                parent.html('Bląd wyboru zdjęcia');
+            }
+        });
+    });
+</script>
