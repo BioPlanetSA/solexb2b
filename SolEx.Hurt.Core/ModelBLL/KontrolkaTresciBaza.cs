@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using ServiceStack.DataAnnotations;
+using SolEx.Hurt.Core.Helper;
+using SolEx.Hurt.Helpers;
+using SolEx.Hurt.Model.AtrybutyKlas;
+using SolEx.Hurt.Model.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
-using Newtonsoft.Json;
-using ServiceStack.DataAnnotations;
-using SolEx.Hurt.Helpers;
-using SolEx.Hurt.Model.AtrybutyKlas;
-using SolEx.Hurt.Model.Interfaces;
 
 namespace SolEx.Hurt.Core.ModelBLL
 {
@@ -148,7 +149,30 @@ namespace SolEx.Hurt.Core.ModelBLL
             return true;
         }
         
+
+        public bool CzyRenderowacDlaKlienta()
+        {
+            if (IdKategoriiKlientowDLaKtorychUkrywac != null && IdKategoriiKlientowDLaKtorychUkrywac.Any())
+            {
+                if (IdKategoriiKlientowDLaKtorychUkrywac.Intersect(AktualnyKlient.Kategorie).Any())
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+
         public Model.TrescKolumna DomyslneWartosciDlaNowejKontrolki;
+
+
+        [Niewymagane]
+        [GrupaAtttribute("Ukrywanie", 3)]
+        [WidoczneListaAdmin(true, true, true, true)]
+        [FriendlyName("Dla której kategorii klientów kontrolka ma być ukryta")]
+        [PobieranieSlownika(typeof(SlownikKategoriiKlienta))]
+        public List<int> IdKategoriiKlientowDLaKtorychUkrywac { get; set; }
+
 
     }
 

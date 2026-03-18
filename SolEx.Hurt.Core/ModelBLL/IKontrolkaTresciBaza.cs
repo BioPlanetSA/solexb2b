@@ -16,6 +16,7 @@ namespace SolEx.Hurt.Core.ModelBLL
         string AcordionNazwa { get; set; }
         bool AcordionZwiniety { get; set; }
 
+        bool CzyRenderowacDlaKlienta();
         RouteValueDictionary Parametry();
     }
 

@@ -25,16 +25,21 @@
         //przechodzimy na funkcje render, ale tymczasowo jak nic nie zwroci to stare renderowanie AKCJI
         var parametry = kontrolka.Parametry();
 
+        if (!kontrolka.CzyRenderowacDlaKlienta())
+        {
+            return;
+        }
+
         renderKontrolkiZawartosc = Html.Action(kontrolka.Akcja, kontrolka.Kontroler, parametry).ToHtmlString();
         if (string.IsNullOrEmpty(renderKontrolkiZawartosc))
         {
             return; //nic nie renderujemy i wychodzimy
         }
-   // }
+        // }
 
-    string idobiektu = "kontrolka-" + kontrolka.Id;
-    bool zawijanie = !string.IsNullOrEmpty(kontrolka.AcordionNazwa);
-    string klasyAkordion = zawijanie && kontrolka.AcordionZwiniety ? " collapsed " : " in ";
+        string idobiektu = "kontrolka-" + kontrolka.Id;
+        bool zawijanie = !string.IsNullOrEmpty(kontrolka.AcordionNazwa);
+        string klasyAkordion = zawijanie && kontrolka.AcordionZwiniety ? " collapsed " : " in ";
 
         <div class="tresc-pojemnik tresc-pojemnik-@Model.Id  @(zawijanie ? "akordion" : "")">
             @if (zawijanie)
