@@ -25,7 +25,7 @@ namespace SolEx.Hurt.Core
         [FriendlyName("Nazwa klienta")]
         public string NazwaKlienta
         {
-            get { return Klient.Nazwa; }
+            get { return Klient?.Nazwa; }
         }
         
         //[Ignore]
