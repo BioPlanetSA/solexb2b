@@ -19,9 +19,11 @@ namespace SolEx.Hurt.Core.Configuration
 
         private static SettingTestResult TestEmailSend(TypyUstawieniaSkrzynek typ)
         {
+            string DoKogo = "solex.test.maila@solex.net.pl";
+
             SettingTestResult result = new SettingTestResult
             {
-                Module = "Wysyłanie wiadomości testowej ze skrzynki: " + typ,
+                Module = "Wysyłanie wiadomości testowej ze skrzynki: " + typ + $" na adres email: {DoKogo}",
                 Result = true
             };
             try

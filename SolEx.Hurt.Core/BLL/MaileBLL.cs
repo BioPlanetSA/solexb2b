@@ -377,7 +377,7 @@ namespace SolEx.Hurt.Core.BLL
 
                 try
                 {
-                    SmtpClientEx smtp = new SmtpClientEx();
+                    SmtpClient smtp = new SmtpClient();
                     smtp.Host = PobierzUstawieniaSkrzynki[zJakiejSkrzynkiWyslac].serwer;
                     smtp.Port = PobierzUstawieniaSkrzynki[zJakiejSkrzynkiWyslac].port;
                     smtp.UseDefaultCredentials = false; // Calosc.Konfiguracja.EmailDefaultCredentials;
@@ -386,6 +386,8 @@ namespace SolEx.Hurt.Core.BLL
                     smtp.Timeout = PobierzUstawieniaSkrzynki[zJakiejSkrzynkiWyslac].timeout;
                     
                     ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+
                     smtp.Send(msg);
                     udaloSieWyslac = true;
                 }
@@ -396,7 +398,7 @@ namespace SolEx.Hurt.Core.BLL
                     {
                         DodajEmailZBledem(wiadomoscEmail, zJakiejSkrzynkiWyslac);
                     }
-                    Calosc.Log.Error(e);
+                    Calosc.Log.Error(e);                  
                     blad = e;
                 }
             }
@@ -567,15 +569,4 @@ namespace SolEx.Hurt.Core.BLL
 
     }
 
-    public class SmtpClientEx : SmtpClient
-    {
-        private static FieldInfo GetLocalHostNameField()
-        {
-            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
-            System.Reflection.FieldInfo result = typeof(SmtpClient).GetField("macyszyn-toys.pl", flags);
-            if (null == result)
-                result = typeof(SmtpClient).GetField("localHostName", flags);
-            return result;
-        }
-    }
 }

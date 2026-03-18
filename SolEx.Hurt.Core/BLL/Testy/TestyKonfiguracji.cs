@@ -212,8 +212,13 @@ namespace SolEx.Hurt.Core.BLL.Testy
                     var testowalna = mod as ITestowalna;
                     if (testowalna != null)
                     {
-                        listaBledow.AddRange(testowalna.TestPoprawnosci());
+                        var dane = testowalna.TestPoprawnosci();
+                        if (dane != null)
+                        {
+                            listaBledow.AddRange(dane);
+                        }
                     }
+
                     //var oba = mod.GetType().GetCustomAttribute<ObsoleteAttribute>();
 
                     if (mod.ZadanieBazowe != null && mod.ZadanieBazowe.ZadanieNadrzedne != null)

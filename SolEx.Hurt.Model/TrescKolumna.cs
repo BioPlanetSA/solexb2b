@@ -89,5 +89,7 @@ namespace SolEx.Hurt.Model
          [FriendlyName("Odstęp (padding) - góra prawa dół lewo - wszystko w px - np. 5px 0px 5px 0px")]
          [GrupaAtttribute("Ogólne", 1)]
          public string Paddingi { get; set; }
+
+
     }
 }

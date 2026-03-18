@@ -480,8 +480,35 @@ namespace SolEx.Hurt.Core.BLL
                         bool czyIgnorowane = info.GetCustomAttributes<IgnoreAttribute>().Any();
                         if (czyIgnorowane && bindowanie.FiltrySql)
                         {
-                            throw new Exception(string.Format("Nie można wyszukiwać po polu {0}. Włączone jest filtrowanie sql a dane pole ma atrybut ignorowane. ", szukanepola[j]));
+                            //dodatkowo sprawdzamy czy klasa bazowa ma ten sam typ = jak tak to podmiana na typ z klasy bazowej - bo moze NIE jest ignorowany
+                            if (typ.BaseType != null)
+                            {
+                                PropertyInfo baseProperty = pola.Last(x => x.Name == szukanepola[j]);   //w C# zwraca wszystkie pola z wszystkich klas - najwyzej sa pierwsze i w dol kolejne
+                                if (baseProperty != null)
+                                {
+                                    var customAttr = baseProperty.GetCustomAttributes<IgnoreAttribute>();
+                                    czyIgnorowane = customAttr.Any();
+                                    if (!czyIgnorowane)
+                                    {
+                                        //mamy problem - bazowy NIE jest ignorowany - podmiana
+                                        info = baseProperty;
+                                    }
+                                    else
+                                    {
+                                        throw new Exception(string.Format("Nie można wyszukiwać po polu {0}. Włączone jest filtrowanie sql a dane pole ma atrybut ignorowane. ", szukanepola[j]));
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception(string.Format("Nie można wyszukiwać po polu {0}. Włączone jest filtrowanie sql a dane pole ma atrybut ignorowane. ", szukanepola[j]));
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception(string.Format("Nie można wyszukiwać po polu {0}. Włączone jest filtrowanie sql a dane pole ma atrybut ignorowane. ", szukanepola[j]));
+                            }
                         }
+
                         Type typpola = info.PropertyType.PobierzPodstawowyTyp();
                         MemberExpression fieldAccess = Expression.Property(pe, info);
 
